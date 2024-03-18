@@ -4,9 +4,8 @@ function sync_tracks_action() {
     $track_url = get_option('track_url');
     $tracks_list = get_option('tracks_list');
     $track_shortcode = get_option('track_shortcode');
+    $log_file_path = plugin_dir_path(__FILE__) . 'logs/geohub-log.txt';
     if (!empty($track_url) && !empty($tracks_list) && !empty($track_shortcode)) {
-
-        $log_file_path = plugin_dir_path(__FILE__) . 'logs/geohub-log.txt';
 
         // The message you want to log
         $log_message = "Hello World PEDRAM - " . current_time('Y-m-d H:i:s') . "\n";
@@ -46,7 +45,7 @@ function sync_tracks_action() {
                  'post_type' => 'track',
                  'meta_query' => [
                      [
-                         'key' => 'geohub_id',
+                         'key' => 'geohub_group_geohub_id',
                          'value' => $geohub_id,
                      ],
                  ],
@@ -74,16 +73,21 @@ function sync_tracks_action() {
              } else {
                  // Altrimenti, crea un nuovo track
                 $track_shortcode = str_replace('$1', $geohub_id, $track_shortcode);
-                 $post_id = wp_insert_post([
-                     'post_title'   => $post_title,
-                     'post_name'    => $post_slug, // Impostazione dello slug
-                     'post_content' => $track_shortcode, // Aggiungi contenuto se necessario
-                     'post_status'  => 'publish',
-                     'post_type'    => 'track',
-                 ]);
+                try {
+                    $post_id = wp_insert_post([
+                        'post_title'   => $post_title,
+                        'post_name'    => $post_slug, // Impostazione dello slug
+                        'post_content' => $track_shortcode, // Aggiungi contenuto se necessario
+                        'post_status'  => 'publish',
+                        'post_type'    => 'track',
+                    ]);
+                } catch (Exception $e) {
+                    $log_message = $post_title . ' - ' . $e->getMessage() . "\n";
+                    error_log('Errore durante l\'inserimento del track: ' . $e->getMessage());
+                    continue;
+                }
                  if (!is_wp_error($post_id)) {
-                    // Replace 'field_XXXXXX' with the actual field key for 'geohub_id'
-                    update_field('geohub_id', $geohub_id, $post_id);
+                    update_field('geohub_group_geohub_id', $geohub_id, $post_id);
                 }
              }
         }
@@ -91,8 +95,8 @@ function sync_tracks_action() {
         if (false === file_put_contents($log_file_path, $log_message, FILE_APPEND | LOCK_EX)) {
             error_log("Unable to write to log file: $log_file_path");
         }
-        set_transient('geohub_sync_tracks_notification', 'Tracks synchronized successfully.', 60); 
     } else {
     }
+    set_transient('geohub_sync_tracks_notification', 'Tracks synchronized successfully.', 60); 
 }
 
