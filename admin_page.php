@@ -37,8 +37,8 @@ function geohub_settings_page()
 			<tr valign="top">
 				<th scope="row">Tracks list API</th>
 				<td><input type="text" size="50" name="tracks_list"
-						value="<?php echo esc_attr(get_option('tracks_list')) ?: 'http://127.0.0.1:8000/api/app/webapp/49/tracks_list'; ?>"
-						placeholder="http://127.0.0.1:8000/api/app/webapp/49/tracks_list" />
+						value="<?php echo esc_attr(get_option('tracks_list')) ?: 'https://geohub.webmapp.it/api/app/webapp/49/tracks_list'; ?>"
+						placeholder="https://geohub.webmapp.it/api/app/webapp/49/tracks_list" />
 				</td>
 			</tr>
 			<tr valign="top">
@@ -51,8 +51,8 @@ function geohub_settings_page()
 			<tr valign="top">
 				<th scope="row">POIs list API</th>
 				<td><input type="text" size="50" name="poi_list"
-						value="<?php echo esc_attr(get_option('poi_list')) ?: 'http://127.0.0.1:8000/api/app/webapp/49/pois_list'; ?>"
-						placeholder="http://127.0.0.1:8000/api/app/webapp/49/pois_list" />
+						value="<?php echo esc_attr(get_option('poi_list')) ?: 'https://geohub.webmapp.it/api/app/webapp/49/pois_list'; ?>"
+						placeholder="https://geohub.webmapp.it/api/app/webapp/49/pois_list" />
 				</td>
 			</tr>
 			<tr valign="top">
