@@ -1,17 +1,18 @@
 <?php
-function ensure_acf_field_for_tracks() {
+
+function ensure_acf_field_for_pois() {
     if(function_exists('acf_add_local_field_group')) {
 
         acf_add_local_field_group(array(
-            'key' => 'geohub_group_track',
-            'title' => 'Dettagli Track',
+            'key' => 'geohub_group_poi',
+            'title' => 'Dettagli Poi',
             'fields' => array (
                 array(
-                    'key' => 'geohub_group_track_geohub_id',
+                    'key' => 'geohub_group_poi_geohub_id',
                     'label' => 'Geohub ID',
-                    'name' => 'geohub_track_id',
+                    'name' => 'geohub_poi_id',
                     'type' => 'number',
-                    'instructions' => 'Inserisci l\'ID originale della track',
+                    'instructions' => 'Inserisci l\'ID originale della poi',
                     'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array (
@@ -31,7 +32,7 @@ function ensure_acf_field_for_tracks() {
                     array (
                         'param' => 'post_type',
                         'operator' => '==',
-                        'value' => 'track',
+                        'value' => 'poi',
                     ),
                 ),
             ),
@@ -46,4 +47,4 @@ function ensure_acf_field_for_tracks() {
         ));
     }
 }
-add_action('acf/init', 'ensure_acf_field_for_tracks');
+add_action('acf/init', 'ensure_acf_field_for_pois');
