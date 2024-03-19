@@ -81,7 +81,7 @@ function sync_tracks_action()
                 ]);
                 $post_id = wp_insert_post($post);
                 if (!is_wp_error($post_id)) {
-                    update_field('geohub_group_track_geohub_id', $geohub_id, $post_id);
+                    update_field('geohub_track_id', $geohub_id, $post_id);
                 }
             }
         }

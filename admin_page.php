@@ -28,10 +28,10 @@ function geohub_settings_page()
 		<h2>APIs:</h2>
 		<table class="form-table" style="margin-left: 30px;">
 			<tr valign="top">
-				<th scope="row">APP configuration API</th>
-				<td><input type="text" size="50" name="app_configuration_api"
-						value="<?php echo esc_attr(get_option('app_configuration_api')) ?: 'https://geohub.webmapp.it/api/app/webmapp/49/config.json'; ?>"
-						placeholder="https://geohub.webmapp.it/api/app/webmapp/49/config.json" />
+				<th scope="row">APP ID</th>
+				<td><input type="text" size="5" name="app_configuration_id"
+						value="<?php echo esc_attr(get_option('app_configuration_id')) ?: '49'; ?>"
+						placeholder="49" />
 				</td>
 			</tr>
 			<tr valign="top">
@@ -80,10 +80,24 @@ function geohub_settings_page()
 				</td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Taxonomy page:</th>
-				<td><input type="text" size="50" name="taxonomy_shortcode"
-						value="<?php echo esc_attr(get_option('taxonomy_shortcode')) ?: "[wm_grid_track activity='$1']"; ?>"
-						placeholder="[wm_grid_track activity='$1']" />
+				<th scope="row">Layer taxonomy page:</th>
+				<td><input type="text" size="50" name="layer_taxonomy_shortcode"
+						value="<?php echo esc_attr(get_option('layer_taxonomy_shortcode')) ?: "[wm_layer_page activity='id']"; ?>"
+						placeholder="[wm_layer_page layer='id']" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Taxonomy Track page:</th>
+				<td><input type="text" size="50" name="taxonomy_track_shortcode"
+						value="<?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track activity='id']"; ?>"
+						placeholder="[wm_grid_track activity='id']" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Taxonomy Poi page:</th>
+				<td><input type="text" size="50" name="taxonomy_poi_shortcode"
+						value="<?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type='id']"; ?>"
+						placeholder="[wm_grid_poi poi_type='id']" />
 				</td>
 			</tr>
 		</table>
@@ -125,7 +139,9 @@ function geohub_settings_init()
     register_setting('geohub-settings', 'poi_list', 'sanitize_text_field');
     register_setting('geohub-settings', 'track_shortcode', 'sanitize_text_field');
     register_setting('geohub-settings', 'poi_shortcode', 'sanitize_text_field');
-    register_setting('geohub-settings', 'taxonomy_shortcode', 'sanitize_text_field');
+    register_setting('geohub-settings', 'layer_taxonomy_shortcode', 'sanitize_text_field');
+    register_setting('geohub-settings', 'taxonomy_track_shortcode', 'sanitize_text_field');
+    register_setting('geohub-settings', 'taxonomy_poi_shortcode', 'sanitize_text_field');
     register_setting('geohub-settings', 'app_configuration_api', 'sanitize_text_field');
 }
 
@@ -161,5 +177,8 @@ function save_geohub_options() {
     update_option('poi_list', sanitize_text_field($_POST['poi_list']));
     update_option('track_shortcode', sanitize_text_field($_POST['track_shortcode']));
     update_option('poi_shortcode', sanitize_text_field($_POST['poi_shortcode']));
-    update_option('taxonomy_shortcode', sanitize_text_field($_POST['taxonomy_shortcode']));
+    update_option('layer_taxonomy_shortcode', sanitize_text_field($_POST['layer_taxonomy_shortcode']));
+    update_option('taxonomy_track_shortcode', sanitize_text_field($_POST['taxonomy_track_shortcode']));
+    update_option('taxonomy_poi_shortcode', sanitize_text_field($_POST['taxonomy_poi_shortcode']));
+    update_option('app_configuration_api', sanitize_text_field($_POST['app_configuration_api']));
 }

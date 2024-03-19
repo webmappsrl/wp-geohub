@@ -27,10 +27,10 @@ function sync_pois_action()
 
         foreach ($pois as $geohub_id => $updated_at) {
             $post_id = null;
-            $track_shortcode_final = '';
+            $poi_shortcode = '';
             $post_title = '';
             $post_slug = '';
-            
+
             $existing_posts = get_posts([
                 'post_type' => 'poi',
                 'meta_query' => [
@@ -87,7 +87,7 @@ function sync_pois_action()
                     continue;
                 }
                 if (!is_wp_error($post_id)) {
-                    update_field('geohub_group_poi_geohub_id', $geohub_id, $post_id);
+                    update_field('geohub_poi_id', $geohub_id, $post_id);
                 }
             }
         }

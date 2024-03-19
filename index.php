@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP GeoHub
 Plugin URI: https://github.com/webmappsrl/wp-geohub
-Description: Plugin to sync tracks from GeoHub to WordPress and display them in a map and in a list.
+Description: Plugin to sync tracks and pois from GeoHub to WordPress and display them via child theme shortcodes.
 Version: 1.0
 Author: Pedram Katanchi
 Author URI: http://webmapp.it
@@ -12,8 +12,8 @@ License: GPL2
 require_once( ABSPATH . "wp-includes/pluggable.php" );
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-    // require_once dirname( __FILE__ ) . '/wp-cli/sync_tracks.php';
-    // require_once dirname( __FILE__ ) . '/wp-cli/sync_pois.php';
+    require_once dirname( __FILE__ ) . '/wp-cli/sync_tracks.php';
+    require_once dirname( __FILE__ ) . '/wp-cli/sync_pois.php';
 }
 
 include_once('hooks/transient.php');
