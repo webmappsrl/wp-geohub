@@ -82,8 +82,8 @@ function geohub_settings_page()
 			<tr valign="top">
 				<th scope="row">Layer taxonomy page:</th>
 				<td><input type="text" size="50" name="layer_taxonomy_shortcode"
-						value="<?php echo esc_attr(get_option('layer_taxonomy_shortcode')) ?: "[wm_layer_page activity='id']"; ?>"
-						placeholder="[wm_layer_page layer='id']" />
+						value="<?php echo esc_attr(get_option('layer_taxonomy_shortcode')) ?: "[wm_single_layer activity='id']"; ?>"
+						placeholder="[wm_single_layer layer='id']" />
 				</td>
 			</tr>
 			<tr valign="top">
