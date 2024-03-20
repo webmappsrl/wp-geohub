@@ -142,7 +142,7 @@ function geohub_settings_init()
     register_setting('geohub-settings', 'layer_taxonomy_shortcode', 'sanitize_text_field');
     register_setting('geohub-settings', 'taxonomy_track_shortcode', 'sanitize_text_field');
     register_setting('geohub-settings', 'taxonomy_poi_shortcode', 'sanitize_text_field');
-    register_setting('geohub-settings', 'app_configuration_api', 'sanitize_text_field');
+    register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
 }
 
 function wp_geohub_footer()
@@ -180,5 +180,5 @@ function save_geohub_options() {
     update_option('layer_taxonomy_shortcode', sanitize_text_field($_POST['layer_taxonomy_shortcode']));
     update_option('taxonomy_track_shortcode', sanitize_text_field($_POST['taxonomy_track_shortcode']));
     update_option('taxonomy_poi_shortcode', sanitize_text_field($_POST['taxonomy_poi_shortcode']));
-    update_option('app_configuration_api', sanitize_text_field($_POST['app_configuration_api']));
+    update_option('app_configuration_id', sanitize_text_field($_POST['app_configuration_id']));
 }
