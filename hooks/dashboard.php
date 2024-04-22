@@ -52,8 +52,8 @@ function geohub_dashboard_widget_content()
         <p>Geohub POIs number: <strong><?php echo count($pois) ?></strong></p>
         <p>Geohub Tracks number: <strong><?php echo count($tracks) ?></strong></p>
         </br>
-        <p>Current POIs number: <strong><?php echo $current_pois ?></strong></p>
-        <p>Current Tracks number: <strong><?php echo $current_tracks ?></strong></p>
+        <p>Current POIs number: <strong><?php echo $current_pois ?></strong> (published)</p>
+        <p>Current Tracks number: <strong><?php echo $current_tracks ?></strong> (published)</p>
         </br>
         <p>Manage Import and Sync:</p>
         <a href="<?php echo esc_url($adminPageURL) ?>" class="button button-primary">Go to GeoHub Settings</a>
