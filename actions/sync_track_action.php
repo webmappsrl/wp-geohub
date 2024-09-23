@@ -42,7 +42,7 @@ function sync_tracks_action()
                 continue; 
             }
 
-            $response = wp_remote_get($track_url . $geohub_id);
+            $response = wp_remote_get($track_url . $geohub_id . ".json");
             if (is_wp_error($response)) {
                 continue; 
             }
