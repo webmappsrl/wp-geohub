@@ -17,8 +17,12 @@ function geohub_settings_page()
 {
 	$app_id = get_option('app_configuration_id') ?: '49';
 
+	$awsApi = "https://wmfe.s3.eu-central-1.amazonaws.com/geohub";
+
+	
+
 	$tracks_list_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/tracks_list";
-	$single_track_api = "https://geohub.webmapp.it/api/ec/track/";
+	$single_track_api = "{$awsApi}/tracks/";
 	$pois_list_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/pois_list";
 	$single_poi_api = "https://geohub.webmapp.it/api/ec/poi/";
 
