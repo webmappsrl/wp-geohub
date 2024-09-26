@@ -3,8 +3,8 @@
 Plugin Name: WP GeoHub
 Plugin URI: https://github.com/webmappsrl/wp-geohub
 Description: Plugin to sync tracks and pois from GeoHub to WordPress and display them via child theme shortcodes.
-Version: 1.1
-Author: Pedram Katanchi, Rubens Garofalo
+Version: 1.2
+Author: Pedram Katanchi, Rubens Garofalo, Valerio Bertolone
 Author URI: https://webmapp.it
 License: GPL2
 */

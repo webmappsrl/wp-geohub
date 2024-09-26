@@ -15,16 +15,20 @@ function geohub_add_admin_menu()
 
 function geohub_settings_page()
 {
-	$app_id = get_option('app_configuration_id') ?: '49';
+	$app_id = get_option('app_configuration_id');
+	if (!is_numeric($app_id) || empty($app_id)) {
+		$app_id = '49';
+	}
 
-	$awsApi = "https://wmfe.s3.eu-central-1.amazonaws.com/geohub";
 
-	
+	$aws_api = "https://wmfe.s3.eu-central-1.amazonaws.com/geohub";
 
 	$tracks_list_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/tracks_list";
-	$single_track_api = "{$awsApi}/tracks/";
+	$single_track_api = "{$aws_api}/tracks/";
 	$pois_list_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/pois_list";
 	$single_poi_api = "https://geohub.webmapp.it/api/ec/poi/";
+	$layer_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/layer/";
+	$poi_type_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/taxonomies/poi_type/";
 
 ?>
 	<div class="wrap">
@@ -46,6 +50,9 @@ function geohub_settings_page()
 					<td>
 						<input type="text" size="5" name="app_configuration_id"
 							value="<?php echo esc_attr($app_id); ?>" placeholder="49" />
+						<p class="description">
+							This APP ID refers to the ID of the app on GeoHub.
+						</p>
 					</td>
 				</tr>
 				<tr valign="top">
@@ -53,6 +60,13 @@ function geohub_settings_page()
 					<td>
 						<input type="text" size="50" name="tracks_list"
 							value="<?php echo esc_attr($tracks_list_api); ?>" readonly />
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Layer API</th>
+					<td>
+						<input type="text" size="50" name="layer_api"
+							value="<?php echo esc_attr($layer_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
@@ -67,6 +81,13 @@ function geohub_settings_page()
 					<td>
 						<input type="text" size="50" name="poi_list"
 							value="<?php echo esc_attr($pois_list_api); ?>" readonly />
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">POI Type API</th>
+					<td>
+						<input type="text" size="50" name="poi_type_api"
+							value="<?php echo esc_attr($poi_type_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
@@ -193,6 +214,8 @@ function geohub_settings_init()
 	register_setting('geohub-settings', 'taxonomy_track_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'taxonomy_poi_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
+	register_setting('geohub-settings', 'layer_api', 'sanitize_text_field');
+	register_setting('geohub-settings', 'poi_type_api', 'sanitize_text_field');
 }
 
 function wp_geohub_footer()
@@ -236,4 +259,6 @@ function save_geohub_options()
 	update_option('taxonomy_track_shortcode', sanitize_text_field($_POST['taxonomy_track_shortcode']));
 	update_option('taxonomy_poi_shortcode', sanitize_text_field($_POST['taxonomy_poi_shortcode']));
 	update_option('app_configuration_id', sanitize_text_field($_POST['app_configuration_id']));
+	update_option('layer_api', sanitize_text_field($_POST['layer_api']));
+	update_option('poi_type_api', sanitize_text_field($_POST['poi_type_api']));
 }
