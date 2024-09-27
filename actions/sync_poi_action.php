@@ -6,12 +6,11 @@ function sync_pois_action()
         return;
 
     $poi_url = get_option('poi_url');
-    $pois_list = get_option('poi_list');
     $poi_shortcode = get_option('poi_shortcode');
     $default_lang = apply_filters('wpml_default_language', NULL );
-    if (!empty($poi_url) && !empty($pois_list) && !empty($poi_shortcode)) {
+    if (!empty($poi_url) && !empty($poi_shortcode)) {
 
-        $pois = wp_remote_get($pois_list);
+        $pois = wp_remote_get($poi_url);
         if (is_wp_error($pois)) {
             set_transient('geohub_sync_pois_notification', 'API poi list non valida o non disponibile.', 60);
             return new WP_Error('invalid_api', 'API poi list non valida o non disponibile.');
@@ -22,9 +21,12 @@ function sync_pois_action()
             return new WP_Error('invalid_input', 'Nessun Poi fornito o formato non valido.');
         }
 
-        foreach ($pois as $geohub_id => $updated_at) {
+        foreach ($pois["features"] as $data) {
             $post_id = null;
             $poi_shortcode_final = '';
+
+            $updated_at = $data["properties"]["updated_at"];
+            $geohub_id = $data["properties"]["id"];
 
             $existing_posts = get_posts([
                 'post_type' => 'poi',
@@ -42,17 +44,6 @@ function sync_pois_action()
 
             if ($existing_posts && $new_updated_time <= $existing_post_modified_time) {
                 continue; 
-            }
-
-            $response = wp_remote_get($poi_url . $geohub_id);
-            if (is_wp_error($response)) {
-                continue; 
-            }
-
-            $body = wp_remote_retrieve_body($response);
-            $data = json_decode($body, true);
-            if (empty($data)) {
-                continue;
             }
 
             // Generate post data from poi information
