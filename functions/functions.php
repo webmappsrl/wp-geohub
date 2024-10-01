@@ -3,7 +3,7 @@
 if (!defined('ABSPATH')) exit;
 
 function requireAllPHPFilesInDirectory($directoryPath){
-    
+    $directoryPath = ABSPATH . $directoryPath;
     if (!is_dir($directoryPath)) {
         throw new InvalidArgumentException("The path '{$directoryPath}' is not a valid directory.");
     }
@@ -58,6 +58,11 @@ function wm_custom_slugify($title)
 // Add custom script to change menu link based on device
 function add_custom_menu_script()
 {
+
+$hrefios = get_option("ios_app_url");
+$hrefandroid = get_option("android_app_url");
+$hrefNomobile = get_option("website_url");
+
 ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -67,13 +72,13 @@ function add_custom_menu_script()
             if (menuLink) {
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
                     // iOS
-                    menuLink.href = "https://apps.apple.com/it/app/pnfc-trekking-map/id1053420140";
+                    menuLink.href = <?php echo $hrefios; ?>;
                 } else if (/android/i.test(userAgent)) {
                     // Android
-                    menuLink.href = "https://play.google.com/store/apps/details?id=it.net7.parcoforestecasentinesi";
+                    menuLink.href = <?php echo $hrefandroid; ?>;
                 } else {
                     // Not mobile
-                    menuLink.href = "https://maps.parcoforestecasentinesi.it/#/map";
+                    menuLink.href = <?php echo $hrefNomobile; ?>;
                 }
                 menuLink.target = "_blank";
             }

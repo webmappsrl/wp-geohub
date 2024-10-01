@@ -90,6 +90,27 @@ function geohub_settings_page()
 					</td>
 				</tr>
 			</table>
+			<h2> Links: </h2>
+			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row">iOS App URL</th>
+					<td>
+						<input type="text" size="50" value="<?php echo esc_attr(get_option('ios_app_url')) ?>" name="ios_app_url"/>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Android App URL</th>
+					<td>
+						<input type="text" size="50"  value="<?php echo esc_attr(get_option('android_app_url')) ?>" name="android_app_url"/>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Website URL</th>
+					<td>
+						<input type="text" size="50" value="<?php echo esc_attr(get_option('website_url')) ?>" name="website_url" />
+					</td>
+				</tr>
+			</table>
 			<h2>Short codes:</h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
@@ -207,6 +228,9 @@ function geohub_settings_init()
 	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
 	register_setting('geohub-settings', 'layer_api', 'sanitize_text_field');
 	register_setting('geohub-settings', 'poi_type_api', 'sanitize_text_field');
+	register_setting('geohub-settings', 'ios_app_url', 'sanitize_text_field');
+	register_setting('geohub-settings', 'android_app_url', 'sanitize_text_field');
+	register_setting('geohub-settings', 'website_url', 'sanitize_text_field');
 }
 
 function wp_geohub_footer()
@@ -252,4 +276,7 @@ function save_geohub_options()
 	update_option('app_configuration_id', sanitize_text_field($_POST['app_configuration_id']));
 	update_option('layer_api', sanitize_text_field($_POST['layer_api']));
 	update_option('poi_type_api', sanitize_text_field($_POST['poi_type_api']));
+	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
+	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
+	update_option('website_url', sanitize_text_field($_POST['website_url']));
 }
