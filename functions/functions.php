@@ -58,10 +58,11 @@ function wm_custom_slugify($title)
 // Add custom script to change menu link based on device
 function add_custom_menu_script()
 {
+$hrefdefault = get_option("default_app_url");
 
-$hrefios = get_option("ios_app_url");
-$hrefandroid = get_option("android_app_url");
-$hrefNomobile = get_option("website_url");
+$hrefios = get_option("ios_app_url") ?: $hrefdefault;
+$hrefandroid = get_option("android_app_url") ?: $hrefdefault;
+$hrefNomobile = get_option("website_url") ?: $hrefdefault;
 
 ?>
     <script>

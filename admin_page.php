@@ -28,6 +28,7 @@ function geohub_settings_page()
 	$poi_api = "{$aws_api}/pois/{$app_id}.geojson";
 	$layer_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/layer/";
 	$poi_type_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/taxonomies/poi_type/";
+	$default_app_url = "https://{$app_id}.app.webmapp.it";
 
 ?>
 	<div class="wrap">
@@ -92,6 +93,13 @@ function geohub_settings_page()
 			</table>
 			<h2> Links: </h2>
 			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row">Default App URL</th>
+					<td>
+						<input type="text" size="50" name="default_app_url"
+							value="<?php echo esc_attr($default_app_url); ?>" readonly />
+					</td>
+				</tr>
 				<tr valign="top">
 					<th scope="row">iOS App URL</th>
 					<td>
@@ -228,6 +236,7 @@ function geohub_settings_init()
 	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
 	register_setting('geohub-settings', 'layer_api', 'sanitize_text_field');
 	register_setting('geohub-settings', 'poi_type_api', 'sanitize_text_field');
+	register_setting('geohub-settings', 'default_app_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'ios_app_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'android_app_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'website_url', 'sanitize_text_field');
@@ -276,6 +285,7 @@ function save_geohub_options()
 	update_option('app_configuration_id', sanitize_text_field($_POST['app_configuration_id']));
 	update_option('layer_api', sanitize_text_field($_POST['layer_api']));
 	update_option('poi_type_api', sanitize_text_field($_POST['poi_type_api']));
+	update_option('default_app_url', sanitize_text_field($_POST['default_app_url']));
 	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
 	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
