@@ -25,10 +25,10 @@ function geohub_settings_page()
 
 	$tracks_list_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/tracks_list";
 	$single_track_api = "{$aws_api}/tracks/";
-	$pois_list_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/pois_list";
-	$single_poi_api = "https://geohub.webmapp.it/api/ec/poi/";
+	$poi_api = "{$aws_api}/pois/{$app_id}.geojson";
 	$layer_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/layer/";
 	$poi_type_api = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/taxonomies/poi_type/";
+	$default_app_url = "https://{$app_id}.app.webmapp.it";
 
 ?>
 	<div class="wrap">
@@ -77,10 +77,10 @@ function geohub_settings_page()
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">POIs list API</th>
+					<th scope="row">POI API</th>
 					<td>
-						<input type="text" size="50" name="poi_list"
-							value="<?php echo esc_attr($pois_list_api); ?>" readonly />
+						<input type="text" size="50" name="poi_url"
+							value="<?php echo esc_attr($poi_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
@@ -90,11 +90,32 @@ function geohub_settings_page()
 							value="<?php echo esc_attr($poi_type_api); ?>" readonly />
 					</td>
 				</tr>
+			</table>
+			<h2> Links: </h2>
+			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Single POI API</th>
+					<th scope="row">Default App URL</th>
 					<td>
-						<input type="text" size="50" name="poi_url"
-							value="<?php echo esc_attr($single_poi_api); ?>" readonly />
+						<input type="text" size="50" name="default_app_url"
+							value="<?php echo esc_attr($default_app_url); ?>" readonly />
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">iOS App URL</th>
+					<td>
+						<input type="text" size="50" value="<?php echo esc_attr(get_option('ios_app_url')) ?>" name="ios_app_url"/>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Android App URL</th>
+					<td>
+						<input type="text" size="50"  value="<?php echo esc_attr(get_option('android_app_url')) ?>" name="android_app_url"/>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Website URL</th>
+					<td>
+						<input type="text" size="50" value="<?php echo esc_attr(get_option('website_url')) ?>" name="website_url" />
 					</td>
 				</tr>
 			</table>
@@ -207,7 +228,6 @@ function geohub_settings_init()
 	register_setting('geohub-settings', 'track_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'poi_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'tracks_list', 'sanitize_text_field');
-	register_setting('geohub-settings', 'poi_list', 'sanitize_text_field');
 	register_setting('geohub-settings', 'track_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'poi_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'layer_taxonomy_shortcode', 'sanitize_text_field');
@@ -216,6 +236,10 @@ function geohub_settings_init()
 	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
 	register_setting('geohub-settings', 'layer_api', 'sanitize_text_field');
 	register_setting('geohub-settings', 'poi_type_api', 'sanitize_text_field');
+	register_setting('geohub-settings', 'default_app_url', 'sanitize_text_field');
+	register_setting('geohub-settings', 'ios_app_url', 'sanitize_text_field');
+	register_setting('geohub-settings', 'android_app_url', 'sanitize_text_field');
+	register_setting('geohub-settings', 'website_url', 'sanitize_text_field');
 }
 
 function wp_geohub_footer()
@@ -261,4 +285,8 @@ function save_geohub_options()
 	update_option('app_configuration_id', sanitize_text_field($_POST['app_configuration_id']));
 	update_option('layer_api', sanitize_text_field($_POST['layer_api']));
 	update_option('poi_type_api', sanitize_text_field($_POST['poi_type_api']));
+	update_option('default_app_url', sanitize_text_field($_POST['default_app_url']));
+	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
+	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
+	update_option('website_url', sanitize_text_field($_POST['website_url']));
 }

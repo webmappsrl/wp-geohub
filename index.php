@@ -16,7 +16,9 @@ if (defined('WP_CLI') && WP_CLI) {
     require_once dirname(__FILE__) . '/wp-cli/sync_pois.php';
 }
 
+include_once('functions/functions.php');
 include_once('functions/controls.php');
+include_once('functions/imports.php');
 include_once('hooks/transient.php');
 include_once('hooks/dashboard.php');
 include_once('post_types/Geohub_RegisterTrackPostType.php');
