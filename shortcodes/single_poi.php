@@ -5,7 +5,7 @@ if (!is_admin()) {
 
 function getPoiById($pois, $desiredId){
     foreach ($pois['features'] as $feature) {
-        if (isset($feature['properties']['id']) && $feature['properties']['id'] === $desiredId) {
+        if (isset($feature['properties']['id']) && $feature['properties']['id'] == $desiredId) {
             return $feature;
         }
     }
