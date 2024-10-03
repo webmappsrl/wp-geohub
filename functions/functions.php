@@ -59,11 +59,9 @@ function wm_custom_slugify($title)
 function add_custom_menu_script()
 {
 $hrefdefault = get_option("default_app_url");
-
 $hrefios = get_option("ios_app_url") ?: $hrefdefault;
 $hrefandroid = get_option("android_app_url") ?: $hrefdefault;
 $hrefNomobile = get_option("website_url") ?: $hrefdefault;
-
 ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -73,13 +71,13 @@ $hrefNomobile = get_option("website_url") ?: $hrefdefault;
             if (menuLink) {
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
                     // iOS
-                    menuLink.href = <?php echo $hrefios; ?>;
+                    menuLink.href = "<?php echo $hrefios; ?>";
                 } else if (/android/i.test(userAgent)) {
                     // Android
-                    menuLink.href = <?php echo $hrefandroid; ?>;
+                    menuLink.href = "<?php echo $hrefandroid; ?>";
                 } else {
                     // Not mobile
-                    menuLink.href = <?php echo $hrefNomobile; ?>;
+                    menuLink.href = "<?php echo $hrefNomobile; ?>";
                 }
                 menuLink.target = "_blank";
             }
