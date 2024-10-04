@@ -58,10 +58,9 @@ function wm_custom_slugify($title)
 // Add custom script to change menu link based on device
 function add_custom_menu_script()
 {
-$hrefdefault = get_option("default_app_url");
+$hrefdefault = get_option("website_url");
 $hrefios = get_option("ios_app_url") ?: $hrefdefault;
 $hrefandroid = get_option("android_app_url") ?: $hrefdefault;
-$hrefNomobile = get_option("website_url") ?: $hrefdefault;
 ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -77,7 +76,7 @@ $hrefNomobile = get_option("website_url") ?: $hrefdefault;
                     menuLink.href = "<?php echo $hrefandroid; ?>";
                 } else {
                     // Not mobile
-                    menuLink.href = "<?php echo $hrefNomobile; ?>";
+                    menuLink.href = "<?php echo $hrefdefault; ?>";
                 }
                 menuLink.target = "_blank";
             }
