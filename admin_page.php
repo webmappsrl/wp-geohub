@@ -58,35 +58,40 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Tracks list API</th>
 					<td>
-						<input type="text" size="50" name="tracks_list"
+						<a href="<?php echo esc_attr($tracks_list_api); ?>" target="_blank"><p><?php echo esc_attr($tracks_list_api); ?></p></a> 
+						<input type="hidden" size="50" name="tracks_list"
 							value="<?php echo esc_attr($tracks_list_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">Layer API</th>
 					<td>
-						<input type="text" size="50" name="layer_api"
+						<a href="<?php echo esc_attr($layer_api); ?>" target="_blank"><p><?php echo esc_attr($layer_api); ?></p></a>
+						<input type="hidden" size="50" name="layer_api"
 							value="<?php echo esc_attr($layer_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">Single Track API</th>
 					<td>
-						<input type="text" size="50" name="track_url"
+						<a href="<?php echo esc_attr($single_track_api); ?>" target="_blank"><p><?php echo esc_attr($single_track_api); ?></p></a>
+						<input type="hidden" size="50" name="track_url"
 							value="<?php echo esc_attr($single_track_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">POI API</th>
 					<td>
-						<input type="text" size="50" name="poi_url"
+						<a href="<?php echo esc_attr($poi_api); ?>" target="_blank"><p><?php echo esc_attr($poi_api); ?></p></a>
+						<input type="hidden" size="50" name="poi_url"
 							value="<?php echo esc_attr($poi_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">POI Type API</th>
 					<td>
-						<input type="text" size="50" name="poi_type_api"
+						<a href="<?php echo esc_attr($poi_type_api); ?>" target="_blank"><p><?php echo esc_attr($poi_type_api); ?></p></a>
+						<input type="hidden" size="50" name="poi_type_api"
 							value="<?php echo esc_attr($poi_type_api); ?>" readonly />
 					</td>
 				</tr>
@@ -94,28 +99,30 @@ function geohub_settings_page()
 			<h2> Links: </h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Default App URL</th>
+					<th scope="row">Website URL</th>
 					<td>
-						<input type="text" size="50" name="default_app_url"
-							value="<?php echo esc_attr($default_app_url); ?>" readonly />
+						<input type="text" size="50" value="<?php echo esc_attr(get_option('website_url')) ? esc_attr(get_option('website_url')): esc_attr($default_app_url) ?>" placeholder="<?php echo esc_attr($default_app_url); ?>" name="website_url" />
+						<p class="description">
+							URL that display the Website version of the map
+						</p>
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">iOS App URL</th>
 					<td>
 						<input type="text" size="50" value="<?php echo esc_attr(get_option('ios_app_url')) ?>" name="ios_app_url"/>
+						<p class="description">
+							URL that display the Mobile version of the map for iOS
+						</p>
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">Android App URL</th>
 					<td>
 						<input type="text" size="50"  value="<?php echo esc_attr(get_option('android_app_url')) ?>" name="android_app_url"/>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row">Website URL</th>
-					<td>
-						<input type="text" size="50" value="<?php echo esc_attr(get_option('website_url')) ?>" name="website_url" />
+						<p class="description">
+							URL that display the Mobile version of the map for Android
+						</p>
 					</td>
 				</tr>
 			</table>
@@ -124,7 +131,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Track page:</th>
 					<td>
-						<input type="text" size="50" name="track_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('track_shortcode')) ?: "[wm_single_track track_id='$1']"; ?></p>
+						<input type="hidden" size="50" name="track_shortcode"
 							value="<?php echo esc_attr(get_option('track_shortcode')) ?: "[wm_single_track track_id='$1']"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a single track. <br>
@@ -136,7 +144,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">POI page:</th>
 					<td>
-						<input type="text" size="50" name="poi_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1';]"; ?></p>
+						<input type="hidden" size="50" name="poi_shortcode"
 							value="<?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1';]"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a single Point of Interest (POI). <br>
@@ -148,7 +157,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Taxonomy Track page:</th>
 					<td>
-						<input type="text" size="50" name="taxonomy_track_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track activity='id']"; ?></p>
+						<input type="hidden" size="50" name="taxonomy_track_shortcode"
 							value="<?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track activity='id']"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a grid of tracks based on taxonomy. <br>
@@ -164,7 +174,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Taxonomy Poi page:</th>
 					<td>
-						<input type="text" size="50" name="taxonomy_poi_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type='id']"; ?></p>
+						<input type="hidden" size="50" name="taxonomy_poi_shortcode"
 							value="<?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type='id']"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a grid of POIs based on taxonomy. <br>
@@ -173,6 +184,19 @@ function geohub_settings_page()
 							<strong>poi_type_ids</strong>: List of POI type IDs (comma-separated). <br>
 							<strong>quantity</strong>: Maximum number of POIs to display. <br>
 							<strong>random</strong>: Display POIs in random order (true/false).
+						</p>
+					</td>
+				</tr>
+			</table>
+
+			<h2> Classes for map:</h2>
+			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row">Map Class</th>
+					<td>
+						<p class="copiable">wm-custom-link</p>
+						<p class="description">Class for the map button in the menu. <br>
+							Has to be added inside the map button inside the header menu, from the interface <br>
 						</p>
 					</td>
 				</tr>
@@ -224,7 +248,6 @@ function geohub_settings_init()
 	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
 	register_setting('geohub-settings', 'layer_api', 'sanitize_text_field');
 	register_setting('geohub-settings', 'poi_type_api', 'sanitize_text_field');
-	register_setting('geohub-settings', 'default_app_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'ios_app_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'android_app_url', 'sanitize_text_field');
 	register_setting('geohub-settings', 'website_url', 'sanitize_text_field');
@@ -272,7 +295,6 @@ function save_geohub_options()
 	update_option('app_configuration_id', sanitize_text_field($_POST['app_configuration_id']));
 	update_option('layer_api', sanitize_text_field($_POST['layer_api']));
 	update_option('poi_type_api', sanitize_text_field($_POST['poi_type_api']));
-	update_option('default_app_url', sanitize_text_field($_POST['default_app_url']));
 	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
 	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
 	update_option('website_url', sanitize_text_field($_POST['website_url']));

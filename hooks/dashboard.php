@@ -18,11 +18,12 @@ function geohub_dashboard_widget_content()
     $current_tracks = 0;
 
     // Geohub
-    $pois_list = get_option('poi_list');
+    $pois_list = get_option('poi_url');
     $tracks_list = get_option('tracks_list');
     if (!empty($pois_list)) {
         $pois = wp_remote_get($pois_list);
         $pois = json_decode(wp_remote_retrieve_body($pois), true);
+        $pois = $pois["features"];
     }
     if (!empty($tracks_list)) {
         $tracks = wp_remote_get($tracks_list);
