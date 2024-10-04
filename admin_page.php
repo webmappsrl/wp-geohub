@@ -131,7 +131,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Track page:</th>
 					<td>
-						<input type="text" size="50" name="track_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('track_shortcode')) ?: "[wm_single_track track_id='$1']"; ?></p>
+						<input type="hidden" size="50" name="track_shortcode"
 							value="<?php echo esc_attr(get_option('track_shortcode')) ?: "[wm_single_track track_id='$1']"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a single track. <br>
@@ -143,7 +144,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">POI page:</th>
 					<td>
-						<input type="text" size="50" name="poi_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1';]"; ?></p>
+						<input type="hidden" size="50" name="poi_shortcode"
 							value="<?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1';]"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a single Point of Interest (POI). <br>
@@ -155,7 +157,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Taxonomy Track page:</th>
 					<td>
-						<input type="text" size="50" name="taxonomy_track_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track activity='id']"; ?></p>
+						<input type="hidden" size="50" name="taxonomy_track_shortcode"
 							value="<?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track activity='id']"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a grid of tracks based on taxonomy. <br>
@@ -171,7 +174,8 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Taxonomy Poi page:</th>
 					<td>
-						<input type="text" size="50" name="taxonomy_poi_shortcode"
+						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type='id']"; ?></p>
+						<input type="hidden" size="50" name="taxonomy_poi_shortcode"
 							value="<?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type='id']"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a grid of POIs based on taxonomy. <br>
