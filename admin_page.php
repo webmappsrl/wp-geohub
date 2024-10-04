@@ -189,6 +189,19 @@ function geohub_settings_page()
 				</tr>
 			</table>
 
+			<h2> Classes for map:</h2>
+			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row">Map Class</th>
+					<td>
+						<p class="copiable">wm-custom-link</p>
+						<p class="description">Class for the map button in the menu. <br>
+							Has to be added inside the map button inside the header menu, from the interface <br>
+						</p>
+					</td>
+				</tr>
+			</table>
+
 
 			<h2>Import and Sync:</h2>
 			<table class="form-table" style="margin-left: 30px;">

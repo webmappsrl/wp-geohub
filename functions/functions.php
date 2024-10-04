@@ -65,7 +65,7 @@ $hrefandroid = get_option("android_app_url") ?: $hrefdefault;
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            var menuLink = document.querySelector('.menu-item-90 a, .menu-item-93 a');
+            var menuLink = document.querySelector('.wm-custom-link');
 
             if (menuLink) {
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
