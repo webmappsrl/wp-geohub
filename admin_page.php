@@ -146,18 +146,6 @@ function geohub_settings_page()
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Layer taxonomy page:</th>
-					<td>
-						<input type="text" size="50" name="layer_taxonomy_shortcode"
-							value="<?php echo esc_attr(get_option('layer_taxonomy_shortcode')) ?: "[wm_single_layer layer='id']"; ?>"
-							readonly />
-						<p class="description">Shortcode to display a single layer taxonomy. <br>
-							<strong>Parameters:</strong><br>
-							<strong>layer</strong>: The ID of the layer.
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
 					<th scope="row">Taxonomy Track page:</th>
 					<td>
 						<input type="text" size="50" name="taxonomy_track_shortcode"
@@ -168,7 +156,8 @@ function geohub_settings_page()
 							<strong>layer_id</strong>: ID of the single layer. <br>
 							<strong>layer_ids</strong>: List of layer IDs (comma-separated). <br>
 							<strong>quantity</strong>: Maximum number of tracks to display. <br>
-							<strong>random</strong>: Display tracks in random order (true/false).
+							<strong>random</strong>: Display tracks in random order (true/false). <br>
+							<strong>content</strong>: Display content (true/false).
 						</p>
 					</td>
 				</tr>
@@ -230,7 +219,6 @@ function geohub_settings_init()
 	register_setting('geohub-settings', 'tracks_list', 'sanitize_text_field');
 	register_setting('geohub-settings', 'track_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'poi_shortcode', 'sanitize_text_field');
-	register_setting('geohub-settings', 'layer_taxonomy_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'taxonomy_track_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'taxonomy_poi_shortcode', 'sanitize_text_field');
 	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
@@ -279,7 +267,6 @@ function save_geohub_options()
 	update_option('poi_list', sanitize_text_field($_POST['poi_list']));
 	update_option('track_shortcode', sanitize_text_field($_POST['track_shortcode']));
 	update_option('poi_shortcode', sanitize_text_field($_POST['poi_shortcode']));
-	update_option('layer_taxonomy_shortcode', sanitize_text_field($_POST['layer_taxonomy_shortcode']));
 	update_option('taxonomy_track_shortcode', sanitize_text_field($_POST['taxonomy_track_shortcode']));
 	update_option('taxonomy_poi_shortcode', sanitize_text_field($_POST['taxonomy_poi_shortcode']));
 	update_option('app_configuration_id', sanitize_text_field($_POST['app_configuration_id']));
