@@ -58,35 +58,40 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">Tracks list API</th>
 					<td>
-						<input type="text" size="50" name="tracks_list"
+						<a href="<?php echo esc_attr($tracks_list_api); ?>" target="_blank"><p><?php echo esc_attr($tracks_list_api); ?></p></a> 
+						<input type="hidden" size="50" name="tracks_list"
 							value="<?php echo esc_attr($tracks_list_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">Layer API</th>
 					<td>
-						<input type="text" size="50" name="layer_api"
+						<a href="<?php echo esc_attr($layer_api); ?>" target="_blank"><p><?php echo esc_attr($layer_api); ?></p></a>
+						<input type="hidden" size="50" name="layer_api"
 							value="<?php echo esc_attr($layer_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">Single Track API</th>
 					<td>
-						<input type="text" size="50" name="track_url"
+						<a href="<?php echo esc_attr($single_track_api); ?>" target="_blank"><p><?php echo esc_attr($single_track_api); ?></p></a>
+						<input type="hidden" size="50" name="track_url"
 							value="<?php echo esc_attr($single_track_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">POI API</th>
 					<td>
-						<input type="text" size="50" name="poi_url"
+						<a href="<?php echo esc_attr($poi_api); ?>" target="_blank"><p><?php echo esc_attr($poi_api); ?></p></a>
+						<input type="hidden" size="50" name="poi_url"
 							value="<?php echo esc_attr($poi_api); ?>" readonly />
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row">POI Type API</th>
 					<td>
-						<input type="text" size="50" name="poi_type_api"
+						<a href="<?php echo esc_attr($poi_type_api); ?>" target="_blank"><p><?php echo esc_attr($poi_type_api); ?></p></a>
+						<input type="hidden" size="50" name="poi_type_api"
 							value="<?php echo esc_attr($poi_type_api); ?>" readonly />
 					</td>
 				</tr>
