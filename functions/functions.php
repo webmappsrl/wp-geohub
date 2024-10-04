@@ -65,7 +65,7 @@ $hrefandroid = get_option("android_app_url") ?: $hrefdefault;
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            var menuLink = document.querySelector('.wm-custom-link');
+            var menuLink = document.querySelector('.wm-custom-link > a');
 
             if (menuLink) {
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
@@ -78,6 +78,7 @@ $hrefandroid = get_option("android_app_url") ?: $hrefdefault;
                     // Not mobile
                     menuLink.href = "<?php echo $hrefdefault; ?>";
                 }
+                console.log(menuLink.href);
                 menuLink.target = "_blank";
             }
         });
