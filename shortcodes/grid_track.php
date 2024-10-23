@@ -56,7 +56,11 @@ function wm_grid_track($atts)
             }
         }
     }
-
+    usort($tracks, function ($a, $b) use ($language) {
+        $nameA = strtolower($a['name'][$language] ?? '');
+        $nameB = strtolower($b['name'][$language] ?? '');
+        return strcmp($nameA, $nameB);
+    });
     if ('true' === $random) {
         shuffle($tracks);
     }
