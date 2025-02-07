@@ -10,6 +10,17 @@ function wm_single_track($atts)
 	} else {
 		$language = 'it';
 	}
+
+	$supported_languages = ['it', 'en', 'fr', 'de', 'es', 'nl', 'sq'];
+
+	if (!in_array($language, $supported_languages)) {
+		$language = substr(get_locale(), 0, 2);
+	}
+
+	if (!in_array($language, $supported_languages)) {
+		$language = 'en';
+	}
+
 	extract(shortcode_atts(array(
 		'track_id' => '',
 	), $atts));
@@ -19,7 +30,7 @@ function wm_single_track($atts)
 
 	$track = json_decode(file_get_contents($geojson_url), true);
 	$track = $track['properties'];
-	$iframeUrl = "https://geohub.webmapp.it/w/simple/" . $track_id;
+	$iframeUrl = "https://geohub.webmapp.it/w/simple/" . $track_id . "?locale=" . $language;
 
 	$description = null;
 	$excerpt = null;
