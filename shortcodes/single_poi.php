@@ -20,6 +20,16 @@ function wm_single_poi($atts)
 		$language = 'it';
 	}
 
+	$supported_languages = ['it', 'en', 'fr', 'de', 'es', 'nl', 'sq'];
+
+    if (!in_array($language, $supported_languages)) {
+        $language = substr(get_locale(), 0, 2);
+    }
+
+    if (!in_array($language, $supported_languages)) {
+        $language = 'en';
+    }
+
 	extract(shortcode_atts(array(
 		'poi_id' => '',
 	), $atts));
@@ -39,7 +49,7 @@ function wm_single_poi($atts)
 	}
 
 	$poi_properties = $poi['properties'];
-	$iframeUrl = "https://geohub.webmapp.it/poi/simple/" . $poi_id;
+	$iframeUrl = "https://geohub.webmapp.it/poi/simple/" . $poi_id . "?locale=" . $language;
 
 	$title = null;
 	$description = null;

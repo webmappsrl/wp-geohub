@@ -38,6 +38,13 @@ function wm_grid_poi($atts)
                 }
             }
         }
+
+        usort($poi_data, function ($a, $b) {
+            preg_match('/\d+/', $a['name'][ICL_LANGUAGE_CODE] ?? '', $matchesA);
+            preg_match('/\d+/', $b['name'][ICL_LANGUAGE_CODE] ?? '', $matchesB);
+            return ($matchesA[0] ?? 0) - ($matchesB[0] ?? 0);
+        });
+
         if ('true' === $random) {
             shuffle($poi_data);
         }
@@ -47,16 +54,15 @@ function wm_grid_poi($atts)
 
         ob_start();
 ?>
-
         <div class="wm_poi_grid">
             <?php foreach ($poi_data as $poi) : ?>
                 <div class="wm_grid_poi_item">
                     <?php
                     $name = $poi['name'][$language] ?? '';
                     $feature_image_url = $poi['featureImage']['thumbnail'] ?? '/assets/images/background.jpg';
-                    $name_url = wm_custom_slugify($name);
-                    $language_prefix = $language === 'en' ? '/en' : '';
-                    $poi_page_url = "{$language_prefix}/poi/{$name_url}/";
+                    $poi_slug = $poi['slug'][$language] ?? wm_custom_slugify($name);
+                    $base_url = apply_filters('wpml_home_url', get_site_url(), $language);
+                    $poi_page_url = trailingslashit($base_url) . "poi/{$poi_slug}/";
                     $svg_icon = $poi['svg_icon'] ?? '';
                     ?>
                     <a href="<?= esc_url($poi_page_url); ?>">
@@ -71,12 +77,10 @@ function wm_grid_poi($atts)
                         <?php if ($name) : ?>
                             <div class="wm_grid_poi_name"><?= esc_html($name); ?></div>
                         <?php endif; ?>
-
                     </a>
                 </div>
             <?php endforeach; ?>
         </div>
-
 <?php
         return ob_get_clean();
     } else {

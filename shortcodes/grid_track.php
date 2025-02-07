@@ -56,10 +56,10 @@ function wm_grid_track($atts)
             }
         }
     }
-    usort($tracks, function ($a, $b) use ($language) {
-        $nameA = strtolower($a['name'][$language] ?? '');
-        $nameB = strtolower($b['name'][$language] ?? '');
-        return strcmp($nameA, $nameB);
+    usort($tracks, function ($a, $b) {
+        preg_match('/\d+/', $a['name'][ICL_LANGUAGE_CODE] ?? '', $matchesA);
+        preg_match('/\d+/', $b['name'][ICL_LANGUAGE_CODE] ?? '', $matchesB);
+        return ($matchesA[0] ?? 0) - ($matchesB[0] ?? 0);
     });
     if ('true' === $random) {
         shuffle($tracks);
@@ -67,7 +67,6 @@ function wm_grid_track($atts)
     if ($quantity > 0 && count($tracks) > $quantity) {
         $tracks = array_slice($tracks, 0, $quantity);
     }
-
     ob_start();
 ?>    
     <?php if(!empty($featured_image_url)) : ?>
@@ -99,9 +98,9 @@ function wm_grid_track($atts)
                         <?php
                         $name = $track['name'][$language] ?? '';
                         $feature_image_url = $track['featureImage']['thumbnail'] ?? '/assets/images/background.jpg';
-                        $name_url = wm_custom_slugify($name);
-                        $language_prefix = $language === 'en' ? '/en' : '';
-                        $track_page_url = "{$language_prefix}/track/{$name_url}/";
+                        $track_slug = $track['slug'][$language] ?? wm_custom_slugify($name);
+                        $base_url = apply_filters('wpml_home_url', get_site_url(), $language);
+                        $track_page_url = trailingslashit($base_url) . "track/{$track_slug}/";
                         $svg_icon = $track['svg_icon'] ?? '';
                         ?>
                         <a href="<?= esc_url($track_page_url); ?>">
