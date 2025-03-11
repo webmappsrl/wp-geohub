@@ -56,10 +56,19 @@ function wm_grid_track($atts)
             }
         }
     }
-    usort($tracks, function ($a, $b) {
-        preg_match('/\d+/', $a['name'][ICL_LANGUAGE_CODE] ?? '', $matchesA);
-        preg_match('/\d+/', $b['name'][ICL_LANGUAGE_CODE] ?? '', $matchesB);
-        return ($matchesA[0] ?? 0) - ($matchesB[0] ?? 0);
+    usort($tracks, function ($a, $b) use ($language) {
+        // Extracting the number from the name
+        preg_match('/\d+/', $a['name'][$language] ?? '', $matchesA);
+        preg_match('/\d+/', $b['name'][$language] ?? '', $matchesB);
+        // Get numbers from content names
+        $numA = isset($matchesA[0]) ? (int)$matchesA[0] : 0;
+        $numB = isset($matchesB[0]) ? (int)$matchesB[0] : 0;
+        // If the numbers are different, sort by number
+        if ($numA !== $numB) {
+            return $numA - $numB;
+        }
+        // If the numbers are the same, sort alphabetically.
+        return strcasecmp($a['name'][$language] ?? '', $b['name'][$language] ?? '');
     });
     if ('true' === $random) {
         shuffle($tracks);
