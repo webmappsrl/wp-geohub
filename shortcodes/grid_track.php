@@ -23,15 +23,20 @@ function wm_grid_track($atts)
     
     $layer_api_base = get_option('layer_api');
 
+    $default_image = plugins_url('wp-geohub/assets/default_image.png');
+
     if(!empty($layer_id) && ($content)) {
 
         $layer_url = "{$layer_api_base}{$layer_id}";
         $layer_data = json_decode(file_get_contents($layer_url), true);
         
-        $featured_image_url = $layer_data['featureImage']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
         $title = $layer_data['title'][$language] ?? null;
         $subtitle = $layer_data['subtitle'][$language] ?? null;
         $description = $layer_data['description'][$language] ?? null;
+        
+        $featured_image_url = !empty($layer_data['featureImage']['thumbnail'])
+        ? esc_url($layer_data['featureImage']['thumbnail'])
+        : $default_image;
     }
 
 
@@ -52,6 +57,9 @@ function wm_grid_track($atts)
                 if (!empty($layer_data['taxonomy_themes'][0]['icon'])) {
                     $track['svg_icon'] = $layer_data['taxonomy_themes'][0]['icon'];
                 }
+                $track['thumbnail_final'] = !empty($track['featureImage']['thumbnail'])
+                    ? esc_url($track['featureImage']['thumbnail'])
+                    : $default_image;
                 $tracks[] = $track;
             }
         }
@@ -106,7 +114,8 @@ function wm_grid_track($atts)
                     <div class="wm_grid_track_item">
                         <?php
                         $name = $track['name'][$language] ?? '';
-                        $feature_image_url = $track['featureImage']['thumbnail'] ?? '/assets/images/background.jpg';
+                        $default_image = plugins_url('wp-geohub/assets/default_image.png');
+                        $feature_image_url = $track['thumbnail_final'];
                         $track_slug = $track['slug'][$language] ?? wm_custom_slugify($name);
                         $base_url = apply_filters('wpml_home_url', get_site_url(), $language);
                         $track_page_url = trailingslashit($base_url) . "track/{$track_slug}/";

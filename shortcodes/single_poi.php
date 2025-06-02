@@ -50,6 +50,7 @@ function wm_single_poi($atts)
 
 	$poi_properties = $poi['properties'];
 	$iframeUrl = "https://geohub.webmapp.it/poi/simple/" . $poi_id . "?locale=" . $language;
+	$default_image = plugins_url('wp-geohub/assets/default_image.png');
 
 	$title = null;
 	$description = null;
@@ -62,13 +63,19 @@ function wm_single_poi($atts)
 	$addr_locality = null;
 	$gallery = null;
 	$related_urls = null;
+	$poi_types = null;
 
 	if (!empty($poi_properties)) {
 		$title = $poi_properties['name'][$language] ?? '';
 		$description = $poi_properties['description'][$language] ?? '';
 		$excerpt = $poi_properties['excerpt'][$language] ?? '';
-		$featured_image_url = $poi_properties['feature_image']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
-		$featured_image = $poi_properties['feature_image']['sizes']['1440x500'] ?? $featured_image_url;
+		$featured_image_url = isset($poi_properties['feature_image']['url']) && !empty($poi_properties['feature_image']['url'])
+			? $poi_properties['feature_image']['url']
+			: $default_image;
+
+		$featured_image = isset($poi_properties['feature_image']['sizes']['1440x500']) && !empty($poi_properties['feature_image']['sizes']['1440x500'])
+			? $poi_properties['feature_image']['sizes']['1440x500']
+			: $featured_image_url;
 		$contact_phone = $poi_properties['contact_phone'] ?? '';
 		$contact_email = $poi_properties['contact_email'] ?? '';
 		$addr_street = $poi_properties['addr_street'] ?? '';
@@ -76,6 +83,7 @@ function wm_single_poi($atts)
 		$addr_locality = $poi_properties['addr_locality'] ?? '';
 		$gallery = $poi_properties['image_gallery'] ?? [];
 		$related_urls = $poi_properties['related_url'] ?? [];
+		$poi_types = $poi_properties['taxonomy']['poi_types'] ?? [];
 	}
 	ob_start();
 ?>
@@ -92,6 +100,18 @@ function wm_single_poi($atts)
 				<?= $title ?>
 			</h1>
 		<?php } ?>
+		<?php if (!empty($poi_types)) : ?>
+				<div class="wm_activities wm_container>
+					<?php foreach ($poi_types as $type) : ?>
+						<span class="wm_activity">
+							<?php if (!empty($type['icon'])) : ?>
+								<span class="wm_activity_icon"><?= $type['icon'] ?></span>
+							<?php endif; ?>
+							<span class="wm_activity_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
+						</span>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
 		<div class="wm_container">
 			<div class="wm_left_wrapper">
 				<iframe class="wm_iframe_map" src="<?= esc_url($iframeUrl); ?>" loading="lazy"></iframe>

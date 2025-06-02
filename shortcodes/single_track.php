@@ -38,15 +38,22 @@ function wm_single_track($atts)
 	$featured_image = null;
 	$gallery = [];
 	$gpx = null;
+	$activity = null;
 
 	if ($track) {
 		$description = $track['description'][$language] ?? null;
 		$excerpt = $track['excerpt'][$language] ?? null;
 		$title = $track['name'][$language] ?? null;
-		$featured_image_url = $track['feature_image']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
-		$featured_image = $track['feature_image']['sizes']['1440x500'] ?? $featured_image_url;
+		$default_image = plugins_url('wp-geohub/assets/default_image.png');
+		$featured_image_url = isset($track['feature_image']['url']) && !empty($track['feature_image']['url'])
+			? $track['feature_image']['url']
+			: $default_image;
+		$featured_image = isset($track['feature_image']['sizes']['1440x500']) && !empty($track['feature_image']['sizes']['1440x500'])
+			? $track['feature_image']['sizes']['1440x500']
+			: $featured_image_url;
 		$gallery = $track['image_gallery'] ?? [];
 		$gpx = $track['gpx_url'];
+		$activity = $track['taxonomy']['activity'] ?? [];
 	}
 	ob_start();
 ?>
@@ -64,6 +71,18 @@ function wm_single_track($atts)
 				<?= $title ?>
 			</h1>
 		<?php } ?>
+		<?php if (!empty($activity)) : ?>
+			<div class="wm_activities wm_container">
+				<?php foreach ($activity as $type) : ?>
+					<span class="wm_activity">
+						<?php if (!empty($type['icon'])) : ?>
+							<span class="wm_activity_icon"><?= $type['icon'] ?></span>
+						<?php endif; ?>
+						<span class="wm_activity_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
+					</span>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
 		<div class="wm_container">
 			<div class="wm_left_wrapper">
 				<iframe class="wm_iframe_map" src="<?= esc_url($iframeUrl); ?>" loading="lazy"></iframe>

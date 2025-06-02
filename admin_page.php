@@ -144,9 +144,9 @@ function geohub_settings_page()
 				<tr valign="top">
 					<th scope="row">POI page:</th>
 					<td>
-						<p class="copiable"><?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1';]"; ?></p>
+						<p class="copiable"><?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1']"; ?></p>
 						<input type="hidden" size="50" name="poi_shortcode"
-							value="<?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1';]"; ?>"
+							value="<?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1']"; ?>"
 							readonly />
 						<p class="description">Shortcode to display a single Point of Interest (POI). <br>
 							<strong>Parameters:</strong><br>
