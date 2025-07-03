@@ -54,7 +54,10 @@ function wm_grid_track($atts)
         $layer_data = json_decode(wp_remote_retrieve_body($response), true);
         if (!empty($layer_data['tracks'])) {
             foreach ($layer_data['tracks'] as $track) {
-                if (!empty($layer_data['taxonomy_themes'][0]['icon'])) {
+                $track['svg_icon'] = '';
+                if (!empty($layer_data['taxonomy_activities'][0]['icon'])) {
+                    $track['svg_icon'] = $layer_data['taxonomy_activities'][0]['icon'];
+                } elseif (!empty($layer_data['taxonomy_themes'][0]['icon'])) {
                     $track['svg_icon'] = $layer_data['taxonomy_themes'][0]['icon'];
                 }
                 $track['thumbnail_final'] = !empty($track['featureImage']['thumbnail'])
