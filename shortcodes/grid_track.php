@@ -33,10 +33,13 @@ function wm_grid_track($atts)
         $title = $layer_data['title'][$language] ?? null;
         $subtitle = $layer_data['subtitle'][$language] ?? null;
         $description = $layer_data['description'][$language] ?? null;
-        
-        $featured_image_url = !empty($layer_data['featureImage']['thumbnail'])
-        ? esc_url($layer_data['featureImage']['thumbnail'])
-        : $default_image;
+
+        $featured_image_url = $default_image;
+        if (!empty($layer_data['featureImage']['sizes']['1440x500'])) {
+            $featured_image_url = esc_url($layer_data['featureImage']['sizes']['1440x500']);
+        } elseif (!empty($layer_data['featureImage']['thumbnail'])) {
+            $featured_image_url = esc_url($layer_data['featureImage']['thumbnail']);
+        }
     }
 
 
@@ -60,9 +63,12 @@ function wm_grid_track($atts)
                 } elseif (!empty($layer_data['taxonomy_themes'][0]['icon'])) {
                     $track['svg_icon'] = $layer_data['taxonomy_themes'][0]['icon'];
                 }
-                $track['thumbnail_final'] = !empty($track['featureImage']['thumbnail'])
-                    ? esc_url($track['featureImage']['thumbnail'])
-                    : $default_image;
+                $track['thumbnail_final'] = $default_image;
+                if (!empty($track['featureImage']['sizes']['1440x500'])) {
+                    $track['thumbnail_final'] = esc_url($track['featureImage']['sizes']['1440x500']);
+                } elseif (!empty($track['featureImage']['thumbnail'])) {
+                    $track['thumbnail_final'] = esc_url($track['featureImage']['thumbnail']);
+                }
                 $tracks[] = $track;
             }
         }
