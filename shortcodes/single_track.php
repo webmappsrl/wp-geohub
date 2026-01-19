@@ -30,7 +30,7 @@ function wm_single_track($atts)
 
 	$track = json_decode(file_get_contents($geojson_url), true);
 	$track = $track['properties'];
-	$iframeUrl = "https://geohub.webmapp.it/w/simple/" . $track_id . "?locale=" . $language;
+	$iframeUrl = geohub_get_iframe_url('track', $track_id, $language);
 
 	$description = null;
 	$excerpt = null;

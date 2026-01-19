@@ -2,23 +2,46 @@
 
 function sync_pois_action()
 {
-    if (is_wp_error(required_plugins()))
+    if (is_wp_error(required_plugins())) {
+        if (wp_doing_ajax()) {
+            wp_send_json_error(['message' => 'Required plugins are not installed or activated']);
+        }
         return;
+    }
 
     $poi_url = get_option('poi_url');
     $poi_shortcode = get_option('poi_shortcode');
-    $default_lang = apply_filters('wpml_default_language', NULL );
+    $default_lang = apply_filters('wpml_default_language', NULL);
+
+    // Check if required options are set
+    if (empty($poi_url) || empty($poi_shortcode)) {
+        $error_message = 'Required configuration options are missing. Please check your settings.';
+        set_transient('geohub_sync_pois_notification', $error_message, 60);
+        if (wp_doing_ajax()) {
+            wp_send_json_error(['message' => $error_message]);
+        }
+        return new WP_Error('missing_config', $error_message);
+    }
+
     if (!empty($poi_url) && !empty($poi_shortcode)) {
 
         $pois = wp_remote_get($poi_url);
         if (is_wp_error($pois)) {
-            set_transient('geohub_sync_pois_notification', 'API poi list non valida o non disponibile.', 60);
-            return new WP_Error('invalid_api', 'API poi list non valida o non disponibile.');
+            $error_message = 'API poi list non valida o non disponibile.';
+            set_transient('geohub_sync_pois_notification', $error_message, 60);
+            if (wp_doing_ajax()) {
+                wp_send_json_error(['message' => $error_message]);
+            }
+            return new WP_Error('invalid_api', $error_message);
         }
         $pois = json_decode(wp_remote_retrieve_body($pois), true);
         if (empty($pois) || !is_array($pois)) {
-            set_transient('geohub_sync_pois_notification', 'Nessun Poi fornito o formato non valido.', 60);
-            return new WP_Error('invalid_input', 'Nessun Poi fornito o formato non valido.');
+            $error_message = 'Nessun Poi fornito o formato non valido.';
+            set_transient('geohub_sync_pois_notification', $error_message, 60);
+            if (wp_doing_ajax()) {
+                wp_send_json_error(['message' => $error_message]);
+            }
+            return new WP_Error('invalid_input', $error_message);
         }
 
         foreach ($pois["features"] as $data) {
@@ -43,7 +66,7 @@ function sync_pois_action()
             $new_updated_time = strtotime($updated_at);
 
             if ($existing_posts && $new_updated_time <= $existing_post_modified_time) {
-                continue; 
+                continue;
             }
 
             // Generate post data from poi information
@@ -71,8 +94,8 @@ function sync_pois_action()
                 continue;
             }
 
-            // Update ACF field
-            update_field('geohub_poi_id', $geohub_id, $post_id);
+            // Update post meta field
+            update_post_meta($post_id, 'geohub_poi_id', $geohub_id);
 
             // WPML integration: Set the language information for the inserted/updated post
             // and create translations for available languages
@@ -89,7 +112,7 @@ function sync_pois_action()
 
                 // Create translation post object (you should modify this part according to how you manage translations)
                 $translated_post_data = [
-                    'post_title'    => $post_title, 
+                    'post_title'    => $post_title,
                     'post_content'  => $poi_shortcode_final,
                     'post_status'   => 'publish',
                     'post_author'   => 1,
@@ -109,12 +132,30 @@ function sync_pois_action()
                     ];
                     do_action('wpml_set_element_language_details', $set_language_args);
 
-                    // Update ACF field for the translation
-                    update_field('geohub_poi_id', $geohub_id, $translated_post_id);
+                    // Update post meta field for the translation
+                    update_post_meta($translated_post_id, 'geohub_poi_id', $geohub_id);
                 }
             }
         }
-    } 
+    } else {
+        // If configuration is missing, this should have been caught earlier, but handle it here too
+        if (wp_doing_ajax()) {
+            wp_send_json_error(['message' => 'Configuration incomplete. Please check your settings.']);
+            return;
+        }
+    }
+
     delete_transient('geohub_transient_warning_message');
     set_transient('geohub_transient_success_message', 'Greate! Pois synchronized successfully.', 60);
+
+    // AJAX response - always send response when called via AJAX
+    if (wp_doing_ajax()) {
+        wp_send_json_success([
+            'message' => 'POIs synchronized successfully!'
+        ]);
+        return; // Ensure execution stops after sending JSON
+    }
 }
+
+// Register AJAX action
+add_action('wp_ajax_sync_pois_action', 'sync_pois_action');

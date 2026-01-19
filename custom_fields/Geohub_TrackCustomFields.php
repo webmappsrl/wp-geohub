@@ -1,49 +1,71 @@
 <?php
-function ensure_acf_field_for_tracks() {
-    if(function_exists('acf_add_local_field_group')) {
 
-        acf_add_local_field_group(array(
-            'key' => 'geohub_group_track',
-            'title' => 'Dettagli Track',
-            'fields' => array (
-                array(
-                    'key' => 'geohub_group_track_geohub_id',
-                    'label' => 'Geohub ID',
-                    'name' => 'geohub_track_id',
-                    'type' => 'number',
-                    'instructions' => 'Inserisci l\'ID originale della track',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array (
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'default_value' => '',
-                    'placeholder' => '',
-                    'prepend' => '',
-                    'append' => '',
-                    'maxlength' => '',
-                )
-            ),
-            'location' => array (
-                array (
-                    array (
-                        'param' => 'post_type',
-                        'operator' => '==',
-                        'value' => 'track',
-                    ),
-                ),
-            ),
-            'menu_order' => 0,
-            'position' => 'normal',
-            'style' => 'default',
-            'label_placement' => 'top',
-            'instruction_placement' => 'label',
-            'hide_on_screen' => '',
-            'active' => true,
-            'description' => '',
-        ));
+/**
+ * Register meta box for Track post type
+ */
+function geohub_track_meta_box() {
+    add_meta_box(
+        'geohub_track_details',
+        'Dettagli Track',
+        'geohub_track_meta_box_callback',
+        'track',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'geohub_track_meta_box');
+
+/**
+ * Meta box callback function
+ */
+function geohub_track_meta_box_callback($post) {
+    wp_nonce_field('geohub_track_meta_box', 'geohub_track_meta_box_nonce');
+    $value = get_post_meta($post->ID, 'geohub_track_id', true);
+    ?>
+    <table class="form-table">
+        <tr>
+            <th scope="row">
+                <label for="geohub_track_id">Geohub ID</label>
+            </th>
+            <td>
+                <input type="number" id="geohub_track_id" name="geohub_track_id" value="<?php echo esc_attr($value); ?>" class="regular-text" />
+                <p class="description">Inserisci l'ID originale della track</p>
+            </td>
+        </tr>
+    </table>
+    <?php
+}
+
+/**
+ * Save meta box data
+ */
+function geohub_track_save_meta_box($post_id) {
+    // Check nonce
+    if (!isset($_POST['geohub_track_meta_box_nonce']) || 
+        !wp_verify_nonce($_POST['geohub_track_meta_box_nonce'], 'geohub_track_meta_box')) {
+        return;
+    }
+
+    // Check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // Check permissions
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    // Check post type
+    if (get_post_type($post_id) !== 'track') {
+        return;
+    }
+
+    // Save meta field
+    if (isset($_POST['geohub_track_id'])) {
+        update_post_meta($post_id, 'geohub_track_id', sanitize_text_field($_POST['geohub_track_id']));
+    } else {
+        delete_post_meta($post_id, 'geohub_track_id');
     }
 }
-add_action('acf/init', 'ensure_acf_field_for_tracks');
+add_action('save_post_track', 'geohub_track_save_meta_box');

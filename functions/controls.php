@@ -1,11 +1,8 @@
 <?php
 
-function required_plugins() {
+function required_plugins()
+{
     $required_plugins = [
-        'advanced-custom-fields/acf.php' => [
-            'name' => 'ACF',
-            'error_message' => 'The ACF plugin is not installed or activated. This plugin requires ACF to function correctly.'
-        ],
         'sitepress-multilingual-cms/sitepress.php' => [
             'name' => 'WPML',
             'error_message' => 'The WPML plugin is not installed or activated. This plugin requires WPML to function correctly.'
