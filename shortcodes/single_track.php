@@ -28,9 +28,15 @@ function wm_single_track($atts)
 	$single_track_base_url = get_option('track_url');
 	$geojson_url = $single_track_base_url . $track_id . ".json";
 
-	$track = json_decode(file_get_contents($geojson_url), true);
-	$track = $track['properties'];
-	$iframeUrl = wm_get_iframe_url('track', $track_id, $language);
+	$track_data = json_decode(file_get_contents($geojson_url), true);
+	$track = $track_data['properties'] ?? [];
+	$track_geometry = $track_data['geometry'] ?? null;
+
+	// Enqueue Leaflet for shortcode
+	wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4');
+	wp_enqueue_style('leaflet-fullscreen-css', 'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.css', array('leaflet-css'), '1.0.2');
+	wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true);
+	wp_enqueue_script('leaflet-fullscreen-js', 'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.min.js', array('leaflet-js'), '1.0.2', true);
 
 	$description = null;
 	$excerpt = null;
@@ -39,6 +45,7 @@ function wm_single_track($atts)
 	$gallery = [];
 	$gpx = null;
 	$activity = null;
+	$dem_data = null;
 
 	if ($track) {
 		$description = $track['description'][$language] ?? null;
@@ -54,78 +61,203 @@ function wm_single_track($atts)
 		$gallery = $track['image_gallery'] ?? [];
 		$gpx = $track['gpx_url'];
 		$activity = $track['taxonomy']['activity'] ?? [];
+
+		// Extract and decode dem_data
+		if (isset($track['dem_data'])) {
+			$dem_data_raw = $track['dem_data'];
+			if (is_string($dem_data_raw)) {
+				$dem_data = json_decode($dem_data_raw, true);
+			} else if (is_array($dem_data_raw)) {
+				$dem_data = $dem_data_raw;
+			}
+		}
 	}
 	ob_start();
 ?>
+	<div class="wm_content_wrapper">
+		<!-- 1. Featured Image -->
+		<?php if ($featured_image) : ?>
+			<div class="wm_featured_image">
+				<img src="<?= esc_url($featured_image) ?>" alt="<?= esc_attr($title) ?>" />
+			</div>
+		<?php endif; ?>
 
-	<section class="l-section wpb_row height_small with_img with_overlay wm_header_section">
-		<div class="l-section-img loaded wm-header-image" style="background-image: url(<?= $featured_image ?>);background-repeat: no-repeat;">
-		</div>
-		<div class="l-section-h i-cf wm_header_wrapper">
-		</div>
-	</section>
-
-	<div class="wm_body_section">
-		<?php if ($title) { ?>
-			<h1 class="align_left wm_header_title">
-				<?= $title ?>
+		<!-- 2. Title -->
+		<?php if ($title) : ?>
+			<h1 class="wm_title">
+				<?= esc_html($title) ?>
 			</h1>
-		<?php } ?>
+		<?php endif; ?>
+
+		<!-- 3. Taxonomies -->
 		<?php if (!empty($activity)) : ?>
-			<div class="wm_activities wm_container">
+			<div class="wm_taxonomies">
 				<?php foreach ($activity as $type) : ?>
-					<span class="wm_activity">
+					<span class="wm_taxonomy_item">
 						<?php if (!empty($type['icon'])) : ?>
-							<span class="wm_activity_icon"><?= $type['icon'] ?></span>
+							<span class="wm_taxonomy_icon"><?= esc_html($type['icon']) ?></span>
 						<?php endif; ?>
-						<span class="wm_activity_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
+						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
 					</span>
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
-		<div class="wm_container">
-			<div class="wm_left_wrapper">
-				<iframe class="wm_iframe_map" src="<?= esc_url($iframeUrl); ?>" loading="lazy"></iframe>
-				<?php if ($description) { ?>
-					<div class="wm_body_description_content">
-						<?php echo $description; ?>
-					</div>
-				<?php } ?>
-			</div>
 
-			<div class="wm_right_wrapper">
-				<div class="wm_body_gallery">
-					<?php if (is_array($gallery) && !empty($gallery)) : ?>
-						<div class="swiper-container">
-							<div class="swiper-wrapper">
-								<?php foreach ($gallery as $image) : ?>
-									<div class="swiper-slide">
-										<?php
-										$thumbnail_url = isset($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
-										$high_res_url = isset($image['url']) ? esc_url($image['url']) : $thumbnail_url;
-										$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
-										if ($thumbnail_url) : ?>
-											<a href="<?= $high_res_url ?>" data-lightbox="track-gallery" data-title="<?= $caption ?>">
-												<img src="<?= $thumbnail_url ?>" alt="<?= $caption ?>" loading="lazy">
-											</a>
-										<?php endif; ?>
-									</div>
-								<?php endforeach; ?>
-							</div>
-							<div class="swiper-pagination"></div>
-							<div class="swiper-button-prev"></div>
-							<div class="swiper-button-next"></div>
+		<!-- 4. Map -->
+		<?php if (!empty($track_geometry)) : ?>
+			<div class="wm_map">
+				<div id="wm-leaflet-map-track-<?= esc_attr($track_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'></div>
+			</div>
+		<?php endif; ?>
+
+		<!-- 4.5. Technical Details -->
+		<?php if (!empty($dem_data) && is_array($dem_data)) : ?>
+			<div class="wm_technical_details">
+				<h2 class="wm_technical_details_title"><?= __('Technical Details', 'wm-package') ?></h2>
+				<div class="wm_technical_details_grid">
+					<?php if (isset($dem_data['distance']) && $dem_data['distance'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Distance', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> km</span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['ele_min']) && $dem_data['ele_min'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Min Elevation', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_min']) ?> m</span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['ele_max']) && $dem_data['ele_max'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Max Elevation', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_max']) ?> m</span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Start Elevation', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_from']) ?> m</span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('End Elevation', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_to']) ?> m</span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['ascent']) && $dem_data['ascent'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Ascent', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ascent']) ?> m</span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['descent']) && $dem_data['descent'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Descent', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['descent']) ?> m</span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['duration_forward_hiking']) && $dem_data['duration_forward_hiking'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Duration Forward (Hiking)', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward_hiking']) ?> <?= __('min', 'wm-package') ?></span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['duration_backward_hiking']) && $dem_data['duration_backward_hiking'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Duration Backward (Hiking)', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward_hiking']) ?> <?= __('min', 'wm-package') ?></span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['duration_forward_bike']) && $dem_data['duration_forward_bike'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Duration Forward (Bike)', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward_bike']) ?> <?= __('min', 'wm-package') ?></span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['duration_backward_bike']) && $dem_data['duration_backward_bike'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Duration Backward (Bike)', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward_bike']) ?> <?= __('min', 'wm-package') ?></span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Duration Forward', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward']) ?> <?= __('min', 'wm-package') ?></span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Duration Backward', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
+						</div>
+					<?php endif; ?>
+
+					<?php if (isset($dem_data['round_trip']) && $dem_data['round_trip'] !== null) : ?>
+						<div class="wm_technical_detail_item">
+							<span class="wm_technical_detail_label"><?= __('Round Trip', 'wm-package') ?>:</span>
+							<span class="wm_technical_detail_value"><?= $dem_data['round_trip'] ? __('Yes', 'wm-package') : __('No', 'wm-package') ?></span>
 						</div>
 					<?php endif; ?>
 				</div>
-				<div class="wm_track_body_download">
-					<a class="icon_atleft" href="<?= $gpx ?>">
-						<i class="fa fa-download"></i>
-						<?= __('Download GPX', 'wm-child') ?>
-					</a>
+			</div>
+		<?php endif; ?>
+
+		<!-- 5. Description -->
+		<?php if ($description) : ?>
+			<div class="wm_description">
+				<?php echo wp_kses_post($description); ?>
+			</div>
+		<?php endif; ?>
+
+		<!-- 6. Gallery -->
+		<?php if (is_array($gallery) && !empty($gallery)) : ?>
+			<div class="wm_gallery">
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<?php foreach ($gallery as $image) : ?>
+							<div class="swiper-slide">
+								<?php
+								$thumbnail_url = isset($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
+								$high_res_url = isset($image['url']) ? esc_url($image['url']) : $thumbnail_url;
+								$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
+								if ($thumbnail_url) : ?>
+									<a href="<?= esc_url($high_res_url) ?>" data-lightbox="track-gallery" data-title="<?= esc_attr($caption) ?>">
+										<img src="<?= esc_url($thumbnail_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
+									</a>
+								<?php endif; ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<div class="swiper-pagination"></div>
+					<div class="swiper-button-prev"></div>
+					<div class="swiper-button-next"></div>
 				</div>
 			</div>
-		</div>
+		<?php endif; ?>
+
+		<!-- 7. Download Links -->
+		<?php if (!empty($gpx)) : ?>
+			<div class="wm_download_links">
+				<a class="wm_download_link" href="<?= esc_url($gpx) ?>">
+					<i class="fa fa-download"></i>
+					<?= __('Download GPX', 'wm-package') ?>
+				</a>
+			</div>
+		<?php endif; ?>
 	</div>
 
 	<script>
@@ -144,6 +276,49 @@ function wm_single_track($atts)
 					prevEl: '.swiper-button-prev',
 				},
 			});
+
+			// Initialize Leaflet map for Track
+			<?php if (!empty($track_geometry)) : ?>
+				var mapElement = document.getElementById('wm-leaflet-map-track-<?= esc_js($track_id) ?>');
+				if (mapElement && typeof L !== 'undefined') {
+					var geometry = JSON.parse(mapElement.getAttribute('data-geometry'));
+					var map = L.map(mapElement).setView([0, 0], 13);
+
+					L.tileLayer('https://api.webmapp.it/tiles/{z}/{x}/{y}.png', {
+						attribution: '&copy; Webmapp &copy; OpenStreetMap',
+						maxZoom: 19
+					}).addTo(map);
+
+					// Remove default Leaflet attribution prefix
+					map.attributionControl.setPrefix(false);
+
+					// Add fullscreen control
+					map.addControl(new L.control.fullscreen());
+
+					if (geometry.type === 'Point' && geometry.coordinates) {
+						var lat = geometry.coordinates[1];
+						var lng = geometry.coordinates[0];
+						map.setView([lat, lng], 15);
+						L.marker([lat, lng]).addTo(map);
+					} else if (geometry.type === 'LineString' && geometry.coordinates) {
+						var latlngs = geometry.coordinates.map(function(coord) {
+							return [coord[1], coord[0]];
+						});
+						var polyline = L.polyline(latlngs, {
+							color: 'blue'
+						}).addTo(map);
+						map.fitBounds(polyline.getBounds());
+					} else if (geometry.type === 'Polygon' && geometry.coordinates) {
+						var latlngs = geometry.coordinates[0].map(function(coord) {
+							return [coord[1], coord[0]];
+						});
+						var polygon = L.polygon(latlngs, {
+							color: 'blue'
+						}).addTo(map);
+						map.fitBounds(polygon.getBounds());
+					}
+				}
+			<?php endif; ?>
 		});
 	</script>
 

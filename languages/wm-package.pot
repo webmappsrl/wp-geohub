@@ -1,0 +1,96 @@
+# Copyright (C) 2024 Webmapp
+# This file is distributed under the same license as the WM Package plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WM Package 2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/webmappsrl/wm-package\n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: shortcodes/single_track.php:116
+msgid "Technical Details"
+msgstr ""
+
+#: shortcodes/single_track.php:120
+msgid "Distance"
+msgstr ""
+
+#: shortcodes/single_track.php:127
+msgid "Min Elevation"
+msgstr ""
+
+#: shortcodes/single_track.php:134
+msgid "Max Elevation"
+msgstr ""
+
+#: shortcodes/single_track.php:141
+msgid "Start Elevation"
+msgstr ""
+
+#: shortcodes/single_track.php:148
+msgid "End Elevation"
+msgstr ""
+
+#: shortcodes/single_track.php:155
+msgid "Ascent"
+msgstr ""
+
+#: shortcodes/single_track.php:162
+msgid "Descent"
+msgstr ""
+
+#: shortcodes/single_track.php:169
+msgid "Duration Forward (Hiking)"
+msgstr ""
+
+#: shortcodes/single_track.php:170
+#: shortcodes/single_track.php:177
+#: shortcodes/single_track.php:184
+#: shortcodes/single_track.php:191
+#: shortcodes/single_track.php:198
+#: shortcodes/single_track.php:205
+msgid "min"
+msgstr ""
+
+#: shortcodes/single_track.php:176
+msgid "Duration Backward (Hiking)"
+msgstr ""
+
+#: shortcodes/single_track.php:183
+msgid "Duration Forward (Bike)"
+msgstr ""
+
+#: shortcodes/single_track.php:190
+msgid "Duration Backward (Bike)"
+msgstr ""
+
+#: shortcodes/single_track.php:197
+msgid "Duration Forward"
+msgstr ""
+
+#: shortcodes/single_track.php:204
+msgid "Duration Backward"
+msgstr ""
+
+#: shortcodes/single_track.php:211
+msgid "Round Trip"
+msgstr ""
+
+#: shortcodes/single_track.php:212
+msgid "Yes"
+msgstr ""
+
+#: shortcodes/single_track.php:212
+msgid "No"
+msgstr ""
+
+#: shortcodes/single_track.php:257
+msgid "Download GPX"
+msgstr ""

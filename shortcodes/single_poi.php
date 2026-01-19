@@ -50,8 +50,14 @@ function wm_single_poi($atts)
 	}
 
 	$poi_properties = $poi['properties'];
-	$iframeUrl = wm_get_iframe_url('poi', $poi_id, $language);
+	$poi_geometry = $poi['geometry'] ?? null;
 	$default_image = plugins_url('wm-package/assets/default_image.png');
+
+	// Enqueue Leaflet for shortcode
+	wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4');
+	wp_enqueue_style('leaflet-fullscreen-css', 'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.css', array('leaflet-css'), '1.0.2');
+	wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true);
+	wp_enqueue_script('leaflet-fullscreen-js', 'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.min.js', array('leaflet-js'), '1.0.2', true);
 
 	$title = null;
 	$description = null;
@@ -88,117 +94,165 @@ function wm_single_poi($atts)
 	}
 	ob_start();
 ?>
-	<section class="l-section wpb_row height_small with_img with_overlay wm_header_section">
-		<div class="l-section-img loaded wm-header-image" style="background-image: url(<?= $featured_image ?>);background-repeat: no-repeat;">
-		</div>
-		<div class="l-section-h i-cf wm_header_wrapper">
-		</div>
-	</section>
-
-	<div class="wm_body_section">
-		<?php if ($title) { ?>
-			<h1 class="align_left wm_header_title">
-				<?= $title ?>
-			</h1>
-		<?php } ?>
-		<?php if (!empty($poi_types)) : ?>
-			<div class="wm_activities wm_container>
-					<?php foreach ($poi_types as $type) : ?>
-						<span class=" wm_activity">
-				<?php if (!empty($type['icon'])) : ?>
-					<span class="wm_activity_icon"><?= $type['icon'] ?></span>
-				<?php endif; ?>
-				<span class="wm_activity_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
-				</span>
-			<?php endforeach; ?>
+	<div class="wm_content_wrapper">
+		<!-- 1. Featured Image -->
+		<?php if ($featured_image) : ?>
+			<div class="wm_featured_image">
+				<img src="<?= esc_url($featured_image) ?>" alt="<?= esc_attr($title) ?>" />
 			</div>
 		<?php endif; ?>
-		<div class="wm_container">
-			<div class="wm_left_wrapper">
-				<iframe class="wm_iframe_map" src="<?= esc_url($iframeUrl); ?>" loading="lazy"></iframe>
-				<?php if ($description) { ?>
-					<div class="wm_body_description_content">
-						<?php echo wp_kses_post($description); ?>
-					</div>
-				<?php } ?>
-			</div>
 
-			<div class="wm_right_wrapper">
-				<div class="wm_body_gallery">
-					<?php if (is_array($gallery) && !empty($gallery)) : ?>
-						<div class="swiper-container">
-							<div class="swiper-wrapper">
-								<?php foreach ($gallery as $image) : ?>
-									<div class="swiper-slide">
-										<?php
-										$thumbnail_url = isset($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
-										$high_res_url = isset($image['url']) ? esc_url($image['url']) : $thumbnail_url;
-										$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
-										if ($thumbnail_url) : ?>
-											<a href="<?= esc_url($high_res_url) ?>" data-lightbox="track-gallery" data-title="<?= esc_attr($caption) ?>">
-												<img src="<?= esc_url($thumbnail_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
-											</a>
-										<?php endif; ?>
-									</div>
-								<?php endforeach; ?>
+		<!-- 2. Title -->
+		<?php if ($title) : ?>
+			<h1 class="wm_title">
+				<?= esc_html($title) ?>
+			</h1>
+		<?php endif; ?>
+
+		<!-- 3. Taxonomies -->
+		<?php if (!empty($poi_types)) : ?>
+			<div class="wm_taxonomies">
+				<?php foreach ($poi_types as $type) : ?>
+					<span class="wm_taxonomy_item">
+						<?php if (!empty($type['icon'])) : ?>
+							<span class="wm_taxonomy_icon"><?= esc_html($type['icon']) ?></span>
+						<?php endif; ?>
+						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
+					</span>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+
+		<!-- 4. Map -->
+		<?php if (!empty($poi_geometry)) : ?>
+			<div class="wm_map">
+				<div id="wm-leaflet-map-poi-<?= esc_attr($poi_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($poi_geometry)) ?>'></div>
+			</div>
+		<?php endif; ?>
+
+		<!-- 5. Description -->
+		<?php if ($description) : ?>
+			<div class="wm_description">
+				<?php echo wp_kses_post($description); ?>
+			</div>
+		<?php endif; ?>
+
+		<!-- 6. Gallery -->
+		<?php if (is_array($gallery) && !empty($gallery)) : ?>
+			<div class="wm_gallery">
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<?php foreach ($gallery as $image) : ?>
+							<div class="swiper-slide">
+								<?php
+								$thumbnail_url = isset($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
+								$high_res_url = isset($image['url']) ? esc_url($image['url']) : $thumbnail_url;
+								$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
+								if ($thumbnail_url) : ?>
+									<a href="<?= esc_url($high_res_url) ?>" data-lightbox="poi-gallery" data-title="<?= esc_attr($caption) ?>">
+										<img src="<?= esc_url($thumbnail_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
+									</a>
+								<?php endif; ?>
 							</div>
-							<div class="swiper-pagination"></div>
-							<div class="swiper-button-prev"></div>
-							<div class="swiper-button-next"></div>
-						</div>
-					<?php endif; ?>
-				</div>
-				<div class="wm_info">
-					<?php
-					$info_parts = [];
-					if (!empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality)) {
-						$address = trim($addr_street . ', ' . $addr_postcode . ' ' . $addr_locality, ', ');
-						$info_parts[] = '<span class="wm_address_info"><span class="fa fa-map-marker-alt"></span> ' . esc_html($address) . '</span>';
-					}
-					if (!empty($contact_phone)) {
-						$info_parts[] = '<span class="wm_contact_phone"><span class="fa fa-phone"></span> ' . esc_html($contact_phone) . '</span>';
-					}
-					if (!empty($contact_email)) {
-						$info_parts[] = '<span class="wm_contact_email"><span class="fa fa-envelope"></span> <a href="mailto:' . esc_attr($contact_email) . '">' . esc_html($contact_email) . '</a></span>';
-					}
-					if (!empty($related_urls)) {
-						$urls_output = [];
-						foreach ($related_urls as $url_name => $url) {
-							$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($url_name) . '</a>';
-						}
-						$info_parts[] = '<span class="wm_related_urls"> <span class="fa fa-external-link-alt"></span> ' . implode(', ', $urls_output) . '</span>';
-					}
-					foreach ($info_parts as $info_part) {
-						echo '<div class="wm_info_item">' . $info_part . '</div>';
-					}
-					?>
+						<?php endforeach; ?>
+					</div>
+					<div class="swiper-pagination"></div>
+					<div class="swiper-button-prev"></div>
+					<div class="swiper-button-next"></div>
 				</div>
 			</div>
-		</div>
-	</div>
+		<?php endif; ?>
 
-
-
-
-
+		<!-- 7. Download/Info Links -->
+		<?php
+		$info_parts = [];
+		if (!empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality)) {
+			$address = trim($addr_street . ', ' . $addr_postcode . ' ' . $addr_locality, ', ');
+			$info_parts[] = '<span class="wm_address_info"><span class="fa fa-map-marker-alt"></span> ' . esc_html($address) . '</span>';
+		}
+		if (!empty($contact_phone)) {
+			$info_parts[] = '<span class="wm_contact_phone"><span class="fa fa-phone"></span> ' . esc_html($contact_phone) . '</span>';
+		}
+		if (!empty($contact_email)) {
+			$info_parts[] = '<span class="wm_contact_email"><span class="fa fa-envelope"></span> <a href="mailto:' . esc_attr($contact_email) . '">' . esc_html($contact_email) . '</a></span>';
+		}
+		if (!empty($related_urls)) {
+			$urls_output = [];
+			foreach ($related_urls as $url_name => $url) {
+				$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($url_name) . '</a>';
+			}
+			$info_parts[] = '<span class="wm_related_urls"> <span class="fa fa-external-link-alt"></span> ' . implode(', ', $urls_output) . '</span>';
+		}
+		if (!empty($info_parts)) : ?>
+			<div class="wm_info_links">
+				<?php foreach ($info_parts as $info_part) : ?>
+					<div class="wm_info_item"><?= $info_part ?></div>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
 	</div>
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			var swiper = new Swiper('.swiper-container', {
-				slidesPerView: 1,
-				spaceBetween: 10,
-				freeMode: true,
-				loop: true,
-				pagination: {
-					el: '.swiper-pagination',
-					clickable: true,
-				},
-				navigation: {
-					nextEl: '.swiper-button-next',
-					prevEl: '.swiper-button-prev',
-				},
-			});
+			if (typeof Swiper !== 'undefined') {
+				var swiper = new Swiper('.swiper-container', {
+					slidesPerView: 1,
+					spaceBetween: 10,
+					freeMode: true,
+					loop: true,
+					pagination: {
+						el: '.swiper-pagination',
+						clickable: true,
+					},
+					navigation: {
+						nextEl: '.swiper-button-next',
+						prevEl: '.swiper-button-prev',
+					},
+				});
+			}
+
+			// Initialize Leaflet map for POI
+			<?php if (!empty($poi_geometry)) : ?>
+				var mapElement = document.getElementById('wm-leaflet-map-poi-<?= esc_js($poi_id) ?>');
+				if (mapElement && typeof L !== 'undefined') {
+					var geometry = JSON.parse(mapElement.getAttribute('data-geometry'));
+					var map = L.map(mapElement).setView([0, 0], 13);
+
+					L.tileLayer('https://api.webmapp.it/tiles/{z}/{x}/{y}.png', {
+						attribution: '&copy; Webmapp &copy; OpenStreetMap',
+						maxZoom: 19
+					}).addTo(map);
+
+					// Remove default Leaflet attribution prefix
+					map.attributionControl.setPrefix(false);
+
+					// Add fullscreen control
+					map.addControl(new L.control.fullscreen());
+
+					if (geometry.type === 'Point' && geometry.coordinates) {
+						var lat = geometry.coordinates[1];
+						var lng = geometry.coordinates[0];
+						map.setView([lat, lng], 15);
+						L.marker([lat, lng]).addTo(map);
+					} else if (geometry.type === 'LineString' && geometry.coordinates) {
+						var latlngs = geometry.coordinates.map(function(coord) {
+							return [coord[1], coord[0]];
+						});
+						var polyline = L.polyline(latlngs, {
+							color: 'blue'
+						}).addTo(map);
+						map.fitBounds(polyline.getBounds());
+					} else if (geometry.type === 'Polygon' && geometry.coordinates) {
+						var latlngs = geometry.coordinates[0].map(function(coord) {
+							return [coord[1], coord[0]];
+						});
+						var polygon = L.polygon(latlngs, {
+							color: 'blue'
+						}).addTo(map);
+						map.fitBounds(polygon.getBounds());
+					}
+				}
+			<?php endif; ?>
 		});
 	</script>
 

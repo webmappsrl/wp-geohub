@@ -2,6 +2,19 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
+/**
+ * Load plugin textdomain for translations
+ */
+function wm_package_load_textdomain()
+{
+    load_plugin_textdomain(
+        'wm-package',
+        false,
+        dirname(plugin_dir_path(__FILE__)) . '/languages/'
+    );
+}
+add_action('plugins_loaded', 'wm_package_load_textdomain');
+
 function requireAllPHPFilesInDirectory($directoryPath)
 {
     $directoryPath = ABSPATH . $directoryPath;
@@ -208,3 +221,141 @@ function add_custom_copy_script()
 
 
 add_action('admin_footer-toplevel_page_wm-settings', 'add_custom_copy_script');
+
+/**
+ * Enqueue Leaflet CSS and JS for maps
+ */
+function wm_package_enqueue_leaflet()
+{
+    global $post;
+
+    // Check if we're on a single POI or Track page
+    if (is_singular(['poi', 'track'])) {
+        // Enqueue Leaflet CSS
+        wp_enqueue_style(
+            'leaflet-css',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+            array(),
+            '1.9.4'
+        );
+
+        // Enqueue Leaflet Fullscreen CSS
+        wp_enqueue_style(
+            'leaflet-fullscreen-css',
+            'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.css',
+            array('leaflet-css'),
+            '1.0.2'
+        );
+
+        // Enqueue Leaflet JS
+        wp_enqueue_script(
+            'leaflet-js',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+            array(),
+            '1.9.4',
+            true
+        );
+
+        // Enqueue Leaflet Fullscreen JS
+        wp_enqueue_script(
+            'leaflet-fullscreen-js',
+            'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.min.js',
+            array('leaflet-js'),
+            '1.0.2',
+            true
+        );
+        return;
+    }
+
+    // Check if shortcodes are used in the post content
+    if ($post && (has_shortcode($post->post_content, 'wm_single_poi') || has_shortcode($post->post_content, 'wm_single_track'))) {
+        // Enqueue Leaflet CSS
+        wp_enqueue_style(
+            'leaflet-css',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+            array(),
+            '1.9.4'
+        );
+
+        // Enqueue Leaflet Fullscreen CSS
+        wp_enqueue_style(
+            'leaflet-fullscreen-css',
+            'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.css',
+            array('leaflet-css'),
+            '1.0.2'
+        );
+
+        // Enqueue Leaflet JS
+        wp_enqueue_script(
+            'leaflet-js',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+            array(),
+            '1.9.4',
+            true
+        );
+
+        // Enqueue Leaflet Fullscreen JS
+        wp_enqueue_script(
+            'leaflet-fullscreen-js',
+            'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.min.js',
+            array('leaflet-js'),
+            '1.0.2',
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'wm_package_enqueue_leaflet');
+
+/**
+ * Enqueue default CSS for WM Package shortcodes
+ * Allows theme to override by creating wm-package-custom.css
+ */
+function wm_package_enqueue_styles()
+{
+    global $post;
+
+    // Check if we're on a single POI or Track page, or if shortcodes are used
+    $should_enqueue = false;
+
+    if (is_singular(['poi', 'track'])) {
+        $should_enqueue = true;
+    } elseif ($post && (has_shortcode($post->post_content, 'wm_single_poi') || has_shortcode($post->post_content, 'wm_single_track'))) {
+        $should_enqueue = true;
+    }
+
+    if (!$should_enqueue) {
+        return;
+    }
+
+    $plugin_url = plugin_dir_url(dirname(__FILE__));
+    $plugin_version = '2.0';
+
+    // First, try to load custom CSS from theme (child theme first, then parent theme)
+    $theme_css = locate_template('wm-package-custom.css');
+
+    if ($theme_css) {
+        // Get the URL of the theme CSS file
+        $theme_css_url = get_stylesheet_directory_uri() . '/wm-package-custom.css';
+        if (is_child_theme() && file_exists(get_stylesheet_directory() . '/wm-package-custom.css')) {
+            $theme_css_url = get_stylesheet_directory_uri() . '/wm-package-custom.css';
+        } elseif (file_exists(get_template_directory() . '/wm-package-custom.css')) {
+            $theme_css_url = get_template_directory_uri() . '/wm-package-custom.css';
+        }
+
+        wp_enqueue_style(
+            'wm-package-custom',
+            $theme_css_url,
+            array(),
+            filemtime($theme_css)
+        );
+    }
+
+    // Always enqueue default CSS (theme CSS will override if it exists)
+    wp_enqueue_style(
+        'wm-package-default',
+        $plugin_url . 'assets/css/wm-package-default.css',
+        array(),
+        $plugin_version
+    );
+}
+add_action('wp_enqueue_scripts', 'wm_package_enqueue_styles');
