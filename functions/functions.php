@@ -55,6 +55,15 @@ function wm_custom_slugify($title)
     return $slug;
 }
 
+/**
+ * Check if a shard is osm2cai-type
+ * This affects URL structure for iframes
+ */
+function wm_is_osm2cai_shard_type($shard)
+{
+    return strpos($shard, 'osm2cai') === 0 || $shard === 'local';
+}
+
 // Helper function to get iframe URL based on shard
 function wm_get_iframe_url($type, $id, $language = 'it')
 {
@@ -68,19 +77,19 @@ function wm_get_iframe_url($type, $id, $language = 'it')
         $app_id = '49';
     }
 
-    if ($shard === 'osm2cai') {
-        // URL for osm2cai
+    // For osm2cai-type shards, use the osm2cai webmapp URL
+    if (wm_is_osm2cai_shard_type($shard)) {
         if ($type === 'track') {
             return "https://{$app_id}.osm2cai.webmapp.it/w/simple/{$id}?locale={$language}";
         } elseif ($type === 'poi') {
             return "https://{$app_id}.osm2cai.webmapp.it/poi/simple/{$id}?locale={$language}";
         }
     } else {
-        // URL for geohub (default)
+        // For all other shards, use app.webmapp URL
         if ($type === 'track') {
-            return "https://geohub.webmapp.it/w/simple/{$id}?locale={$language}";
+            return "https://{$app_id}.app.webmapp.it/w/simple/{$id}?locale={$language}";
         } elseif ($type === 'poi') {
-            return "https://geohub.webmapp.it/poi/simple/{$id}?locale={$language}";
+            return "https://{$app_id}.app.webmapp.it/poi/simple/{$id}?locale={$language}";
         }
     }
 

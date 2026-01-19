@@ -13,29 +13,168 @@ function wm_add_admin_menu()
 	);
 }
 
+/**
+ * URL to fetch shards configuration from wm-types repository
+ */
+define('WM_SHARDS_CONFIG_URL', 'https://raw.githubusercontent.com/webmappsrl/wm-types/refs/heads/main/src/environment.ts');
+define('WM_SHARDS_CACHE_KEY', 'wm_shards_config_cache');
+define('WM_SHARDS_CACHE_EXPIRATION', DAY_IN_SECONDS); // Cache for 24 hours
+
+/**
+ * Parse TypeScript shards configuration from environment.ts content
+ * 
+ * @param string $content The TypeScript file content
+ * @return array Parsed shards configuration
+ */
+function wm_parse_shards_from_typescript($content)
+{
+	$shards = [];
+
+	// Extract the shards object using regex
+	// Match pattern: shardName: { origin: '...', ... awsApi: '...' }
+	$pattern = "/(\w+):\s*\{\s*origin:\s*['\"]([^'\"]+)['\"],\s*elasticApi:\s*['\"][^'\"]+['\"],\s*graphhopperHost:\s*['\"][^'\"]+['\"],\s*awsApi:\s*['\"]([^'\"]+)['\"]/";
+
+	if (preg_match_all($pattern, $content, $matches, PREG_SET_ORDER)) {
+		foreach ($matches as $match) {
+			$shard_name = $match[1];
+			$shards[$shard_name] = [
+				'origin' => $match[2],
+				'awsApi' => $match[3],
+			];
+		}
+	}
+
+	return $shards;
+}
+
+/**
+ * Get fallback shards configuration (used when remote fetch fails)
+ */
+function wm_get_fallback_shards_config()
+{
+	return [
+		'geohub' => [
+			'origin' => 'https://geohub.webmapp.it',
+			'awsApi' => 'https://wmfe.s3.eu-central-1.amazonaws.com/geohub',
+		],
+		'osm2cai' => [
+			'origin' => 'https://osm2cai.cai.it',
+			'awsApi' => 'https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2',
+		],
+	];
+}
+
+/**
+ * Get all available shards configuration
+ * Fetched dynamically from: https://github.com/webmappsrl/wm-types/blob/main/src/environment.ts
+ * Results are cached for 24 hours
+ * 
+ * @param bool $force_refresh Force refresh from remote source
+ * @return array Shards configuration
+ */
+function wm_get_shards_config($force_refresh = false)
+{
+	// Check cache first
+	if (!$force_refresh) {
+		$cached = get_transient(WM_SHARDS_CACHE_KEY);
+		if ($cached !== false && is_array($cached) && !empty($cached)) {
+			return $cached;
+		}
+	}
+
+	// Fetch from remote
+	$response = wp_remote_get(WM_SHARDS_CONFIG_URL, [
+		'timeout' => 10,
+		'sslverify' => true,
+	]);
+
+	if (is_wp_error($response)) {
+		error_log('WM Package: Failed to fetch shards config - ' . $response->get_error_message());
+		// Return cached data if available, otherwise fallback
+		$cached = get_transient(WM_SHARDS_CACHE_KEY);
+		return ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+	}
+
+	$status_code = wp_remote_retrieve_response_code($response);
+	if ($status_code !== 200) {
+		error_log('WM Package: Failed to fetch shards config - HTTP ' . $status_code);
+		$cached = get_transient(WM_SHARDS_CACHE_KEY);
+		return ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+	}
+
+	$body = wp_remote_retrieve_body($response);
+	$shards = wm_parse_shards_from_typescript($body);
+
+	if (empty($shards)) {
+		error_log('WM Package: Failed to parse shards from TypeScript content');
+		$cached = get_transient(WM_SHARDS_CACHE_KEY);
+		return ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+	}
+
+	// Cache the result
+	set_transient(WM_SHARDS_CACHE_KEY, $shards, WM_SHARDS_CACHE_EXPIRATION);
+
+	return $shards;
+}
+
+/**
+ * AJAX handler to refresh shards configuration
+ */
+function wm_ajax_refresh_shards()
+{
+	if (!current_user_can('manage_options')) {
+		wp_send_json_error(['message' => 'Unauthorized']);
+		return;
+	}
+
+	$shards = wm_get_shards_config(true); // Force refresh
+
+	if (!empty($shards)) {
+		wp_send_json_success([
+			'message' => 'Shards configuration refreshed successfully',
+			'shards' => $shards,
+			'count' => count($shards)
+		]);
+	} else {
+		wp_send_json_error(['message' => 'Failed to refresh shards configuration']);
+	}
+}
+add_action('wp_ajax_wm_refresh_shards', 'wm_ajax_refresh_shards');
+
+/**
+ * Check if a shard is osm2cai-type (affects POI URL structure)
+ */
+function wm_is_osm2cai_shard($shard)
+{
+	return strpos($shard, 'osm2cai') === 0 || $shard === 'local';
+}
+
 function wm_get_api_urls($shard, $app_id)
 {
+	$shards = wm_get_shards_config();
 	$urls = [];
 
-	if ($shard === 'osm2cai') {
-		// API for osm2cai
-		$aws_api = "https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2";
-		$urls['aws_api'] = $aws_api;
-		$urls['tracks_list_api'] = "https://osm2cai.cai.it/api/app/webapp/{$app_id}/tracks_list";
-		$urls['single_track_api'] = "{$aws_api}/tracks/";
+	// Fallback to geohub if shard is not found
+	if (!isset($shards[$shard])) {
+		$shard = 'geohub';
+	}
+
+	$origin = rtrim($shards[$shard]['origin'], '/');
+	$aws_api = rtrim($shards[$shard]['awsApi'], '/');
+
+	$urls['aws_api'] = $aws_api;
+	$urls['origin'] = $origin;
+	$urls['tracks_list_api'] = "{$origin}/api/app/webapp/{$app_id}/tracks_list";
+	$urls['single_track_api'] = "{$aws_api}/tracks/";
+	$urls['layer_api'] = "{$origin}/api/app/webapp/{$app_id}/layer/";
+	$urls['poi_type_api'] = "{$origin}/api/app/webapp/{$app_id}/taxonomies/poi_type/";
+
+	// POI URL structure differs for osm2cai-type shards
+	if (wm_is_osm2cai_shard($shard)) {
 		$urls['poi_api'] = "{$aws_api}/{$app_id}/pois.geojson";
-		$urls['layer_api'] = "https://osm2cai.cai.it/api/app/webapp/{$app_id}/layer/";
-		$urls['poi_type_api'] = "https://osm2cai.cai.it/api/app/webapp/{$app_id}/taxonomies/poi_type/";
 		$urls['default_app_url'] = "https://{$app_id}.osm2cai.webmapp.it/";
 	} else {
-		// API for geohub (default)
-		$aws_api = "https://wmfe.s3.eu-central-1.amazonaws.com/geohub";
-		$urls['aws_api'] = $aws_api;
-		$urls['tracks_list_api'] = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/tracks_list";
-		$urls['single_track_api'] = "{$aws_api}/tracks/";
 		$urls['poi_api'] = "{$aws_api}/pois/{$app_id}.geojson";
-		$urls['layer_api'] = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/layer/";
-		$urls['poi_type_api'] = "https://geohub.webmapp.it/api/app/webapp/{$app_id}/taxonomies/poi_type/";
 		$urls['default_app_url'] = "https://{$app_id}.app.webmapp.it";
 	}
 
@@ -92,12 +231,23 @@ function wm_settings_page()
 				<tr valign="top">
 					<th scope="row">Shard</th>
 					<td>
+						<?php $shards_config = wm_get_shards_config(); ?>
 						<select name="wm_shard" id="wm_shard">
-							<option value="geohub" <?php selected($shard, 'geohub'); ?>>geohub</option>
-							<option value="osm2cai" <?php selected($shard, 'osm2cai'); ?>>osm2cai</option>
+							<?php foreach ($shards_config as $shard_name => $shard_data) : ?>
+								<option value="<?php echo esc_attr($shard_name); ?>" <?php selected($shard, $shard_name); ?>>
+									<?php echo esc_html($shard_name); ?>
+								</option>
+							<?php endforeach; ?>
 						</select>
+						<button type="button" id="refresh_shards" class="button button-secondary" style="margin-left: 10px;">
+							🔄 Refresh Shards
+						</button>
 						<p class="description">
 							Select the backend shard from which data will be retrieved.
+							<br><small>
+								Configuration from: <a href="https://github.com/webmappsrl/wm-types/blob/main/src/environment.ts" target="_blank">wm-types/environment.ts</a>
+								<br>Available shards: <strong id="shards_count"><?php echo count($shards_config); ?></strong> (cached for 24 hours)
+							</small>
 						</p>
 					</td>
 				</tr>
@@ -392,27 +542,85 @@ function wm_admin_footer()
 	</style>
 	<script type="text/javascript">
 		jQuery(document).ready(function($) {
+			// Shards configuration dynamically loaded from wm-types/environment.ts via PHP
+			var shardsConfig = <?php echo json_encode(wm_get_shards_config()); ?>;
+
+			// Refresh shards button handler
+			$('#refresh_shards').on('click', function() {
+				var $btn = $(this);
+				var originalText = $btn.text();
+				$btn.prop('disabled', true).text('⏳ Loading...');
+
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wm_refresh_shards'
+					},
+					dataType: 'json',
+					success: function(response) {
+						if (response.success) {
+							shardsConfig = response.data.shards;
+							// Update select options
+							var $select = $('#wm_shard');
+							var currentVal = $select.val();
+							$select.empty();
+							$.each(shardsConfig, function(name, data) {
+								$select.append($('<option>', {
+									value: name,
+									text: name
+								}));
+							});
+							// Restore selection if still exists
+							if ($select.find('option[value="' + currentVal + '"]').length) {
+								$select.val(currentVal);
+							}
+							$('#shards_count').text(response.data.count);
+							updateApiUrls();
+							alert('✅ ' + response.data.message + ' (' + response.data.count + ' shards)');
+						} else {
+							alert('❌ ' + (response.data.message || 'Failed to refresh'));
+						}
+					},
+					error: function() {
+						alert('❌ Error communicating with the server');
+					},
+					complete: function() {
+						$btn.prop('disabled', false).text(originalText);
+					}
+				});
+			});
+
+			// Check if shard is osm2cai-type (affects POI URL structure)
+			function isOsm2caiShard(shard) {
+				return shard.indexOf('osm2cai') === 0 || shard === 'local';
+			}
+
 			// Function to update API URLs based on shard and app_id
 			function updateApiUrls() {
 				var shard = $('#wm_shard').val();
 				var appId = $('input[name="app_configuration_id"]').val() || '49';
 
-				var apiUrls = {};
+				// Fallback to geohub if shard not found
+				if (!shardsConfig[shard]) {
+					shard = 'geohub';
+				}
 
-				if (shard === 'osm2cai') {
-					var awsApi = 'https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2';
-					apiUrls.tracksList = 'https://osm2cai.cai.it/api/app/webapp/' + appId + '/tracks_list';
-					apiUrls.singleTrack = awsApi + '/tracks/';
+				var origin = shardsConfig[shard].origin.replace(/\/$/, '');
+				var awsApi = shardsConfig[shard].awsApi.replace(/\/$/, '');
+
+				var apiUrls = {
+					tracksList: origin + '/api/app/webapp/' + appId + '/tracks_list',
+					singleTrack: awsApi + '/tracks/',
+					layer: origin + '/api/app/webapp/' + appId + '/layer/',
+					poiType: origin + '/api/app/webapp/' + appId + '/taxonomies/poi_type/'
+				};
+
+				// POI URL structure differs for osm2cai-type shards
+				if (isOsm2caiShard(shard)) {
 					apiUrls.poi = awsApi + '/' + appId + '/pois.geojson';
-					apiUrls.layer = 'https://osm2cai.cai.it/api/app/webapp/' + appId + '/layer/';
-					apiUrls.poiType = 'https://osm2cai.cai.it/api/app/webapp/' + appId + '/taxonomies/poi_type/';
 				} else {
-					var awsApi = 'https://wmfe.s3.eu-central-1.amazonaws.com/geohub';
-					apiUrls.tracksList = 'https://geohub.webmapp.it/api/app/webapp/' + appId + '/tracks_list';
-					apiUrls.singleTrack = awsApi + '/tracks/';
 					apiUrls.poi = awsApi + '/pois/' + appId + '.geojson';
-					apiUrls.layer = 'https://geohub.webmapp.it/api/app/webapp/' + appId + '/layer/';
-					apiUrls.poiType = 'https://geohub.webmapp.it/api/app/webapp/' + appId + '/taxonomies/poi_type/';
 				}
 
 				// Update links and inputs
@@ -438,7 +646,7 @@ function wm_admin_footer()
 			}
 
 			// Update APIs when shard or app_id changes
-			$('#wm_shard, input[name="app_configuration_id"]').on('change', updateApiUrls);
+			$('#wm_shard, input[name="app_configuration_id"]').on('change keyup', updateApiUrls);
 
 			// Function to show sync progress modal
 			function showSyncModal(message, title) {
