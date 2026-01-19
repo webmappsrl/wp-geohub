@@ -21,7 +21,7 @@ function wm_grid_poi($atts)
         $poi_data = [];
         $poi_type_ids_array = !empty($poi_type_ids) ? explode(',', $poi_type_ids) : (!empty($poi_type_id) ? [$poi_type_id] : []);
         $poi_type_api_base = get_option('poi_type_api');
-        $default_image = plugins_url('wp-geohub/assets/default_image.png');
+        $default_image = plugins_url('wm-package/assets/default_image.png');
 
         foreach ($poi_type_ids_array as $id) {
             $poi_url = "{$poi_type_api_base}{$id}";

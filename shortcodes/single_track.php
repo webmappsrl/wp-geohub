@@ -30,7 +30,7 @@ function wm_single_track($atts)
 
 	$track = json_decode(file_get_contents($geojson_url), true);
 	$track = $track['properties'];
-	$iframeUrl = geohub_get_iframe_url('track', $track_id, $language);
+	$iframeUrl = wm_get_iframe_url('track', $track_id, $language);
 
 	$description = null;
 	$excerpt = null;
@@ -44,7 +44,7 @@ function wm_single_track($atts)
 		$description = $track['description'][$language] ?? null;
 		$excerpt = $track['excerpt'][$language] ?? null;
 		$title = $track['name'][$language] ?? null;
-		$default_image = plugins_url('wp-geohub/assets/default_image.png');
+		$default_image = plugins_url('wm-package/assets/default_image.png');
 		$featured_image_url = isset($track['feature_image']['url']) && !empty($track['feature_image']['url'])
 			? $track['feature_image']['url']
 			: $default_image;

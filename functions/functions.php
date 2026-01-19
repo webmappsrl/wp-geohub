@@ -49,16 +49,16 @@ function wm_custom_slugify($title)
 {
     $title = iconv('UTF-8', 'ASCII//TRANSLIT', $title);
     $title = str_replace('–', '-', $title);
-    $title = str_replace("’", '', $title);
+    $title = str_replace("'", '', $title);
     $title = preg_replace('!\s+!', ' ', $title);
     $slug = sanitize_title_with_dashes($title);
     return $slug;
 }
 
 // Helper function to get iframe URL based on shard
-function geohub_get_iframe_url($type, $id, $language = 'it')
+function wm_get_iframe_url($type, $id, $language = 'it')
 {
-    $shard = get_option('geohub_shard');
+    $shard = get_option('wm_shard');
     if (empty($shard)) {
         $shard = 'geohub';
     }
@@ -198,4 +198,4 @@ function add_custom_copy_script()
 
 
 
-add_action('admin_footer-toplevel_page_geohub-settings', 'add_custom_copy_script');
+add_action('admin_footer-toplevel_page_wm-settings', 'add_custom_copy_script');

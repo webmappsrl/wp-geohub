@@ -1,19 +1,19 @@
 <?php
 
-add_action('admin_menu', 'geohub_add_admin_menu');
-function geohub_add_admin_menu()
+add_action('admin_menu', 'wm_add_admin_menu');
+function wm_add_admin_menu()
 {
 	add_menu_page(
 		'WM Package Settings',     // Page title
 		'WM Package',              // Menu title
 		'manage_options',         // Capability
-		'geohub-settings',     // Menu slug
-		'geohub_settings_page', // Function to display the page
+		'wm-settings',     // Menu slug
+		'wm_settings_page', // Function to display the page
 		plugins_url('assets/menu-icon.png', __FILE__) // Icon URL, dynamically getting the correct path
 	);
 }
 
-function geohub_get_api_urls($shard, $app_id)
+function wm_get_api_urls($shard, $app_id)
 {
 	$urls = [];
 
@@ -42,19 +42,19 @@ function geohub_get_api_urls($shard, $app_id)
 	return $urls;
 }
 
-function geohub_settings_page()
+function wm_settings_page()
 {
 	$app_id = get_option('app_configuration_id');
 	if (!is_numeric($app_id) || empty($app_id)) {
 		$app_id = '49';
 	}
 
-	$shard = get_option('geohub_shard');
+	$shard = get_option('wm_shard');
 	if (empty($shard)) {
 		$shard = 'geohub';
 	}
 
-	$api_urls = geohub_get_api_urls($shard, $app_id);
+	$api_urls = wm_get_api_urls($shard, $app_id);
 	$tracks_list_api = $api_urls['tracks_list_api'];
 	$single_track_api = $api_urls['single_track_api'];
 	$poi_api = $api_urls['poi_api'];
@@ -65,7 +65,7 @@ function geohub_settings_page()
 ?>
 	<div class="wrap">
 		<h1 style="display: flex; align-items: center;">
-			<img src="<?php echo plugins_url('assets/menu-icon.png', __FILE__); ?>" alt="Geohub Icon" style="margin-right: 10px; height: 30px; width: 30px;" />
+			<img src="<?php echo plugins_url('assets/menu-icon.png', __FILE__); ?>" alt="WM Icon" style="margin-right: 10px; height: 30px; width: 30px;" />
 			WM Package Settings
 		</h1>
 		<div style="display: none;" id="spinner" class="notice notice-warning">
@@ -85,14 +85,14 @@ function geohub_settings_page()
 			</div>
 		</div>
 		<form method="post" action="options.php">
-			<?php settings_fields('geohub-settings'); ?>
-			<?php do_settings_sections('geohub-settings'); ?>
+			<?php settings_fields('wm-settings'); ?>
+			<?php do_settings_sections('wm-settings'); ?>
 			<h2>APIs:</h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
 					<th scope="row">Shard</th>
 					<td>
-						<select name="geohub_shard" id="geohub_shard">
+						<select name="wm_shard" id="wm_shard">
 							<option value="geohub" <?php selected($shard, 'geohub'); ?>>geohub</option>
 							<option value="osm2cai" <?php selected($shard, 'osm2cai'); ?>>osm2cai</option>
 						</select>
@@ -107,7 +107,7 @@ function geohub_settings_page()
 						<input type="text" size="5" name="app_configuration_id"
 							value="<?php echo esc_attr($app_id); ?>" placeholder="49" />
 						<p class="description">
-							This APP ID refers to the ID of the app on GeoHub.
+							This APP ID refers to the ID of the app on the backend.
 						</p>
 					</td>
 				</tr>
@@ -305,40 +305,40 @@ function geohub_settings_page()
 }
 
 if (isset($_POST['generate_track'])) {
-	save_geohub_options();
+	wm_save_options();
 	add_action('admin_init', 'sync_tracks_action');
 }
 
 if (isset($_POST['generate_poi'])) {
-	save_geohub_options();
+	wm_save_options();
 	add_action('admin_init', 'sync_pois_action');
 }
 
 // Delete actions are handled completely via AJAX, so no need to handle POST here
 
-add_action('admin_init', 'geohub_settings_init');
-function geohub_settings_init()
+add_action('admin_init', 'wm_settings_init');
+function wm_settings_init()
 {
-	register_setting('geohub-settings', 'geohub_shard', 'sanitize_text_field');
-	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
-	register_setting('geohub-settings', 'track_shortcode', 'sanitize_text_field');
-	register_setting('geohub-settings', 'poi_shortcode', 'sanitize_text_field');
-	register_setting('geohub-settings', 'track_url', 'sanitize_text_field');
-	register_setting('geohub-settings', 'poi_url', 'sanitize_text_field');
-	register_setting('geohub-settings', 'tracks_list', 'sanitize_text_field');
-	register_setting('geohub-settings', 'track_shortcode', 'sanitize_text_field');
-	register_setting('geohub-settings', 'poi_shortcode', 'sanitize_text_field');
-	register_setting('geohub-settings', 'taxonomy_track_shortcode', 'sanitize_text_field');
-	register_setting('geohub-settings', 'taxonomy_poi_shortcode', 'sanitize_text_field');
-	register_setting('geohub-settings', 'app_configuration_id', 'sanitize_text_field');
-	register_setting('geohub-settings', 'layer_api', 'sanitize_text_field');
-	register_setting('geohub-settings', 'poi_type_api', 'sanitize_text_field');
-	register_setting('geohub-settings', 'ios_app_url', 'sanitize_text_field');
-	register_setting('geohub-settings', 'android_app_url', 'sanitize_text_field');
-	register_setting('geohub-settings', 'website_url', 'sanitize_text_field');
+	register_setting('wm-settings', 'wm_shard', 'sanitize_text_field');
+	register_setting('wm-settings', 'app_configuration_id', 'sanitize_text_field');
+	register_setting('wm-settings', 'track_shortcode', 'sanitize_text_field');
+	register_setting('wm-settings', 'poi_shortcode', 'sanitize_text_field');
+	register_setting('wm-settings', 'track_url', 'sanitize_text_field');
+	register_setting('wm-settings', 'poi_url', 'sanitize_text_field');
+	register_setting('wm-settings', 'tracks_list', 'sanitize_text_field');
+	register_setting('wm-settings', 'track_shortcode', 'sanitize_text_field');
+	register_setting('wm-settings', 'poi_shortcode', 'sanitize_text_field');
+	register_setting('wm-settings', 'taxonomy_track_shortcode', 'sanitize_text_field');
+	register_setting('wm-settings', 'taxonomy_poi_shortcode', 'sanitize_text_field');
+	register_setting('wm-settings', 'app_configuration_id', 'sanitize_text_field');
+	register_setting('wm-settings', 'layer_api', 'sanitize_text_field');
+	register_setting('wm-settings', 'poi_type_api', 'sanitize_text_field');
+	register_setting('wm-settings', 'ios_app_url', 'sanitize_text_field');
+	register_setting('wm-settings', 'android_app_url', 'sanitize_text_field');
+	register_setting('wm-settings', 'website_url', 'sanitize_text_field');
 }
 
-function wp_geohub_footer()
+function wm_admin_footer()
 {
 ?>
 	<style type="text/css">
@@ -394,7 +394,7 @@ function wp_geohub_footer()
 		jQuery(document).ready(function($) {
 			// Function to update API URLs based on shard and app_id
 			function updateApiUrls() {
-				var shard = $('#geohub_shard').val();
+				var shard = $('#wm_shard').val();
 				var appId = $('input[name="app_configuration_id"]').val() || '49';
 
 				var apiUrls = {};
@@ -438,7 +438,7 @@ function wp_geohub_footer()
 			}
 
 			// Update APIs when shard or app_id changes
-			$('#geohub_shard, input[name="app_configuration_id"]').on('change', updateApiUrls);
+			$('#wm_shard, input[name="app_configuration_id"]').on('change', updateApiUrls);
 
 			// Function to show sync progress modal
 			function showSyncModal(message, title) {
@@ -474,7 +474,7 @@ function wp_geohub_footer()
 
 			$('#generate_track').click(function(e) {
 				e.preventDefault();
-				if (!confirm('⚠️ WARNING: You are about to sync/generate all Tracks from GeoHub. This may take some time and will update or create Track posts.\n\nAre you sure you want to proceed?')) {
+				if (!confirm('⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts.\n\nAre you sure you want to proceed?')) {
 					return false;
 				}
 
@@ -525,7 +525,7 @@ function wp_geohub_footer()
 			});
 			$('#generate_poi').click(function(e) {
 				e.preventDefault();
-				if (!confirm('⚠️ WARNING: You are about to sync/generate all POIs from GeoHub. This may take some time and will update or create POI posts.\n\nAre you sure you want to proceed?')) {
+				if (!confirm('⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts.\n\nAre you sure you want to proceed?')) {
 					return false;
 				}
 
@@ -636,18 +636,18 @@ function wp_geohub_footer()
 	</script>
 <?php
 }
-add_action('admin_footer-toplevel_page_geohub-settings', 'wp_geohub_footer');
+add_action('admin_footer-toplevel_page_wm-settings', 'wm_admin_footer');
 
-function save_geohub_options()
+function wm_save_options()
 {
-	$shard = isset($_POST['geohub_shard']) ? sanitize_text_field($_POST['geohub_shard']) : 'geohub';
+	$shard = isset($_POST['wm_shard']) ? sanitize_text_field($_POST['wm_shard']) : 'geohub';
 	$app_id = isset($_POST['app_configuration_id']) ? sanitize_text_field($_POST['app_configuration_id']) : '49';
 
 	// Save the shard
-	update_option('geohub_shard', $shard);
+	update_option('wm_shard', $shard);
 
 	// Build API URLs based on selected shard
-	$api_urls = geohub_get_api_urls($shard, $app_id);
+	$api_urls = wm_get_api_urls($shard, $app_id);
 
 	update_option('track_url', $api_urls['single_track_api']);
 	update_option('poi_url', $api_urls['poi_api']);

@@ -58,7 +58,7 @@ function delete_all_pois_action()
         // Verify that the post still exists
         if (get_post($post_id)) {
             // Delete associated post meta as well
-            delete_post_meta($post_id, 'geohub_poi_id');
+            delete_post_meta($post_id, 'wm_poi_id');
 
             // Delete the post (force delete bypasses trash)
             $result = wp_delete_post($post_id, true);
@@ -71,9 +71,9 @@ function delete_all_pois_action()
     }
 
     if (!empty($errors)) {
-        set_transient('geohub_delete_pois_notification', 'Deleted ' . $deleted_count . ' pois. Some errors: ' . implode(', ', $errors), 60);
+        set_transient('wm_delete_pois_notification', 'Deleted ' . $deleted_count . ' pois. Some errors: ' . implode(', ', $errors), 60);
     } else {
-        set_transient('geohub_delete_pois_notification', 'Successfully deleted ' . $deleted_count . ' pois.', 60);
+        set_transient('wm_delete_pois_notification', 'Successfully deleted ' . $deleted_count . ' pois.', 60);
     }
 
     // AJAX response

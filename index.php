@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: WP GeoHub
-Plugin URI: https://github.com/webmappsrl/wp-geohub
-Description: Plugin to sync tracks and pois from GeoHub to WordPress and display them via child theme shortcodes.
-Version: 1.2
-Author: Pedram Katanchi, Rubens Garofalo, Valerio Bertolone
+Plugin Name: WM Package
+Plugin URI: https://github.com/webmappsrl/wm-package
+Description: Plugin to sync tracks and POIs from external APIs to WordPress and display them via shortcodes.
+Version: 2.0
+Author: Webmapp
 Author URI: https://webmapp.it
 License: GPL2
 */
@@ -21,10 +21,10 @@ include_once('functions/controls.php');
 include_once('functions/imports.php');
 include_once('hooks/transient.php');
 include_once('hooks/dashboard.php');
-include_once('post_types/Geohub_RegisterTrackPostType.php');
-include_once('post_types/Geohub_RegisterPoiPostType.php');
-include_once('custom_fields/Geohub_TrackCustomFields.php');
-include_once('custom_fields/Geohub_PoiCustomFields.php');
+include_once('post_types/RegisterTrackPostType.php');
+include_once('post_types/RegisterPoiPostType.php');
+include_once('custom_fields/TrackCustomFields.php');
+include_once('custom_fields/PoiCustomFields.php');
 include_once('actions/sync_track_action.php');
 include_once('actions/sync_poi_action.php');
 include_once('actions/delete_tracks_action.php');

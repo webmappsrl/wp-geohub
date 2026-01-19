@@ -12,7 +12,7 @@ function required_plugins()
     foreach ($required_plugins as $plugin_path => $plugin_data) {
         if (!is_plugin_active($plugin_path)) {
             $error_message = "ERROR: " . $plugin_data['error_message'];
-            set_transient('geohub_transient_error_message', $error_message, 60);
+            set_transient('wm_transient_error_message', $error_message, 60);
             return new WP_Error('required_plugin', $error_message);
         }
     }
@@ -25,7 +25,7 @@ function required_plugins()
     foreach ($translated_post_types as $post_type => $name) {
         if (!apply_filters('wpml_is_translated_post_type', null, $post_type)) {
             $error_message = "ERROR: The {$name} post type is not translatable. Please enable the translation for the {$name} post type in WPML settings > Post type translation.";
-            set_transient('geohub_transient_error_message', $error_message, 60);
+            set_transient('wm_transient_error_message', $error_message, 60);
             return new WP_Error('required_plugin', $error_message);
         }
     }

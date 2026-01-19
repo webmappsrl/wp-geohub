@@ -50,8 +50,8 @@ function wm_single_poi($atts)
 	}
 
 	$poi_properties = $poi['properties'];
-	$iframeUrl = geohub_get_iframe_url('poi', $poi_id, $language);
-	$default_image = plugins_url('wp-geohub/assets/default_image.png');
+	$iframeUrl = wm_get_iframe_url('poi', $poi_id, $language);
+	$default_image = plugins_url('wm-package/assets/default_image.png');
 
 	$title = null;
 	$description = null;
@@ -176,7 +176,6 @@ function wm_single_poi($atts)
 			</div>
 		</div>
 	</div>
-
 
 
 

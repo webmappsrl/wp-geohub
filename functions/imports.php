@@ -3,7 +3,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Shortcodes
-$shortcodesPath = 'wp-content/plugins/wp-geohub/shortcodes';
+$shortcodesPath = 'wp-content/plugins/wm-package/shortcodes';
 requireAllPHPFilesInDirectory($shortcodesPath);
 
 
@@ -32,6 +32,3 @@ function load_font_awesome()
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 }
 add_action('wp_enqueue_scripts', 'load_font_awesome');
-
-
-

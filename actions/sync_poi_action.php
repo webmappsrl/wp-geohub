@@ -16,7 +16,7 @@ function sync_pois_action()
     // Check if required options are set
     if (empty($poi_url) || empty($poi_shortcode)) {
         $error_message = 'Required configuration options are missing. Please check your settings.';
-        set_transient('geohub_sync_pois_notification', $error_message, 60);
+        set_transient('wm_sync_pois_notification', $error_message, 60);
         if (wp_doing_ajax()) {
             wp_send_json_error(['message' => $error_message]);
         }
@@ -28,7 +28,7 @@ function sync_pois_action()
         $pois = wp_remote_get($poi_url);
         if (is_wp_error($pois)) {
             $error_message = 'API poi list non valida o non disponibile.';
-            set_transient('geohub_sync_pois_notification', $error_message, 60);
+            set_transient('wm_sync_pois_notification', $error_message, 60);
             if (wp_doing_ajax()) {
                 wp_send_json_error(['message' => $error_message]);
             }
@@ -37,7 +37,7 @@ function sync_pois_action()
         $pois = json_decode(wp_remote_retrieve_body($pois), true);
         if (empty($pois) || !is_array($pois)) {
             $error_message = 'Nessun Poi fornito o formato non valido.';
-            set_transient('geohub_sync_pois_notification', $error_message, 60);
+            set_transient('wm_sync_pois_notification', $error_message, 60);
             if (wp_doing_ajax()) {
                 wp_send_json_error(['message' => $error_message]);
             }
@@ -49,14 +49,14 @@ function sync_pois_action()
             $poi_shortcode_final = '';
 
             $updated_at = $data["properties"]["updated_at"];
-            $geohub_id = $data["properties"]["id"];
+            $source_id = $data["properties"]["id"];
 
             $existing_posts = get_posts([
                 'post_type' => 'poi',
                 'meta_query' => [
                     [
-                        'key' => 'geohub_poi_id',
-                        'value' => $geohub_id,
+                        'key' => 'wm_poi_id',
+                        'value' => $source_id,
                     ],
                 ],
                 'numberposts' => 1,
@@ -70,9 +70,9 @@ function sync_pois_action()
             }
 
             // Generate post data from poi information
-            $post_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : 'poi no title ' . $geohub_id;
+            $post_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : 'poi no title ' . $source_id;
             $post_slug = sanitize_title($post_title);
-            $poi_shortcode_final = str_replace('$1', $geohub_id, $poi_shortcode);
+            $poi_shortcode_final = str_replace('$1', $source_id, $poi_shortcode);
 
             // Insert or update post
             $post_data = [
@@ -95,7 +95,7 @@ function sync_pois_action()
             }
 
             // Update post meta field
-            update_post_meta($post_id, 'geohub_poi_id', $geohub_id);
+            update_post_meta($post_id, 'wm_poi_id', $source_id);
 
             // WPML integration: Set the language information for the inserted/updated post
             // and create translations for available languages
@@ -107,7 +107,7 @@ function sync_pois_action()
                 if ($lang_code == $original_language_info->language_code) continue;
 
                 // Generate post data from poi information
-                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : 'Poi no title ' . $geohub_id;
+                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : 'Poi no title ' . $source_id;
                 $post_slug = sanitize_title($post_title);
 
                 // Create translation post object (you should modify this part according to how you manage translations)
@@ -133,7 +133,7 @@ function sync_pois_action()
                     do_action('wpml_set_element_language_details', $set_language_args);
 
                     // Update post meta field for the translation
-                    update_post_meta($translated_post_id, 'geohub_poi_id', $geohub_id);
+                    update_post_meta($translated_post_id, 'wm_poi_id', $source_id);
                 }
             }
         }
@@ -145,8 +145,8 @@ function sync_pois_action()
         }
     }
 
-    delete_transient('geohub_transient_warning_message');
-    set_transient('geohub_transient_success_message', 'Greate! Pois synchronized successfully.', 60);
+    delete_transient('wm_transient_warning_message');
+    set_transient('wm_transient_success_message', 'Greate! Pois synchronized successfully.', 60);
 
     // AJAX response - always send response when called via AJAX
     if (wp_doing_ajax()) {
