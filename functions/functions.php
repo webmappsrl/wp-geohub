@@ -307,6 +307,77 @@ function wm_package_enqueue_leaflet()
 add_action('wp_enqueue_scripts', 'wm_package_enqueue_leaflet');
 
 /**
+ * Enqueue Leaflet map initialization script
+ */
+function wm_package_enqueue_leaflet_map_script()
+{
+    global $post;
+
+    // Check if we're on a single POI or Track page, or if shortcodes are used
+    $should_enqueue = false;
+
+    if (is_singular(['poi', 'track'])) {
+        $should_enqueue = true;
+    } elseif ($post && (has_shortcode($post->post_content, 'wm_single_poi') || has_shortcode($post->post_content, 'wm_single_track'))) {
+        $should_enqueue = true;
+    }
+
+    if (!$should_enqueue) {
+        return;
+    }
+
+    // Add inline script for Leaflet map initialization
+    $script = "
+    function wmInitLeafletMap(mapElementId, geometryJson) {
+        var mapElement = document.getElementById(mapElementId);
+        if (!mapElement || typeof L === 'undefined') {
+            return;
+        }
+
+        var geometry = JSON.parse(geometryJson);
+        var map = L.map(mapElement).setView([0, 0], 13);
+
+        L.tileLayer('https://api.webmapp.it/tiles/{z}/{x}/{y}.png', {
+            attribution: '&copy; Webmapp &copy; OpenStreetMap',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Remove default Leaflet attribution prefix
+        map.attributionControl.setPrefix(false);
+
+        // Add fullscreen control
+        map.addControl(new L.control.fullscreen());
+
+        if (geometry.type === 'Point' && geometry.coordinates) {
+            var lat = geometry.coordinates[1];
+            var lng = geometry.coordinates[0];
+            map.setView([lat, lng], 15);
+            L.marker([lat, lng]).addTo(map);
+        } else if (geometry.type === 'LineString' && geometry.coordinates) {
+            var latlngs = geometry.coordinates.map(function(coord) {
+                return [coord[1], coord[0]];
+            });
+            var polyline = L.polyline(latlngs, {
+                color: 'blue'
+            }).addTo(map);
+            map.fitBounds(polyline.getBounds());
+        } else if (geometry.type === 'Polygon' && geometry.coordinates) {
+            var latlngs = geometry.coordinates[0].map(function(coord) {
+                return [coord[1], coord[0]];
+            });
+            var polygon = L.polygon(latlngs, {
+                color: 'blue'
+            }).addTo(map);
+            map.fitBounds(polygon.getBounds());
+        }
+    }
+    ";
+
+    wp_add_inline_script('leaflet-js', $script, 'before');
+}
+add_action('wp_enqueue_scripts', 'wm_package_enqueue_leaflet_map_script', 20);
+
+/**
  * Enqueue default CSS for WM Package shortcodes
  * Allows theme to override by creating wm-package-custom.css
  */

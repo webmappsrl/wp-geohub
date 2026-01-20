@@ -280,43 +280,9 @@ function wm_single_track($atts)
 			// Initialize Leaflet map for Track
 			<?php if (!empty($track_geometry)) : ?>
 				var mapElement = document.getElementById('wm-leaflet-map-track-<?= esc_js($track_id) ?>');
-				if (mapElement && typeof L !== 'undefined') {
-					var geometry = JSON.parse(mapElement.getAttribute('data-geometry'));
-					var map = L.map(mapElement).setView([0, 0], 13);
-
-					L.tileLayer('https://api.webmapp.it/tiles/{z}/{x}/{y}.png', {
-						attribution: '&copy; Webmapp &copy; OpenStreetMap',
-						maxZoom: 19
-					}).addTo(map);
-
-					// Remove default Leaflet attribution prefix
-					map.attributionControl.setPrefix(false);
-
-					// Add fullscreen control
-					map.addControl(new L.control.fullscreen());
-
-					if (geometry.type === 'Point' && geometry.coordinates) {
-						var lat = geometry.coordinates[1];
-						var lng = geometry.coordinates[0];
-						map.setView([lat, lng], 15);
-						L.marker([lat, lng]).addTo(map);
-					} else if (geometry.type === 'LineString' && geometry.coordinates) {
-						var latlngs = geometry.coordinates.map(function(coord) {
-							return [coord[1], coord[0]];
-						});
-						var polyline = L.polyline(latlngs, {
-							color: 'blue'
-						}).addTo(map);
-						map.fitBounds(polyline.getBounds());
-					} else if (geometry.type === 'Polygon' && geometry.coordinates) {
-						var latlngs = geometry.coordinates[0].map(function(coord) {
-							return [coord[1], coord[0]];
-						});
-						var polygon = L.polygon(latlngs, {
-							color: 'blue'
-						}).addTo(map);
-						map.fitBounds(polygon.getBounds());
-					}
+				if (mapElement && typeof wmInitLeafletMap !== 'undefined') {
+					var geometryJson = mapElement.getAttribute('data-geometry');
+					wmInitLeafletMap('wm-leaflet-map-track-<?= esc_js($track_id) ?>', geometryJson);
 				}
 			<?php endif; ?>
 		});

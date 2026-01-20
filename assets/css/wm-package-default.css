@@ -198,6 +198,67 @@
     text-decoration: underline;
 }
 
+/* Technical Details Table */
+.wm_technical_details {
+    width: 100%;
+    margin: 0;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.wm_technical_details_title {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0;
+    padding: 20px 20px 15px 20px;
+    border-bottom: 1px solid #e2e2e2;
+    color: #1a1a1a;
+    background-color: #f8f9fa;
+}
+
+.wm_technical_details_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin: 0;
+}
+
+.wm_technical_detail_item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e2e2e2;
+    border-right: 1px solid #e2e2e2;
+    background: #fff;
+}
+
+.wm_technical_detail_item:nth-child(even) {
+    border-right: none;
+}
+
+.wm_technical_detail_item:last-child,
+.wm_technical_detail_item:nth-last-child(2) {
+    border-bottom: none;
+}
+
+.wm_technical_detail_label {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wm_technical_detail_value {
+    font-size: 1em;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .wm_content_wrapper {
@@ -220,6 +281,22 @@
     .wm_taxonomy_item {
         font-size: 0.85em;
         padding: 5px 10px;
+    }
+
+    .wm_technical_details_grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wm_technical_detail_item {
+        border-right: none;
+    }
+
+    .wm_technical_detail_item:nth-child(even) {
+        border-right: none;
+    }
+
+    .wm_technical_detail_item:nth-last-child(2) {
+        border-bottom: 1px solid #e2e2e2;
     }
 }
 
