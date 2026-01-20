@@ -95,7 +95,7 @@ function wm_single_track($atts)
 				<?php foreach ($activity as $type) : ?>
 					<span class="wm_taxonomy_item">
 						<?php if (!empty($type['icon'])) : ?>
-							<span class="wm_taxonomy_icon"><?= esc_html($type['icon']) ?></span>
+							<span class="wm_taxonomy_icon"><?= wm_render_svg_icon($type['icon']) ?></span>
 						<?php endif; ?>
 						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
 					</span>

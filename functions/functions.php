@@ -390,7 +390,7 @@ function wm_package_enqueue_styles()
 
     if (is_singular(['poi', 'track'])) {
         $should_enqueue = true;
-    } elseif ($post && (has_shortcode($post->post_content, 'wm_single_poi') || has_shortcode($post->post_content, 'wm_single_track'))) {
+    } elseif ($post && (has_shortcode($post->post_content, 'wm_single_poi') || has_shortcode($post->post_content, 'wm_single_track') || has_shortcode($post->post_content, 'wm_grid_track'))) {
         $should_enqueue = true;
     }
 
@@ -430,3 +430,90 @@ function wm_package_enqueue_styles()
     );
 }
 add_action('wp_enqueue_scripts', 'wm_package_enqueue_styles');
+
+/**
+ * Safely render SVG icon code
+ * Allows SVG tags and attributes for rendering icons from API
+ */
+function wm_render_svg_icon($svg_code)
+{
+    if (empty($svg_code)) {
+        return '';
+    }
+
+    // Define allowed SVG tags and attributes
+    $allowed_svg_tags = array(
+        'svg' => array(
+            'xmlns' => true,
+            'viewbox' => true,
+            'viewBox' => true,
+            'width' => true,
+            'height' => true,
+            'class' => true,
+            'id' => true,
+            'style' => true,
+        ),
+        'circle' => array(
+            'fill' => true,
+            'cx' => true,
+            'cy' => true,
+            'r' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+        ),
+        'g' => array(
+            'fill' => true,
+            'transform' => true,
+            'class' => true,
+            'id' => true,
+        ),
+        'path' => array(
+            'd' => true,
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+            'class' => true,
+        ),
+        'rect' => array(
+            'x' => true,
+            'y' => true,
+            'width' => true,
+            'height' => true,
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+        ),
+        'polygon' => array(
+            'points' => true,
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+        ),
+        'polyline' => array(
+            'points' => true,
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+        ),
+        'line' => array(
+            'x1' => true,
+            'y1' => true,
+            'x2' => true,
+            'y2' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+        ),
+        'ellipse' => array(
+            'cx' => true,
+            'cy' => true,
+            'rx' => true,
+            'ry' => true,
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+        ),
+    );
+
+    // Use wp_kses to filter SVG code
+    return wp_kses($svg_code, $allowed_svg_tags);
+}

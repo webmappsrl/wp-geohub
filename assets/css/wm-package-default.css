@@ -318,3 +318,390 @@
         height: 250px;
     }
 }
+
+/* Grid Tracks Layout - Grid Style */
+.wm_tracks_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 30px 0;
+    padding: 0;
+    width: 100%;
+}
+
+.wm_grid_track_item {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    height: 100%;
+}
+
+.wm_grid_track_item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Header bar with category and button */
+.wm_grid_track_header {
+    background-color: #0073aa;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wm_grid_track_category {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wm_grid_track_category_icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.wm_grid_track_category_icon svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+.wm_grid_track_id {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.wm_grid_track_header_button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.wm_grid_track_header_button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Image strip */
+.wm_grid_track_image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+.wm_grid_icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wm_grid_icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Content section (if needed for additional info) */
+.wm_grid_track_content {
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wm_grid_track_region {
+    font-size: 0.85em;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.wm_grid_track_name {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.4;
+}
+
+.wm_grid_track_button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0073aa;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    width: fit-content;
+}
+
+.wm_grid_track_button:hover {
+    background-color: #005a87;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Responsive Grid */
+@media (max-width: 992px) {
+    .wm_tracks_grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wm_tracks_grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .wm_grid_track_header {
+        padding: 12px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .wm_grid_track_header_button {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    .wm_grid_track_image {
+        height: 180px;
+    }
+    
+    .wm_grid_track_content {
+        padding: 12px 15px;
+    }
+    
+    .wm_grid_track_name {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .wm_tracks_grid {
+        gap: 15px;
+    }
+    
+    .wm_grid_track_image {
+        height: 160px;
+    }
+    
+    .wm_grid_track_button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+        width: 100%;
+    }
+}
+
+/* Filters Interface */
+.wm_tracks_filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.wm_filter_item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wm_filter_label {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+}
+
+.wm_filter_range {
+    font-weight: 600;
+    color: #0073aa;
+    margin-left: 5px;
+}
+
+.wm_filter_select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 0.95em;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+.wm_filter_select:hover {
+    border-color: #0073aa;
+}
+
+.wm_filter_select:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 3px rgba(0, 115, 170, 0.1);
+}
+
+/* Dual Range Slider */
+.wm_slider_container {
+    position: relative;
+    height: 50px;
+    margin: 15px 0;
+    padding: 0 9px;
+}
+
+.wm_slider {
+    position: absolute;
+    width: calc(100% - 18px);
+    height: 6px;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    z-index: 2;
+    pointer-events: none;
+    margin: 0;
+    top: 22px;
+}
+
+.wm_slider::-webkit-slider-runnable-track {
+    height: 6px;
+    background: transparent;
+}
+
+.wm_slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #0073aa;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-top: -6px;
+}
+
+.wm_slider::-webkit-slider-thumb:hover {
+    background: #005a87;
+    transform: scale(1.1);
+}
+
+.wm_slider::-moz-range-track {
+    height: 6px;
+    background: transparent;
+    border: none;
+}
+
+.wm_slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #0073aa;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    pointer-events: all;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.wm_slider::-moz-range-thumb:hover {
+    background: #005a87;
+    transform: scale(1.1);
+}
+
+.wm_slider_track {
+    position: absolute;
+    top: 22px;
+    left: 9px;
+    right: 9px;
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+    z-index: 1;
+    --min-percent: 0%;
+    --max-percent: 100%;
+}
+
+.wm_slider_track::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: var(--min-percent);
+    right: calc(100% - var(--max-percent));
+    bottom: 0;
+    background: #0073aa;
+    border-radius: 3px;
+    z-index: 1;
+    transition: left 0.1s ease, right 0.1s ease;
+}
+
+/* Loading and Error States */
+.wm_loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.1em;
+}
+
+.wm_error {
+    text-align: center;
+    padding: 40px;
+    color: #d63638;
+    font-size: 1.1em;
+}
+
+.wm_no_results {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.1em;
+}
+
+/* Responsive Filters */
+@media (max-width: 768px) {
+    .wm_tracks_filters {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+}

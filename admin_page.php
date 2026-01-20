@@ -169,6 +169,15 @@ function wm_get_api_urls($shard, $app_id)
 	$urls['layer_api'] = "{$origin}/api/app/webapp/{$app_id}/layer/";
 	$urls['poi_type_api'] = "{$origin}/api/app/webapp/{$app_id}/taxonomies/poi_type/";
 
+	// Elasticsearch API URL - different patterns for different shards
+	if ($shard === 'geohub') {
+		// Geohub uses a different domain for Elasticsearch
+		$urls['elastic_api'] = "https://elastic-json.webmapp.it/v2/search/";
+	} else {
+		// Other shards use /api/v2/elasticsearch
+		$urls['elastic_api'] = "{$origin}/api/v2/elasticsearch";
+	}
+
 	// POI URL structure differs for osm2cai-type shards
 	if (wm_is_osm2cai_shard($shard)) {
 		$urls['poi_api'] = "{$aws_api}/{$app_id}/pois.geojson";
@@ -870,6 +879,7 @@ function wm_save_options()
 	update_option('app_configuration_id', $app_id);
 	update_option('layer_api', $api_urls['layer_api']);
 	update_option('poi_type_api', $api_urls['poi_type_api']);
+	update_option('elastic_api', $api_urls['elastic_api']);
 	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
 	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
