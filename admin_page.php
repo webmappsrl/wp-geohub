@@ -427,6 +427,33 @@ function wm_settings_page()
 				</tr>
 			</table>
 
+			<h2>Track Navigation:</h2>
+			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row">Enable Track Navigation</th>
+					<td>
+						<label>
+							<input type="checkbox" name="track_navigation_enabled" value="1" <?php checked(get_option('track_navigation_enabled'), '1'); ?> />
+							Enable navigation buttons (Previous/Next) on single track pages
+						</label>
+						<p class="description">
+							When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks.
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Default Layer IDs for Navigation</th>
+					<td>
+						<input type="text" size="50" name="track_navigation_layer_ids"
+							value="<?php echo esc_attr(get_option('track_navigation_layer_ids')); ?>"
+							placeholder="e.g., 123,456,789" />
+						<p class="description">
+							Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter.
+						</p>
+					</td>
+				</tr>
+			</table>
+
 
 			<h2>Import and Sync:</h2>
 			<table class="form-table" style="margin-left: 30px;">
@@ -495,6 +522,8 @@ function wm_settings_init()
 	register_setting('wm-settings', 'ios_app_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'android_app_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'website_url', 'sanitize_text_field');
+	register_setting('wm-settings', 'track_navigation_enabled', 'sanitize_text_field');
+	register_setting('wm-settings', 'track_navigation_layer_ids', 'sanitize_text_field');
 }
 
 function wm_admin_footer()
@@ -883,4 +912,6 @@ function wm_save_options()
 	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
 	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
+	update_option('track_navigation_enabled', isset($_POST['track_navigation_enabled']) ? '1' : '0');
+	update_option('track_navigation_layer_ids', sanitize_text_field($_POST['track_navigation_layer_ids'] ?? ''));
 }

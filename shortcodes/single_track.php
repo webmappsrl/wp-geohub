@@ -23,6 +23,7 @@ function wm_single_track($atts)
 
 	extract(shortcode_atts(array(
 		'track_id' => '',
+		'layer_ids' => '', // Optional: comma-separated layer IDs for navigation
 	), $atts));
 
 	$single_track_base_url = get_option('track_url');
@@ -103,116 +104,72 @@ function wm_single_track($atts)
 			</div>
 		<?php endif; ?>
 
-		<!-- 4. Map -->
-		<?php if (!empty($track_geometry)) : ?>
-			<div class="wm_map">
-				<div id="wm-leaflet-map-track-<?= esc_attr($track_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'></div>
-			</div>
-		<?php endif; ?>
+		<!-- 4. Map and Technical Details Container -->
+		<?php if (!empty($track_geometry) || (!empty($dem_data) && is_array($dem_data))) : ?>
+			<div class="wm_map_technical_wrapper">
+				<!-- 4. Map -->
+				<?php if (!empty($track_geometry)) : ?>
+					<div class="wm_map">
+						<div id="wm-leaflet-map-track-<?= esc_attr($track_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'></div>
+					</div>
+				<?php endif; ?>
 
-		<!-- 4.5. Technical Details -->
-		<?php if (!empty($dem_data) && is_array($dem_data)) : ?>
-			<div class="wm_technical_details">
-				<h2 class="wm_technical_details_title"><?= __('Technical Details', 'wm-package') ?></h2>
-				<div class="wm_technical_details_grid">
-					<?php if (isset($dem_data['distance']) && $dem_data['distance'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Distance', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> km</span>
-						</div>
-					<?php endif; ?>
+				<!-- 4.5. Technical Details -->
+				<?php if (!empty($dem_data) && is_array($dem_data)) : ?>
+					<div class="wm_technical_details">
+						<h2 class="wm_technical_details_title"><?= __('Technical Details', 'wm-package') ?></h2>
+						<div class="wm_technical_details_grid">
+							<?php if (isset($dem_data['distance']) && $dem_data['distance'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('Distance', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> km</span>
+								</div>
+							<?php endif; ?>
 
-					<?php if (isset($dem_data['ele_min']) && $dem_data['ele_min'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Min Elevation', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_min']) ?> m</span>
-						</div>
-					<?php endif; ?>
+							<?php if (isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('Duration Backward', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
+								</div>
+							<?php endif; ?>
 
-					<?php if (isset($dem_data['ele_max']) && $dem_data['ele_max'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Max Elevation', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_max']) ?> m</span>
-						</div>
-					<?php endif; ?>
+							<?php if (isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('Duration Forward', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward']) ?> <?= __('min', 'wm-package') ?></span>
+								</div>
+							<?php endif; ?>
 
-					<?php if (isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Start Elevation', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_from']) ?> m</span>
-						</div>
-					<?php endif; ?>
+							<?php if (isset($dem_data['ascent']) && $dem_data['ascent'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('Ascent', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html($dem_data['ascent']) ?> m</span>
+								</div>
+							<?php endif; ?>
 
-					<?php if (isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('End Elevation', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_to']) ?> m</span>
-						</div>
-					<?php endif; ?>
+							<?php if (isset($dem_data['descent']) && $dem_data['descent'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('Descent', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html($dem_data['descent']) ?> m</span>
+								</div>
+							<?php endif; ?>
 
-					<?php if (isset($dem_data['ascent']) && $dem_data['ascent'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Ascent', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['ascent']) ?> m</span>
-						</div>
-					<?php endif; ?>
+							<?php if (isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('Start Elevation', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_from']) ?> m</span>
+								</div>
+							<?php endif; ?>
 
-					<?php if (isset($dem_data['descent']) && $dem_data['descent'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Descent', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['descent']) ?> m</span>
+							<?php if (isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('End Elevation', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_to']) ?> m</span>
+								</div>
+							<?php endif; ?>
 						</div>
-					<?php endif; ?>
-
-					<?php if (isset($dem_data['duration_forward_hiking']) && $dem_data['duration_forward_hiking'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Duration Forward (Hiking)', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward_hiking']) ?> <?= __('min', 'wm-package') ?></span>
-						</div>
-					<?php endif; ?>
-
-					<?php if (isset($dem_data['duration_backward_hiking']) && $dem_data['duration_backward_hiking'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Duration Backward (Hiking)', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward_hiking']) ?> <?= __('min', 'wm-package') ?></span>
-						</div>
-					<?php endif; ?>
-
-					<?php if (isset($dem_data['duration_forward_bike']) && $dem_data['duration_forward_bike'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Duration Forward (Bike)', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward_bike']) ?> <?= __('min', 'wm-package') ?></span>
-						</div>
-					<?php endif; ?>
-
-					<?php if (isset($dem_data['duration_backward_bike']) && $dem_data['duration_backward_bike'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Duration Backward (Bike)', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward_bike']) ?> <?= __('min', 'wm-package') ?></span>
-						</div>
-					<?php endif; ?>
-
-					<?php if (isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Duration Forward', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward']) ?> <?= __('min', 'wm-package') ?></span>
-						</div>
-					<?php endif; ?>
-
-					<?php if (isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Duration Backward', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
-						</div>
-					<?php endif; ?>
-
-					<?php if (isset($dem_data['round_trip']) && $dem_data['round_trip'] !== null) : ?>
-						<div class="wm_technical_detail_item">
-							<span class="wm_technical_detail_label"><?= __('Round Trip', 'wm-package') ?>:</span>
-							<span class="wm_technical_detail_value"><?= $dem_data['round_trip'] ? __('Yes', 'wm-package') : __('No', 'wm-package') ?></span>
-						</div>
-					<?php endif; ?>
-				</div>
+					</div>
+				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 
@@ -258,6 +215,164 @@ function wm_single_track($atts)
 				</a>
 			</div>
 		<?php endif; ?>
+
+		<!-- 8. Track Navigation -->
+		<?php
+		$navigation_enabled = get_option('track_navigation_enabled') === '1';
+		if ($navigation_enabled) {
+			// Get layer IDs from shortcode parameter or admin option
+			$nav_layer_ids = !empty($layer_ids) ? $layer_ids : get_option('track_navigation_layer_ids');
+
+			if (!empty($nav_layer_ids)) {
+				$nav_layer_ids_array = array_map('trim', explode(',', $nav_layer_ids));
+
+				// Get Elasticsearch configuration
+				$elastic_api_base = get_option('elastic_api');
+				$app_id = get_option('app_configuration_id') ?: '49';
+				$shard = get_option('wm_shard') ?: 'geohub';
+				$shard_app = $shard . '_app';
+
+				// Fallback: if elastic_api is not set, try to construct it from origin
+				if (empty($elastic_api_base)) {
+					if (function_exists('wm_get_api_urls')) {
+						$api_urls = wm_get_api_urls($shard, $app_id);
+						$elastic_api_base = $api_urls['elastic_api'] ?? null;
+					}
+					if (empty($elastic_api_base)) {
+						$origin = get_option('layer_api');
+						if ($origin) {
+							$origin = preg_replace('#/api/app/webapp/.*$#', '', $origin);
+							if ($shard === 'geohub') {
+								$elastic_api_base = 'https://elastic-json.webmapp.it/v2/search/';
+							} else {
+								$elastic_api_base = rtrim($origin, '/') . '/api/v2/elasticsearch';
+							}
+						}
+					}
+				}
+
+				// Fetch all tracks from Elasticsearch
+				$all_tracks = array();
+				if (!empty($elastic_api_base)) {
+					foreach ($nav_layer_ids_array as $layer_id) {
+						if (empty($layer_id)) continue;
+
+						$elastic_url = $elastic_api_base;
+						if (strpos($elastic_url, '?') === false) {
+							$elastic_url .= '?';
+						} else {
+							$elastic_url .= '&';
+						}
+						$elastic_url .= "app={$shard_app}_{$app_id}&layer=" . urlencode($layer_id) . "&size=1000";
+
+						$response = wp_remote_get($elastic_url, array('timeout' => 15));
+
+						if (!is_wp_error($response)) {
+							$elastic_data = json_decode(wp_remote_retrieve_body($response), true);
+
+							if (!empty($elastic_data['hits']) && is_array($elastic_data['hits'])) {
+								foreach ($elastic_data['hits'] as $hit) {
+									$track_item = array();
+									$track_item['id'] = $hit['id'] ?? null;
+									$track_item['name'] = is_array($hit['name'] ?? null) ? $hit['name'] : array($language => $hit['name'] ?? '');
+									$track_item['slug'] = is_array($hit['slug'] ?? null) ? $hit['slug'] : array($language => wm_custom_slugify($track_item['name'][$language] ?? ''));
+									$track_item['updatedAt'] = $hit['properties']['updatedAt'] ?? $hit['updatedAt'] ?? null;
+									$all_tracks[] = $track_item;
+								}
+							}
+						}
+					}
+
+					// Keep tracks in the exact order as returned by Elasticsearch API (no sorting)
+					// The order in hits array is the correct navigation order
+
+					// Find current track index
+					$current_index = -1;
+					$current_track_slug = $track['slug'][$language] ?? '';
+					$current_track_id = $track['id'] ?? $track_id;
+
+					// Also try to get slug from track name if slug is not available
+					if (empty($current_track_slug) && !empty($track['name'][$language])) {
+						$current_track_slug = wm_custom_slugify($track['name'][$language]);
+					}
+
+					foreach ($all_tracks as $index => $track_item) {
+						$item_slug = $track_item['slug'][$language] ?? '';
+						$item_id = $track_item['id'] ?? '';
+
+						// Match by ID or slug
+						if (!empty($current_track_id) && $item_id == $current_track_id) {
+							$current_index = $index;
+							break;
+						}
+						if (!empty($current_track_slug) && $item_slug === $current_track_slug) {
+							$current_index = $index;
+							break;
+						}
+						// Also try matching track_id parameter (might be a slug)
+						if ($track_id && ($item_id == $track_id || $item_slug === $track_id)) {
+							$current_index = $index;
+							break;
+						}
+					}
+
+					// Get previous and next tracks
+					$prev_track = null;
+					$next_track = null;
+
+					if ($current_index >= 0) {
+						if ($current_index > 0) {
+							$prev_track = $all_tracks[$current_index - 1];
+						}
+						if ($current_index < count($all_tracks) - 1) {
+							$next_track = $all_tracks[$current_index + 1];
+						}
+					}
+
+					// Display navigation buttons
+					if ($prev_track || $next_track) :
+						$base_url = apply_filters('wpml_home_url', get_site_url(), $language);
+		?>
+						<div class="wm_track_navigation">
+							<?php if ($prev_track) :
+								$prev_slug = $prev_track['slug'][$language] ?? '';
+								$prev_url = trailingslashit($base_url) . "track/{$prev_slug}/";
+								$prev_name = $prev_track['name'][$language] ?? __('Previous Track', 'wm-package');
+							?>
+								<a href="<?= esc_url($prev_url) ?>" class="wm_track_nav_button wm_track_nav_prev">
+									<span class="wm_track_nav_arrow">←</span>
+									<span class="wm_track_nav_label"><?= __('Previous', 'wm-package') ?></span>
+									<span class="wm_track_nav_name"><?= esc_html($prev_name) ?></span>
+								</a>
+							<?php else : ?>
+								<span class="wm_track_nav_button wm_track_nav_prev wm_track_nav_disabled">
+									<span class="wm_track_nav_arrow">←</span>
+									<span class="wm_track_nav_label"><?= __('Previous', 'wm-package') ?></span>
+								</span>
+							<?php endif; ?>
+
+							<?php if ($next_track) :
+								$next_slug = $next_track['slug'][$language] ?? '';
+								$next_url = trailingslashit($base_url) . "track/{$next_slug}/";
+								$next_name = $next_track['name'][$language] ?? __('Next Track', 'wm-package');
+							?>
+								<a href="<?= esc_url($next_url) ?>" class="wm_track_nav_button wm_track_nav_next">
+									<span class="wm_track_nav_label"><?= __('Next', 'wm-package') ?></span>
+									<span class="wm_track_nav_name"><?= esc_html($next_name) ?></span>
+									<span class="wm_track_nav_arrow">→</span>
+								</a>
+							<?php else : ?>
+								<span class="wm_track_nav_button wm_track_nav_next wm_track_nav_disabled">
+									<span class="wm_track_nav_label"><?= __('Next', 'wm-package') ?></span>
+									<span class="wm_track_nav_arrow">→</span>
+								</span>
+							<?php endif; ?>
+						</div>
+		<?php endif;
+				}
+			}
+		}
+		?>
 	</div>
 
 	<script>

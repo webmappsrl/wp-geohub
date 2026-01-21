@@ -209,6 +209,12 @@ function wm_grid_track($atts)
         }
 
         // Now process tracks normally
+        // Initialize arrays to collect filter options across all layers
+        $all_regions = array();
+        $distances = array();
+        $ascents = array();
+        $difficulties = array();
+
         foreach ($layer_ids_array as $id) {
             if (empty($id)) continue;
 
@@ -227,11 +233,6 @@ function wm_grid_track($atts)
 
             if (!is_wp_error($response)) {
                 $elastic_data = json_decode(wp_remote_retrieve_body($response), true);
-
-                // Extract filter options from aggregations and hits
-                $all_regions = array();
-                $distances = array();
-                $ascents = array();
 
                 // Helper function to extract region name from various formats
                 $extract_region_name = function ($where) use ($language) {
@@ -280,6 +281,25 @@ function wm_grid_track($atts)
                             }
                         }
                     }
+
+                    // Get difficulties from cai_scale aggregations if available
+                    if (!empty($aggs['cai_scale'])) {
+                        if (isset($aggs['cai_scale']['count']['buckets'])) {
+                            foreach ($aggs['cai_scale']['count']['buckets'] as $bucket) {
+                                $difficulty_value = $bucket['key'] ?? $bucket;
+                                if (!empty($difficulty_value) && is_string($difficulty_value) && !in_array($difficulty_value, $difficulties)) {
+                                    $difficulties[] = $difficulty_value;
+                                }
+                            }
+                        } elseif (isset($aggs['cai_scale']['buckets'])) {
+                            foreach ($aggs['cai_scale']['buckets'] as $bucket) {
+                                $difficulty_value = $bucket['key'] ?? $bucket;
+                                if (!empty($difficulty_value) && is_string($difficulty_value) && !in_array($difficulty_value, $difficulties)) {
+                                    $difficulties[] = $difficulty_value;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 // Calculate min/max from hits for sliders and collect regions from all hits
@@ -287,6 +307,21 @@ function wm_grid_track($atts)
                     foreach ($elastic_data['hits'] as $hit) {
                         if (isset($hit['distance'])) $distances[] = (float)$hit['distance'];
                         if (isset($hit['ascent'])) $ascents[] = (int)$hit['ascent'];
+
+                        // Collect cai_scale difficulties from hits
+                        if (isset($hit['cai_scale']) && !empty($hit['cai_scale'])) {
+                            $difficulty_value = is_string($hit['cai_scale']) ? $hit['cai_scale'] : (string)$hit['cai_scale'];
+                            if (!empty($difficulty_value) && !in_array($difficulty_value, $difficulties)) {
+                                $difficulties[] = $difficulty_value;
+                            }
+                        }
+                        // Also check properties.cai_scale if it exists
+                        if (isset($hit['properties']['cai_scale']) && !empty($hit['properties']['cai_scale'])) {
+                            $difficulty_value = is_string($hit['properties']['cai_scale']) ? $hit['properties']['cai_scale'] : (string)$hit['properties']['cai_scale'];
+                            if (!empty($difficulty_value) && !in_array($difficulty_value, $difficulties)) {
+                                $difficulties[] = $difficulty_value;
+                            }
+                        }
 
                         // Collect regions from hits - handle various data structures
                         if (!empty($hit['taxonomyWheres']) && is_array($hit['taxonomyWheres'])) {
@@ -308,28 +343,9 @@ function wm_grid_track($atts)
                             }
                         }
                     }
-
-                    if (!empty($distances)) {
-                        $filter_options['distance_min'] = max(1, floor(min($distances)));
-                        $filter_options['distance_max'] = max(40, ceil(max($distances)));
-                    }
-                    if (!empty($ascents)) {
-                        $filter_options['ascent_min'] = max(1, min($ascents));
-                        $filter_options['ascent_max'] = max(2500, max($ascents));
-                    }
                 }
 
-                // Merge with regions collected from all layers and API
-                if (!empty($all_regions_from_api)) {
-                    $all_regions = array_merge($all_regions, $all_regions_from_api);
-                }
-
-                // Sort and store unique regions
-                $all_regions = array_unique($all_regions);
-                $all_regions = array_filter($all_regions); // Remove empty values
-                sort($all_regions);
-                $filter_options['regions'] = $all_regions;
-
+                // Process tracks from this layer
                 if (!empty($elastic_data['hits']) && is_array($elastic_data['hits'])) {
                     foreach ($elastic_data['hits'] as $hit) {
                         $track = array();
@@ -377,6 +393,68 @@ function wm_grid_track($atts)
                 }
             }
         }
+
+        // Process filter options after collecting data from all layers
+        // Merge with regions collected from all layers and API
+        if (!empty($all_regions_from_api)) {
+            $all_regions = array_merge($all_regions, $all_regions_from_api);
+        }
+
+        // Sort and store unique regions
+        $all_regions = array_unique($all_regions);
+        $all_regions = array_filter($all_regions); // Remove empty values
+        sort($all_regions);
+        $filter_options['regions'] = $all_regions;
+
+        // Calculate min/max for distance and ascent sliders
+        $has_distance_data = false;
+        if (!empty($distances)) {
+            $calculated_min = max(1, floor(min($distances)));
+            $calculated_max = ceil(max($distances));
+            // Only consider valid if we have meaningful data and min < max
+            if ($calculated_min < $calculated_max && count($distances) > 0) {
+                $filter_options['distance_min'] = $calculated_min;
+                $filter_options['distance_max'] = $calculated_max;
+                $has_distance_data = true;
+            }
+        }
+
+        $has_ascent_data = false;
+        if (!empty($ascents)) {
+            $calculated_min = max(1, min($ascents));
+            $calculated_max = max($ascents);
+            // Only consider valid if we have meaningful data and min < max
+            if ($calculated_min < $calculated_max && count($ascents) > 0) {
+                $filter_options['ascent_min'] = $calculated_min;
+                $filter_options['ascent_max'] = $calculated_max;
+                $has_ascent_data = true;
+            }
+        }
+
+        // Sort and store unique difficulties
+        $difficulties = array_unique($difficulties);
+        $difficulties = array_filter($difficulties); // Remove empty values
+        sort($difficulties);
+        $filter_options['difficulties'] = $difficulties;
+        $has_difficulty_data = !empty($difficulties);
+
+        // Check if we have any valid filter data
+        $has_region_data = !empty($filter_options['regions']);
+        $has_any_filter_data = $has_distance_data || $has_region_data || $has_difficulty_data || $has_ascent_data;
+
+        // Store flags for template rendering
+        $filter_options['has_distance_data'] = $has_distance_data;
+        $filter_options['has_region_data'] = $has_region_data;
+        $filter_options['has_difficulty_data'] = $has_difficulty_data;
+        $filter_options['has_ascent_data'] = $has_ascent_data;
+        $filter_options['has_any_filter_data'] = $has_any_filter_data;
+    } else {
+        // No Elasticsearch data, no filters available
+        $filter_options['has_distance_data'] = false;
+        $filter_options['has_region_data'] = false;
+        $filter_options['has_difficulty_data'] = false;
+        $filter_options['has_ascent_data'] = false;
+        $filter_options['has_any_filter_data'] = false;
     }
 
     // Fallback to Layer API if Elasticsearch failed or is disabled
@@ -467,47 +545,65 @@ function wm_grid_track($atts)
             <div class="wm_body_section">
             <?php endif; ?>
 
-            <?php if ($show_filters === 'true' && $use_elastic) : ?>
+            <?php if ($show_filters === 'true' && $use_elastic && !empty($filter_options['has_any_filter_data'])) : ?>
                 <!-- Filters Interface -->
                 <div class="wm_tracks_filters" data-layer-id="<?= esc_attr($layer_id ?: $layer_ids_array[0] ?? ''); ?>" data-elastic-api="<?= esc_attr($elastic_api_base); ?>" data-shard-app="<?= esc_attr($shard_app); ?>" data-app-id="<?= esc_attr($app_id); ?>">
-                    <div class="wm_filter_item">
-                        <label class="wm_filter_label"><?= __('Length', 'wm-package'); ?> <span class="wm_filter_range" id="distance_range"><?= esc_html($filter_options['distance_min']); ?> - <?= esc_html($filter_options['distance_max']); ?> <?= __('km', 'wm-package'); ?></span></label>
-                        <div class="wm_slider_container">
-                            <input type="range" id="distance_min" class="wm_slider" min="<?= esc_attr($filter_options['distance_min']); ?>" max="<?= esc_attr($filter_options['distance_max']); ?>" value="<?= esc_attr($filter_options['distance_min']); ?>" step="1">
-                            <input type="range" id="distance_max" class="wm_slider" min="<?= esc_attr($filter_options['distance_min']); ?>" max="<?= esc_attr($filter_options['distance_max']); ?>" value="<?= esc_attr($filter_options['distance_max']); ?>" step="1">
-                            <div class="wm_slider_track"></div>
+                    <?php if (!empty($filter_options['has_distance_data'])) : ?>
+                        <div class="wm_filter_item">
+                            <label class="wm_filter_label"><?= __('Length', 'wm-package'); ?> <span class="wm_filter_range" id="distance_range"><?= esc_html($filter_options['distance_min']); ?> - <?= esc_html($filter_options['distance_max']); ?> <?= __('km', 'wm-package'); ?></span></label>
+                            <div class="wm_slider_container">
+                                <input type="range" id="distance_min" class="wm_slider" min="<?= esc_attr($filter_options['distance_min']); ?>" max="<?= esc_attr($filter_options['distance_max']); ?>" value="<?= esc_attr($filter_options['distance_min']); ?>" step="1">
+                                <input type="range" id="distance_max" class="wm_slider" min="<?= esc_attr($filter_options['distance_min']); ?>" max="<?= esc_attr($filter_options['distance_max']); ?>" value="<?= esc_attr($filter_options['distance_max']); ?>" step="1">
+                                <div class="wm_slider_track"></div>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
-                    <div class="wm_filter_item">
-                        <label class="wm_filter_label"><?= __('Region', 'wm-package'); ?></label>
-                        <select id="filter_region" class="wm_filter_select">
-                            <option value=""><?= __('Select region', 'wm-package'); ?></option>
-                            <?php foreach ($filter_options['regions'] as $region) : ?>
-                                <option value="<?= esc_attr($region); ?>"><?= esc_html($region); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="wm_filter_item">
-                        <label class="wm_filter_label"><?= __('Difficulty', 'wm-package'); ?></label>
-                        <select id="filter_difficulty" class="wm_filter_select">
-                            <option value=""><?= __('Select difficulty', 'wm-package'); ?></option>
-                            <option value="T"><?= __('Tourist', 'wm-package'); ?> (T)</option>
-                            <option value="E"><?= __('Hiker', 'wm-package'); ?> (E)</option>
-                            <option value="EE"><?= __('Expert hiker', 'wm-package'); ?> (EE)</option>
-                            <option value="EEA"><?= __('Expert hiker with equipment', 'wm-package'); ?> (EEA)</option>
-                        </select>
-                    </div>
-
-                    <div class="wm_filter_item">
-                        <label class="wm_filter_label"><?= __('Elevation gain +', 'wm-package'); ?> <span class="wm_filter_range" id="ascent_range"><?= esc_html($filter_options['ascent_min']); ?> - <?= esc_html($filter_options['ascent_max']); ?> <?= __('m', 'wm-package'); ?></span></label>
-                        <div class="wm_slider_container">
-                            <input type="range" id="ascent_min" class="wm_slider" min="<?= esc_attr($filter_options['ascent_min']); ?>" max="<?= esc_attr($filter_options['ascent_max']); ?>" value="<?= esc_attr($filter_options['ascent_min']); ?>" step="1">
-                            <input type="range" id="ascent_max" class="wm_slider" min="<?= esc_attr($filter_options['ascent_min']); ?>" max="<?= esc_attr($filter_options['ascent_max']); ?>" value="<?= esc_attr($filter_options['ascent_max']); ?>" step="1">
-                            <div class="wm_slider_track"></div>
+                    <?php if (!empty($filter_options['has_region_data'])) : ?>
+                        <div class="wm_filter_item">
+                            <label class="wm_filter_label"><?= __('Region', 'wm-package'); ?></label>
+                            <select id="filter_region" class="wm_filter_select">
+                                <option value=""><?= __('Select region', 'wm-package'); ?></option>
+                                <?php foreach ($filter_options['regions'] as $region) : ?>
+                                    <option value="<?= esc_attr($region); ?>"><?= esc_html($region); ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                    </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($filter_options['has_difficulty_data'])) : ?>
+                        <div class="wm_filter_item">
+                            <label class="wm_filter_label"><?= __('Difficulty', 'wm-package'); ?></label>
+                            <select id="filter_difficulty" class="wm_filter_select">
+                                <option value=""><?= __('Select difficulty', 'wm-package'); ?></option>
+                                <?php
+                                // Map of difficulty codes to labels
+                                $difficulty_labels = array(
+                                    'T' => __('Tourist', 'wm-package') . ' (T)',
+                                    'E' => __('Hiker', 'wm-package') . ' (E)',
+                                    'EE' => __('Expert hiker', 'wm-package') . ' (EE)',
+                                    'EEA' => __('Expert hiker with equipment', 'wm-package') . ' (EEA)'
+                                );
+                                // Only show options that exist in the data
+                                foreach ($filter_options['difficulties'] as $difficulty) {
+                                    $label = isset($difficulty_labels[$difficulty]) ? $difficulty_labels[$difficulty] : $difficulty;
+                                    echo '<option value="' . esc_attr($difficulty) . '">' . esc_html($label) . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($filter_options['has_ascent_data'])) : ?>
+                        <div class="wm_filter_item">
+                            <label class="wm_filter_label"><?= __('Elevation gain +', 'wm-package'); ?> <span class="wm_filter_range" id="ascent_range"><?= esc_html($filter_options['ascent_min']); ?> - <?= esc_html($filter_options['ascent_max']); ?> <?= __('m', 'wm-package'); ?></span></label>
+                            <div class="wm_slider_container">
+                                <input type="range" id="ascent_min" class="wm_slider" min="<?= esc_attr($filter_options['ascent_min']); ?>" max="<?= esc_attr($filter_options['ascent_max']); ?>" value="<?= esc_attr($filter_options['ascent_min']); ?>" step="1">
+                                <input type="range" id="ascent_max" class="wm_slider" min="<?= esc_attr($filter_options['ascent_min']); ?>" max="<?= esc_attr($filter_options['ascent_max']); ?>" value="<?= esc_attr($filter_options['ascent_max']); ?>" step="1">
+                                <div class="wm_slider_track"></div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
@@ -579,7 +675,7 @@ function wm_grid_track($atts)
         </div>
     <?php endif; ?>
 
-    <?php if ($show_filters === 'true' && $use_elastic) : ?>
+    <?php if ($show_filters === 'true' && $use_elastic && !empty($filter_options['has_any_filter_data'])) : ?>
         <script>
             (function() {
                 const filtersContainer = document.querySelector('.wm_tracks_filters');
@@ -596,49 +692,66 @@ function wm_grid_track($atts)
 
                 function buildFilters() {
                     const filters = [];
-                    const defaultDistanceMin = <?= $filter_options['distance_min']; ?>;
-                    const defaultDistanceMax = <?= $filter_options['distance_max']; ?>;
-                    const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
-                    const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
+                    <?php if (!empty($filter_options['has_distance_data'])) : ?>
+                        const defaultDistanceMin = <?= $filter_options['distance_min']; ?>;
+                        const defaultDistanceMax = <?= $filter_options['distance_max']; ?>;
+                        // Distance filter - only apply if different from default
+                        const distanceMinEl = document.getElementById('distance_min');
+                        const distanceMaxEl = document.getElementById('distance_max');
+                        if (distanceMinEl && distanceMaxEl) {
+                            const distanceMin = parseFloat(distanceMinEl.value);
+                            const distanceMax = parseFloat(distanceMaxEl.value);
+                            if (distanceMin > defaultDistanceMin || distanceMax < defaultDistanceMax) {
+                                filters.push(JSON.stringify({
+                                    identifier: 'distance',
+                                    min: distanceMin,
+                                    max: distanceMax
+                                }));
+                            }
+                        }
+                    <?php endif; ?>
 
-                    // Distance filter - only apply if different from default
-                    const distanceMin = parseFloat(document.getElementById('distance_min').value);
-                    const distanceMax = parseFloat(document.getElementById('distance_max').value);
-                    if (distanceMin > defaultDistanceMin || distanceMax < defaultDistanceMax) {
-                        filters.push(JSON.stringify({
-                            identifier: 'distance',
-                            min: distanceMin,
-                            max: distanceMax
-                        }));
+                    <?php if (!empty($filter_options['has_ascent_data'])) : ?>
+                        const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
+                        const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
+                        // Ascent filter - only apply if different from default
+                        const ascentMinEl = document.getElementById('ascent_min');
+                        const ascentMaxEl = document.getElementById('ascent_max');
+                        if (ascentMinEl && ascentMaxEl) {
+                            const ascentMin = parseInt(ascentMinEl.value);
+                            const ascentMax = parseInt(ascentMaxEl.value);
+                            if (ascentMin > defaultAscentMin || ascentMax < defaultAscentMax) {
+                                filters.push(JSON.stringify({
+                                    identifier: 'ascent',
+                                    min: ascentMin,
+                                    max: ascentMax
+                                }));
+                            }
+                        }
+                    <?php endif; ?>
+
+                    // Region filter - only apply if filter exists
+                    const regionElement = document.getElementById('filter_region');
+                    if (regionElement) {
+                        const region = regionElement.value;
+                        if (region) {
+                            filters.push(JSON.stringify({
+                                identifier: region,
+                                taxonomy: 'taxonomyWheres'
+                            }));
+                        }
                     }
 
-                    // Ascent filter - only apply if different from default
-                    const ascentMin = parseInt(document.getElementById('ascent_min').value);
-                    const ascentMax = parseInt(document.getElementById('ascent_max').value);
-                    if (ascentMin > defaultAscentMin || ascentMax < defaultAscentMax) {
-                        filters.push(JSON.stringify({
-                            identifier: 'ascent',
-                            min: ascentMin,
-                            max: ascentMax
-                        }));
-                    }
-
-                    // Region filter
-                    const region = document.getElementById('filter_region').value;
-                    if (region) {
-                        filters.push(JSON.stringify({
-                            identifier: region,
-                            taxonomy: 'taxonomyWheres'
-                        }));
-                    }
-
-                    // Difficulty filter
-                    const difficulty = document.getElementById('filter_difficulty').value;
-                    if (difficulty) {
-                        filters.push(JSON.stringify({
-                            identifier: difficulty,
-                            taxonomy: 'cai_scale'
-                        }));
+                    // Difficulty filter - only apply if filter exists
+                    const difficultyElement = document.getElementById('filter_difficulty');
+                    if (difficultyElement) {
+                        const difficulty = difficultyElement.value;
+                        if (difficulty) {
+                            filters.push(JSON.stringify({
+                                identifier: difficulty,
+                                taxonomy: 'cai_scale'
+                            }));
+                        }
                     }
 
                     return filters;
@@ -779,55 +892,64 @@ function wm_grid_track($atts)
                     }
                 }
 
-                // Initialize sliders
-                const distanceMin = document.getElementById('distance_min');
-                const distanceMax = document.getElementById('distance_max');
-                const ascentMin = document.getElementById('ascent_min');
-                const ascentMax = document.getElementById('ascent_max');
-
-                if (distanceMin && distanceMax) {
-                    updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
-                    updateSliderTrack(distanceMin, distanceMax);
-
-                    distanceMin.addEventListener('input', function() {
-                        if (parseFloat(this.value) >= parseFloat(distanceMax.value)) {
-                            this.value = parseFloat(distanceMax.value) - 1;
-                        }
+                // Initialize sliders - only if they exist
+                <?php if (!empty($filter_options['has_distance_data'])) : ?>
+                    const distanceMin = document.getElementById('distance_min');
+                    const distanceMax = document.getElementById('distance_max');
+                    if (distanceMin && distanceMax) {
                         updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
-                        updateResults();
-                    });
-                    distanceMax.addEventListener('input', function() {
-                        if (parseFloat(this.value) <= parseFloat(distanceMin.value)) {
-                            this.value = parseFloat(distanceMin.value) + 1;
-                        }
-                        updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
-                        updateResults();
-                    });
-                }
+                        updateSliderTrack(distanceMin, distanceMax);
 
-                if (ascentMin && ascentMax) {
-                    updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
-                    updateSliderTrack(ascentMin, ascentMax);
+                        distanceMin.addEventListener('input', function() {
+                            if (parseFloat(this.value) >= parseFloat(distanceMax.value)) {
+                                this.value = parseFloat(distanceMax.value) - 1;
+                            }
+                            updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
+                            updateResults();
+                        });
+                        distanceMax.addEventListener('input', function() {
+                            if (parseFloat(this.value) <= parseFloat(distanceMin.value)) {
+                                this.value = parseFloat(distanceMin.value) + 1;
+                            }
+                            updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
+                            updateResults();
+                        });
+                    }
+                <?php endif; ?>
 
-                    ascentMin.addEventListener('input', function() {
-                        if (parseInt(this.value) >= parseInt(ascentMax.value)) {
-                            this.value = parseInt(ascentMax.value) - 1;
-                        }
+                <?php if (!empty($filter_options['has_ascent_data'])) : ?>
+                    const ascentMin = document.getElementById('ascent_min');
+                    const ascentMax = document.getElementById('ascent_max');
+                    if (ascentMin && ascentMax) {
                         updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
-                        updateResults();
-                    });
-                    ascentMax.addEventListener('input', function() {
-                        if (parseInt(this.value) <= parseInt(ascentMin.value)) {
-                            this.value = parseInt(ascentMin.value) + 1;
-                        }
-                        updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
-                        updateResults();
-                    });
-                }
+                        updateSliderTrack(ascentMin, ascentMax);
 
-                // Dropdown filters
-                document.getElementById('filter_region')?.addEventListener('change', updateResults);
-                document.getElementById('filter_difficulty')?.addEventListener('change', updateResults);
+                        ascentMin.addEventListener('input', function() {
+                            if (parseInt(this.value) >= parseInt(ascentMax.value)) {
+                                this.value = parseInt(ascentMax.value) - 1;
+                            }
+                            updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
+                            updateResults();
+                        });
+                        ascentMax.addEventListener('input', function() {
+                            if (parseInt(this.value) <= parseInt(ascentMin.value)) {
+                                this.value = parseInt(ascentMin.value) + 1;
+                            }
+                            updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
+                            updateResults();
+                        });
+                    }
+                <?php endif; ?>
+
+                // Dropdown filters - only attach listeners if elements exist
+                const regionFilter = document.getElementById('filter_region');
+                if (regionFilter) {
+                    regionFilter.addEventListener('change', updateResults);
+                }
+                const difficultyFilter = document.getElementById('filter_difficulty');
+                if (difficultyFilter) {
+                    difficultyFilter.addEventListener('change', updateResults);
+                }
             })();
         </script>
     <?php endif; ?>
