@@ -264,6 +264,29 @@ function wm_package_enqueue_leaflet()
             '1.0.2',
             true
         );
+
+        // Enqueue Leaflet MarkerCluster CSS
+        wp_enqueue_style(
+            'leaflet-markercluster-css',
+            'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css',
+            array('leaflet-css'),
+            '1.4.1'
+        );
+        wp_enqueue_style(
+            'leaflet-markercluster-default-css',
+            'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css',
+            array('leaflet-markercluster-css'),
+            '1.4.1'
+        );
+
+        // Enqueue Leaflet MarkerCluster JS
+        wp_enqueue_script(
+            'leaflet-markercluster-js',
+            'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js',
+            array('leaflet-js'),
+            '1.4.1',
+            true
+        );
         return;
     }
 
@@ -302,6 +325,29 @@ function wm_package_enqueue_leaflet()
             '1.0.2',
             true
         );
+
+        // Enqueue Leaflet MarkerCluster CSS
+        wp_enqueue_style(
+            'leaflet-markercluster-css',
+            'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css',
+            array('leaflet-css'),
+            '1.4.1'
+        );
+        wp_enqueue_style(
+            'leaflet-markercluster-default-css',
+            'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css',
+            array('leaflet-markercluster-css'),
+            '1.4.1'
+        );
+
+        // Enqueue Leaflet MarkerCluster JS
+        wp_enqueue_script(
+            'leaflet-markercluster-js',
+            'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js',
+            array('leaflet-js'),
+            '1.4.1',
+            true
+        );
     }
 }
 add_action('wp_enqueue_scripts', 'wm_package_enqueue_leaflet');
@@ -328,7 +374,7 @@ function wm_package_enqueue_leaflet_map_script()
 
     // Add inline script for Leaflet map initialization
     $script = "
-    function wmInitLeafletMap(mapElementId, geometryJson) {
+    function wmInitLeafletMap(mapElementId, geometryJson, relatedPoisJson) {
         var mapElement = document.getElementById(mapElementId);
         if (!mapElement || typeof L === 'undefined') {
             return;
@@ -339,7 +385,7 @@ function wm_package_enqueue_leaflet_map_script()
 
         L.tileLayer('https://api.webmapp.it/tiles/{z}/{x}/{y}.png', {
             attribution: '&copy; Webmapp &copy; OpenStreetMap',
-            maxZoom: 19
+            maxZoom: 16
         }).addTo(map);
 
         // Remove default Leaflet attribution prefix
@@ -348,11 +394,17 @@ function wm_package_enqueue_leaflet_map_script()
         // Add fullscreen control
         map.addControl(new L.control.fullscreen());
 
+        var bounds = null;
+        var hasTrackPoint = false;
+        var hasTrackBounds = false;
+
         if (geometry.type === 'Point' && geometry.coordinates) {
             var lat = geometry.coordinates[1];
             var lng = geometry.coordinates[0];
             map.setView([lat, lng], 15);
             L.marker([lat, lng]).addTo(map);
+            bounds = L.latLngBounds([lat, lng]);
+            hasTrackPoint = true;
         } else if (geometry.type === 'LineString' && geometry.coordinates) {
             var latlngs = geometry.coordinates.map(function(coord) {
                 return [coord[1], coord[0]];
@@ -360,7 +412,8 @@ function wm_package_enqueue_leaflet_map_script()
             var polyline = L.polyline(latlngs, {
                 color: 'blue'
             }).addTo(map);
-            map.fitBounds(polyline.getBounds());
+            bounds = polyline.getBounds();
+            hasTrackBounds = true;
         } else if (geometry.type === 'Polygon' && geometry.coordinates) {
             var latlngs = geometry.coordinates[0].map(function(coord) {
                 return [coord[1], coord[0]];
@@ -368,7 +421,101 @@ function wm_package_enqueue_leaflet_map_script()
             var polygon = L.polygon(latlngs, {
                 color: 'blue'
             }).addTo(map);
-            map.fitBounds(polygon.getBounds());
+            bounds = polygon.getBounds();
+            hasTrackBounds = true;
+        }
+
+        var hasPoiBounds = false;
+        if (relatedPoisJson) {
+            var relatedPois = relatedPoisJson;
+            if (typeof relatedPoisJson === 'string') {
+                try {
+                    relatedPois = JSON.parse(relatedPoisJson);
+                } catch (e) {
+                    relatedPois = null;
+                }
+            }
+
+            var poiCollection = null;
+            if (Array.isArray(relatedPois)) {
+                poiCollection = {
+                    type: 'FeatureCollection',
+                    features: relatedPois
+                };
+            } else if (relatedPois && relatedPois.type === 'FeatureCollection') {
+                poiCollection = relatedPois;
+            } else if (relatedPois && relatedPois.type === 'Feature') {
+                poiCollection = {
+                    type: 'FeatureCollection',
+                    features: [relatedPois]
+                };
+            }
+
+            if (poiCollection && Array.isArray(poiCollection.features) && poiCollection.features.length) {
+                var poiLayer = L.geoJSON(poiCollection, {
+                    pointToLayer: function(feature, latlng) {
+                        return L.marker(latlng);
+                    },
+                    onEachFeature: function(feature, layer) {
+                        var name = null;
+                        var poiUrl = null;
+                        if (feature && feature.properties && feature.properties.name) {
+                            if (typeof feature.properties.name === 'string') {
+                                name = feature.properties.name;
+                            } else if (feature.properties.name.it) {
+                                name = feature.properties.name.it;
+                            } else {
+                                for (var key in feature.properties.name) {
+                                    if (Object.prototype.hasOwnProperty.call(feature.properties.name, key) && feature.properties.name[key]) {
+                                        name = feature.properties.name[key];
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (feature && feature.properties && feature.properties.wm_poi_url) {
+                            poiUrl = feature.properties.wm_poi_url;
+                        }
+                        if (name) {
+                            if (poiUrl) {
+                                var popupContent = \"<a href='\" + poiUrl + \"'>\" + name + \"</a>\";
+                                layer.bindPopup(popupContent);
+                            } else {
+                                layer.bindPopup(name);
+                            }
+                        }
+                    }
+                });
+
+                var poiLayerForBounds = poiLayer;
+                if (typeof L.markerClusterGroup === 'function') {
+                    var poiCluster = L.markerClusterGroup({
+                        showCoverageOnHover: false,
+                        maxClusterRadius: 60
+                    });
+                    poiCluster.addLayer(poiLayer);
+                    poiCluster.addTo(map);
+                    poiLayerForBounds = poiCluster;
+                } else {
+                    poiLayer.addTo(map);
+                }
+
+                if (poiLayerForBounds && poiLayerForBounds.getBounds) {
+                    var poiBounds = poiLayerForBounds.getBounds();
+                    if (poiBounds && poiBounds.isValid && poiBounds.isValid()) {
+                        hasPoiBounds = true;
+                        if (bounds) {
+                            bounds.extend(poiBounds);
+                        } else {
+                            bounds = poiBounds;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (bounds && (hasTrackBounds || hasPoiBounds)) {
+            map.fitBounds(bounds, { padding: [20, 20] });
         }
     }
     ";

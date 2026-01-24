@@ -32,6 +32,51 @@ function wm_single_track($atts)
 	$track_data = json_decode(file_get_contents($geojson_url), true);
 	$track = $track_data['properties'] ?? [];
 	$track_geometry = $track_data['geometry'] ?? null;
+	$related_pois = $track_data['related_pois'] ?? ($track['related_pois'] ?? []);
+	if (!is_array($related_pois)) {
+		$related_pois = [];
+	}
+	if (!empty($related_pois)) {
+		$related_poi_ids = [];
+		foreach ($related_pois as $poi_feature) {
+			$poi_id = $poi_feature['properties']['id'] ?? null;
+			if (!empty($poi_id)) {
+				$related_poi_ids[] = (string)$poi_id;
+			}
+		}
+		$related_poi_ids = array_values(array_unique($related_poi_ids));
+
+		if (!empty($related_poi_ids)) {
+			$poi_posts = get_posts([
+				'post_type' => 'poi',
+				'post_status' => 'publish',
+				'posts_per_page' => -1,
+				'meta_query' => [
+					[
+						'key' => 'wm_poi_id',
+						'value' => $related_poi_ids,
+						'compare' => 'IN',
+					],
+				],
+			]);
+
+			$related_poi_urls = [];
+			foreach ($poi_posts as $poi_post) {
+				$source_id = get_post_meta($poi_post->ID, 'wm_poi_id', true);
+				if (!empty($source_id)) {
+					$related_poi_urls[(string)$source_id] = get_permalink($poi_post->ID);
+				}
+			}
+
+			foreach ($related_pois as &$poi_feature) {
+				$source_id = $poi_feature['properties']['id'] ?? null;
+				if (!empty($source_id) && isset($related_poi_urls[(string)$source_id])) {
+					$poi_feature['properties']['wm_poi_url'] = $related_poi_urls[(string)$source_id];
+				}
+			}
+			unset($poi_feature);
+		}
+	}
 
 	// Enqueue Leaflet for shortcode
 	wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4');
@@ -110,7 +155,12 @@ function wm_single_track($atts)
 				<!-- 4. Map -->
 				<?php if (!empty($track_geometry)) : ?>
 					<div class="wm_map">
-						<div id="wm-leaflet-map-track-<?= esc_attr($track_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'></div>
+						<div
+							id="wm-leaflet-map-track-<?= esc_attr($track_id) ?>"
+							class="wm_leaflet_map"
+							data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'
+							data-related-pois='<?= esc_attr(wp_json_encode($related_pois)) ?>'
+						></div>
 					</div>
 				<?php endif; ?>
 
@@ -397,7 +447,8 @@ function wm_single_track($atts)
 				var mapElement = document.getElementById('wm-leaflet-map-track-<?= esc_js($track_id) ?>');
 				if (mapElement && typeof wmInitLeafletMap !== 'undefined') {
 					var geometryJson = mapElement.getAttribute('data-geometry');
-					wmInitLeafletMap('wm-leaflet-map-track-<?= esc_js($track_id) ?>', geometryJson);
+					var relatedPoisJson = mapElement.getAttribute('data-related-pois');
+					wmInitLeafletMap('wm-leaflet-map-track-<?= esc_js($track_id) ?>', geometryJson, relatedPoisJson);
 				}
 			<?php endif; ?>
 		});
