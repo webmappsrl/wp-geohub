@@ -141,12 +141,73 @@
     color: #333;
 }
 
+/* 7. Related POIs */
+.wm_related_pois {
+    width: 100%;
+    margin: 0;
+}
+
+.wm_related_pois .swiper-container {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.wm_related_pois .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wm_related_pois .swiper-button-prev,
+.wm_related_pois .swiper-button-next {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.wm_related_poi_card {
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.wm_related_poi_image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.wm_related_poi_image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wm_related_poi_name {
+    font-weight: 600;
+    text-align: center;
+}
+
+.wm_related_pois a {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* 7. Download/Info Links */
 .wm_download_links {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin: 0;
+}
+
+.wm_download_links--map {
+    margin-top: 12px;
 }
 
 .wm_download_link {

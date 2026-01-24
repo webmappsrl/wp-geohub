@@ -114,9 +114,6 @@ function wm_single_poi($atts)
 			<div class="wm_taxonomies">
 				<?php foreach ($poi_types as $type) : ?>
 					<span class="wm_taxonomy_item">
-						<?php if (!empty($type['icon'])) : ?>
-							<span class="wm_taxonomy_icon"><?= wm_render_svg_icon($type['icon']) ?></span>
-						<?php endif; ?>
 						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
 					</span>
 				<?php endforeach; ?>

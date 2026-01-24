@@ -92,12 +92,12 @@ function wm_single_track($atts)
 	$gpx = null;
 	$activity = null;
 	$dem_data = null;
+	$default_image = plugins_url('wm-package/assets/default_image.png');
 
 	if ($track) {
 		$description = $track['description'][$language] ?? null;
 		$excerpt = $track['excerpt'][$language] ?? null;
 		$title = $track['name'][$language] ?? null;
-		$default_image = plugins_url('wm-package/assets/default_image.png');
 		$featured_image_url = isset($track['feature_image']['url']) && !empty($track['feature_image']['url'])
 			? $track['feature_image']['url']
 			: $default_image;
@@ -140,9 +140,6 @@ function wm_single_track($atts)
 			<div class="wm_taxonomies">
 				<?php foreach ($activity as $type) : ?>
 					<span class="wm_taxonomy_item">
-						<?php if (!empty($type['icon'])) : ?>
-							<span class="wm_taxonomy_icon"><?= wm_render_svg_icon($type['icon']) ?></span>
-						<?php endif; ?>
 						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
 					</span>
 				<?php endforeach; ?>
@@ -161,6 +158,14 @@ function wm_single_track($atts)
 							data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'
 							data-related-pois='<?= esc_attr(wp_json_encode($related_pois)) ?>'
 						></div>
+						<?php if (!empty($gpx)) : ?>
+							<div class="wm_download_links wm_download_links--map">
+								<a class="wm_download_link" href="<?= esc_url($gpx) ?>">
+									<i class="fa fa-download"></i>
+									<?= __('Download GPX', 'wm-package') ?>
+								</a>
+							</div>
+						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 
@@ -233,7 +238,7 @@ function wm_single_track($atts)
 		<!-- 6. Gallery -->
 		<?php if (is_array($gallery) && !empty($gallery)) : ?>
 			<div class="wm_gallery">
-				<div class="swiper-container">
+				<div class="swiper-container wm_swiper">
 					<div class="swiper-wrapper">
 						<?php foreach ($gallery as $image) : ?>
 							<div class="swiper-slide">
@@ -256,13 +261,75 @@ function wm_single_track($atts)
 			</div>
 		<?php endif; ?>
 
-		<!-- 7. Download Links -->
-		<?php if (!empty($gpx)) : ?>
-			<div class="wm_download_links">
-				<a class="wm_download_link" href="<?= esc_url($gpx) ?>">
-					<i class="fa fa-download"></i>
-					<?= __('Download GPX', 'wm-package') ?>
-				</a>
+		<!-- 7. Related POIs -->
+		<?php if (!empty($related_pois)) : ?>
+			<div class="wm_related_pois">
+				<h2 class="wm_related_pois_title"><?= __('Related POIs', 'wm-package') ?></h2>
+				<div class="swiper-container wm_swiper">
+					<div class="swiper-wrapper">
+						<?php foreach ($related_pois as $poi_feature) : ?>
+							<?php
+							$poi_properties = $poi_feature['properties'] ?? [];
+							$poi_name = '';
+							if (!empty($poi_properties['name'])) {
+								if (is_string($poi_properties['name'])) {
+									$poi_name = $poi_properties['name'];
+								} elseif (!empty($poi_properties['name'][$language])) {
+									$poi_name = $poi_properties['name'][$language];
+								} else {
+									foreach ($poi_properties['name'] as $name_value) {
+										if (!empty($name_value)) {
+											$poi_name = $name_value;
+											break;
+										}
+									}
+								}
+							}
+
+							$poi_image = $default_image;
+							if (!empty($poi_properties['feature_image']['sizes']['1440x500'])) {
+								$poi_image = $poi_properties['feature_image']['sizes']['1440x500'];
+							} elseif (!empty($poi_properties['feature_image']['url'])) {
+								$poi_image = $poi_properties['feature_image']['url'];
+							} elseif (!empty($poi_properties['featureImage']['thumbnail'])) {
+								$poi_image = $poi_properties['featureImage']['thumbnail'];
+							} elseif (!empty($poi_feature['featureImage']['thumbnail'])) {
+								$poi_image = $poi_feature['featureImage']['thumbnail'];
+							}
+							if (empty($poi_image)) {
+								$poi_image = $default_image;
+							}
+
+							$poi_url = $poi_properties['wm_poi_url'] ?? '';
+
+							if (empty($poi_name) && empty($poi_image)) {
+								continue;
+							}
+							?>
+							<div class="swiper-slide">
+								<?php if (!empty($poi_url)) : ?>
+									<a href="<?= esc_url($poi_url) ?>">
+									<?php endif; ?>
+									<div class="wm_related_poi_card">
+										<?php if (!empty($poi_image)) : ?>
+											<div class="wm_related_poi_image">
+												<img src="<?= esc_url($poi_image) ?>" alt="<?= esc_attr($poi_name) ?>" loading="lazy">
+											</div>
+										<?php endif; ?>
+										<?php if (!empty($poi_name)) : ?>
+											<div class="wm_related_poi_name"><?= esc_html($poi_name) ?></div>
+										<?php endif; ?>
+									</div>
+									<?php if (!empty($poi_url)) : ?>
+									</a>
+								<?php endif; ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<div class="swiper-pagination"></div>
+					<div class="swiper-button-prev"></div>
+					<div class="swiper-button-next"></div>
+				</div>
 			</div>
 		<?php endif; ?>
 
@@ -427,20 +494,36 @@ function wm_single_track($atts)
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			var swiper = new Swiper('.swiper-container', {
-				slidesPerView: 1,
-				spaceBetween: 10,
-				freeMode: true,
-				loop: true,
-				pagination: {
-					el: '.swiper-pagination',
-					clickable: true,
-				},
-				navigation: {
-					nextEl: '.swiper-button-next',
-					prevEl: '.swiper-button-prev',
-				},
-			});
+			if (typeof Swiper !== 'undefined') {
+				var swiperContainers = document.querySelectorAll('.wm_swiper');
+				swiperContainers.forEach(function(container) {
+					var config = {
+						slidesPerView: 1,
+						spaceBetween: 10,
+						freeMode: true,
+						loop: true
+					};
+
+					var paginationEl = container.querySelector('.swiper-pagination');
+					if (paginationEl) {
+						config.pagination = {
+							el: paginationEl,
+							clickable: true
+						};
+					}
+
+					var nextEl = container.querySelector('.swiper-button-next');
+					var prevEl = container.querySelector('.swiper-button-prev');
+					if (nextEl && prevEl) {
+						config.navigation = {
+							nextEl: nextEl,
+							prevEl: prevEl
+						};
+					}
+
+					new Swiper(container, config);
+				});
+			}
 
 			// Initialize Leaflet map for Track
 			<?php if (!empty($track_geometry)) : ?>
