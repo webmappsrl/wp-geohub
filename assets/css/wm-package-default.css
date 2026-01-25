@@ -858,3 +858,147 @@
         display: none;
     }
 }
+
+/* Grid POIs Layout - Grid Style (aligned with tracks) */
+.wm_poi_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 30px 0;
+    padding: 0;
+    width: 100%;
+}
+
+.wm_grid_poi_item {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    height: 100%;
+}
+
+.wm_grid_poi_item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Header bar with category and button */
+.wm_grid_poi_header {
+    background-color: #0073aa;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wm_grid_poi_category {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wm_grid_poi_header_button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.wm_grid_poi_header_button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Image strip */
+.wm_grid_poi_image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+/* POI name */
+.wm_grid_poi_name {
+    padding: 13px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.4;
+}
+
+.wm_grid_poi_name h5 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.4;
+}
+
+/* Responsive Grid for POIs */
+@media (max-width: 992px) {
+    .wm_poi_grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wm_poi_grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .wm_grid_poi_header {
+        padding: 12px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .wm_grid_poi_header_button {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    .wm_grid_poi_image {
+        height: 180px;
+    }
+    
+    .wm_grid_poi_name {
+        padding: 12px 15px;
+    }
+    
+    .wm_grid_poi_name h5 {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .wm_poi_grid {
+        gap: 15px;
+    }
+    
+    .wm_grid_poi_image {
+        height: 160px;
+    }
+}

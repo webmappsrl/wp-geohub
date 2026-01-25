@@ -30,6 +30,16 @@ function wm_grid_poi($atts)
             if (!is_wp_error($response)) {
                 $data = json_decode(wp_remote_retrieve_body($response), true);
                 if (!empty($data) && isset($data['features'])) {
+                    // Get POI type name for category
+                    $poi_type_name = '';
+                    if (!empty($data['name'])) {
+                        if (is_array($data['name'])) {
+                            $poi_type_name = $data['name'][$language] ?? $data['name']['it'] ?? $data['name']['en'] ?? '';
+                        } else {
+                            $poi_type_name = $data['name'];
+                        }
+                    }
+                    
                     foreach ($data['features'] as $feature) {
                         if (isset($data['icon'])) {
                             $feature['svg_icon'] = $data['icon'];
@@ -37,6 +47,8 @@ function wm_grid_poi($atts)
                         $feature['thumbnail_final'] = !empty($feature['featureImage']['thumbnail'])
                             ? esc_url($feature['featureImage']['thumbnail'])
                             : esc_url($default_image);
+                        // Add POI type name to each feature for category display
+                        $feature['poi_type_name'] = $poi_type_name;
                         $poi_data[] = $feature;
                     }
                 }
@@ -74,21 +86,35 @@ function wm_grid_poi($atts)
                     $poi_slug = $poi['slug'][$language] ?? wm_custom_slugify($name);
                     $base_url = apply_filters('wpml_home_url', get_site_url(), $language);
                     $poi_page_url = trailingslashit($base_url) . "poi/{$poi_slug}/";
-                    $svg_icon = $poi['svg_icon'] ?? '';
+                    
+                    // Get POI category/type for header
+                    $poi_category = $poi['poi_type_name'] ?? '';
                     ?>
-                    <a href="<?= esc_url($poi_page_url); ?>">
-                        <?php if ($feature_image_url) : ?>
-                            <div class="wm_grid_poi_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
-                                <?php if ($svg_icon) : ?>
-                                    <div class="wm_grid_icon"><?= $svg_icon; ?></div>
-                                <?php endif; ?>
-                            </div>
-                        <?php endif; ?>
+                    
+                    <!-- Header bar with category and button -->
+                    <div class="wm_grid_poi_header">
+                        <div class="wm_grid_poi_category">
+                            <?php if ($poi_category) : ?>
+                                <span><?= esc_html($poi_category); ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <a href="<?= esc_url($poi_page_url); ?>" class="wm_grid_poi_header_button">
+                            <?= __('Go to POI', 'wm-package'); ?>
+                        </a>
+                    </div>
 
-                        <?php if ($name) : ?>
-                            <div class="wm_grid_poi_name"><?= esc_html($name); ?></div>
-                        <?php endif; ?>
-                    </a>
+                    <!-- POI name -->
+                    <?php if ($name) : ?>
+                        <div class="wm_grid_poi_name">
+                            <h5><?= esc_html($name); ?></h5>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Image strip -->
+                    <?php if ($feature_image_url) : ?>
+                        <div class="wm_grid_poi_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>

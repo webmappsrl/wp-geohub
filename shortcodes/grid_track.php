@@ -635,7 +635,6 @@ function wm_grid_track($atts)
                         $track_slug = $track['slug'][$language] ?? wm_custom_slugify($name);
                         $base_url = apply_filters('wpml_home_url', get_site_url(), $language);
                         $track_page_url = trailingslashit($base_url) . "track/{$track_slug}/";
-                        $svg_icon = $track['svg_icon'] ?? '';
 
                         // Get region/category from taxonomyWheres
                         $region = '';

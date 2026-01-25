@@ -537,7 +537,7 @@ function wm_package_enqueue_styles()
 
     if (is_singular(['poi', 'track'])) {
         $should_enqueue = true;
-    } elseif ($post && (has_shortcode($post->post_content, 'wm_single_poi') || has_shortcode($post->post_content, 'wm_single_track') || has_shortcode($post->post_content, 'wm_grid_track'))) {
+    } elseif ($post && (has_shortcode($post->post_content, 'wm_single_poi') || has_shortcode($post->post_content, 'wm_single_track') || has_shortcode($post->post_content, 'wm_grid_track') || has_shortcode($post->post_content, 'wm_grid_poi'))) {
         $should_enqueue = true;
     }
 
