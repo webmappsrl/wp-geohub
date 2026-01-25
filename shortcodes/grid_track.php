@@ -352,7 +352,15 @@ function wm_grid_track($atts)
 
                         // Map Elasticsearch hit to track structure
                         $track['id'] = $hit['id'] ?? null;
-                        $track['name'] = is_array($hit['name'] ?? null) ? $hit['name'] : array($language => $hit['name'] ?? '');
+                        // Handle name field: check both hit['name'] and hit['properties']['name'] for geohub compatibility
+                        $name_value = $hit['name'] ?? $hit['properties']['name'] ?? null;
+                        if (is_array($name_value)) {
+                            // If it's already an array (object with translations), use it directly
+                            $track['name'] = $name_value;
+                        } else {
+                            // If it's a string or null, convert to array format
+                            $track['name'] = array($language => $name_value ?? '');
+                        }
                         $track['slug'] = is_array($hit['slug'] ?? null) ? $hit['slug'] : array($language => wm_custom_slugify($track['name'][$language] ?? ''));
                         $track['distance'] = $hit['distance'] ?? null;
                         $track['updatedAt'] = $hit['properties']['updatedAt'] ?? $hit['updatedAt'] ?? null;
@@ -611,7 +619,17 @@ function wm_grid_track($atts)
                 <?php foreach ($tracks as $track) : ?>
                     <div class="wm_grid_track_item">
                         <?php
-                        $name = $track['name'][$language] ?? '';
+                        // Extract name with fallback to other languages if current language not available
+                        $name = '';
+                        if (is_array($track['name'] ?? null)) {
+                            $name = $track['name'][$language] ?? $track['name']['it'] ?? $track['name']['en'] ?? '';
+                            // If still empty, try to get first available value
+                            if (empty($name) && !empty($track['name'])) {
+                                $name = reset($track['name']);
+                            }
+                        } else {
+                            $name = $track['name'] ?? '';
+                        }
                         $default_image = plugins_url('wm-package/assets/default_image.png');
                         $feature_image_url = $track['thumbnail_final'];
                         $track_slug = $track['slug'][$language] ?? wm_custom_slugify($name);
@@ -661,6 +679,13 @@ function wm_grid_track($atts)
                                 <?= __('Go to track', 'wm-package'); ?>
                             </a>
                         </div>
+
+                        <!-- Track name -->
+                        <?php if ($name) : ?>
+                            <div class="wm_grid_track_name">
+                                <h5><?= esc_html($name); ?></h5>
+                            </div>
+                        <?php endif; ?>
 
                         <!-- Image strip -->
                         <?php if ($feature_image_url) : ?>
@@ -804,7 +829,9 @@ function wm_grid_track($atts)
 
                     let html = '';
                     hits.forEach(function(hit) {
-                        const name = (hit.name && typeof hit.name === 'object') ? (hit.name[language] || hit.name.it || hit.name.en || '') : (hit.name || '');
+                        // Handle name field: check both hit.name and hit.properties.name for geohub compatibility
+                        const nameValue = hit.name || (hit.properties && hit.properties.name) || '';
+                        const name = (nameValue && typeof nameValue === 'object') ? (nameValue[language] || nameValue.it || nameValue.en || '') : (nameValue || '');
                         const slug = (hit.slug && typeof hit.slug === 'object') ? (hit.slug[language] || '') : (hit.slug || '');
                         const trackSlug = slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
                         const baseUrl = '<?= esc_js(apply_filters('wpml_home_url', get_site_url(), $language)); ?>';
@@ -840,6 +867,9 @@ function wm_grid_track($atts)
                         html += '</div>';
                         html += '<a href="' + escapeHtml(trackUrl) + '" class="wm_grid_track_header_button"><?= esc_js(__('Go to track', 'wm-package')); ?></a>';
                         html += '</div>';
+                        if (name) {
+                            html += '<div class="wm_grid_track_name"><h3>' + escapeHtml(name) + '</h3></div>';
+                        }
                         if (imageUrl) {
                             html += '<div class="wm_grid_track_image" style="background-image: url(\'' + escapeHtml(imageUrl) + '\');"></div>';
                         }
