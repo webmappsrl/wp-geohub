@@ -19,15 +19,19 @@
 /* 1. Featured Image */
 .wm_featured_image {
     width: 100%;
+    height: 400px;
     margin-bottom: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
 }
 
 .wm_featured_image img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     object-fit: cover;
-    border-radius: 8px;
+    object-position: center;
 }
 
 /* 2. Title */
@@ -65,8 +69,9 @@
     font-size: 0.9em;
 }
 
-/* 4. Map and Technical Details Wrapper */
-.wm_map_technical_wrapper {
+/* 4. Map and Technical Details Wrapper / Map and Info Details Wrapper */
+.wm_map_technical_wrapper,
+.wm_map_info_wrapper {
     display: flex;
     gap: 20px;
     width: 100%;
@@ -269,8 +274,9 @@
     text-decoration: underline;
 }
 
-/* Technical Details Table */
-.wm_technical_details {
+/* Technical Details / Info Details - Combined styles */
+.wm_technical_details,
+.wm_info_details {
     flex: 1;
     width: 100%;
     height: 540px;
@@ -278,13 +284,13 @@
     background: #fff;
     border: 1px solid #e2e2e2;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
 }
 
-.wm_technical_details_title {
+.wm_technical_details_title,
+.wm_info_details_title {
     font-size: 1.0em;
     font-weight: 600;
     margin: 0;
@@ -294,7 +300,8 @@
     background-color: #f8f9fa;
 }
 
-.wm_technical_details_grid {
+.wm_technical_details_grid,
+.wm_info_details_grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
@@ -303,7 +310,8 @@
     overflow-y: auto;
 }
 
-.wm_technical_detail_item {
+.wm_technical_detail_item,
+.wm_info_detail_item {
     display: flex;
     flex-direction: column;
     padding: 10px 20px;
@@ -311,11 +319,13 @@
     background: #fff;
 }
 
-.wm_technical_detail_item:last-child {
+.wm_technical_detail_item:last-child,
+.wm_info_detail_item:last-child {
     border-bottom: none;
 }
 
-.wm_technical_detail_label {
+.wm_technical_detail_label,
+.wm_info_detail_label {
     font-size: 0.7em;
     font-weight: 500;
     color: #666;
@@ -324,10 +334,22 @@
     letter-spacing: 0.5px;
 }
 
-.wm_technical_detail_value {
+.wm_technical_detail_value,
+.wm_info_detail_value {
     font-size: 0.7em;
     font-weight: 600;
     color: #1a1a1a;
+}
+
+.wm_technical_detail_value a,
+.wm_info_detail_value a {
+    color: #0073aa;
+    text-decoration: none;
+}
+
+.wm_technical_detail_value a:hover,
+.wm_info_detail_value a:hover {
+    text-decoration: underline;
 }
 
 /* Responsive Design */
@@ -337,11 +359,16 @@
         gap: 25px;
     }
 
+    .wm_featured_image {
+        height: 300px;
+    }
+
     .wm_title {
         font-size: 1.6em;
     }
 
-    .wm_map_technical_wrapper {
+    .wm_map_technical_wrapper,
+    .wm_map_info_wrapper {
         flex-direction: column;
         gap: 20px;
     }
@@ -350,7 +377,8 @@
         flex: 1;
     }
 
-    .wm_technical_details {
+    .wm_technical_details,
+    .wm_info_details {
         flex: 1;
     }
 
@@ -376,6 +404,10 @@
     .wm_content_wrapper {
         padding: 10px 0;
         gap: 20px;
+    }
+
+    .wm_featured_image {
+        height: 250px;
     }
 
     .wm_title {

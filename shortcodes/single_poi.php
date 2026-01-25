@@ -120,10 +120,64 @@ function wm_single_poi($atts)
 			</div>
 		<?php endif; ?>
 
-		<!-- 4. Map -->
-		<?php if (!empty($poi_geometry)) : ?>
-			<div class="wm_map">
-				<div id="wm-leaflet-map-poi-<?= esc_attr($poi_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($poi_geometry)) ?>'></div>
+		<!-- 4. Map and Info Links Container -->
+		<?php if (!empty($poi_geometry) || !empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality) || !empty($contact_phone) || !empty($contact_email) || !empty($related_urls)) : ?>
+			<div class="wm_map_info_wrapper">
+				<!-- 4. Map -->
+				<?php if (!empty($poi_geometry)) : ?>
+					<div class="wm_map">
+						<div id="wm-leaflet-map-poi-<?= esc_attr($poi_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($poi_geometry)) ?>'></div>
+					</div>
+				<?php endif; ?>
+
+				<!-- 4.5. Info Links -->
+				<?php if (!empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality) || !empty($contact_phone) || !empty($contact_email) || !empty($related_urls)) : ?>
+					<div class="wm_info_details">
+						<h2 class="wm_info_details_title"><?= __('Contact Information', 'wm-package') ?></h2>
+						<div class="wm_info_details_grid">
+							<?php if (!empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality)) : ?>
+								<?php
+								$address = trim($addr_street . ', ' . $addr_postcode . ' ' . $addr_locality, ', ');
+								?>
+								<div class="wm_info_detail_item">
+									<span class="wm_info_detail_label"><?= __('Address', 'wm-package') ?>:</span>
+									<span class="wm_info_detail_value"><?= esc_html($address) ?></span>
+								</div>
+							<?php endif; ?>
+
+							<?php if (!empty($contact_phone)) : ?>
+								<div class="wm_info_detail_item">
+									<span class="wm_info_detail_label"><?= __('Phone', 'wm-package') ?>:</span>
+									<span class="wm_info_detail_value"><?= esc_html($contact_phone) ?></span>
+								</div>
+							<?php endif; ?>
+
+							<?php if (!empty($contact_email)) : ?>
+								<div class="wm_info_detail_item">
+									<span class="wm_info_detail_label"><?= __('Email', 'wm-package') ?>:</span>
+									<span class="wm_info_detail_value">
+										<a href="mailto:<?= esc_attr($contact_email) ?>"><?= esc_html($contact_email) ?></a>
+									</span>
+								</div>
+							<?php endif; ?>
+
+							<?php if (!empty($related_urls)) : ?>
+								<div class="wm_info_detail_item">
+									<span class="wm_info_detail_label"><?= __('Related Links', 'wm-package') ?>:</span>
+									<span class="wm_info_detail_value">
+										<?php
+										$urls_output = [];
+										foreach ($related_urls as $url_name => $url) {
+											$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($url_name) . '</a>';
+										}
+										echo implode(', ', $urls_output);
+										?>
+									</span>
+								</div>
+							<?php endif; ?>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 
@@ -157,34 +211,6 @@ function wm_single_poi($atts)
 					<div class="swiper-button-prev"></div>
 					<div class="swiper-button-next"></div>
 				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- 7. Download/Info Links -->
-		<?php
-		$info_parts = [];
-		if (!empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality)) {
-			$address = trim($addr_street . ', ' . $addr_postcode . ' ' . $addr_locality, ', ');
-			$info_parts[] = '<span class="wm_address_info"><span class="fa fa-map-marker-alt"></span> ' . esc_html($address) . '</span>';
-		}
-		if (!empty($contact_phone)) {
-			$info_parts[] = '<span class="wm_contact_phone"><span class="fa fa-phone"></span> ' . esc_html($contact_phone) . '</span>';
-		}
-		if (!empty($contact_email)) {
-			$info_parts[] = '<span class="wm_contact_email"><span class="fa fa-envelope"></span> <a href="mailto:' . esc_attr($contact_email) . '">' . esc_html($contact_email) . '</a></span>';
-		}
-		if (!empty($related_urls)) {
-			$urls_output = [];
-			foreach ($related_urls as $url_name => $url) {
-				$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($url_name) . '</a>';
-			}
-			$info_parts[] = '<span class="wm_related_urls"> <span class="fa fa-external-link-alt"></span> ' . implode(', ', $urls_output) . '</span>';
-		}
-		if (!empty($info_parts)) : ?>
-			<div class="wm_info_links">
-				<?php foreach ($info_parts as $info_part) : ?>
-					<div class="wm_info_item"><?= $info_part ?></div>
-				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
 	</div>
