@@ -569,9 +569,9 @@ function wm_grid_track($atts)
 
                     <?php if (!empty($filter_options['has_region_data'])) : ?>
                         <div class="wm_filter_item">
-                            <label class="wm_filter_label"><?= __('Region', 'wm-package'); ?></label>
+                            <label class="wm_filter_label"><?= __('Where', 'wm-package'); ?></label>
                             <select id="filter_region" class="wm_filter_select">
-                                <option value=""><?= __('Select region', 'wm-package'); ?></option>
+                                <option value=""><?= __('Select where', 'wm-package'); ?></option>
                                 <?php foreach ($filter_options['regions'] as $region) : ?>
                                     <option value="<?= esc_attr($region); ?>"><?= esc_html($region); ?></option>
                                 <?php endforeach; ?>
@@ -662,35 +662,40 @@ function wm_grid_track($atts)
                                 $activity_category = $first_activity;
                             }
                         }
+
+                        // Build taxonomy display (category + track ID if available)
+                        $taxonomy_display = '';
+                        if ($activity_category) {
+                            $taxonomy_display = $activity_category;
+                            if ($track_id_display) {
+                                $taxonomy_display .= ' ' . $track_id_display;
+                            }
+                        } elseif ($track_id_display) {
+                            $taxonomy_display = $track_id_display;
+                        }
                         ?>
 
-                        <!-- Header bar with category and button -->
-                        <div class="wm_grid_track_header">
-                            <div class="wm_grid_track_category">
-                                <?php if ($activity_category) : ?>
-                                    <span><?= esc_html($activity_category); ?></span>
-                                <?php endif; ?>
-                                <?php if ($track_id_display) : ?>
-                                    <span class="wm_grid_track_id"><?= esc_html($track_id_display); ?></span>
-                                <?php endif; ?>
-                            </div>
-                            <a href="<?= esc_url($track_page_url); ?>" class="wm_grid_track_header_button">
-                                <?= __('Go to track', 'wm-package'); ?>
-                            </a>
+                        <!-- Sezione superiore con immagine in evidenza -->
+                        <div class="wm_grid_track_image_section" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
+                            <!-- Box tassonomia in alto a sinistra -->
+                            <?php if ($taxonomy_display) : ?>
+                                <div class="wm_grid_track_taxonomy_box">
+                                    <span><?= esc_html($taxonomy_display); ?></span>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
-                        <!-- Track name -->
-                        <?php if ($name) : ?>
-                            <div class="wm_grid_track_name">
-                                <h5><?= esc_html($name); ?></h5>
+                        <!-- Sezione inferiore con name e tasto view -->
+                        <div class="wm_grid_track_footer">
+                            <div class="wm_grid_track_footer_name">
+                                <?php if ($name) : ?>
+                                    <span><?= esc_html($name); ?></span>
+                                <?php endif; ?>
                             </div>
-                        <?php endif; ?>
-
-                        <!-- Image strip -->
-                        <?php if ($feature_image_url) : ?>
-                            <div class="wm_grid_track_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
-                            </div>
-                        <?php endif; ?>
+                            <a href="<?= esc_url($track_page_url); ?>" class="wm_grid_track_view_button">
+                                <?= __('View', 'wm-package'); ?>
+                            </a>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -854,24 +859,36 @@ function wm_grid_track($atts)
                         const trackIdMatch = name.match(/^([A-Z]+\s+[A-Z0-9]+)/);
                         const trackIdDisplay = trackIdMatch ? trackIdMatch[1] : '';
 
-                        html += '<div class="wm_grid_track_item">';
-                        html += '<div class="wm_grid_track_header">';
-                        html += '<div class="wm_grid_track_category">';
+                        // Build taxonomy display (category + track ID if available)
+                        let taxonomyDisplay = '';
                         if (activityCategory) {
-                            html += '<span>' + escapeHtml(activityCategory) + '</span>';
+                            taxonomyDisplay = activityCategory;
+                            if (trackIdDisplay) {
+                                taxonomyDisplay += ' ' + trackIdDisplay;
+                            }
+                        } else if (trackIdDisplay) {
+                            taxonomyDisplay = trackIdDisplay;
                         }
-                        if (trackIdDisplay) {
-                            html += '<span class="wm_grid_track_id">' + escapeHtml(trackIdDisplay) + '</span>';
+
+                        html += '<div class="wm_grid_track_item">';
+                        // Sezione superiore con immagine
+                        html += '<div class="wm_grid_track_image_section" style="background-image: url(\'' + escapeHtml(imageUrl) + '\');">';
+                        // Box tassonomia in alto a sinistra
+                        if (taxonomyDisplay) {
+                            html += '<div class="wm_grid_track_taxonomy_box">';
+                            html += '<span>' + escapeHtml(taxonomyDisplay) + '</span>';
+                            html += '</div>';
                         }
                         html += '</div>';
-                        html += '<a href="' + escapeHtml(trackUrl) + '" class="wm_grid_track_header_button"><?= esc_js(__('Go to track', 'wm-package')); ?></a>';
-                        html += '</div>';
+                        // Sezione inferiore con name e tasto view
+                        html += '<div class="wm_grid_track_footer">';
+                        html += '<div class="wm_grid_track_footer_name">';
                         if (name) {
-                            html += '<div class="wm_grid_track_name"><h3>' + escapeHtml(name) + '</h3></div>';
+                            html += '<span>' + escapeHtml(name) + '</span>';
                         }
-                        if (imageUrl) {
-                            html += '<div class="wm_grid_track_image" style="background-image: url(\'' + escapeHtml(imageUrl) + '\');"></div>';
-                        }
+                        html += '</div>';
+                        html += '<a href="' + escapeHtml(trackUrl) + '" class="wm_grid_track_view_button"><?= esc_js(__('View', 'wm-package')); ?></a>';
+                        html += '</div>';
                         html += '</div>';
                     });
 

@@ -4,8 +4,8 @@ add_action('admin_menu', 'wm_add_admin_menu');
 function wm_add_admin_menu()
 {
 	add_menu_page(
-		'WM Package Settings',     // Page title
-		'WM Package',              // Menu title
+		__('WM Package Settings', 'wm-package'),     // Page title
+		__('WM Package', 'wm-package'),              // Menu title
 		'manage_options',         // Capability
 		'wm-settings',     // Menu slug
 		'wm_settings_page', // Function to display the page
@@ -123,7 +123,7 @@ function wm_get_shards_config($force_refresh = false)
 function wm_ajax_refresh_shards()
 {
 	if (!current_user_can('manage_options')) {
-		wp_send_json_error(['message' => 'Unauthorized']);
+		wp_send_json_error(['message' => __('Unauthorized', 'wm-package')]);
 		return;
 	}
 
@@ -131,12 +131,12 @@ function wm_ajax_refresh_shards()
 
 	if (!empty($shards)) {
 		wp_send_json_success([
-			'message' => 'Shards configuration refreshed successfully',
+			'message' => __('Shards configuration refreshed successfully', 'wm-package'),
 			'shards' => $shards,
 			'count' => count($shards)
 		]);
 	} else {
-		wp_send_json_error(['message' => 'Failed to refresh shards configuration']);
+		wp_send_json_error(['message' => __('Failed to refresh shards configuration', 'wm-package')]);
 	}
 }
 add_action('wp_ajax_wm_refresh_shards', 'wm_ajax_refresh_shards');
@@ -208,37 +208,38 @@ function wm_settings_page()
 	$poi_api = $api_urls['poi_api'];
 	$layer_api = $api_urls['layer_api'];
 	$poi_type_api = $api_urls['poi_type_api'];
+	$elastic_api = $api_urls['elastic_api'];
 	$default_app_url = $api_urls['default_app_url'];
 
 ?>
 	<div class="wrap">
 		<h1 style="display: flex; align-items: center;">
-			<img src="<?php echo plugins_url('assets/menu-icon.png', __FILE__); ?>" alt="WM Icon" style="margin-right: 10px; height: 30px; width: 30px;" />
-			WM Package Settings
+			<img src="<?php echo plugins_url('assets/menu-icon.png', __FILE__); ?>" alt="<?php echo esc_attr__('WM Icon', 'wm-package'); ?>" style="margin-right: 10px; height: 30px; width: 30px;" />
+			<?php echo esc_html__('WM Package Settings', 'wm-package'); ?>
 		</h1>
 		<div style="display: none;" id="spinner" class="notice notice-warning">
 			<img src="<?php echo admin_url('images/spinner.gif'); ?>" style="margin:8px;">
-			<p>Do not close this page while it is loading</p>
+			<p><?php echo esc_html__('Do not close this page while it is loading', 'wm-package'); ?></p>
 		</div>
 		<!-- Sync Progress Modal -->
 		<div id="sync-progress-modal">
 			<div class="modal-content">
 				<div class="spinner-container">
-					<img src="<?php echo admin_url('images/spinner.gif'); ?>" alt="Loading...">
+					<img src="<?php echo admin_url('images/spinner.gif'); ?>" alt="<?php echo esc_attr__('Loading...', 'wm-package'); ?>">
 				</div>
-				<h2 id="modal-title">Processing...</h2>
+				<h2 id="modal-title"><?php echo esc_html__('Processing...', 'wm-package'); ?></h2>
 				<p id="sync-progress-message">
-					Please do not close or reload this page while the operation is in progress.
+					<?php echo esc_html__('Please do not close or reload this page while the operation is in progress.', 'wm-package'); ?>
 				</p>
 			</div>
 		</div>
 		<form method="post" action="options.php">
 			<?php settings_fields('wm-settings'); ?>
 			<?php do_settings_sections('wm-settings'); ?>
-			<h2>APIs:</h2>
+			<h2><?php echo esc_html__('Backend Configuration:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Shard</th>
+					<th scope="row"><?php echo esc_html__('Shard', 'wm-package'); ?></th>
 					<td>
 						<?php $shards_config = wm_get_shards_config(); ?>
 						<select name="wm_shard" id="wm_shard">
@@ -249,237 +250,271 @@ function wm_settings_page()
 							<?php endforeach; ?>
 						</select>
 						<button type="button" id="refresh_shards" class="button button-secondary" style="margin-left: 10px;">
-							🔄 Refresh Shards
+							🔄 <?php echo esc_html__('Refresh Shards', 'wm-package'); ?>
 						</button>
 						<p class="description">
-							Select the backend shard from which data will be retrieved.
+							<?php echo esc_html__('Select the backend shard from which data will be retrieved.', 'wm-package'); ?>
 							<br><small>
-								Configuration from: <a href="https://github.com/webmappsrl/wm-types/blob/main/src/environment.ts" target="_blank">wm-types/environment.ts</a>
-								<br>Available shards: <strong id="shards_count"><?php echo count($shards_config); ?></strong> (cached for 24 hours)
+								<?php echo esc_html__('Configuration from:', 'wm-package'); ?> <a href="https://github.com/webmappsrl/wm-types/blob/main/src/environment.ts" target="_blank">wm-types/environment.ts</a>
+								<br><?php echo esc_html__('Available shards:', 'wm-package'); ?> <strong id="shards_count"><?php echo count($shards_config); ?></strong> <?php echo esc_html__('(cached for 24 hours)', 'wm-package'); ?>
 							</small>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">APP ID</th>
+					<th scope="row"><?php echo esc_html__('APP ID', 'wm-package'); ?></th>
 					<td>
 						<input type="text" size="5" name="app_configuration_id"
 							value="<?php echo esc_attr($app_id); ?>" placeholder="49" />
 						<p class="description">
-							This APP ID refers to the ID of the app on the backend.
+							<?php echo esc_html__('This APP ID refers to the ID of the app on the backend.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
+			</table>
+			<h2><?php echo esc_html__('APIs:', 'wm-package'); ?></h2>
+			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Tracks list API</th>
+					<th scope="row"><?php echo esc_html__('Tracks list API', 'wm-package'); ?></th>
 					<td>
 						<a href="<?php echo esc_attr($tracks_list_api); ?>" target="_blank" class="api-link-tracks-list">
 							<p class="api-url-tracks-list"><?php echo esc_attr($tracks_list_api); ?></p>
 						</a>
 						<input type="hidden" size="50" name="tracks_list" class="api-input-tracks-list"
 							value="<?php echo esc_attr($tracks_list_api); ?>" readonly />
+						<p class="description">
+							<?php echo esc_html__('API endpoint used to retrieve the list of tracks for a specific app.', 'wm-package'); ?>
+						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Layer API</th>
+					<th scope="row"><?php echo esc_html__('Layer API', 'wm-package'); ?></th>
 					<td>
 						<a href="<?php echo esc_attr($layer_api); ?>" target="_blank" class="api-link-layer">
 							<p class="api-url-layer"><?php echo esc_attr($layer_api); ?></p>
 						</a>
 						<input type="hidden" size="50" name="layer_api" class="api-input-layer"
 							value="<?php echo esc_attr($layer_api); ?>" readonly />
+						<p class="description">
+							<?php echo esc_html__('API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays.', 'wm-package'); ?>
+						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Single Track API</th>
+					<th scope="row"><?php echo esc_html__('Single Track API', 'wm-package'); ?></th>
 					<td>
 						<a href="<?php echo esc_attr($single_track_api); ?>" target="_blank" class="api-link-track">
 							<p class="api-url-track"><?php echo esc_attr($single_track_api); ?></p>
 						</a>
 						<input type="hidden" size="50" name="track_url" class="api-input-track"
 							value="<?php echo esc_attr($single_track_api); ?>" readonly />
+						<p class="description">
+							<?php echo esc_html__('API endpoint used to retrieve detailed information for a single track by ID.', 'wm-package'); ?>
+						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">POI API</th>
+					<th scope="row"><?php echo esc_html__('POI API', 'wm-package'); ?></th>
 					<td>
 						<a href="<?php echo esc_attr($poi_api); ?>" target="_blank" class="api-link-poi">
 							<p class="api-url-poi"><?php echo esc_attr($poi_api); ?></p>
 						</a>
 						<input type="hidden" size="50" name="poi_url" class="api-input-poi"
 							value="<?php echo esc_attr($poi_api); ?>" readonly />
+						<p class="description">
+							<?php echo esc_html__('API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app.', 'wm-package'); ?>
+						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">POI Type API</th>
+					<th scope="row"><?php echo esc_html__('POI Type API', 'wm-package'); ?></th>
 					<td>
 						<a href="<?php echo esc_attr($poi_type_api); ?>" target="_blank" class="api-link-poi-type">
 							<p class="api-url-poi-type"><?php echo esc_attr($poi_type_api); ?></p>
 						</a>
 						<input type="hidden" size="50" name="poi_type_api" class="api-input-poi-type"
 							value="<?php echo esc_attr($poi_type_api); ?>" readonly />
+						<p class="description">
+							<?php echo esc_html__('API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest.', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Elasticsearch API', 'wm-package'); ?></th>
+					<td>
+						<a href="<?php echo esc_attr($elastic_api); ?>" target="_blank" class="api-link-elastic">
+							<p class="api-url-elastic"><?php echo esc_attr($elastic_api); ?></p>
+						</a>
+						<input type="hidden" size="50" name="elastic_api" class="api-input-elastic"
+							value="<?php echo esc_attr($elastic_api); ?>" readonly />
+						<p class="description">
+							<?php echo esc_html__('Elasticsearch API used for advanced track filtering and search in grid views.', 'wm-package'); ?>
+						</p>
 					</td>
 				</tr>
 			</table>
-			<h2> Links: </h2>
+			<h2><?php echo esc_html__('Links:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Website URL</th>
+					<th scope="row"><?php echo esc_html__('Website URL', 'wm-package'); ?></th>
 					<td>
 						<input type="text" size="50" value="<?php echo esc_attr(get_option('website_url')) ? esc_attr(get_option('website_url')) : esc_attr($default_app_url) ?>" placeholder="<?php echo esc_attr($default_app_url); ?>" name="website_url" />
 						<p class="description">
-							URL that display the Website version of the map
+							<?php echo esc_html__('URL that display the Website version of the map', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">iOS App URL</th>
+					<th scope="row"><?php echo esc_html__('iOS App URL', 'wm-package'); ?></th>
 					<td>
 						<input type="text" size="50" value="<?php echo esc_attr(get_option('ios_app_url')) ?>" name="ios_app_url" />
 						<p class="description">
-							URL that display the Mobile version of the map for iOS
+							<?php echo esc_html__('URL that display the Mobile version of the map for iOS', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Android App URL</th>
+					<th scope="row"><?php echo esc_html__('Android App URL', 'wm-package'); ?></th>
 					<td>
 						<input type="text" size="50" value="<?php echo esc_attr(get_option('android_app_url')) ?>" name="android_app_url" />
 						<p class="description">
-							URL that display the Mobile version of the map for Android
+							<?php echo esc_html__('URL that display the Mobile version of the map for Android', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 			</table>
-			<h2>Short codes:</h2>
+			<h2><?php echo esc_html__('Short codes:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Track page:</th>
+					<th scope="row"><?php echo esc_html__('Track page:', 'wm-package'); ?></th>
 					<td>
 						<p class="copiable"><?php echo esc_attr(get_option('track_shortcode')) ?: "[wm_single_track track_id='$1']"; ?></p>
 						<input type="hidden" size="50" name="track_shortcode"
 							value="<?php echo esc_attr(get_option('track_shortcode')) ?: "[wm_single_track track_id='$1']"; ?>"
 							readonly />
-						<p class="description">Shortcode to display a single track. <br>
-							<strong>Parameters:</strong><br>
-							<strong>track_id</strong>: The ID of the track. <br>
+						<p class="description"><?php echo esc_html__('Shortcode to display a single track with full details, map, and related POIs.', 'wm-package'); ?> <br>
+							<strong><?php echo esc_html__('Parameters:', 'wm-package'); ?></strong><br>
+							<strong>track_id</strong>: <?php echo esc_html__('(Required) The ID of the track to display.', 'wm-package'); ?> <br>
+							<strong>layer_ids</strong>: <?php echo esc_html__('(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons).', 'wm-package'); ?> <br>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">POI page:</th>
+					<th scope="row"><?php echo esc_html__('POI page:', 'wm-package'); ?></th>
 					<td>
 						<p class="copiable"><?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1']"; ?></p>
 						<input type="hidden" size="50" name="poi_shortcode"
 							value="<?php echo esc_attr(get_option('poi_shortcode')) ?: "[wm_single_poi poi_id='$1']"; ?>"
 							readonly />
-						<p class="description">Shortcode to display a single Point of Interest (POI). <br>
-							<strong>Parameters:</strong><br>
-							<strong>poi_id</strong>: The ID of the POI.
+						<p class="description"><?php echo esc_html__('Shortcode to display a single Point of Interest (POI) with full details and map location.', 'wm-package'); ?> <br>
+							<strong><?php echo esc_html__('Parameters:', 'wm-package'); ?></strong><br>
+							<strong>poi_id</strong>: <?php echo esc_html__('(Required) The ID of the POI to display.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Taxonomy Track page:</th>
+					<th scope="row"><?php echo esc_html__('Grid Tracks page:', 'wm-package'); ?></th>
 					<td>
-						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track activity='id']"; ?></p>
+						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track layer_id='id']"; ?></p>
 						<input type="hidden" size="50" name="taxonomy_track_shortcode"
-							value="<?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track activity='id']"; ?>"
+							value="<?php echo esc_attr(get_option('taxonomy_track_shortcode')) ?: "[wm_grid_track layer_id='id']"; ?>"
 							readonly />
-						<p class="description">Shortcode to display a grid of tracks based on taxonomy. <br>
-							<strong>Parameters:</strong><br>
-							<strong>layer_id</strong>: ID of the single layer. <br>
-							<strong>layer_ids</strong>: List of layer IDs (comma-separated). <br>
-							<strong>quantity</strong>: Maximum number of tracks to display. <br>
-							<strong>random</strong>: Display tracks in random order (true/false). <br>
-							<strong>content</strong>: Display content (true/false).
+						<p class="description"><?php echo esc_html__('Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering.', 'wm-package'); ?> <br>
+							<strong><?php echo esc_html__('Parameters:', 'wm-package'); ?></strong><br>
+							<strong>layer_id</strong>: <?php echo esc_html__('(Optional) ID of a single layer to display tracks from.', 'wm-package'); ?> <br>
+							<strong>layer_ids</strong>: <?php echo esc_html__('(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided.', 'wm-package'); ?> <br>
+							<strong>quantity</strong>: <?php echo esc_html__('(Optional) Maximum number of tracks to display. Default: -1 (unlimited).', 'wm-package'); ?> <br>
+							<strong>random</strong>: <?php echo esc_html__('(Optional) Display tracks in random order. Values: "true" or "false". Default: "false".', 'wm-package'); ?> <br>
+							<strong>content</strong>: <?php echo esc_html__('(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false.', 'wm-package'); ?> <br>
+							<strong>use_elastic</strong>: <?php echo esc_html__('(Optional) Use Elasticsearch API for advanced filtering. Values: "true" or "false". Default: "true".', 'wm-package'); ?> <br>
+							<strong>show_filters</strong>: <?php echo esc_html__('(Optional) Show filter interface (distance, region, difficulty, elevation). Values: "true" or "false". Default: "true".', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Taxonomy Poi page:</th>
+					<th scope="row"><?php echo esc_html__('Grid POIs page:', 'wm-package'); ?></th>
 					<td>
-						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type='id']"; ?></p>
+						<p class="copiable"><?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type_id='id']"; ?></p>
 						<input type="hidden" size="50" name="taxonomy_poi_shortcode"
-							value="<?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type='id']"; ?>"
+							value="<?php echo esc_attr(get_option('taxonomy_poi_shortcode')) ?: "[wm_grid_poi poi_type_id='id']"; ?>"
 							readonly />
-						<p class="description">Shortcode to display a grid of POIs based on taxonomy. <br>
-							<strong>Parameters:</strong><br>
-							<strong>poi_type_id</strong>: ID of the single POI type. <br>
-							<strong>poi_type_ids</strong>: List of POI type IDs (comma-separated). <br>
-							<strong>quantity</strong>: Maximum number of POIs to display. <br>
-							<strong>random</strong>: Display POIs in random order (true/false).
+						<p class="description"><?php echo esc_html__('Shortcode to display a grid of POIs filtered by POI type taxonomy.', 'wm-package'); ?> <br>
+							<strong><?php echo esc_html__('Parameters:', 'wm-package'); ?></strong><br>
+							<strong>poi_type_id</strong>: <?php echo esc_html__('(Optional) ID of a single POI type to display POIs from.', 'wm-package'); ?> <br>
+							<strong>poi_type_ids</strong>: <?php echo esc_html__('(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided.', 'wm-package'); ?> <br>
+							<strong>quantity</strong>: <?php echo esc_html__('(Optional) Maximum number of POIs to display. Default: -1 (unlimited).', 'wm-package'); ?> <br>
+							<strong>random</strong>: <?php echo esc_html__('(Optional) Display POIs in random order. Values: "true" or "false". Default: "false".', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 			</table>
 
-			<h2> Classes for map:</h2>
+			<h2><?php echo esc_html__('Classes for map:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Map Class</th>
+					<th scope="row"><?php echo esc_html__('Map Class', 'wm-package'); ?></th>
 					<td>
 						<p class="copiable">wm-custom-link</p>
-						<p class="description">Class for the map button in the menu. <br>
-							Has to be added inside the map button inside the header menu, from the interface <br>
+						<p class="description"><?php echo esc_html__('Class for the map button in the menu.', 'wm-package'); ?> <br>
+							<?php echo esc_html__('Has to be added inside the map button inside the header menu, from the interface', 'wm-package'); ?> <br>
 						</p>
 					</td>
 				</tr>
 			</table>
 
-			<h2>Track Navigation:</h2>
+			<h2><?php echo esc_html__('Track Navigation:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Enable Track Navigation</th>
+					<th scope="row"><?php echo esc_html__('Enable Track Navigation', 'wm-package'); ?></th>
 					<td>
 						<label>
 							<input type="checkbox" name="track_navigation_enabled" value="1" <?php checked(get_option('track_navigation_enabled'), '1'); ?> />
-							Enable navigation buttons (Previous/Next) on single track pages
+							<?php echo esc_html__('Enable navigation buttons (Previous/Next) on single track pages', 'wm-package'); ?>
 						</label>
 						<p class="description">
-							When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks.
+							<?php echo esc_html__('When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Default Layer IDs for Navigation</th>
+					<th scope="row"><?php echo esc_html__('Default Layer IDs for Navigation', 'wm-package'); ?></th>
 					<td>
 						<input type="text" size="50" name="track_navigation_layer_ids"
 							value="<?php echo esc_attr(get_option('track_navigation_layer_ids')); ?>"
-							placeholder="e.g., 123,456,789" />
+							placeholder="<?php echo esc_attr__('e.g., 123,456,789', 'wm-package'); ?>" />
 						<p class="description">
-							Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter.
+							<?php echo esc_html__('Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 			</table>
 
 
-			<h2>Import and Sync:</h2>
+			<h2><?php echo esc_html__('Import and Sync:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row">Generate TRACK</th>
-					<td><?php submit_button('Generate Tracks', 'primary', 'generate_track'); ?>
+					<th scope="row"><?php echo esc_html__('Generate TRACK', 'wm-package'); ?></th>
+					<td><?php submit_button(__('Generate Tracks', 'wm-package'), 'primary', 'generate_track'); ?>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Delete TRACK</th>
-					<td><?php submit_button('Delete All Tracks', 'delete', 'delete_track', false, array('style' => 'background-color: #dc3232; border-color: #dc3232; color: #fff;')); ?>
+					<th scope="row"><?php echo esc_html__('Delete TRACK', 'wm-package'); ?></th>
+					<td><?php submit_button(__('Delete All Tracks', 'wm-package'), 'delete', 'delete_track', false, array('style' => 'background-color: #dc3232; border-color: #dc3232; color: #fff;')); ?>
 						<p class="description" style="color: #dc3232; font-weight: bold;">
-							⚠️ Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone.
+							⚠️ <?php echo esc_html__('Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Generate POI</th>
-					<td><?php submit_button('Generate POIs', 'primary', 'generate_poi'); ?>
+					<th scope="row"><?php echo esc_html__('Generate POI', 'wm-package'); ?></th>
+					<td><?php submit_button(__('Generate POIs', 'wm-package'), 'primary', 'generate_poi'); ?>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Delete POI</th>
-					<td><?php submit_button('Delete All POIs', 'delete', 'delete_poi', false, array('style' => 'background-color: #dc3232; border-color: #dc3232; color: #fff;')); ?>
+					<th scope="row"><?php echo esc_html__('Delete POI', 'wm-package'); ?></th>
+					<td><?php submit_button(__('Delete All POIs', 'wm-package'), 'delete', 'delete_poi', false, array('style' => 'background-color: #dc3232; border-color: #dc3232; color: #fff;')); ?>
 						<p class="description" style="color: #dc3232; font-weight: bold;">
-							⚠️ Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone.
+							⚠️ <?php echo esc_html__('Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
@@ -580,6 +615,31 @@ function wm_admin_footer()
 	</style>
 	<script type="text/javascript">
 		jQuery(document).ready(function($) {
+			// Localized strings
+			var wmPackageStrings = {
+				loading: '<?php echo esc_js(__('Loading...', 'wm-package')); ?>',
+				processing: '<?php echo esc_js(__('Processing...', 'wm-package')); ?>',
+				synchronizing: '<?php echo esc_js(__('Synchronizing...', 'wm-package')); ?>',
+				deletingTracks: '<?php echo esc_js(__('Deleting Tracks...', 'wm-package')); ?>',
+				deletingPois: '<?php echo esc_js(__('Deleting POIs...', 'wm-package')); ?>',
+				doNotCloseSync: '<?php echo esc_js(__('Please do not close or reload this page while synchronization is in progress.', 'wm-package')); ?>',
+				doNotCloseDelete: '<?php echo esc_js(__('Please do not close or reload this page while deletion is in progress.', 'wm-package')); ?>',
+				warningSyncTracks: '<?php echo esc_js(__('⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
+				warningSyncPois: '<?php echo esc_js(__('⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
+				warningDeleteTracks: '<?php echo esc_js(__('⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
+				warningDeletePois: '<?php echo esc_js(__('⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
+				confirmDeleteTracks: '<?php echo esc_js(__('Final confirmation: Delete ALL Tracks?', 'wm-package')); ?>',
+				confirmDeletePois: '<?php echo esc_js(__('Final confirmation: Delete ALL POIs?', 'wm-package')); ?>',
+				tracksSynced: '<?php echo esc_js(__('Tracks synchronized successfully!', 'wm-package')); ?>',
+				poisSynced: '<?php echo esc_js(__('POIs synchronized successfully!', 'wm-package')); ?>',
+				errorUnknown: '<?php echo esc_js(__('Unknown error occurred', 'wm-package')); ?>',
+				errorServer: '<?php echo esc_js(__('Error communicating with the server', 'wm-package')); ?>',
+				errorTimeout: '<?php echo esc_js(__('Request timeout. The operation may still be processing. Please check the results.', 'wm-package')); ?>',
+				errorFormat: '<?php echo esc_js(__('Response format error, but operation may have completed. Please check the results.', 'wm-package')); ?>',
+				errorRefresh: '<?php echo esc_js(__('Failed to refresh', 'wm-package')); ?>',
+				shards: '<?php echo esc_js(__('shards', 'wm-package')); ?>'
+			};
+
 			// Shards configuration dynamically loaded from wm-types/environment.ts via PHP
 			var shardsConfig = <?php echo json_encode(wm_get_shards_config()); ?>;
 
@@ -587,7 +647,7 @@ function wm_admin_footer()
 			$('#refresh_shards').on('click', function() {
 				var $btn = $(this);
 				var originalText = $btn.text();
-				$btn.prop('disabled', true).text('⏳ Loading...');
+				$btn.prop('disabled', true).text('⏳ ' + wmPackageStrings.loading);
 
 				$.ajax({
 					url: ajaxurl,
@@ -615,13 +675,13 @@ function wm_admin_footer()
 							}
 							$('#shards_count').text(response.data.count);
 							updateApiUrls();
-							alert('✅ ' + response.data.message + ' (' + response.data.count + ' shards)');
+							alert('✅ ' + response.data.message + ' (' + response.data.count + ' ' + wmPackageStrings.shards + ')');
 						} else {
-							alert('❌ ' + (response.data.message || 'Failed to refresh'));
+							alert('❌ ' + (response.data.message || wmPackageStrings.errorRefresh));
 						}
 					},
 					error: function() {
-						alert('❌ Error communicating with the server');
+						alert('❌ ' + wmPackageStrings.errorServer);
 					},
 					complete: function() {
 						$btn.prop('disabled', false).text(originalText);
@@ -654,6 +714,15 @@ function wm_admin_footer()
 					poiType: origin + '/api/app/webapp/' + appId + '/taxonomies/poi_type/'
 				};
 
+				// Elasticsearch API URL - different patterns for different shards
+				if (shard === 'geohub') {
+					// Geohub uses a different domain for Elasticsearch
+					apiUrls.elastic = 'https://elastic-json.webmapp.it/v2/search/';
+				} else {
+					// Other shards use /api/v2/elasticsearch
+					apiUrls.elastic = origin + '/api/v2/elasticsearch';
+				}
+
 				// POI URL structure differs for osm2cai-type shards
 				if (isOsm2caiShard(shard)) {
 					apiUrls.poi = awsApi + '/' + appId + '/pois.geojson';
@@ -681,6 +750,10 @@ function wm_admin_footer()
 				$('.api-link-poi-type').attr('href', apiUrls.poiType);
 				$('.api-url-poi-type').text(apiUrls.poiType);
 				$('.api-input-poi-type').val(apiUrls.poiType);
+
+				$('.api-link-elastic').attr('href', apiUrls.elastic);
+				$('.api-url-elastic').text(apiUrls.elastic);
+				$('.api-input-elastic').val(apiUrls.elastic);
 			}
 
 			// Update APIs when shard or app_id changes
@@ -694,7 +767,7 @@ function wm_admin_footer()
 				if (title) {
 					$('#modal-title').text(title);
 				} else {
-					$('#modal-title').text('Processing...');
+					$('#modal-title').text(wmPackageStrings.processing);
 				}
 				$('#sync-progress-modal').css('display', 'flex');
 				// Prevent closing modal by clicking outside or pressing ESC
@@ -720,12 +793,12 @@ function wm_admin_footer()
 
 			$('#generate_track').click(function(e) {
 				e.preventDefault();
-				if (!confirm('⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts.\n\nAre you sure you want to proceed?')) {
+				if (!confirm(wmPackageStrings.warningSyncTracks)) {
 					return false;
 				}
 
 				// Show modal with spinner
-				showSyncModal('Please do not close or reload this page while synchronization is in progress.', 'Synchronizing...');
+				showSyncModal(wmPackageStrings.doNotCloseSync, wmPackageStrings.synchronizing);
 
 				$.ajax({
 					url: ajaxurl,
@@ -738,18 +811,18 @@ function wm_admin_footer()
 					success: function(response) {
 						hideSyncModal();
 						if (response && response.success) {
-							alert('✅ ' + (response.data && response.data.message ? response.data.message : 'Tracks synchronized successfully!'));
+							alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.tracksSynced));
 							location.reload();
 						} else {
-							alert('❌ Error: ' + (response && response.data && response.data.message ? response.data.message : 'Unknown error occurred'));
+							alert('❌ Error: ' + (response && response.data && response.data.message ? response.data.message : wmPackageStrings.errorUnknown));
 						}
 					},
 					error: function(xhr, status, error) {
 						hideSyncModal();
 						// Try to parse error response if available
-						var errorMessage = 'Error communicating with the server';
+						var errorMessage = wmPackageStrings.errorServer;
 						if (status === 'timeout') {
-							errorMessage = 'Request timeout. The operation may still be processing. Please check the results.';
+							errorMessage = wmPackageStrings.errorTimeout;
 						} else if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
 							errorMessage = xhr.responseJSON.data.message;
 						} else if (xhr.responseText) {
@@ -761,7 +834,7 @@ function wm_admin_footer()
 							} catch (e) {
 								// If parsing fails, check if operation might have succeeded
 								if (xhr.status === 200) {
-									errorMessage = 'Response format error, but operation may have completed. Please check the results.';
+									errorMessage = wmPackageStrings.errorFormat;
 								}
 							}
 						}
@@ -771,12 +844,12 @@ function wm_admin_footer()
 			});
 			$('#generate_poi').click(function(e) {
 				e.preventDefault();
-				if (!confirm('⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts.\n\nAre you sure you want to proceed?')) {
+				if (!confirm(wmPackageStrings.warningSyncPois)) {
 					return false;
 				}
 
 				// Show modal with spinner
-				showSyncModal('Please do not close or reload this page while synchronization is in progress.', 'Synchronizing...');
+				showSyncModal(wmPackageStrings.doNotCloseSync, wmPackageStrings.synchronizing);
 
 				$.ajax({
 					url: ajaxurl,
@@ -789,18 +862,18 @@ function wm_admin_footer()
 					success: function(response) {
 						hideSyncModal();
 						if (response && response.success) {
-							alert('✅ ' + (response.data && response.data.message ? response.data.message : 'POIs synchronized successfully!'));
+							alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.poisSynced));
 							location.reload();
 						} else {
-							alert('❌ Error: ' + (response && response.data && response.data.message ? response.data.message : 'Unknown error occurred'));
+							alert('❌ Error: ' + (response && response.data && response.data.message ? response.data.message : wmPackageStrings.errorUnknown));
 						}
 					},
 					error: function(xhr, status, error) {
 						hideSyncModal();
 						// Try to parse error response if available
-						var errorMessage = 'Error communicating with the server';
+						var errorMessage = wmPackageStrings.errorServer;
 						if (status === 'timeout') {
-							errorMessage = 'Request timeout. The operation may still be processing. Please check the results.';
+							errorMessage = wmPackageStrings.errorTimeout;
 						} else if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
 							errorMessage = xhr.responseJSON.data.message;
 						} else if (xhr.responseText) {
@@ -812,7 +885,7 @@ function wm_admin_footer()
 							} catch (e) {
 								// If parsing fails, check if operation might have succeeded
 								if (xhr.status === 200) {
-									errorMessage = 'Response format error, but operation may have completed. Please check the results.';
+									errorMessage = wmPackageStrings.errorFormat;
 								}
 							}
 						}
@@ -823,15 +896,15 @@ function wm_admin_footer()
 
 			$('#delete_track').click(function(e) {
 				e.preventDefault();
-				if (!confirm('⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone.\n\nAre you sure you want to proceed?')) {
+				if (!confirm(wmPackageStrings.warningDeleteTracks)) {
 					return false;
 				}
-				if (!confirm('Final confirmation: Delete ALL Tracks?')) {
+				if (!confirm(wmPackageStrings.confirmDeleteTracks)) {
 					return false;
 				}
 
 				// Show modal with spinner
-				showSyncModal('Please do not close or reload this page while deletion is in progress.', 'Deleting Tracks...');
+				showSyncModal(wmPackageStrings.doNotCloseDelete, wmPackageStrings.deletingTracks);
 
 				$.post(ajaxurl, {
 					action: 'delete_all_tracks_action',
@@ -842,25 +915,25 @@ function wm_admin_footer()
 						alert('✅ ' + response.data.message);
 						location.reload();
 					} else {
-						alert('❌ Error: ' + (response.data.message || 'Unknown error'));
+						alert('❌ Error: ' + (response.data.message || wmPackageStrings.errorUnknown));
 					}
 				}).fail(function() {
 					hideSyncModal();
-					alert('❌ Error communicating with the server');
+					alert('❌ ' + wmPackageStrings.errorServer);
 				});
 			});
 
 			$('#delete_poi').click(function(e) {
 				e.preventDefault();
-				if (!confirm('⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone.\n\nAre you sure you want to proceed?')) {
+				if (!confirm(wmPackageStrings.warningDeletePois)) {
 					return false;
 				}
-				if (!confirm('Final confirmation: Delete ALL POIs?')) {
+				if (!confirm(wmPackageStrings.confirmDeletePois)) {
 					return false;
 				}
 
 				// Show modal with spinner
-				showSyncModal('Please do not close or reload this page while deletion is in progress.', 'Deleting POIs...');
+				showSyncModal(wmPackageStrings.doNotCloseDelete, wmPackageStrings.deletingPois);
 
 				$.post(ajaxurl, {
 					action: 'delete_all_pois_action',
@@ -871,11 +944,11 @@ function wm_admin_footer()
 						alert('✅ ' + response.data.message);
 						location.reload();
 					} else {
-						alert('❌ Error: ' + (response.data.message || 'Unknown error'));
+						alert('❌ Error: ' + (response.data.message || wmPackageStrings.errorUnknown));
 					}
 				}).fail(function() {
 					hideSyncModal();
-					alert('❌ Error communicating with the server');
+					alert('❌ ' + wmPackageStrings.errorServer);
 				});
 			});
 		});

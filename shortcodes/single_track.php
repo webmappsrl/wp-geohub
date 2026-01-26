@@ -92,6 +92,7 @@ function wm_single_track($atts)
 	$gpx = null;
 	$activity = null;
 	$dem_data = null;
+	$not_accessible_message = null;
 	$default_image = plugins_url('wm-package/assets/default_image.png');
 
 	if ($track) {
@@ -107,6 +108,18 @@ function wm_single_track($atts)
 		$gallery = $track['image_gallery'] ?? [];
 		$gpx = $track['gpx_url'];
 		$activity = $track['taxonomy']['activity'] ?? [];
+
+		// Extract not_accessible_message if track is not accessible
+		if (!empty($track['not_accessible']) && !empty($track['not_accessible_message'])) {
+			$not_accessible_message = $track['not_accessible_message'][$language] ?? 
+				$track['not_accessible_message']['it'] ?? 
+				$track['not_accessible_message']['en'] ?? 
+				null;
+			// Fallback: get first available translation
+			if (empty($not_accessible_message) && is_array($track['not_accessible_message'])) {
+				$not_accessible_message = reset($track['not_accessible_message']);
+			}
+		}
 
 		// Extract and decode dem_data
 		if (isset($track['dem_data'])) {
@@ -133,6 +146,13 @@ function wm_single_track($atts)
 			<h1 class="wm_title">
 				<?= esc_html($title) ?>
 			</h1>
+		<?php endif; ?>
+
+		<!-- 2.5. Not Accessible Message -->
+		<?php if ($not_accessible_message) : ?>
+			<div class="wm_not_accessible_message">
+				<?= esc_html($not_accessible_message) ?>
+			</div>
 		<?php endif; ?>
 
 		<!-- 3. Taxonomies -->

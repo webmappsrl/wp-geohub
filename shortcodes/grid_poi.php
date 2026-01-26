@@ -39,7 +39,7 @@ function wm_grid_poi($atts)
                             $poi_type_name = $data['name'];
                         }
                     }
-                    
+
                     foreach ($data['features'] as $feature) {
                         if (isset($data['icon'])) {
                             $feature['svg_icon'] = $data['icon'];
@@ -86,35 +86,32 @@ function wm_grid_poi($atts)
                     $poi_slug = $poi['slug'][$language] ?? wm_custom_slugify($name);
                     $base_url = apply_filters('wpml_home_url', get_site_url(), $language);
                     $poi_page_url = trailingslashit($base_url) . "poi/{$poi_slug}/";
-                    
+
                     // Get POI category/type for header
                     $poi_category = $poi['poi_type_name'] ?? '';
                     ?>
-                    
-                    <!-- Header bar with category and button -->
-                    <div class="wm_grid_poi_header">
-                        <div class="wm_grid_poi_category">
-                            <?php if ($poi_category) : ?>
+
+                    <!-- Sezione superiore con immagine in evidenza -->
+                    <div class="wm_grid_poi_image_section" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
+                        <!-- Box tassonomia in alto a sinistra -->
+                        <?php if ($poi_category) : ?>
+                            <div class="wm_grid_poi_taxonomy_box">
                                 <span><?= esc_html($poi_category); ?></span>
-                            <?php endif; ?>
-                        </div>
-                        <a href="<?= esc_url($poi_page_url); ?>" class="wm_grid_poi_header_button">
-                            <?= __('Go to POI', 'wm-package'); ?>
-                        </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
-                    <!-- POI name -->
-                    <?php if ($name) : ?>
-                        <div class="wm_grid_poi_name">
-                            <h5><?= esc_html($name); ?></h5>
+                    <!-- Sezione inferiore con name e tasto view -->
+                    <div class="wm_grid_poi_footer">
+                        <div class="wm_grid_poi_footer_name">
+                            <?php if ($name) : ?>
+                                <span><?= esc_html($name); ?></span>
+                            <?php endif; ?>
                         </div>
-                    <?php endif; ?>
-
-                    <!-- Image strip -->
-                    <?php if ($feature_image_url) : ?>
-                        <div class="wm_grid_poi_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
-                        </div>
-                    <?php endif; ?>
+                        <a href="<?= esc_url($poi_page_url); ?>" class="wm_grid_poi_view_button">
+                            <?= __('View', 'wm-package'); ?>
+                        </a>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
