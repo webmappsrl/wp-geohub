@@ -719,8 +719,38 @@ function wm_grid_track($atts)
 
                 let filterTimeout;
 
+                // Function to get URL parameter
+                function getUrlParameter(name) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(name);
+                }
+
+                // Function to update URL with where parameter
+                function updateUrlWithWhere(whereValue) {
+                    const url = new URL(window.location.href);
+                    if (whereValue) {
+                        url.searchParams.set('where', whereValue);
+                    } else {
+                        url.searchParams.delete('where');
+                    }
+                    // Update URL without reloading page
+                    window.history.pushState({}, '', url.toString());
+                }
+
+                // Function to create slug from region name
+                function createSlug(text) {
+                    return text.toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '') // Remove accents
+                        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with dash
+                        .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
+                }
+
                 function buildFilters() {
                     const filters = [];
+                    let whereValue = null;
+                    let difficultyValue = null;
+
                     <?php if (!empty($filter_options['has_distance_data'])) : ?>
                         const defaultDistanceMin = <?= $filter_options['distance_min']; ?>;
                         const defaultDistanceMax = <?= $filter_options['distance_max']; ?>;
@@ -759,37 +789,39 @@ function wm_grid_track($atts)
                         }
                     <?php endif; ?>
 
-                    // Region filter - only apply if filter exists
-                    const regionElement = document.getElementById('filter_region');
-                    if (regionElement) {
-                        const region = regionElement.value;
-                        if (region) {
-                            filters.push(JSON.stringify({
-                                identifier: region,
-                                taxonomy: 'taxonomyWheres'
-                            }));
+                    // Where filter - get value separately to use as taxonomyWheres parameter
+                    const whereElement = document.getElementById('filter_region');
+                    if (whereElement) {
+                        whereValue = whereElement.value;
+                        if (whereValue) {
+                            // Update URL with where parameter
+                            updateUrlWithWhere(createSlug(whereValue));
+                        } else {
+                            // Remove where parameter if no where selected
+                            updateUrlWithWhere(null);
                         }
                     }
 
-                    // Difficulty filter - only apply if filter exists
+                    // Difficulty filter - get value separately to use as cai_scale parameter
                     const difficultyElement = document.getElementById('filter_difficulty');
                     if (difficultyElement) {
-                        const difficulty = difficultyElement.value;
-                        if (difficulty) {
-                            filters.push(JSON.stringify({
-                                identifier: difficulty,
-                                taxonomy: 'cai_scale'
-                            }));
-                        }
+                        difficultyValue = difficultyElement.value;
                     }
 
-                    return filters;
+                    return {
+                        filters: filters,
+                        whereValue: whereValue,
+                        difficultyValue: difficultyValue
+                    };
                 }
 
                 function updateResults() {
                     clearTimeout(filterTimeout);
                     filterTimeout = setTimeout(function() {
-                        const filters = buildFilters();
+                        const filterData = buildFilters();
+                        const filters = filterData.filters;
+                        const whereValue = filterData.whereValue;
+                        const difficultyValue = filterData.difficultyValue;
                         let url = elasticApi;
                         if (url.indexOf('?') === -1) {
                             url += '?';
@@ -797,6 +829,16 @@ function wm_grid_track($atts)
                             url += '&';
                         }
                         url += 'app=' + shardApp + '_' + appId + '&layer=' + encodeURIComponent(layerId);
+
+                        // Add taxonomyWheres parameter directly if where filter is selected
+                        if (whereValue) {
+                            url += '&taxonomyWheres=' + encodeURIComponent(whereValue);
+                        }
+
+                        // Add cai_scale parameter directly if difficulty filter is selected
+                        if (difficultyValue) {
+                            url += '&cai_scale=' + encodeURIComponent(difficultyValue);
+                        }
 
                         if (filters.length > 0) {
                             url += '&filters=[' + filters.join(',') + ']';
@@ -988,9 +1030,24 @@ function wm_grid_track($atts)
                 <?php endif; ?>
 
                 // Dropdown filters - only attach listeners if elements exist
-                const regionFilter = document.getElementById('filter_region');
-                if (regionFilter) {
-                    regionFilter.addEventListener('change', updateResults);
+                const whereFilter = document.getElementById('filter_region');
+                if (whereFilter) {
+                    // Check if URL has where parameter and set filter accordingly
+                    const whereParam = getUrlParameter('where');
+                    if (whereParam) {
+                        // Find matching where by comparing slugs
+                        const options = whereFilter.options;
+                        for (let i = 0; i < options.length; i++) {
+                            const optionValue = options[i].value;
+                            if (optionValue && createSlug(optionValue) === whereParam) {
+                                whereFilter.value = optionValue;
+                                // Trigger update to apply filter
+                                updateResults();
+                                break;
+                            }
+                        }
+                    }
+                    whereFilter.addEventListener('change', updateResults);
                 }
                 const difficultyFilter = document.getElementById('filter_difficulty');
                 if (difficultyFilter) {
