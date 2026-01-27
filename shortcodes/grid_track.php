@@ -568,6 +568,41 @@ function wm_grid_track($atts)
                     <?php endif; ?>
 
                     <?php if (!empty($filter_options['has_region_data'])) : ?>
+                        <?php
+                        // Italian regions array
+                        $italian_regions = array(
+                            'Abruzzo',
+                            'Basilicata',
+                            'Calabria',
+                            'Campania',
+                            'Emilia-Romagna',
+                            'Friuli-Venezia Giulia',
+                            'Lazio',
+                            'Liguria',
+                            'Lombardia',
+                            'Marche',
+                            'Molise',
+                            'Piemonte',
+                            'Puglia',
+                            'Sardegna',
+                            'Sicilia',
+                            'Toscana',
+                            'Trentino-Alto Adige',
+                            'Umbria',
+                            'Valle d\'Aosta',
+                            'Veneto'
+                        );
+                        ?>
+                        <div class="wm_filter_item">
+                            <label class="wm_filter_label"><?= __('Region', 'wm-package'); ?></label>
+                            <select id="filter_italian_region" class="wm_filter_select">
+                                <option value=""><?= __('Select region', 'wm-package'); ?></option>
+                                <?php foreach ($italian_regions as $region) : ?>
+                                    <option value="<?= esc_attr($region); ?>"><?= esc_html($region); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
                         <div class="wm_filter_item">
                             <label class="wm_filter_label"><?= __('Where', 'wm-package'); ?></label>
                             <select id="filter_region" class="wm_filter_select">
@@ -612,6 +647,13 @@ function wm_grid_track($atts)
                             </div>
                         </div>
                     <?php endif; ?>
+                </div>
+
+                <!-- Reset Filters Button - Outside filters block -->
+                <div class="wm_filter_reset_container" id="wm_filter_reset_container" style="display: none; text-align: center;">
+                    <button type="button" id="wm_reset_filters" class="wm_reset_filters_button">
+                        <?= __('Reset filters', 'wm-package'); ?>
+                    </button>
                 </div>
             <?php endif; ?>
 
@@ -663,15 +705,10 @@ function wm_grid_track($atts)
                             }
                         }
 
-                        // Build taxonomy display (category + track ID if available)
+                        // Build taxonomy display (only category, no track ID)
                         $taxonomy_display = '';
                         if ($activity_category) {
                             $taxonomy_display = $activity_category;
-                            if ($track_id_display) {
-                                $taxonomy_display .= ' ' . $track_id_display;
-                            }
-                        } elseif ($track_id_display) {
-                            $taxonomy_display = $track_id_display;
                         }
                         ?>
 
@@ -730,11 +767,142 @@ function wm_grid_track($atts)
                     const url = new URL(window.location.href);
                     if (whereValue) {
                         url.searchParams.set('where', whereValue);
+                        // Keep region parameter if it exists (allow both filters to work together)
                     } else {
                         url.searchParams.delete('where');
                     }
                     // Update URL without reloading page
                     window.history.pushState({}, '', url.toString());
+                }
+
+                // Function to update URL with region parameter
+                function updateUrlWithRegion(regionValue) {
+                    const url = new URL(window.location.href);
+                    if (regionValue) {
+                        url.searchParams.set('region', createSlug(regionValue));
+                        // Keep where parameter if it exists (allow both filters to work together)
+                    } else {
+                        url.searchParams.delete('region');
+                    }
+                    // Update URL without reloading page
+                    window.history.pushState({}, '', url.toString());
+                }
+
+                // Get Where filter element
+                const whereFilter = document.getElementById('filter_region');
+                
+                // Store original Where filter options
+                let originalWhereOptions = [];
+                if (whereFilter) {
+                    for (let i = 0; i < whereFilter.options.length; i++) {
+                        originalWhereOptions.push({
+                            value: whereFilter.options[i].value,
+                            text: whereFilter.options[i].text
+                        });
+                    }
+                }
+
+                // Function to update Where filter options based on selected region
+                function updateWhereOptionsForRegion(regionName) {
+                    if (!whereFilter || !regionName) {
+                        // Restore original options if no region selected
+                        if (whereFilter && originalWhereOptions.length > 0) {
+                            whereFilter.innerHTML = '';
+                            originalWhereOptions.forEach(function(option) {
+                                const opt = document.createElement('option');
+                                opt.value = option.value;
+                                opt.textContent = option.text;
+                                whereFilter.appendChild(opt);
+                            });
+                        }
+                        return;
+                    }
+
+                    // Build API URL to get taxonomyWheres for the selected region
+                    let apiUrl = elasticApi;
+                    if (apiUrl.indexOf('?') === -1) {
+                        apiUrl += '?';
+                    } else {
+                        apiUrl += '&';
+                    }
+                    apiUrl += 'app=' + shardApp + '_' + appId + '&layer=' + encodeURIComponent(layerId);
+                    apiUrl += '&taxonomyWheres=' + encodeURIComponent(regionName);
+
+                    // Fetch taxonomyWheres for this region
+                    fetch(apiUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!whereFilter) return;
+
+                            // Collect unique taxonomyWheres from the results
+                            const regionWheres = new Set();
+                            
+                            if (data.hits && Array.isArray(data.hits)) {
+                                data.hits.forEach(function(hit) {
+                                    if (hit.taxonomyWheres && Array.isArray(hit.taxonomyWheres)) {
+                                        hit.taxonomyWheres.forEach(function(where) {
+                                            let whereName = '';
+                                            if (typeof where === 'string') {
+                                                whereName = where;
+                                            } else if (where && typeof where === 'object') {
+                                                if (where.name) {
+                                                    if (typeof where.name === 'string') {
+                                                        whereName = where.name;
+                                                    } else if (typeof where.name === 'object') {
+                                                        whereName = where.name[language] || where.name.it || where.name.en || '';
+                                                    }
+                                                } else if (where.title) {
+                                                    if (typeof where.title === 'string') {
+                                                        whereName = where.title;
+                                                    } else if (typeof where.title === 'object') {
+                                                        whereName = where.title[language] || where.title.it || where.title.en || '';
+                                                    }
+                                                }
+                                            }
+                                            if (whereName && whereName !== regionName) {
+                                                regionWheres.add(whereName);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+                            // Update Where filter options
+                            whereFilter.innerHTML = '<option value=""><?= esc_js(__('Select where', 'wm-package')); ?></option>';
+                            
+                            if (regionWheres.size > 0) {
+                                const sortedWheres = Array.from(regionWheres).sort();
+                                sortedWheres.forEach(function(whereName) {
+                                    const opt = document.createElement('option');
+                                    opt.value = whereName;
+                                    opt.textContent = whereName;
+                                    whereFilter.appendChild(opt);
+                                });
+                            } else {
+                                // If no specific wheres found, show all original options
+                                originalWhereOptions.forEach(function(option) {
+                                    if (option.value) {
+                                        const opt = document.createElement('option');
+                                        opt.value = option.value;
+                                        opt.textContent = option.text;
+                                        whereFilter.appendChild(opt);
+                                    }
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching region wheres:', error);
+                            // On error, restore original options
+                            if (whereFilter && originalWhereOptions.length > 0) {
+                                whereFilter.innerHTML = '';
+                                originalWhereOptions.forEach(function(option) {
+                                    const opt = document.createElement('option');
+                                    opt.value = option.value;
+                                    opt.textContent = option.text;
+                                    whereFilter.appendChild(opt);
+                                });
+                            }
+                        });
                 }
 
                 // Function to create slug from region name
@@ -746,10 +914,20 @@ function wm_grid_track($atts)
                         .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
                 }
 
+                // Function to find region name from slug
+                function findRegionFromSlug(slug) {
+                    const italianRegions = <?= json_encode($italian_regions); ?>;
+                    for (let i = 0; i < italianRegions.length; i++) {
+                        if (createSlug(italianRegions[i]) === slug) {
+                            return italianRegions[i];
+                        }
+                    }
+                    return null;
+                }
+
                 function buildFilters() {
                     const filters = [];
                     let whereValue = null;
-                    let difficultyValue = null;
 
                     <?php if (!empty($filter_options['has_distance_data'])) : ?>
                         const defaultDistanceMin = <?= $filter_options['distance_min']; ?>;
@@ -789,20 +967,50 @@ function wm_grid_track($atts)
                         }
                     <?php endif; ?>
 
-                    // Where filter - get value separately to use as taxonomyWheres parameter
-                    const whereElement = document.getElementById('filter_region');
-                    if (whereElement) {
-                        whereValue = whereElement.value;
-                        if (whereValue) {
-                            // Update URL with where parameter
-                            updateUrlWithWhere(createSlug(whereValue));
-                        } else {
-                            // Remove where parameter if no where selected
-                            updateUrlWithWhere(null);
+                    // Where filter and Region filter - can work together
+                    const whereParam = getUrlParameter('where');
+                    const regionParam = getUrlParameter('region');
+                    let regionValue = null;
+                    
+                    // Get region value if region parameter exists
+                    if (regionParam) {
+                        const regionName = findRegionFromSlug(regionParam);
+                        if (regionName) {
+                            regionValue = regionName;
+                        }
+                    } else {
+                        // Check if region filter is selected
+                        const regionFilterEl = document.getElementById('filter_italian_region');
+                        if (regionFilterEl && regionFilterEl.value) {
+                            regionValue = regionFilterEl.value;
+                        }
+                    }
+                    
+                    // Get where value - can be used together with region
+                    if (whereParam) {
+                        // Use where parameter from URL
+                        const whereElement = document.getElementById('filter_region');
+                        if (whereElement) {
+                            // Find matching where by comparing slugs
+                            const options = whereElement.options;
+                            for (let i = 0; i < options.length; i++) {
+                                const optionValue = options[i].value;
+                                if (optionValue && createSlug(optionValue) === whereParam) {
+                                    whereValue = optionValue;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        // Use filter dropdown value
+                        const whereElement = document.getElementById('filter_region');
+                        if (whereElement) {
+                            whereValue = whereElement.value;
                         }
                     }
 
-                    // Difficulty filter - get value separately to use as cai_scale parameter
+                    // Difficulty filter - get value for client-side filtering
+                    let difficultyValue = null;
                     const difficultyElement = document.getElementById('filter_difficulty');
                     if (difficultyElement) {
                         difficultyValue = difficultyElement.value;
@@ -811,8 +1019,117 @@ function wm_grid_track($atts)
                     return {
                         filters: filters,
                         whereValue: whereValue,
+                        regionValue: regionValue,
                         difficultyValue: difficultyValue
                     };
+                }
+
+                // Function to check if any filters are active
+                function hasActiveFilters() {
+                    const filterData = buildFilters();
+                    
+                    // Check if any filters are applied
+                    if (filterData.filters.length > 0) {
+                        return true;
+                    }
+                    
+                    if (filterData.whereValue) {
+                        return true;
+                    }
+                    
+                    if (filterData.regionValue) {
+                        return true;
+                    }
+                    
+                    if (filterData.difficultyValue) {
+                        return true;
+                    }
+                    
+                    <?php if (!empty($filter_options['has_ascent_data'])) : ?>
+                    const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
+                    const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
+                    const ascentMinEl = document.getElementById('ascent_min');
+                    const ascentMaxEl = document.getElementById('ascent_max');
+                    if (ascentMinEl && ascentMaxEl) {
+                        const ascentMin = parseInt(ascentMinEl.value);
+                        const ascentMax = parseInt(ascentMaxEl.value);
+                        if (ascentMin > defaultAscentMin || ascentMax < defaultAscentMax) {
+                            return true;
+                        }
+                    }
+                    <?php endif; ?>
+                    
+                    return false;
+                }
+
+                // Function to update reset button visibility
+                function updateResetButtonVisibility() {
+                    const resetContainer = document.getElementById('wm_filter_reset_container');
+                    if (resetContainer) {
+                        if (hasActiveFilters()) {
+                            resetContainer.style.display = 'block';
+                        } else {
+                            resetContainer.style.display = 'none';
+                        }
+                    }
+                }
+
+                // Function to reset all filters
+                function resetAllFilters() {
+                    <?php if (!empty($filter_options['has_distance_data'])) : ?>
+                    const defaultDistanceMin = <?= $filter_options['distance_min']; ?>;
+                    const defaultDistanceMax = <?= $filter_options['distance_max']; ?>;
+                    const distanceMinEl = document.getElementById('distance_min');
+                    const distanceMaxEl = document.getElementById('distance_max');
+                    if (distanceMinEl && distanceMaxEl) {
+                        distanceMinEl.value = defaultDistanceMin;
+                        distanceMaxEl.value = defaultDistanceMax;
+                        updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
+                        updateSliderTrack(distanceMinEl, distanceMaxEl);
+                    }
+                    <?php endif; ?>
+
+                    <?php if (!empty($filter_options['has_ascent_data'])) : ?>
+                    const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
+                    const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
+                    const ascentMinEl = document.getElementById('ascent_min');
+                    const ascentMaxEl = document.getElementById('ascent_max');
+                    if (ascentMinEl && ascentMaxEl) {
+                        ascentMinEl.value = defaultAscentMin;
+                        ascentMaxEl.value = defaultAscentMax;
+                        updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
+                        updateSliderTrack(ascentMinEl, ascentMaxEl);
+                    }
+                    <?php endif; ?>
+
+                    // Reset Where filter
+                    if (whereFilter) {
+                        whereFilter.value = '';
+                    }
+
+                    // Reset Region filter
+                    const regionFilter = document.getElementById('filter_italian_region');
+                    if (regionFilter) {
+                        regionFilter.value = '';
+                    }
+
+                    // Reset Difficulty filter
+                    const difficultyFilter = document.getElementById('filter_difficulty');
+                    if (difficultyFilter) {
+                        difficultyFilter.value = '';
+                    }
+
+                    // Restore original Where options
+                    updateWhereOptionsForRegion(null);
+
+                    // Clear URL parameters
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('where');
+                    url.searchParams.delete('region');
+                    window.history.pushState({}, '', url.toString());
+
+                    // Update results
+                    updateResults();
                 }
 
                 function updateResults() {
@@ -821,6 +1138,7 @@ function wm_grid_track($atts)
                         const filterData = buildFilters();
                         const filters = filterData.filters;
                         const whereValue = filterData.whereValue;
+                        const regionValue = filterData.regionValue;
                         const difficultyValue = filterData.difficultyValue;
                         let url = elasticApi;
                         if (url.indexOf('?') === -1) {
@@ -830,14 +1148,17 @@ function wm_grid_track($atts)
                         }
                         url += 'app=' + shardApp + '_' + appId + '&layer=' + encodeURIComponent(layerId);
 
-                        // Add taxonomyWheres parameter directly if where filter is selected
-                        if (whereValue) {
-                            url += '&taxonomyWheres=' + encodeURIComponent(whereValue);
+                        // Priority: if region is selected, use it for taxonomyWheres
+                        // If both region and where are selected, filter by region first, then filter client-side by where
+                        let taxonomyWheresValue = null;
+                        if (regionValue) {
+                            taxonomyWheresValue = regionValue;
+                        } else if (whereValue) {
+                            taxonomyWheresValue = whereValue;
                         }
 
-                        // Add cai_scale parameter directly if difficulty filter is selected
-                        if (difficultyValue) {
-                            url += '&cai_scale=' + encodeURIComponent(difficultyValue);
+                        if (taxonomyWheresValue) {
+                            url += '&taxonomyWheres=' + encodeURIComponent(taxonomyWheresValue);
                         }
 
                         if (filters.length > 0) {
@@ -853,14 +1174,56 @@ function wm_grid_track($atts)
                             .then(response => response.json())
                             .then(data => {
                                 if (tracksContainer && data.hits) {
-                                    renderTracks(data.hits);
+                                    let filteredHits = data.hits;
+                                    
+                                    // If both region and where are selected, filter client-side by where
+                                    if (regionValue && whereValue) {
+                                        filteredHits = data.hits.filter(function(hit) {
+                                            if (!hit.taxonomyWheres || !Array.isArray(hit.taxonomyWheres)) {
+                                                return false;
+                                            }
+                                            return hit.taxonomyWheres.some(function(where) {
+                                                let whereName = '';
+                                                if (typeof where === 'string') {
+                                                    whereName = where;
+                                                } else if (where && typeof where === 'object') {
+                                                    if (where.name) {
+                                                        if (typeof where.name === 'string') {
+                                                            whereName = where.name;
+                                                        } else if (typeof where.name === 'object') {
+                                                            whereName = where.name[language] || where.name.it || where.name.en || '';
+                                                        }
+                                                    } else if (where.title) {
+                                                        if (typeof where.title === 'string') {
+                                                            whereName = where.title;
+                                                        } else if (typeof where.title === 'object') {
+                                                            whereName = where.title[language] || where.title.it || where.title.en || '';
+                                                        }
+                                                    }
+                                                }
+                                                return whereName === whereValue;
+                                            });
+                                        });
+                                    }
+                                    
+                                    // Filter by cai_scale client-side if difficulty is selected
+                                    if (difficultyValue) {
+                                        filteredHits = filteredHits.filter(function(hit) {
+                                            return hit.cai_scale === difficultyValue;
+                                        });
+                                    }
+                                    renderTracks(filteredHits);
                                 }
+                                // Update reset button visibility after results are updated
+                                updateResetButtonVisibility();
                             })
                             .catch(error => {
                                 console.error('Filter error:', error);
                                 if (tracksContainer) {
                                     tracksContainer.innerHTML = '<div class="wm_error"><?= __('Error loading tracks', 'wm-package'); ?></div>';
                                 }
+                                // Update reset button visibility even on error
+                                updateResetButtonVisibility();
                             });
                     }, 300);
                 }
@@ -898,18 +1261,11 @@ function wm_grid_track($atts)
                         }
 
                         const activityCategory = (hit.taxonomyActivities && hit.taxonomyActivities.length > 0) ? hit.taxonomyActivities[0] : '';
-                        const trackIdMatch = name.match(/^([A-Z]+\s+[A-Z0-9]+)/);
-                        const trackIdDisplay = trackIdMatch ? trackIdMatch[1] : '';
 
-                        // Build taxonomy display (category + track ID if available)
+                        // Build taxonomy display (only category, no track ID)
                         let taxonomyDisplay = '';
                         if (activityCategory) {
                             taxonomyDisplay = activityCategory;
-                            if (trackIdDisplay) {
-                                taxonomyDisplay += ' ' + trackIdDisplay;
-                            }
-                        } else if (trackIdDisplay) {
-                            taxonomyDisplay = trackIdDisplay;
                         }
 
                         html += '<div class="wm_grid_track_item">';
@@ -1030,7 +1386,6 @@ function wm_grid_track($atts)
                 <?php endif; ?>
 
                 // Dropdown filters - only attach listeners if elements exist
-                const whereFilter = document.getElementById('filter_region');
                 if (whereFilter) {
                     // Check if URL has where parameter and set filter accordingly
                     const whereParam = getUrlParameter('where');
@@ -1041,18 +1396,118 @@ function wm_grid_track($atts)
                             const optionValue = options[i].value;
                             if (optionValue && createSlug(optionValue) === whereParam) {
                                 whereFilter.value = optionValue;
+                                // Don't reset region filter - allow both to work together
+                                // If region is selected, keep it and update Where options
+                                const regionFilter = document.getElementById('filter_italian_region');
+                                if (regionFilter && regionFilter.value) {
+                                    // Keep region filter active, don't reset it
+                                    // Where options are already filtered for this region
+                                } else {
+                                    // No region selected, restore original Where options
+                                    updateWhereOptionsForRegion(null);
+                                }
+                                // Update URL with where parameter
+                                updateUrlWithWhere(createSlug(optionValue));
                                 // Trigger update to apply filter
                                 updateResults();
                                 break;
                             }
                         }
                     }
-                    whereFilter.addEventListener('change', updateResults);
+                    whereFilter.addEventListener('change', function() {
+                        const selectedWhere = this.value;
+                        // Don't reset region filter - allow both to work together
+                        // If region is selected, keep it active
+                        const regionFilter = document.getElementById('filter_italian_region');
+                        if (regionFilter && regionFilter.value) {
+                            // Region is selected, keep it active
+                            // Where options are already filtered for this region
+                        } else {
+                            // No region selected, restore original Where options
+                            updateWhereOptionsForRegion(null);
+                        }
+                        // Update URL with where parameter (keeping region if it exists)
+                        if (selectedWhere) {
+                            updateUrlWithWhere(createSlug(selectedWhere));
+                        } else {
+                            updateUrlWithWhere(null);
+                        }
+                        updateResults();
+                    });
                 }
+
+                // Italian Region filter - filters results using taxonomyWheres like Where filter
+                const regionFilter = document.getElementById('filter_italian_region');
+                if (regionFilter) {
+                    // Check if URL has region parameter and set filter accordingly
+                    const regionParam = getUrlParameter('region');
+                    if (regionParam) {
+                        // Find matching region by comparing slugs
+                        const options = regionFilter.options;
+                        for (let i = 0; i < options.length; i++) {
+                            const optionValue = options[i].value;
+                            if (optionValue && createSlug(optionValue) === regionParam) {
+                                regionFilter.value = optionValue;
+                                // Don't reset Where filter - allow both to work together
+                                // Update Where filter options for this region
+                                updateWhereOptionsForRegion(optionValue);
+                                // Trigger update to apply filter
+                                updateResults();
+                                break;
+                            }
+                        }
+                    }
+                    // Store previous region value to detect changes
+                    let previousRegionValue = regionFilter.value;
+                    
+                    regionFilter.addEventListener('change', function() {
+                        const selectedRegion = this.value;
+                        const regionChanged = (previousRegionValue !== selectedRegion);
+                        previousRegionValue = selectedRegion;
+                        
+                        // Update URL with region parameter
+                        updateUrlWithRegion(selectedRegion);
+                        
+                        // Update Where filter options for selected region (or restore if empty)
+                        if (selectedRegion) {
+                            // Update Where options for this region
+                            updateWhereOptionsForRegion(selectedRegion);
+                            // Reset Where filter when region changes (to start fresh)
+                            if (regionChanged && whereFilter) {
+                                whereFilter.value = '';
+                                updateUrlWithWhere(null);
+                            }
+                        } else {
+                            // Region deselected, restore original Where options
+                            updateWhereOptionsForRegion(null);
+                            // Reset Where filter when region is deselected
+                            if (whereFilter) {
+                                whereFilter.value = '';
+                                updateUrlWithWhere(null);
+                            }
+                        }
+                        // Update results to apply filter
+                        updateResults();
+                    });
+                }
+
                 const difficultyFilter = document.getElementById('filter_difficulty');
                 if (difficultyFilter) {
                     difficultyFilter.addEventListener('change', updateResults);
                 }
+
+                // Reset filters button
+                const resetFiltersButton = document.getElementById('wm_reset_filters');
+                if (resetFiltersButton) {
+                    resetFiltersButton.addEventListener('click', function() {
+                        resetAllFilters();
+                    });
+                }
+
+                // Initial check for reset button visibility (with small delay to ensure all filters are initialized)
+                setTimeout(function() {
+                    updateResetButtonVisibility();
+                }, 100);
             })();
         </script>
     <?php endif; ?>
