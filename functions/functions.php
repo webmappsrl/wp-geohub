@@ -372,9 +372,12 @@ function wm_package_enqueue_leaflet_map_script()
         return;
     }
 
+    // Get default image URL
+    $default_image_url = plugins_url('wm-package/assets/default_image.png');
+
     // Add inline script for Leaflet map initialization
     $script = "
-    function wmInitLeafletMap(mapElementId, geometryJson, relatedPoisJson) {
+    function wmInitLeafletMap(mapElementId, geometryJson, relatedPoisJson, defaultImageUrl) {
         var mapElement = document.getElementById(mapElementId);
         if (!mapElement || typeof L === 'undefined') {
             return;
@@ -382,6 +385,7 @@ function wm_package_enqueue_leaflet_map_script()
 
         var geometry = JSON.parse(geometryJson);
         var map = L.map(mapElement).setView([0, 0], 13);
+        var defaultImgUrl = defaultImageUrl || '" . esc_js($default_image_url) . "';
 
         L.tileLayer('https://api.webmapp.it/tiles/{z}/{x}/{y}.png', {
             attribution: '&copy; Webmapp &copy; OpenStreetMap',
@@ -394,6 +398,54 @@ function wm_package_enqueue_leaflet_map_script()
         // Add fullscreen control
         map.addControl(new L.control.fullscreen());
 
+        // Function to create custom POI marker with circle and image
+        function createPoiMarker(feature, latlng, defaultImg) {
+            var poiImage = null;
+            var properties = feature && feature.properties ? feature.properties : {};
+            
+            // Try to get featured image from various possible locations
+            if (properties.feature_image) {
+                if (properties.feature_image.sizes && properties.feature_image.sizes['1440x500']) {
+                    poiImage = properties.feature_image.sizes['1440x500'];
+                } else if (properties.feature_image.url) {
+                    poiImage = properties.feature_image.url;
+                } else if (properties.feature_image.thumbnail) {
+                    poiImage = properties.feature_image.thumbnail;
+                }
+            }
+            
+            // Try alternative property names
+            if (!poiImage && properties.featureImage && properties.featureImage.thumbnail) {
+                poiImage = properties.featureImage.thumbnail;
+            }
+            
+            // Use default image if no featured image found
+            if (!poiImage) {
+                poiImage = defaultImg;
+            }
+            
+            // If still no image, use classic marker
+            if (!poiImage) {
+                return L.marker(latlng);
+            }
+            
+            // Create custom div icon with circle and image
+            var iconHtml = '<div class=\"wm-poi-marker-circle\">' +
+                '<img src=\"' + poiImage + '\" alt=\"\" class=\"wm-poi-marker-image\" ' +
+                'onerror=\"this.onerror=null; this.src=\'' + (defaultImg || '') + '\';\" />' +
+                '</div>';
+            
+            var customIcon = L.divIcon({
+                className: 'wm-poi-custom-marker',
+                html: iconHtml,
+                iconSize: [40, 40],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, -20]
+            });
+            
+            return L.marker(latlng, { icon: customIcon });
+        }
+
         var bounds = null;
         var hasTrackPoint = false;
         var hasTrackBounds = false;
@@ -402,7 +454,28 @@ function wm_package_enqueue_leaflet_map_script()
             var lat = geometry.coordinates[1];
             var lng = geometry.coordinates[0];
             map.setView([lat, lng], 15);
-            L.marker([lat, lng]).addTo(map);
+            
+            // Check if this is a single POI page with image data
+            var poiImage = mapElement.getAttribute('data-poi-image');
+            if (poiImage) {
+                // Create custom marker for single POI
+                var poiFeature = {
+                    properties: {
+                        feature_image: {
+                            url: poiImage,
+                            sizes: {
+                                '1440x500': poiImage
+                            }
+                        }
+                    }
+                };
+                var customMarker = createPoiMarker(poiFeature, [lat, lng], defaultImgUrl);
+                customMarker.addTo(map);
+            } else {
+                // Use standard marker for track points
+                L.marker([lat, lng]).addTo(map);
+            }
+            
             bounds = L.latLngBounds([lat, lng]);
             hasTrackPoint = true;
         } else if (geometry.type === 'LineString' && geometry.coordinates) {
@@ -454,7 +527,7 @@ function wm_package_enqueue_leaflet_map_script()
             if (poiCollection && Array.isArray(poiCollection.features) && poiCollection.features.length) {
                 var poiLayer = L.geoJSON(poiCollection, {
                     pointToLayer: function(feature, latlng) {
-                        return L.marker(latlng);
+                        return createPoiMarker(feature, latlng, defaultImgUrl);
                     },
                     onEachFeature: function(feature, layer) {
                         var name = null;

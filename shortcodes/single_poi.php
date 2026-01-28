@@ -126,7 +126,9 @@ function wm_single_poi($atts)
 				<!-- 4. Map -->
 				<?php if (!empty($poi_geometry)) : ?>
 					<div class="wm_map">
-						<div id="wm-leaflet-map-poi-<?= esc_attr($poi_id) ?>" class="wm_leaflet_map" data-geometry='<?= esc_attr(json_encode($poi_geometry)) ?>'></div>
+						<div id="wm-leaflet-map-poi-<?= esc_attr($poi_id) ?>" class="wm_leaflet_map"
+							data-geometry='<?= esc_attr(json_encode($poi_geometry)) ?>'
+							data-poi-image='<?= esc_attr($featured_image) ?>'></div>
 					</div>
 				<?php endif; ?>
 
@@ -189,19 +191,33 @@ function wm_single_poi($atts)
 		<?php endif; ?>
 
 		<!-- 6. Gallery -->
-		<?php if (is_array($gallery) && !empty($gallery)) : ?>
+		<?php
+		// Filtra le immagini che hanno almeno url o thumbnail
+		$valid_gallery = [];
+		if (is_array($gallery) && !empty($gallery)) {
+			foreach ($gallery as $image) {
+				if ((isset($image['url']) && !empty($image['url'])) || (isset($image['thumbnail']) && !empty($image['thumbnail']))) {
+					$valid_gallery[] = $image;
+				}
+			}
+		}
+		if (!empty($valid_gallery)) : ?>
 			<div class="wm_gallery">
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-						<?php foreach ($gallery as $image) : ?>
+						<?php foreach ($valid_gallery as $image) : ?>
 							<div class="swiper-slide">
 								<?php
-								$thumbnail_url = isset($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
-								$high_res_url = isset($image['url']) ? esc_url($image['url']) : $thumbnail_url;
+								// Usa prima url (alta risoluzione), fallback a thumbnail
+								$high_res_url = isset($image['url']) && !empty($image['url']) ? esc_url($image['url']) : '';
+								$thumbnail_url = isset($image['thumbnail']) && !empty($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
+								$swiper_image_url = $high_res_url ?: $thumbnail_url;
+								// Per il lightbox usa sempre url se disponibile, altrimenti thumbnail
+								$lightbox_url = $high_res_url ?: $thumbnail_url;
 								$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
-								if ($thumbnail_url) : ?>
-									<a href="<?= esc_url($high_res_url) ?>" data-lightbox="poi-gallery" data-title="<?= esc_attr($caption) ?>">
-										<img src="<?= esc_url($thumbnail_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
+								if ($swiper_image_url) : ?>
+									<a href="<?= esc_url($lightbox_url) ?>" data-lightbox="poi-gallery" data-title="<?= esc_attr($caption) ?>">
+										<img src="<?= esc_url($swiper_image_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
 									</a>
 								<?php endif; ?>
 							</div>
@@ -239,7 +255,8 @@ function wm_single_poi($atts)
 				var mapElement = document.getElementById('wm-leaflet-map-poi-<?= esc_js($poi_id) ?>');
 				if (mapElement && typeof wmInitLeafletMap !== 'undefined') {
 					var geometryJson = mapElement.getAttribute('data-geometry');
-					wmInitLeafletMap('wm-leaflet-map-poi-<?= esc_js($poi_id) ?>', geometryJson);
+					var defaultImageUrl = '<?= esc_js($default_image) ?>';
+					wmInitLeafletMap('wm-leaflet-map-poi-<?= esc_js($poi_id) ?>', geometryJson, null, defaultImageUrl);
 				}
 			<?php endif; ?>
 		});

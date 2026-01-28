@@ -1051,3 +1051,35 @@
         align-self: stretch;
     }
 }
+
+/* Custom POI Markers - Circle with Image */
+.wm-poi-custom-marker {
+    background: transparent;
+    border: none;
+}
+
+.wm-poi-marker-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: #fff;
+    position: relative;
+    display: block;
+}
+
+.wm-poi-marker-image {
+    display: block;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+    object-position: center center;
+    transform: translate(-50%, -50%) scale(1.3);
+}

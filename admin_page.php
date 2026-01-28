@@ -462,7 +462,7 @@ function wm_settings_page()
 				</tr>
 			</table>
 
-			<h2><?php echo esc_html__('Track Navigation:', 'wm-package'); ?></h2>
+			<h2><?php echo esc_html__('Track Configuration:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
 					<th scope="row"><?php echo esc_html__('Enable Track Navigation', 'wm-package'); ?></th>
@@ -484,6 +484,18 @@ function wm_settings_page()
 							placeholder="<?php echo esc_attr__('e.g., 123,456,789', 'wm-package'); ?>" />
 						<p class="description">
 							<?php echo esc_html__('Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter.', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Download Track', 'wm-package'); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="track_download_enabled" value="1" <?php checked(get_option('track_download_enabled'), '1'); ?> />
+							<?php echo esc_html__('Enable GPX download button on single track pages', 'wm-package'); ?>
+						</label>
+						<p class="description">
+							<?php echo esc_html__('When enabled, a download button will appear on the map to allow users to download the track GPX file.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
@@ -559,6 +571,7 @@ function wm_settings_init()
 	register_setting('wm-settings', 'website_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'track_navigation_enabled', 'sanitize_text_field');
 	register_setting('wm-settings', 'track_navigation_layer_ids', 'sanitize_text_field');
+	register_setting('wm-settings', 'track_download_enabled', 'sanitize_text_field');
 }
 
 function wm_admin_footer()
@@ -987,4 +1000,5 @@ function wm_save_options()
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
 	update_option('track_navigation_enabled', isset($_POST['track_navigation_enabled']) ? '1' : '0');
 	update_option('track_navigation_layer_ids', sanitize_text_field($_POST['track_navigation_layer_ids'] ?? ''));
+	update_option('track_download_enabled', isset($_POST['track_download_enabled']) ? '1' : '0');
 }

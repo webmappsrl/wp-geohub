@@ -111,9 +111,9 @@ function wm_single_track($atts)
 
 		// Extract not_accessible_message if track is not accessible
 		if (!empty($track['not_accessible']) && !empty($track['not_accessible_message'])) {
-			$not_accessible_message = $track['not_accessible_message'][$language] ?? 
-				$track['not_accessible_message']['it'] ?? 
-				$track['not_accessible_message']['en'] ?? 
+			$not_accessible_message = $track['not_accessible_message'][$language] ??
+				$track['not_accessible_message']['it'] ??
+				$track['not_accessible_message']['en'] ??
 				null;
 			// Fallback: get first available translation
 			if (empty($not_accessible_message) && is_array($track['not_accessible_message'])) {
@@ -176,9 +176,10 @@ function wm_single_track($atts)
 							id="wm-leaflet-map-track-<?= esc_attr($track_id) ?>"
 							class="wm_leaflet_map"
 							data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'
-							data-related-pois='<?= esc_attr(wp_json_encode($related_pois)) ?>'
-						></div>
-						<?php if (!empty($gpx)) : ?>
+							data-related-pois='<?= esc_attr(wp_json_encode($related_pois)) ?>'></div>
+						<?php
+						$download_enabled = get_option('track_download_enabled') === '1';
+						if ($download_enabled && !empty($gpx)) : ?>
 							<div class="wm_download_links wm_download_links--map">
 								<a class="wm_download_link" href="<?= esc_url($gpx) ?>">
 									<i class="fa fa-download"></i>
@@ -201,17 +202,17 @@ function wm_single_track($atts)
 								</div>
 							<?php endif; ?>
 
-							<?php if (isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('Duration Backward', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
-								</div>
-							<?php endif; ?>
-
 							<?php if (isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) : ?>
 								<div class="wm_technical_detail_item">
 									<span class="wm_technical_detail_label"><?= __('Duration Forward', 'wm-package') ?>:</span>
 									<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward']) ?> <?= __('min', 'wm-package') ?></span>
+								</div>
+							<?php endif; ?>
+
+							<?php if (isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
+								<div class="wm_technical_detail_item">
+									<span class="wm_technical_detail_label"><?= __('Duration Backward', 'wm-package') ?>:</span>
+									<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
 								</div>
 							<?php endif; ?>
 
@@ -256,19 +257,33 @@ function wm_single_track($atts)
 		<?php endif; ?>
 
 		<!-- 6. Gallery -->
-		<?php if (is_array($gallery) && !empty($gallery)) : ?>
+		<?php
+		// Filtra le immagini che hanno almeno url o thumbnail
+		$valid_gallery = [];
+		if (is_array($gallery) && !empty($gallery)) {
+			foreach ($gallery as $image) {
+				if ((isset($image['url']) && !empty($image['url'])) || (isset($image['thumbnail']) && !empty($image['thumbnail']))) {
+					$valid_gallery[] = $image;
+				}
+			}
+		}
+		if (!empty($valid_gallery)) : ?>
 			<div class="wm_gallery">
 				<div class="swiper-container wm_swiper">
 					<div class="swiper-wrapper">
-						<?php foreach ($gallery as $image) : ?>
+						<?php foreach ($valid_gallery as $image) : ?>
 							<div class="swiper-slide">
 								<?php
-								$thumbnail_url = isset($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
-								$high_res_url = isset($image['url']) ? esc_url($image['url']) : $thumbnail_url;
+								// Usa prima url (alta risoluzione), fallback a thumbnail
+								$high_res_url = isset($image['url']) && !empty($image['url']) ? esc_url($image['url']) : '';
+								$thumbnail_url = isset($image['thumbnail']) && !empty($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
+								$swiper_image_url = $high_res_url ?: $thumbnail_url;
+								// Per il lightbox usa sempre url se disponibile, altrimenti thumbnail
+								$lightbox_url = $high_res_url ?: $thumbnail_url;
 								$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
-								if ($thumbnail_url) : ?>
-									<a href="<?= esc_url($high_res_url) ?>" data-lightbox="track-gallery" data-title="<?= esc_attr($caption) ?>">
-										<img src="<?= esc_url($thumbnail_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
+								if ($swiper_image_url) : ?>
+									<a href="<?= esc_url($lightbox_url) ?>" data-lightbox="track-gallery" data-title="<?= esc_attr($caption) ?>">
+										<img src="<?= esc_url($swiper_image_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
 									</a>
 								<?php endif; ?>
 							</div>
@@ -551,7 +566,8 @@ function wm_single_track($atts)
 				if (mapElement && typeof wmInitLeafletMap !== 'undefined') {
 					var geometryJson = mapElement.getAttribute('data-geometry');
 					var relatedPoisJson = mapElement.getAttribute('data-related-pois');
-					wmInitLeafletMap('wm-leaflet-map-track-<?= esc_js($track_id) ?>', geometryJson, relatedPoisJson);
+					var defaultImageUrl = '<?= esc_js($default_image) ?>';
+					wmInitLeafletMap('wm-leaflet-map-track-<?= esc_js($track_id) ?>', geometryJson, relatedPoisJson, defaultImageUrl);
 				}
 			<?php endif; ?>
 		});
