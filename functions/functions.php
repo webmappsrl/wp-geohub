@@ -737,3 +737,77 @@ function wm_render_svg_icon($svg_code)
     // Use wp_kses to filter SVG code
     return wp_kses($svg_code, $allowed_svg_tags);
 }
+
+/**
+ * Get WM default configuration from JSON file with dynamic ID
+ * The 'id' field is always updated with the current app_configuration_id from WordPress options
+ * 
+ * @return array|false Configuration array or false on error
+ */
+function wm_get_default_config()
+{
+    $config_file = plugin_dir_path(dirname(__FILE__)) . 'config/wm_default_config.json';
+
+    if (!file_exists($config_file)) {
+        return false;
+    }
+
+    $config_content = file_get_contents($config_file);
+    if ($config_content === false) {
+        return false;
+    }
+
+    $config = json_decode($config_content, true);
+    if ($config === null || !isset($config['WM_PLUGIN'])) {
+        return false;
+    }
+
+    // Get the current app_configuration_id from WordPress options
+    $app_id = get_option('app_configuration_id');
+    if (!is_numeric($app_id) || empty($app_id)) {
+        $app_id = '49'; // Default fallback
+    }
+
+    // Update the id field dynamically
+    $config['WM_PLUGIN']['id'] = (int) $app_id;
+
+    return $config;
+}
+
+/**
+ * Update the ID field in wm_default_config.json file
+ * Called when app_configuration_id is saved in admin_page.php
+ * 
+ * @param int|string $app_id The app configuration ID to save
+ * @return bool True on success, false on failure
+ */
+function wm_update_config_id($app_id)
+{
+    $config_file = plugin_dir_path(dirname(__FILE__)) . 'config/wm_default_config.json';
+
+    if (!file_exists($config_file)) {
+        return false;
+    }
+
+    $config_content = file_get_contents($config_file);
+    if ($config_content === false) {
+        return false;
+    }
+
+    $config = json_decode($config_content, true);
+    if ($config === null || !isset($config['WM_PLUGIN'])) {
+        return false;
+    }
+
+    // Update the id field
+    $config['WM_PLUGIN']['id'] = (int) $app_id;
+
+    // Write back to file with pretty print
+    $updated_content = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    if ($updated_content === false) {
+        return false;
+    }
+
+    $result = file_put_contents($config_file, $updated_content);
+    return $result !== false;
+}

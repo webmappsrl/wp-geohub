@@ -197,6 +197,11 @@ function wm_settings_page()
 		$app_id = '49';
 	}
 
+	// Ensure the config JSON file has the correct ID value
+	if (function_exists('wm_update_config_id')) {
+		wm_update_config_id($app_id);
+	}
+
 	$shard = get_option('wm_shard');
 	if (empty($shard)) {
 		$shard = 'geohub';
@@ -462,45 +467,70 @@ function wm_settings_page()
 				</tr>
 			</table>
 
-			<h2><?php echo esc_html__('Track Configuration:', 'wm-package'); ?></h2>
-			<table class="form-table" style="margin-left: 30px;">
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Enable Track Navigation', 'wm-package'); ?></th>
-					<td>
-						<label>
-							<input type="checkbox" name="track_navigation_enabled" value="1" <?php checked(get_option('track_navigation_enabled'), '1'); ?> />
-							<?php echo esc_html__('Enable navigation buttons (Previous/Next) on single track pages', 'wm-package'); ?>
-						</label>
-						<p class="description">
-							<?php echo esc_html__('When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Default Layer IDs for Navigation', 'wm-package'); ?></th>
-					<td>
-						<input type="text" size="50" name="track_navigation_layer_ids"
-							value="<?php echo esc_attr(get_option('track_navigation_layer_ids')); ?>"
-							placeholder="<?php echo esc_attr__('e.g., 123,456,789', 'wm-package'); ?>" />
-						<p class="description">
-							<?php echo esc_html__('Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Download Track', 'wm-package'); ?></th>
-					<td>
-						<label>
-							<input type="checkbox" name="track_download_enabled" value="1" <?php checked(get_option('track_download_enabled'), '1'); ?> />
-							<?php echo esc_html__('Enable GPX download button on single track pages', 'wm-package'); ?>
-						</label>
-						<p class="description">
-							<?php echo esc_html__('When enabled, a download button will appear on the map to allow users to download the track GPX file.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-			</table>
+			<?php
+			// Check config JSON values to determine which fields to show
+			$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+			$generate_edges_enabled = false;
+			$download_track_enabled = false;
 
+			if ($config) {
+				if (isset($config['WM_PLUGIN']['generate_edges'])) {
+					$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+				}
+				if (isset($config['WM_PLUGIN']['download_track_enable'])) {
+					$download_track_enabled = (bool) $config['WM_PLUGIN']['download_track_enable'];
+				}
+			}
+
+			// Only show "Track Configuration" section if at least one field is enabled
+			if ($generate_edges_enabled || $download_track_enabled) : ?>
+				<h2><?php echo esc_html__('Track Configuration:', 'wm-package'); ?></h2>
+				<table class="form-table" style="margin-left: 30px;">
+					<?php
+					// Only show navigation fields if generate_edges is enabled in config JSON
+					if ($generate_edges_enabled) : ?>
+						<tr valign="top">
+							<th scope="row"><?php echo esc_html__('Enable Track Navigation', 'wm-package'); ?></th>
+							<td>
+								<label>
+									<input type="checkbox" name="track_navigation_enabled" value="1" checked disabled />
+									<?php echo esc_html__('Enabled', 'wm-package'); ?>
+								</label>
+								<p class="description">
+									<?php echo esc_html__('When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks.', 'wm-package'); ?>
+								</p>
+							</td>
+						</tr>
+						<tr valign="top">
+							<th scope="row"><?php echo esc_html__('Default Layer IDs for Navigation', 'wm-package'); ?></th>
+							<td>
+								<input type="text" size="50" name="track_navigation_layer_ids"
+									value="<?php echo esc_attr(get_option('track_navigation_layer_ids')); ?>"
+									placeholder="<?php echo esc_attr__('e.g., 123,456,789', 'wm-package'); ?>" />
+								<p class="description">
+									<?php echo esc_html__('Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter.', 'wm-package'); ?>
+								</p>
+							</td>
+						</tr>
+					<?php endif; ?>
+					<?php
+					// Only show this field if enabled in config JSON
+					if ($download_track_enabled) : ?>
+						<tr valign="top">
+							<th scope="row"><?php echo esc_html__('Download Track', 'wm-package'); ?></th>
+							<td>
+								<label>
+									<input type="checkbox" name="track_download_enabled" value="1" checked disabled />
+									<?php echo esc_html__('Enabled', 'wm-package'); ?>
+								</label>
+								<p class="description">
+									<?php echo esc_html__('When enabled, a download button will appear on the map to allow users to download the track GPX file.', 'wm-package'); ?>
+								</p>
+							</td>
+						</tr>
+					<?php endif; ?>
+				</table>
+			<?php endif; ?>
 
 			<h2><?php echo esc_html__('Import and Sync:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
@@ -569,9 +599,17 @@ function wm_settings_init()
 	register_setting('wm-settings', 'ios_app_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'android_app_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'website_url', 'sanitize_text_field');
-	register_setting('wm-settings', 'track_navigation_enabled', 'sanitize_text_field');
-	register_setting('wm-settings', 'track_navigation_layer_ids', 'sanitize_text_field');
-	register_setting('wm-settings', 'track_download_enabled', 'sanitize_text_field');
+	// track_navigation fields are only shown if generate_edges is enabled in wm_default_config.json
+	$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+	$generate_edges_enabled = false;
+	if ($config && isset($config['WM_PLUGIN']['generate_edges'])) {
+		$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+	}
+	if ($generate_edges_enabled) {
+		// track_navigation_enabled is now controlled by wm_default_config.json (generate_edges), not WordPress options
+		register_setting('wm-settings', 'track_navigation_layer_ids', 'sanitize_text_field');
+	}
+	// track_download_enabled is now controlled by wm_default_config.json, not WordPress options
 }
 
 function wm_admin_footer()
@@ -992,13 +1030,29 @@ function wm_save_options()
 	update_option('taxonomy_track_shortcode', sanitize_text_field($_POST['taxonomy_track_shortcode']));
 	update_option('taxonomy_poi_shortcode', sanitize_text_field($_POST['taxonomy_poi_shortcode']));
 	update_option('app_configuration_id', $app_id);
+
+	// Update the ID field in wm_default_config.json dynamically
+	if (function_exists('wm_update_config_id')) {
+		wm_update_config_id($app_id);
+	}
+
 	update_option('layer_api', $api_urls['layer_api']);
 	update_option('poi_type_api', $api_urls['poi_type_api']);
 	update_option('elastic_api', $api_urls['elastic_api']);
 	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
 	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
-	update_option('track_navigation_enabled', isset($_POST['track_navigation_enabled']) ? '1' : '0');
-	update_option('track_navigation_layer_ids', sanitize_text_field($_POST['track_navigation_layer_ids'] ?? ''));
-	update_option('track_download_enabled', isset($_POST['track_download_enabled']) ? '1' : '0');
+
+	// Only save track_navigation_layer_ids if generate_edges is enabled in config JSON
+	// track_navigation_enabled is now controlled by wm_default_config.json (generate_edges), not WordPress options
+	$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+	$generate_edges_enabled = false;
+	if ($config && isset($config['WM_PLUGIN']['generate_edges'])) {
+		$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+	}
+	if ($generate_edges_enabled) {
+		update_option('track_navigation_layer_ids', sanitize_text_field($_POST['track_navigation_layer_ids'] ?? ''));
+	}
+
+	// track_download_enabled is now controlled by wm_default_config.json, not WordPress options
 }

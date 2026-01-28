@@ -178,7 +178,14 @@ function wm_single_track($atts)
 							data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'
 							data-related-pois='<?= esc_attr(wp_json_encode($related_pois)) ?>'></div>
 						<?php
-						$download_enabled = get_option('track_download_enabled') === '1';
+						// Get download_track_enable from config JSON
+						$download_enabled = false;
+						if (function_exists('wm_get_default_config')) {
+							$config = wm_get_default_config();
+							if ($config && isset($config['WM_PLUGIN']['download_track_enable'])) {
+								$download_enabled = (bool) $config['WM_PLUGIN']['download_track_enable'];
+							}
+						}
 						if ($download_enabled && !empty($gpx)) : ?>
 							<div class="wm_download_links wm_download_links--map">
 								<a class="wm_download_link" href="<?= esc_url($gpx) ?>">
@@ -191,60 +198,120 @@ function wm_single_track($atts)
 				<?php endif; ?>
 
 				<!-- 4.5. Technical Details -->
-				<?php if (!empty($dem_data) && is_array($dem_data)) : ?>
-					<div class="wm_technical_details">
-						<h2 class="wm_technical_details_title"><?= __('Technical Details', 'wm-package') ?></h2>
-						<div class="wm_technical_details_grid">
-							<?php if (isset($dem_data['distance']) && $dem_data['distance'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('Distance', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> km</span>
-								</div>
-							<?php endif; ?>
+				<?php if (!empty($dem_data) && is_array($dem_data)) :
+					// Get config JSON values for technical details visibility
+					$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+					$show_distance = true;
+					$show_duration_forward = true;
+					$show_duration_backward = true;
+					$show_ascent = true;
+					$show_descent = true;
+					$show_ele_from = true;
+					$show_ele_to = true;
 
-							<?php if (isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('Duration Forward', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward']) ?> <?= __('min', 'wm-package') ?></span>
-								</div>
-							<?php endif; ?>
+					if ($config && isset($config['WM_PLUGIN'])) {
+						if (isset($config['WM_PLUGIN']['showDistance'])) {
+							$show_distance = (bool) $config['WM_PLUGIN']['showDistance'];
+						}
+						if (isset($config['WM_PLUGIN']['showDurationForward'])) {
+							$show_duration_forward = (bool) $config['WM_PLUGIN']['showDurationForward'];
+						}
+						if (isset($config['WM_PLUGIN']['showDurationBackward'])) {
+							$show_duration_backward = (bool) $config['WM_PLUGIN']['showDurationBackward'];
+						}
+						if (isset($config['WM_PLUGIN']['showAscent'])) {
+							$show_ascent = (bool) $config['WM_PLUGIN']['showAscent'];
+						}
+						if (isset($config['WM_PLUGIN']['showDescent'])) {
+							$show_descent = (bool) $config['WM_PLUGIN']['showDescent'];
+						}
+						if (isset($config['WM_PLUGIN']['showEleFrom'])) {
+							$show_ele_from = (bool) $config['WM_PLUGIN']['showEleFrom'];
+						}
+						if (isset($config['WM_PLUGIN']['showEleTo'])) {
+							$show_ele_to = (bool) $config['WM_PLUGIN']['showEleTo'];
+						}
+					}
 
-							<?php if (isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('Duration Backward', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
-								</div>
-							<?php endif; ?>
+					// Check if at least one technical detail should be shown
+					$has_visible_details = false;
+					if ($show_distance && isset($dem_data['distance']) && $dem_data['distance'] !== null) {
+						$has_visible_details = true;
+					}
+					if ($show_duration_forward && isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) {
+						$has_visible_details = true;
+					}
+					if ($show_duration_backward && isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) {
+						$has_visible_details = true;
+					}
+					if ($show_ascent && isset($dem_data['ascent']) && $dem_data['ascent'] !== null) {
+						$has_visible_details = true;
+					}
+					if ($show_descent && isset($dem_data['descent']) && $dem_data['descent'] !== null) {
+						$has_visible_details = true;
+					}
+					if ($show_ele_from && isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) {
+						$has_visible_details = true;
+					}
+					if ($show_ele_to && isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) {
+						$has_visible_details = true;
+					}
 
-							<?php if (isset($dem_data['ascent']) && $dem_data['ascent'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('Ascent', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html($dem_data['ascent']) ?> m</span>
-								</div>
-							<?php endif; ?>
+					if ($has_visible_details) : ?>
+						<div class="wm_technical_details">
+							<h2 class="wm_technical_details_title"><?= __('Technical Details', 'wm-package') ?></h2>
+							<div class="wm_technical_details_grid">
+								<?php if ($show_distance && isset($dem_data['distance']) && $dem_data['distance'] !== null) : ?>
+									<div class="wm_technical_detail_item">
+										<span class="wm_technical_detail_label"><?= __('Distance', 'wm-package') ?>:</span>
+										<span class="wm_technical_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> km</span>
+									</div>
+								<?php endif; ?>
 
-							<?php if (isset($dem_data['descent']) && $dem_data['descent'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('Descent', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html($dem_data['descent']) ?> m</span>
-								</div>
-							<?php endif; ?>
+								<?php if ($show_duration_forward && isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) : ?>
+									<div class="wm_technical_detail_item">
+										<span class="wm_technical_detail_label"><?= __('Duration Forward', 'wm-package') ?>:</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_forward']) ?> <?= __('min', 'wm-package') ?></span>
+									</div>
+								<?php endif; ?>
 
-							<?php if (isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('Start Elevation', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_from']) ?> m</span>
-								</div>
-							<?php endif; ?>
+								<?php if ($show_duration_backward && isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
+									<div class="wm_technical_detail_item">
+										<span class="wm_technical_detail_label"><?= __('Duration Backward', 'wm-package') ?>:</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
+									</div>
+								<?php endif; ?>
 
-							<?php if (isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) : ?>
-								<div class="wm_technical_detail_item">
-									<span class="wm_technical_detail_label"><?= __('End Elevation', 'wm-package') ?>:</span>
-									<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_to']) ?> m</span>
-								</div>
-							<?php endif; ?>
+								<?php if ($show_ascent && isset($dem_data['ascent']) && $dem_data['ascent'] !== null) : ?>
+									<div class="wm_technical_detail_item">
+										<span class="wm_technical_detail_label"><?= __('Ascent', 'wm-package') ?>:</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ascent']) ?> m</span>
+									</div>
+								<?php endif; ?>
+
+								<?php if ($show_descent && isset($dem_data['descent']) && $dem_data['descent'] !== null) : ?>
+									<div class="wm_technical_detail_item">
+										<span class="wm_technical_detail_label"><?= __('Descent', 'wm-package') ?>:</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['descent']) ?> m</span>
+									</div>
+								<?php endif; ?>
+
+								<?php if ($show_ele_from && isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) : ?>
+									<div class="wm_technical_detail_item">
+										<span class="wm_technical_detail_label"><?= __('Start Elevation', 'wm-package') ?>:</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_from']) ?> m</span>
+									</div>
+								<?php endif; ?>
+
+								<?php if ($show_ele_to && isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) : ?>
+									<div class="wm_technical_detail_item">
+										<span class="wm_technical_detail_label"><?= __('End Elevation', 'wm-package') ?>:</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_to']) ?> m</span>
+									</div>
+								<?php endif; ?>
+							</div>
 						</div>
-					</div>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
@@ -370,8 +437,18 @@ function wm_single_track($atts)
 
 		<!-- 8. Track Navigation -->
 		<?php
-		$navigation_enabled = get_option('track_navigation_enabled') === '1';
-		if ($navigation_enabled) {
+		// Get generate_edges from config JSON to determine if navigation should be enabled
+		// track_navigation_enabled is now controlled by generate_edges in wm_default_config.json
+		$generate_edges_enabled = false;
+		if (function_exists('wm_get_default_config')) {
+			$config = wm_get_default_config();
+			if ($config && isset($config['WM_PLUGIN']['generate_edges'])) {
+				$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+			}
+		}
+
+		// Only show navigation if generate_edges is enabled in config JSON
+		if ($generate_edges_enabled) {
 			// Get layer IDs from shortcode parameter or admin option
 			$nav_layer_ids = !empty($layer_ids) ? $layer_ids : get_option('track_navigation_layer_ids');
 
