@@ -1,0 +1,540 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: wm-package\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language:it\n"
+"MIME-Version: 1.0\n"
+
+msgid "Address"
+msgstr "Indirizzo"
+
+msgid "Phone"
+msgstr "Telefono"
+
+msgid "Related Links"
+msgstr "Link correlati"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Contact Information"
+msgstr "Informazioni di contatto"
+
+msgid "Related POIs"
+msgstr "POI correlati"
+
+msgid "Download GPX"
+msgstr "Scarica GPX"
+
+msgid "No tracks found"
+msgstr "Nessun sentiero trovato"
+
+msgid "Error loading tracks"
+msgstr "Errore nel caricamento dei sentieri"
+
+msgid "Loading..."
+msgstr "Caricamento..."
+
+msgid "Go to track"
+msgstr "Vai al sentiero"
+
+msgid "m"
+msgstr "m"
+
+msgid "Elevation gain +"
+msgstr "Dislivello positivo +"
+
+msgid "Expert hiker with equipment"
+msgstr "Escursionista esperto con attrezzatura"
+
+msgid "Expert hiker"
+msgstr "Escursionista esperto"
+
+msgid "Hiker"
+msgstr "Escursionista"
+
+msgid "Tourist"
+msgstr "Turista"
+
+msgid "Select difficulty"
+msgstr "Seleziona difficoltà"
+
+msgid "Difficulty"
+msgstr "Difficoltà"
+
+msgid "km"
+msgstr "km"
+
+msgid "Length"
+msgstr "Lunghezza"
+
+msgid "Next"
+msgstr "Successivo"
+
+msgid "Previous"
+msgstr "Precedente"
+
+msgid "No"
+msgstr "No"
+
+msgid "min"
+msgstr "min"
+
+msgid "Yes"
+msgstr "Si"
+
+msgid "Round Trip"
+msgstr "Anello"
+
+msgid "Duration Backward"
+msgstr "Durata ritorno"
+
+msgid "Duration Forward"
+msgstr "Durata andata"
+
+msgid "Duration Backward (Bike)"
+msgstr "Durata ritorno (bici)"
+
+msgid "Duration Forward (Bike)"
+msgstr "Durata andata (bici)"
+
+msgid "Duration Backward (Hiking)"
+msgstr "Durata ritorno (escursionismo)"
+
+msgid "Duration Forward (Hiking)"
+msgstr "Durata andata (escursionismo)"
+
+msgid "Descent"
+msgstr "Dislivello negativo"
+
+msgid "Ascent"
+msgstr "Dislivello positivo"
+
+msgid "End Elevation"
+msgstr "Quota di arrivo"
+
+msgid "Start Elevation"
+msgstr "Quota di partenza"
+
+msgid "Max Elevation"
+msgstr "Quota massima"
+
+msgid "Min Elevation"
+msgstr "Quota minima"
+
+msgid "Distance"
+msgstr "Distanza"
+
+msgid "Technical Details"
+msgstr "Dettagli tecnici"
+
+# Admin / Dashboard
+msgid "WM Package Settings"
+msgstr "Impostazioni WM Package"
+
+msgid "WM Package"
+msgstr "WM Package"
+
+msgid "No file uploaded or invalid file."
+msgstr "Nessun file caricato o file non valido."
+
+msgid "File must be in PNG format. Current format not allowed."
+msgstr "Il file deve essere in formato PNG. Formato attuale non consentito."
+
+msgid "Extension not allowed. Use .png files only."
+msgstr "Estensione non consentita. Usare solo file .png."
+
+msgid "The file is not a valid PNG image."
+msgstr "Il file non è un'immagine PNG valida."
+
+msgid "The file must be a valid PNG."
+msgstr "Il file deve essere un PNG valido."
+
+msgid "Maximum dimensions allowed: %1$d×%2$d pixels."
+msgstr "Dimensioni massime consentite: %1$d×%2$d pixel."
+
+msgid "Unauthorized"
+msgstr "Non autorizzato"
+
+msgid "Shards configuration refreshed successfully"
+msgstr "Configurazione shards aggiornata con successo"
+
+msgid "Failed to refresh shards configuration"
+msgstr "Impossibile aggiornare la configurazione shards"
+
+msgid "Shard and APP ID must be set."
+msgstr "Shard e APP ID devono essere impostati."
+
+msgid "Config API helpers not available."
+msgstr "Helper Config API non disponibili."
+
+msgid "Could not build config API URL for this shard."
+msgstr "Impossibile costruire l'URL Config API per questo shard."
+
+msgid "Config updated from API (WORDPRESS/APP merged with local when present)."
+msgstr "Config aggiornato dall'API (WORDPRESS/APP unito al locale se presente)."
+
+msgid "Using local config (API unavailable or invalid response)."
+msgstr "Uso config locale (API non disponibile o risposta non valida)."
+
+msgid "Security verification failed. Please try again."
+msgstr "Verifica di sicurezza fallita. Riprova."
+
+msgid "The plugin assets folder is not writable."
+msgstr "La cartella assets del plugin non è scrivibile."
+
+msgid "Unable to replace the default image."
+msgstr "Impossibile sostituire l'immagine predefinita."
+
+msgid "Default image updated successfully."
+msgstr "Immagine predefinita aggiornata con successo."
+
+msgid "WM Icon"
+msgstr "Icona WM"
+
+msgid "Do not close this page while it is loading"
+msgstr "Non chiudere questa pagina durante il caricamento"
+
+msgid "Processing..."
+msgstr "Elaborazione in corso..."
+
+msgid "Please do not close or reload this page while the operation is in progress."
+msgstr "Non chiudere o ricaricare questa pagina mentre l'operazione è in corso."
+
+msgid "Backend Configuration:"
+msgstr "Configurazione backend:"
+
+msgid "Shard"
+msgstr "Shard"
+
+msgid "Refresh Shards"
+msgstr "Aggiorna Shards"
+
+msgid "Refresh Config API"
+msgstr "Aggiorna Config API"
+
+msgid "Select the backend shard from which data will be retrieved."
+msgstr "Seleziona lo shard backend da cui recuperare i dati."
+
+msgid "Configuration from:"
+msgstr "Configurazione da:"
+
+msgid "Available shards:"
+msgstr "Shards disponibili:"
+
+msgid "(cached for 24 hours)"
+msgstr "(in cache per 24 ore)"
+
+msgid "APP ID"
+msgstr "APP ID"
+
+msgid "This APP ID refers to the ID of the app on the backend."
+msgstr "Questo APP ID si riferisce all'ID dell'app sul backend."
+
+msgid "APIs:"
+msgstr "API:"
+
+msgid "Tracks list API"
+msgstr "API elenco tracce"
+
+msgid "API endpoint used to retrieve the list of tracks for a specific app."
+msgstr "Endpoint API per recuperare l'elenco delle tracce di un'app specifica."
+
+msgid "Layer API"
+msgstr "API Layer"
+
+msgid "API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays."
+msgstr "Endpoint API per recuperare informazioni sui layer inclusi tracce, metadati e contenuti per le griglie."
+
+msgid "Single Track API"
+msgstr "API singola traccia"
+
+msgid "API endpoint used to retrieve detailed information for a single track by ID."
+msgstr "Endpoint API per recuperare i dettagli di una singola traccia tramite ID."
+
+msgid "POI API"
+msgstr "API POI"
+
+msgid "API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app."
+msgstr "Endpoint API per recuperare i dati dei POI in formato GeoJSON per un'app specifica."
+
+msgid "POI Type API"
+msgstr "API tipi POI"
+
+msgid "API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest."
+msgstr "Endpoint API per le tassonomie dei tipi POI per filtrare e categorizzare i POI."
+
+msgid "Elasticsearch API"
+msgstr "API Elasticsearch"
+
+msgid "Elasticsearch API used for advanced track filtering and search in grid views."
+msgstr "API Elasticsearch per filtri avanzati e ricerca nelle griglie."
+
+msgid "Config API"
+msgstr "Config API"
+
+msgid "Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when \"Refresh Config API\" is used."
+msgstr "Config JSON per questa app (shard + APP ID). Fonte per le opzioni WORDPRESS/APP quando si usa \"Aggiorna Config API\"."
+
+msgid "Links:"
+msgstr "Link:"
+
+msgid "Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect."
+msgstr "Configura gli URL per il redirect dinamico: su desktop si apre l'URL del sito, su iOS l'URL App iOS (App Store), su Android l'URL App Android (Play Store). Aggiungi la classe CSS sotto a qualsiasi elemento per abilitare il redirect."
+
+msgid "Webapp URL"
+msgstr "URL Webapp"
+
+msgid "URL that display the Website version of the map"
+msgstr "URL che mostra la versione web della mappa"
+
+msgid "iOS App URL"
+msgstr "URL App iOS"
+
+msgid "URL that display the Mobile version of the map for iOS"
+msgstr "URL che mostra la versione mobile della mappa per iOS"
+
+msgid "Android App URL"
+msgstr "URL App Android"
+
+msgid "URL that display the Mobile version of the map for Android"
+msgstr "URL che mostra la versione mobile della mappa per Android"
+
+msgid "CSS class for redirect"
+msgstr "Classe CSS per il redirect"
+
+msgid "Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in \"CSS Classes\"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab."
+msgstr "Aggiungi questa classe a qualsiasi elemento per abilitare il redirect agli URL sopra (in base al dispositivo). Puoi usarla su: voce di menu (es. in Aspetto → Menu, in \"Classi CSS\"), su un link, su un pulsante o su un contenitore che avvolge un link. Il link si apre in una nuova scheda."
+
+msgid "Default image"
+msgstr "Immagine predefinita"
+
+msgid "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
+msgstr "Immagine usata per tracce e POI quando non c'è una foto. Formato consentito: PNG. Consigliato: quadrata, max 1024×1024 px."
+
+msgid "Current image"
+msgstr "Immagine attuale"
+
+msgid "View current image"
+msgstr "Visualizza immagine attuale"
+
+msgid "Opens the image currently used for tracks and POIs in a new tab."
+msgstr "Apre in una nuova scheda l'immagine attualmente usata per tracce e POI."
+
+msgid "Example image"
+msgstr "Immagine di esempio"
+
+msgid "View example image"
+msgstr "Visualizza immagine di esempio"
+
+msgid "Reference image."
+msgstr "Immagine di riferimento."
+
+msgid "Upload new image"
+msgstr "Carica nuova immagine"
+
+msgid "Replace default image"
+msgstr "Sostituisci immagine predefinita"
+
+msgid "PNG files only. The image will replace the current one."
+msgstr "Solo file PNG. L'immagine sostituirà quella attuale."
+
+msgid "Short codes:"
+msgstr "Shortcode:"
+
+msgid "Track page:"
+msgstr "Pagina traccia:"
+
+msgid "Shortcode to display a single track with full details, map, and related POIs."
+msgstr "Shortcode per mostrare una singola traccia con dettagli, mappa e POI correlati."
+
+msgid "Parameters:"
+msgstr "Parametri:"
+
+msgid "(Required) The ID of the track to display."
+msgstr "(Obbligatorio) ID della traccia da mostrare."
+
+msgid "(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons)."
+msgstr "(Opzionale) Elenco di ID layer separati da virgola per la navigazione tra tracce (pulsanti Precedente/Successivo)."
+
+msgid "POI page:"
+msgstr "Pagina POI:"
+
+msgid "Shortcode to display a single Point of Interest (POI) with full details and map location."
+msgstr "Shortcode per mostrare un singolo POI con dettagli e posizione sulla mappa."
+
+msgid "(Required) The ID of the POI to display."
+msgstr "(Obbligatorio) ID del POI da mostrare."
+
+msgid "Grid Tracks page:"
+msgstr "Pagina griglia tracce:"
+
+msgid "Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering."
+msgstr "Shortcode per una griglia di tracce con filtri opzionali (distanza, regione, difficoltà, dislivello). Usa l'API Elasticsearch per filtri avanzati."
+
+msgid "(Optional) ID of a single layer to display tracks from."
+msgstr "(Opzionale) ID di un singolo layer da cui mostrare le tracce."
+
+msgid "(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided."
+msgstr "(Opzionale) Elenco di ID layer separati da virgola. Ha priorità su layer_id se sono forniti entrambi."
+
+msgid "(Optional) Maximum number of tracks to display. Default: -1 (unlimited)."
+msgstr "(Opzionale) Numero massimo di tracce da mostrare. Predefinito: -1 (illimitato)."
+
+msgid "(Optional) Display tracks in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Opzionale) Mostra le tracce in ordine casuale. Valori: \"true\" o \"false\". Predefinito: \"false\"."
+
+msgid "(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false."
+msgstr "(Opzionale) Mostra contenuto del layer (titolo, sottotitolo, descrizione, immagine in evidenza). Valori: true/false. Predefinito: false."
+
+msgid "(Optional) Use Elasticsearch API for advanced filtering. Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Opzionale) Usa API Elasticsearch per filtri avanzati. Valori: \"true\" o \"false\". Predefinito: \"true\"."
+
+msgid "(Optional) Show filter interface (distance, region, difficulty, elevation). Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Opzionale) Mostra interfaccia filtri (distanza, regione, difficoltà, dislivello). Valori: \"true\" o \"false\". Predefinito: \"true\"."
+
+msgid "Grid POIs page:"
+msgstr "Pagina griglia POI:"
+
+msgid "Shortcode to display a grid of POIs filtered by POI type taxonomy."
+msgstr "Shortcode per una griglia di POI filtrati per tipo."
+
+msgid "(Optional) ID of a single POI type to display POIs from."
+msgstr "(Opzionale) ID di un singolo tipo POI da cui mostrare i POI."
+
+msgid "(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided."
+msgstr "(Opzionale) Elenco di ID tipi POI separati da virgola. Ha priorità su poi_type_id se sono forniti entrambi."
+
+msgid "(Optional) Maximum number of POIs to display. Default: -1 (unlimited)."
+msgstr "(Opzionale) Numero massimo di POI da mostrare. Predefinito: -1 (illimitato)."
+
+msgid "(Optional) Display POIs in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Opzionale) Mostra i POI in ordine casuale. Valori: \"true\" o \"false\". Predefinito: \"false\"."
+
+msgid "Track Configuration:"
+msgstr "Configurazione tracce:"
+
+msgid "Enable Track Navigation"
+msgstr "Abilita navigazione tra tracce"
+
+msgid "Enabled"
+msgstr "Abilitato"
+
+msgid "When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks."
+msgstr "Se abilitato, i pulsanti di navigazione appariranno in fondo a ogni pagina traccia per passare tra le tracce."
+
+msgid "Default Layer IDs for Navigation"
+msgstr "ID layer predefiniti per la navigazione"
+
+msgid "e.g., 123,456,789"
+msgstr "es. 123,456,789"
+
+msgid "Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter."
+msgstr "Elenco di ID layer separati da virgola per la navigazione tra tracce. Se vuoto, la navigazione funziona solo se layer_ids è fornito nello shortcode."
+
+msgid "Download Track"
+msgstr "Scarica traccia"
+
+msgid "When enabled, a download button will appear on the map to allow users to download the track GPX file."
+msgstr "Se abilitato, un pulsante di download apparirà sulla mappa per scaricare il file GPX della traccia."
+
+msgid "Import and Sync:"
+msgstr "Importa e sincronizza:"
+
+msgid "Generate TRACK"
+msgstr "Genera TRACCE"
+
+msgid "Generate Tracks"
+msgstr "Genera tracce"
+
+msgid "Delete TRACK"
+msgstr "Elimina TRACCE"
+
+msgid "Delete All Tracks"
+msgstr "Elimina tutte le tracce"
+
+msgid "Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone."
+msgstr "Attenzione: questa azione eliminerà DEFINITIVAMENTE tutti i post Traccia. L'operazione non può essere annullata."
+
+msgid "Generate POI"
+msgstr "Genera POI"
+
+msgid "Generate POIs"
+msgstr "Genera POI"
+
+msgid "Delete POI"
+msgstr "Elimina POI"
+
+msgid "Delete All POIs"
+msgstr "Elimina tutti i POI"
+
+msgid "Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone."
+msgstr "Attenzione: questa azione eliminerà DEFINITIVAMENTE tutti i post POI. L'operazione non può essere annullata."
+
+msgid "Previous Track"
+msgstr "Traccia precedente"
+
+msgid "Next Track"
+msgstr "Traccia successiva"
+
+msgid "Region"
+msgstr "Regione"
+
+msgid "Select region"
+msgstr "Seleziona regione"
+
+msgid "Where"
+msgstr "Dove"
+
+msgid "Select where"
+msgstr "Seleziona dove"
+
+msgid "Reset filters"
+msgstr "Azzera filtri"
+
+msgid "View"
+msgstr "Visualizza"
+
+msgid "Translations"
+msgstr "Traduzioni"
+
+msgid "You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings."
+msgstr "Puoi scaricare i file .po di traduzione qui sotto e importarli in un plugin di traduzione (es. WPML, Loco Translate, Poedit) per tradurre o modificare le stringhe del plugin."
+
+msgid "Download .po"
+msgstr "Scarica .po"
+
+msgid "No .po translation files found in the languages folder."
+msgstr "Nessun file .po di traduzione trovato nella cartella languages."
+
+msgid "Security check failed."
+msgstr "Controllo di sicurezza non superato."
+
+msgid "File not found."
+msgstr "File non trovato."
+
+msgid "German"
+msgstr "Tedesco"
+
+msgid "English"
+msgstr "Inglese"
+
+msgid "Spanish"
+msgstr "Spagnolo"
+
+msgid "French"
+msgstr "Francese"
+
+msgid "Italian"
+msgstr "Italiano"
+
+msgid "Dutch"
+msgstr "Olandese"
+
+msgid "Albanian"
+msgstr "Albanese"

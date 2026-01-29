@@ -1,5 +1,64 @@
 <?php
 
+/**
+ * Get list of .po translation files available in the plugin languages folder.
+ *
+ * @return array List of [ 'filename' => 'language_label' ]
+ */
+function wm_get_available_po_files()
+{
+	$lang_dir = dirname(__FILE__) . '/languages';
+	$files = [];
+	$locale_names = [
+		'de' => __('German', 'wm-package'),
+		'en' => __('English', 'wm-package'),
+		'es' => __('Spanish', 'wm-package'),
+		'fr' => __('French', 'wm-package'),
+		'it' => __('Italian', 'wm-package'),
+		'nl' => __('Dutch', 'wm-package'),
+		'sq' => __('Albanian', 'wm-package'),
+	];
+	foreach (glob($lang_dir . '/wm-package-*.po') ?: [] as $path) {
+		$filename = basename($path);
+		if (!preg_match('/^wm-package-([a-z]{2,3})\.po$/', $filename, $m)) {
+			continue;
+		}
+		$code = $m[1];
+		$label = isset($locale_names[$code]) ? $locale_names[$code] : strtoupper($code);
+		$files[$filename] = $label . ' (' . $code . ')';
+	}
+	return $files;
+}
+
+/**
+ * Serve .po file for download (admin only, nonce-checked). Prevents path traversal.
+ */
+function wm_serve_po_download()
+{
+	if (!isset($_GET['wm_download_po']) || !is_user_logged_in() || !current_user_can('manage_options')) {
+		return;
+	}
+	$file = sanitize_file_name($_GET['wm_download_po']);
+	if (!preg_match('/^wm-package-[a-z]{2,3}\.po$/', $file)) {
+		return;
+	}
+	if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'wm_download_po')) {
+		wp_die(esc_html__('Security check failed.', 'wm-package'));
+		return;
+	}
+	$path = dirname(__FILE__) . '/languages/' . $file;
+	if (!is_readable($path) || !is_file($path)) {
+		wp_die(esc_html__('File not found.', 'wm-package'));
+		return;
+	}
+	header('Content-Type: application/octet-stream');
+	header('Content-Disposition: attachment; filename="' . $file . '"');
+	header('Content-Length: ' . filesize($path));
+	readfile($path);
+	exit;
+}
+add_action('admin_init', 'wm_serve_po_download');
+
 add_action('admin_menu', 'wm_add_admin_menu');
 function wm_add_admin_menu()
 {
@@ -540,7 +599,7 @@ function wm_settings_page()
 			?>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Website URL', 'wm-package'); ?></th>
+					<th scope="row"><?php echo esc_html__('Webapp URL', 'wm-package'); ?></th>
 					<td>
 						<input type="text" size="50" value="<?php echo esc_attr(get_option('website_url')) ? esc_attr(get_option('website_url')) : esc_attr($default_app_url) ?>" placeholder="<?php echo esc_attr($default_app_url); ?>" name="website_url" />
 						<p class="description">
@@ -692,6 +751,36 @@ function wm_settings_page()
 						</p>
 					</td>
 				</tr>
+			</table>
+			<h2><?php echo esc_html__('Translations', 'wm-package'); ?></h2>
+			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
+				<?php echo esc_html__('You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings.', 'wm-package'); ?>
+			</p>
+			<table class="form-table" style="margin-left: 30px;">
+				<?php
+				$po_files = wm_get_available_po_files();
+				if (!empty($po_files)) :
+					foreach ($po_files as $filename => $label) :
+						$download_url = wp_nonce_url(admin_url('admin.php?page=wm-settings&wm_download_po=' . rawurlencode($filename)), 'wm_download_po');
+				?>
+						<tr valign="top">
+							<th scope="row"><?php echo esc_html($label); ?></th>
+							<td>
+								<a href="<?php echo esc_url($download_url); ?>" class="button button-secondary">
+									<?php echo esc_html__('Download .po', 'wm-package'); ?> — <?php echo esc_html($filename); ?>
+								</a>
+							</td>
+						</tr>
+					<?php
+					endforeach;
+				else :
+					?>
+					<tr valign="top">
+						<td colspan="2">
+							<p class="description"><?php echo esc_html__('No .po translation files found in the languages folder.', 'wm-package'); ?></p>
+						</td>
+					</tr>
+				<?php endif; ?>
 			</table>
 
 			<?php

@@ -367,6 +367,7 @@ function wm_grid_track($atts)
                         $track['ascent'] = $hit['ascent'] ?? null;
                         $track['taxonomy_activities'] = $hit['taxonomyActivities'] ?? [];
                         $track['taxonomy_wheres'] = $hit['taxonomyWheres'] ?? [];
+                        $track['taxonomy_icons'] = $hit['taxonomyIcons'] ?? [];
 
                         // Feature image
                         if (!empty($hit['feature_image'])) {
@@ -696,20 +697,27 @@ function wm_grid_track($atts)
                             $track_id_display = $matches[1];
                         }
 
-                        // Get activity category for header
+                        // Get activity category for header: prefer taxonomyIcons[key].label[language], else raw key, else nothing
                         $activity_category = '';
                         if (!empty($track['taxonomy_activities']) && is_array($track['taxonomy_activities'])) {
-                            $first_activity = reset($track['taxonomy_activities']);
-                            if (is_string($first_activity)) {
-                                $activity_category = $first_activity;
+                            $first_activity_key = reset($track['taxonomy_activities']);
+                            if (is_string($first_activity_key)) {
+                                $icons = $track['taxonomy_icons'] ?? [];
+                                $label = $icons[$first_activity_key]['label'] ?? null;
+                                if (is_array($label) && !empty($label[$language])) {
+                                    $activity_category = $label[$language];
+                                } elseif (is_array($label) && !empty($label['it'])) {
+                                    $activity_category = $label['it'];
+                                } elseif (is_array($label) && !empty($label['en'])) {
+                                    $activity_category = $label['en'];
+                                } else {
+                                    $activity_category = $first_activity_key;
+                                }
                             }
                         }
 
                         // Build taxonomy display (only category, no track ID)
-                        $taxonomy_display = '';
-                        if ($activity_category) {
-                            $taxonomy_display = $activity_category;
-                        }
+                        $taxonomy_display = $activity_category;
                         ?>
 
                         <!-- Sezione superiore con immagine in evidenza -->
@@ -790,7 +798,7 @@ function wm_grid_track($atts)
 
                 // Get Where filter element
                 const whereFilter = document.getElementById('filter_region');
-                
+
                 // Store original Where filter options
                 let originalWhereOptions = [];
                 if (whereFilter) {
@@ -836,7 +844,7 @@ function wm_grid_track($atts)
 
                             // Collect unique taxonomyWheres from the results
                             const regionWheres = new Set();
-                            
+
                             if (data.hits && Array.isArray(data.hits)) {
                                 data.hits.forEach(function(hit) {
                                     if (hit.taxonomyWheres && Array.isArray(hit.taxonomyWheres)) {
@@ -869,7 +877,7 @@ function wm_grid_track($atts)
 
                             // Update Where filter options
                             whereFilter.innerHTML = '<option value=""><?= esc_js(__('Select where', 'wm-package')); ?></option>';
-                            
+
                             if (regionWheres.size > 0) {
                                 const sortedWheres = Array.from(regionWheres).sort();
                                 sortedWheres.forEach(function(whereName) {
@@ -971,7 +979,7 @@ function wm_grid_track($atts)
                     const whereParam = getUrlParameter('where');
                     const regionParam = getUrlParameter('region');
                     let regionValue = null;
-                    
+
                     // Get region value if region parameter exists
                     if (regionParam) {
                         const regionName = findRegionFromSlug(regionParam);
@@ -985,7 +993,7 @@ function wm_grid_track($atts)
                             regionValue = regionFilterEl.value;
                         }
                     }
-                    
+
                     // Get where value - can be used together with region
                     if (whereParam) {
                         // Use where parameter from URL
@@ -1027,38 +1035,38 @@ function wm_grid_track($atts)
                 // Function to check if any filters are active
                 function hasActiveFilters() {
                     const filterData = buildFilters();
-                    
+
                     // Check if any filters are applied
                     if (filterData.filters.length > 0) {
                         return true;
                     }
-                    
+
                     if (filterData.whereValue) {
                         return true;
                     }
-                    
+
                     if (filterData.regionValue) {
                         return true;
                     }
-                    
+
                     if (filterData.difficultyValue) {
                         return true;
                     }
-                    
+
                     <?php if (!empty($filter_options['has_ascent_data'])) : ?>
-                    const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
-                    const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
-                    const ascentMinEl = document.getElementById('ascent_min');
-                    const ascentMaxEl = document.getElementById('ascent_max');
-                    if (ascentMinEl && ascentMaxEl) {
-                        const ascentMin = parseInt(ascentMinEl.value);
-                        const ascentMax = parseInt(ascentMaxEl.value);
-                        if (ascentMin > defaultAscentMin || ascentMax < defaultAscentMax) {
-                            return true;
+                        const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
+                        const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
+                        const ascentMinEl = document.getElementById('ascent_min');
+                        const ascentMaxEl = document.getElementById('ascent_max');
+                        if (ascentMinEl && ascentMaxEl) {
+                            const ascentMin = parseInt(ascentMinEl.value);
+                            const ascentMax = parseInt(ascentMaxEl.value);
+                            if (ascentMin > defaultAscentMin || ascentMax < defaultAscentMax) {
+                                return true;
+                            }
                         }
-                    }
                     <?php endif; ?>
-                    
+
                     return false;
                 }
 
@@ -1077,29 +1085,29 @@ function wm_grid_track($atts)
                 // Function to reset all filters
                 function resetAllFilters() {
                     <?php if (!empty($filter_options['has_distance_data'])) : ?>
-                    const defaultDistanceMin = <?= $filter_options['distance_min']; ?>;
-                    const defaultDistanceMax = <?= $filter_options['distance_max']; ?>;
-                    const distanceMinEl = document.getElementById('distance_min');
-                    const distanceMaxEl = document.getElementById('distance_max');
-                    if (distanceMinEl && distanceMaxEl) {
-                        distanceMinEl.value = defaultDistanceMin;
-                        distanceMaxEl.value = defaultDistanceMax;
-                        updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
-                        updateSliderTrack(distanceMinEl, distanceMaxEl);
-                    }
+                        const defaultDistanceMin = <?= $filter_options['distance_min']; ?>;
+                        const defaultDistanceMax = <?= $filter_options['distance_max']; ?>;
+                        const distanceMinEl = document.getElementById('distance_min');
+                        const distanceMaxEl = document.getElementById('distance_max');
+                        if (distanceMinEl && distanceMaxEl) {
+                            distanceMinEl.value = defaultDistanceMin;
+                            distanceMaxEl.value = defaultDistanceMax;
+                            updateSliderRange('distance_min', 'distance_max', 'distance_range', 'km');
+                            updateSliderTrack(distanceMinEl, distanceMaxEl);
+                        }
                     <?php endif; ?>
 
                     <?php if (!empty($filter_options['has_ascent_data'])) : ?>
-                    const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
-                    const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
-                    const ascentMinEl = document.getElementById('ascent_min');
-                    const ascentMaxEl = document.getElementById('ascent_max');
-                    if (ascentMinEl && ascentMaxEl) {
-                        ascentMinEl.value = defaultAscentMin;
-                        ascentMaxEl.value = defaultAscentMax;
-                        updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
-                        updateSliderTrack(ascentMinEl, ascentMaxEl);
-                    }
+                        const defaultAscentMin = <?= $filter_options['ascent_min']; ?>;
+                        const defaultAscentMax = <?= $filter_options['ascent_max']; ?>;
+                        const ascentMinEl = document.getElementById('ascent_min');
+                        const ascentMaxEl = document.getElementById('ascent_max');
+                        if (ascentMinEl && ascentMaxEl) {
+                            ascentMinEl.value = defaultAscentMin;
+                            ascentMaxEl.value = defaultAscentMax;
+                            updateSliderRange('ascent_min', 'ascent_max', 'ascent_range', 'm');
+                            updateSliderTrack(ascentMinEl, ascentMaxEl);
+                        }
                     <?php endif; ?>
 
                     // Reset Where filter
@@ -1175,7 +1183,7 @@ function wm_grid_track($atts)
                             .then(data => {
                                 if (tracksContainer && data.hits) {
                                     let filteredHits = data.hits;
-                                    
+
                                     // If both region and where are selected, filter client-side by where
                                     if (regionValue && whereValue) {
                                         filteredHits = data.hits.filter(function(hit) {
@@ -1205,7 +1213,7 @@ function wm_grid_track($atts)
                                             });
                                         });
                                     }
-                                    
+
                                     // Filter by cai_scale client-side if difficulty is selected
                                     if (difficultyValue) {
                                         filteredHits = filteredHits.filter(function(hit) {
@@ -1260,12 +1268,16 @@ function wm_grid_track($atts)
                             }
                         }
 
-                        const activityCategory = (hit.taxonomyActivities && hit.taxonomyActivities.length > 0) ? hit.taxonomyActivities[0] : '';
-
-                        // Build taxonomy display (only category, no track ID)
+                        const activityKey = (hit.taxonomyActivities && hit.taxonomyActivities.length > 0) ? hit.taxonomyActivities[0] : '';
                         let taxonomyDisplay = '';
-                        if (activityCategory) {
-                            taxonomyDisplay = activityCategory;
+                        if (activityKey) {
+                            const icons = hit.taxonomyIcons || {};
+                            const label = icons[activityKey] && icons[activityKey].label ? icons[activityKey].label : null;
+                            if (label && typeof label === 'object' && (label[language] || label.it || label.en)) {
+                                taxonomyDisplay = label[language] || label.it || label.en || '';
+                            } else {
+                                taxonomyDisplay = typeof activityKey === 'string' ? activityKey : '';
+                            }
                         }
 
                         html += '<div class="wm_grid_track_item">';
@@ -1459,15 +1471,15 @@ function wm_grid_track($atts)
                     }
                     // Store previous region value to detect changes
                     let previousRegionValue = regionFilter.value;
-                    
+
                     regionFilter.addEventListener('change', function() {
                         const selectedRegion = this.value;
                         const regionChanged = (previousRegionValue !== selectedRegion);
                         previousRegionValue = selectedRegion;
-                        
+
                         // Update URL with region parameter
                         updateUrlWithRegion(selectedRegion);
-                        
+
                         // Update Where filter options for selected region (or restore if empty)
                         if (selectedRegion) {
                             // Update Where options for this region

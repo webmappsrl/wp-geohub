@@ -7,534 +7,534 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language:\n"
+"Language:en\n"
 "MIME-Version: 1.0\n"
 
 msgid "Address"
-msgstr ""
+msgstr "Address"
 
 msgid "Phone"
-msgstr ""
+msgstr "Phone"
 
 msgid "Related Links"
-msgstr ""
+msgstr "Related Links"
 
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 msgid "Contact Information"
-msgstr ""
+msgstr "Contact Information"
 
 msgid "Related POIs"
-msgstr ""
+msgstr "Related POIs"
 
 msgid "Download GPX"
-msgstr ""
+msgstr "Download GPX"
 
 msgid "No tracks found"
-msgstr ""
+msgstr "No tracks found"
 
 msgid "Error loading tracks"
-msgstr ""
+msgstr "Error loading tracks"
 
 msgid "Loading..."
-msgstr ""
+msgstr "Loading..."
 
 msgid "Go to track"
-msgstr ""
+msgstr "Go to track"
 
 msgid "m"
-msgstr ""
+msgstr "m"
 
 msgid "Elevation gain +"
-msgstr ""
+msgstr "Elevation gain +"
 
 msgid "Expert hiker with equipment"
-msgstr ""
+msgstr "Expert hiker with equipment"
 
 msgid "Expert hiker"
-msgstr ""
+msgstr "Expert hiker"
 
 msgid "Hiker"
-msgstr ""
+msgstr "Hiker"
 
 msgid "Tourist"
-msgstr ""
+msgstr "Tourist"
 
 msgid "Select difficulty"
-msgstr ""
+msgstr "Select difficulty"
 
 msgid "Difficulty"
-msgstr ""
+msgstr "Difficulty"
 
 msgid "km"
-msgstr ""
+msgstr "km"
 
 msgid "Length"
-msgstr ""
+msgstr "Length"
 
 msgid "Next"
-msgstr ""
+msgstr "Next"
 
 msgid "Previous"
-msgstr ""
+msgstr "Previous"
 
 msgid "No"
-msgstr ""
+msgstr "No"
 
 msgid "min"
-msgstr ""
+msgstr "min"
 
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 msgid "Round Trip"
-msgstr ""
+msgstr "Round Trip"
 
 msgid "Duration Backward"
-msgstr ""
+msgstr "Duration Backward"
 
 msgid "Duration Forward"
-msgstr ""
+msgstr "Duration Forward"
 
 msgid "Duration Backward (Bike)"
-msgstr ""
+msgstr "Duration Backward (Bike)"
 
 msgid "Duration Forward (Bike)"
-msgstr ""
+msgstr "Duration Forward (Bike)"
 
 msgid "Duration Backward (Hiking)"
-msgstr ""
+msgstr "Duration Backward (Hiking)"
 
 msgid "Duration Forward (Hiking)"
-msgstr ""
+msgstr "Duration Forward (Hiking)"
 
 msgid "Descent"
-msgstr ""
+msgstr "Descent"
 
 msgid "Ascent"
-msgstr ""
+msgstr "Ascent"
 
 msgid "End Elevation"
-msgstr ""
+msgstr "End Elevation"
 
 msgid "Start Elevation"
-msgstr ""
+msgstr "Start Elevation"
 
 msgid "Max Elevation"
-msgstr ""
+msgstr "Max Elevation"
 
 msgid "Min Elevation"
-msgstr ""
+msgstr "Min Elevation"
 
 msgid "Distance"
-msgstr ""
+msgstr "Distance"
 
 msgid "Technical Details"
-msgstr ""
+msgstr "Technical Details"
 
-# Admin / Dashboard strings
+# Admin / Dashboard (English = source)
 msgid "WM Package Settings"
-msgstr ""
+msgstr "WM Package Settings"
 
 msgid "WM Package"
-msgstr ""
+msgstr "WM Package"
 
 msgid "No file uploaded or invalid file."
-msgstr ""
+msgstr "No file uploaded or invalid file."
 
 msgid "File must be in PNG format. Current format not allowed."
-msgstr ""
+msgstr "File must be in PNG format. Current format not allowed."
 
 msgid "Extension not allowed. Use .png files only."
-msgstr ""
+msgstr "Extension not allowed. Use .png files only."
 
 msgid "The file is not a valid PNG image."
-msgstr ""
+msgstr "The file is not a valid PNG image."
 
 msgid "The file must be a valid PNG."
-msgstr ""
+msgstr "The file must be a valid PNG."
 
 msgid "Maximum dimensions allowed: %1$d×%2$d pixels."
-msgstr ""
+msgstr "Maximum dimensions allowed: %1$d×%2$d pixels."
 
 msgid "Unauthorized"
-msgstr ""
+msgstr "Unauthorized"
 
 msgid "Shards configuration refreshed successfully"
-msgstr ""
+msgstr "Shards configuration refreshed successfully"
 
 msgid "Failed to refresh shards configuration"
-msgstr ""
+msgstr "Failed to refresh shards configuration"
 
 msgid "Shard and APP ID must be set."
-msgstr ""
+msgstr "Shard and APP ID must be set."
 
 msgid "Config API helpers not available."
-msgstr ""
+msgstr "Config API helpers not available."
 
 msgid "Could not build config API URL for this shard."
-msgstr ""
+msgstr "Could not build config API URL for this shard."
 
 msgid "Config updated from API (WORDPRESS/APP merged with local when present)."
-msgstr ""
+msgstr "Config updated from API (WORDPRESS/APP merged with local when present)."
 
 msgid "Using local config (API unavailable or invalid response)."
-msgstr ""
+msgstr "Using local config (API unavailable or invalid response)."
 
 msgid "Security verification failed. Please try again."
-msgstr ""
+msgstr "Security verification failed. Please try again."
 
 msgid "The plugin assets folder is not writable."
-msgstr ""
+msgstr "The plugin assets folder is not writable."
 
 msgid "Unable to replace the default image."
-msgstr ""
+msgstr "Unable to replace the default image."
 
 msgid "Default image updated successfully."
-msgstr ""
+msgstr "Default image updated successfully."
 
 msgid "WM Icon"
-msgstr ""
+msgstr "WM Icon"
 
 msgid "Do not close this page while it is loading"
-msgstr ""
+msgstr "Do not close this page while it is loading"
 
 msgid "Processing..."
-msgstr ""
+msgstr "Processing..."
 
 msgid "Please do not close or reload this page while the operation is in progress."
-msgstr ""
+msgstr "Please do not close or reload this page while the operation is in progress."
 
 msgid "Backend Configuration:"
-msgstr ""
+msgstr "Backend Configuration:"
 
 msgid "Shard"
-msgstr ""
+msgstr "Shard"
 
 msgid "Refresh Shards"
-msgstr ""
+msgstr "Refresh Shards"
 
 msgid "Refresh Config API"
-msgstr ""
+msgstr "Refresh Config API"
 
 msgid "Select the backend shard from which data will be retrieved."
-msgstr ""
+msgstr "Select the backend shard from which data will be retrieved."
 
 msgid "Configuration from:"
-msgstr ""
+msgstr "Configuration from:"
 
 msgid "Available shards:"
-msgstr ""
+msgstr "Available shards:"
 
 msgid "(cached for 24 hours)"
-msgstr ""
+msgstr "(cached for 24 hours)"
 
 msgid "APP ID"
-msgstr ""
+msgstr "APP ID"
 
 msgid "This APP ID refers to the ID of the app on the backend."
-msgstr ""
+msgstr "This APP ID refers to the ID of the app on the backend."
 
 msgid "APIs:"
-msgstr ""
+msgstr "APIs:"
 
 msgid "Tracks list API"
-msgstr ""
+msgstr "Tracks list API"
 
 msgid "API endpoint used to retrieve the list of tracks for a specific app."
-msgstr ""
+msgstr "API endpoint used to retrieve the list of tracks for a specific app."
 
 msgid "Layer API"
-msgstr ""
+msgstr "Layer API"
 
 msgid "API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays."
-msgstr ""
+msgstr "API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays."
 
 msgid "Single Track API"
-msgstr ""
+msgstr "Single Track API"
 
 msgid "API endpoint used to retrieve detailed information for a single track by ID."
-msgstr ""
+msgstr "API endpoint used to retrieve detailed information for a single track by ID."
 
 msgid "POI API"
-msgstr ""
+msgstr "POI API"
 
 msgid "API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app."
-msgstr ""
+msgstr "API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app."
 
 msgid "POI Type API"
-msgstr ""
+msgstr "POI Type API"
 
 msgid "API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest."
-msgstr ""
+msgstr "API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest."
 
 msgid "Elasticsearch API"
-msgstr ""
+msgstr "Elasticsearch API"
 
 msgid "Elasticsearch API used for advanced track filtering and search in grid views."
-msgstr ""
+msgstr "Elasticsearch API used for advanced track filtering and search in grid views."
 
 msgid "Config API"
-msgstr ""
+msgstr "Config API"
 
 msgid "Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when \"Refresh Config API\" is used."
-msgstr ""
+msgstr "Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when \"Refresh Config API\" is used."
 
 msgid "Links:"
-msgstr ""
+msgstr "Links:"
 
 msgid "Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect."
-msgstr ""
+msgstr "Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect."
 
 msgid "Webapp URL"
-msgstr ""
+msgstr "Webapp URL"
 
 msgid "URL that display the Website version of the map"
-msgstr ""
+msgstr "URL that display the Website version of the map"
 
 msgid "iOS App URL"
-msgstr ""
+msgstr "iOS App URL"
 
 msgid "URL that display the Mobile version of the map for iOS"
-msgstr ""
+msgstr "URL that display the Mobile version of the map for iOS"
 
 msgid "Android App URL"
-msgstr ""
+msgstr "Android App URL"
 
 msgid "URL that display the Mobile version of the map for Android"
-msgstr ""
+msgstr "URL that display the Mobile version of the map for Android"
 
 msgid "CSS class for redirect"
-msgstr ""
+msgstr "CSS class for redirect"
 
 msgid "Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in \"CSS Classes\"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab."
-msgstr ""
+msgstr "Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in \"CSS Classes\"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab."
 
 msgid "Default image"
-msgstr ""
+msgstr "Default image"
 
 msgid "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
-msgstr ""
+msgstr "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
 
 msgid "Current image"
-msgstr ""
+msgstr "Current image"
 
 msgid "View current image"
-msgstr ""
+msgstr "View current image"
 
 msgid "Opens the image currently used for tracks and POIs in a new tab."
-msgstr ""
+msgstr "Opens the image currently used for tracks and POIs in a new tab."
 
 msgid "Example image"
-msgstr ""
+msgstr "Example image"
 
 msgid "View example image"
-msgstr ""
+msgstr "View example image"
 
 msgid "Reference image."
-msgstr ""
+msgstr "Reference image."
 
 msgid "Upload new image"
-msgstr ""
+msgstr "Upload new image"
 
 msgid "Replace default image"
-msgstr ""
+msgstr "Replace default image"
 
 msgid "PNG files only. The image will replace the current one."
-msgstr ""
+msgstr "PNG files only. The image will replace the current one."
 
 msgid "Short codes:"
-msgstr ""
+msgstr "Short codes:"
 
 msgid "Track page:"
-msgstr ""
+msgstr "Track page:"
 
 msgid "Shortcode to display a single track with full details, map, and related POIs."
-msgstr ""
+msgstr "Shortcode to display a single track with full details, map, and related POIs."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parameters:"
 
 msgid "(Required) The ID of the track to display."
-msgstr ""
+msgstr "(Required) The ID of the track to display."
 
 msgid "(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons)."
-msgstr ""
+msgstr "(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons)."
 
 msgid "POI page:"
-msgstr ""
+msgstr "POI page:"
 
 msgid "Shortcode to display a single Point of Interest (POI) with full details and map location."
-msgstr ""
+msgstr "Shortcode to display a single Point of Interest (POI) with full details and map location."
 
 msgid "(Required) The ID of the POI to display."
-msgstr ""
+msgstr "(Required) The ID of the POI to display."
 
 msgid "Grid Tracks page:"
-msgstr ""
+msgstr "Grid Tracks page:"
 
 msgid "Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering."
-msgstr ""
+msgstr "Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering."
 
 msgid "(Optional) ID of a single layer to display tracks from."
-msgstr ""
+msgstr "(Optional) ID of a single layer to display tracks from."
 
 msgid "(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided."
-msgstr ""
+msgstr "(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided."
 
 msgid "(Optional) Maximum number of tracks to display. Default: -1 (unlimited)."
-msgstr ""
+msgstr "(Optional) Maximum number of tracks to display. Default: -1 (unlimited)."
 
 msgid "(Optional) Display tracks in random order. Values: \"true\" or \"false\". Default: \"false\"."
-msgstr ""
+msgstr "(Optional) Display tracks in random order. Values: \"true\" or \"false\". Default: \"false\"."
 
 msgid "(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false."
-msgstr ""
+msgstr "(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false."
 
 msgid "(Optional) Use Elasticsearch API for advanced filtering. Values: \"true\" or \"false\". Default: \"true\"."
-msgstr ""
+msgstr "(Optional) Use Elasticsearch API for advanced filtering. Values: \"true\" or \"false\". Default: \"true\"."
 
 msgid "(Optional) Show filter interface (distance, region, difficulty, elevation). Values: \"true\" or \"false\". Default: \"true\"."
-msgstr ""
+msgstr "(Optional) Show filter interface (distance, region, difficulty, elevation). Values: \"true\" or \"false\". Default: \"true\"."
 
 msgid "Grid POIs page:"
-msgstr ""
+msgstr "Grid POIs page:"
 
 msgid "Shortcode to display a grid of POIs filtered by POI type taxonomy."
-msgstr ""
+msgstr "Shortcode to display a grid of POIs filtered by POI type taxonomy."
 
 msgid "(Optional) ID of a single POI type to display POIs from."
-msgstr ""
+msgstr "(Optional) ID of a single POI type to display POIs from."
 
 msgid "(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided."
-msgstr ""
+msgstr "(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided."
 
 msgid "(Optional) Maximum number of POIs to display. Default: -1 (unlimited)."
-msgstr ""
+msgstr "(Optional) Maximum number of POIs to display. Default: -1 (unlimited)."
 
 msgid "(Optional) Display POIs in random order. Values: \"true\" or \"false\". Default: \"false\"."
-msgstr ""
+msgstr "(Optional) Display POIs in random order. Values: \"true\" or \"false\". Default: \"false\"."
 
 msgid "Track Configuration:"
-msgstr ""
+msgstr "Track Configuration:"
 
 msgid "Enable Track Navigation"
-msgstr ""
+msgstr "Enable Track Navigation"
 
 msgid "Enabled"
-msgstr ""
+msgstr "Enabled"
 
 msgid "When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks."
-msgstr ""
+msgstr "When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks."
 
 msgid "Default Layer IDs for Navigation"
-msgstr ""
+msgstr "Default Layer IDs for Navigation"
 
 msgid "e.g., 123,456,789"
-msgstr ""
+msgstr "e.g., 123,456,789"
 
 msgid "Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter."
-msgstr ""
+msgstr "Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter."
 
 msgid "Download Track"
-msgstr ""
+msgstr "Download Track"
 
 msgid "When enabled, a download button will appear on the map to allow users to download the track GPX file."
-msgstr ""
+msgstr "When enabled, a download button will appear on the map to allow users to download the track GPX file."
 
 msgid "Import and Sync:"
-msgstr ""
+msgstr "Import and Sync:"
 
 msgid "Generate TRACK"
-msgstr ""
+msgstr "Generate TRACK"
 
 msgid "Generate Tracks"
-msgstr ""
+msgstr "Generate Tracks"
 
 msgid "Delete TRACK"
-msgstr ""
+msgstr "Delete TRACK"
 
 msgid "Delete All Tracks"
-msgstr ""
+msgstr "Delete All Tracks"
 
 msgid "Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone."
-msgstr ""
+msgstr "Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone."
 
 msgid "Generate POI"
-msgstr ""
+msgstr "Generate POI"
 
 msgid "Generate POIs"
-msgstr ""
+msgstr "Generate POIs"
 
 msgid "Delete POI"
-msgstr ""
+msgstr "Delete POI"
 
 msgid "Delete All POIs"
-msgstr ""
+msgstr "Delete All POIs"
 
 msgid "Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone."
-msgstr ""
+msgstr "Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone."
 
 msgid "Previous Track"
-msgstr ""
+msgstr "Previous Track"
 
 msgid "Next Track"
-msgstr ""
+msgstr "Next Track"
 
 msgid "Region"
-msgstr ""
+msgstr "Region"
 
 msgid "Select region"
-msgstr ""
+msgstr "Select region"
 
 msgid "Where"
-msgstr ""
+msgstr "Where"
 
 msgid "Select where"
-msgstr ""
+msgstr "Select where"
 
 msgid "Reset filters"
-msgstr ""
+msgstr "Reset filters"
 
 msgid "View"
-msgstr ""
+msgstr "View"
 
 msgid "Translations"
-msgstr ""
+msgstr "Translations"
 
 msgid "You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings."
-msgstr ""
+msgstr "You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings."
 
 msgid "Download .po"
-msgstr ""
+msgstr "Download .po"
 
 msgid "No .po translation files found in the languages folder."
-msgstr ""
+msgstr "No .po translation files found in the languages folder."
 
 msgid "Security check failed."
-msgstr ""
+msgstr "Security check failed."
 
 msgid "File not found."
-msgstr ""
+msgstr "File not found."
 
 msgid "German"
-msgstr ""
+msgstr "German"
 
 msgid "English"
-msgstr ""
+msgstr "English"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Spanish"
 
 msgid "French"
-msgstr ""
+msgstr "French"
 
 msgid "Italian"
-msgstr ""
+msgstr "Italian"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Dutch"
 
 msgid "Albanian"
-msgstr ""
+msgstr "Albanian"

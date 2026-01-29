@@ -7,534 +7,533 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language:\n"
+"Language:nl\n"
 "MIME-Version: 1.0\n"
 
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 msgid "Phone"
-msgstr ""
+msgstr "Telefoon"
 
 msgid "Related Links"
-msgstr ""
+msgstr "Gerelateerde links"
 
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 msgid "Contact Information"
-msgstr ""
+msgstr "Contactgegevens"
 
 msgid "Related POIs"
-msgstr ""
+msgstr "Gerelateerde POI's"
 
 msgid "Download GPX"
-msgstr ""
+msgstr "GPX downloaden"
 
 msgid "No tracks found"
-msgstr ""
+msgstr "Geen routes gevonden"
 
 msgid "Error loading tracks"
-msgstr ""
+msgstr "Fout bij laden van routes"
 
 msgid "Loading..."
-msgstr ""
+msgstr "Laden..."
 
 msgid "Go to track"
-msgstr ""
+msgstr "Naar route"
 
 msgid "m"
-msgstr ""
+msgstr "m"
 
 msgid "Elevation gain +"
-msgstr ""
+msgstr "Hoogtewinst +"
 
 msgid "Expert hiker with equipment"
-msgstr ""
+msgstr "Ervaren wandelaar met uitrusting"
 
 msgid "Expert hiker"
-msgstr ""
+msgstr "Ervaren wandelaar"
 
 msgid "Hiker"
-msgstr ""
+msgstr "Wandelaar"
 
 msgid "Tourist"
-msgstr ""
+msgstr "Toerist"
 
 msgid "Select difficulty"
-msgstr ""
+msgstr "Selecteer moeilijkheid"
 
 msgid "Difficulty"
-msgstr ""
+msgstr "Moeilijkheid"
 
 msgid "km"
-msgstr ""
+msgstr "km"
 
 msgid "Length"
-msgstr ""
+msgstr "Lengte"
 
 msgid "Next"
-msgstr ""
+msgstr "Volgende"
 
 msgid "Previous"
-msgstr ""
+msgstr "Vorige"
 
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 msgid "min"
-msgstr ""
+msgstr "min"
 
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 msgid "Round Trip"
-msgstr ""
+msgstr "Rondwandeling"
 
 msgid "Duration Backward"
-msgstr ""
+msgstr "Duur terug"
 
 msgid "Duration Forward"
-msgstr ""
+msgstr "Duur heen"
 
 msgid "Duration Backward (Bike)"
-msgstr ""
+msgstr "Duur terug (fiets)"
 
 msgid "Duration Forward (Bike)"
-msgstr ""
+msgstr "Duur heen (fiets)"
 
 msgid "Duration Backward (Hiking)"
-msgstr ""
+msgstr "Duur terug (wandelen)"
 
 msgid "Duration Forward (Hiking)"
-msgstr ""
+msgstr "Duur heen (wandelen)"
 
 msgid "Descent"
-msgstr ""
+msgstr "Daling"
 
 msgid "Ascent"
-msgstr ""
+msgstr "Stijging"
 
 msgid "End Elevation"
-msgstr ""
+msgstr "Eindhoogte"
 
 msgid "Start Elevation"
-msgstr ""
+msgstr "Starthoogte"
 
 msgid "Max Elevation"
-msgstr ""
+msgstr "Maximale hoogte"
 
 msgid "Min Elevation"
-msgstr ""
+msgstr "Minimale hoogte"
 
 msgid "Distance"
-msgstr ""
+msgstr "Afstand"
 
 msgid "Technical Details"
-msgstr ""
-
-# Admin / Dashboard strings
+msgstr "Technische details"
+# Admin / Dashboard
 msgid "WM Package Settings"
-msgstr ""
+msgstr "WM Package-instellingen"
 
 msgid "WM Package"
-msgstr ""
+msgstr "WM Package"
 
 msgid "No file uploaded or invalid file."
-msgstr ""
+msgstr "Geen bestand geüpload of ongeldig bestand."
 
 msgid "File must be in PNG format. Current format not allowed."
-msgstr ""
+msgstr "Bestand moet in PNG-formaat zijn. Huidig formaat niet toegestaan."
 
 msgid "Extension not allowed. Use .png files only."
-msgstr ""
+msgstr "Extensie niet toegestaan. Gebruik alleen .png-bestanden."
 
 msgid "The file is not a valid PNG image."
-msgstr ""
+msgstr "Het bestand is geen geldige PNG-afbeelding."
 
 msgid "The file must be a valid PNG."
-msgstr ""
+msgstr "Het bestand moet een geldige PNG zijn."
 
 msgid "Maximum dimensions allowed: %1$d×%2$d pixels."
-msgstr ""
+msgstr "Maximaal toegestane afmetingen: %1$d×%2$d pixels."
 
 msgid "Unauthorized"
-msgstr ""
+msgstr "Niet geautoriseerd"
 
 msgid "Shards configuration refreshed successfully"
-msgstr ""
+msgstr "Shards-configuratie succesvol vernieuwd"
 
 msgid "Failed to refresh shards configuration"
-msgstr ""
+msgstr "Vernieuwen shards-configuratie mislukt"
 
 msgid "Shard and APP ID must be set."
-msgstr ""
+msgstr "Shard en APP ID moeten worden ingesteld."
 
 msgid "Config API helpers not available."
-msgstr ""
+msgstr "Config API-helpers niet beschikbaar."
 
 msgid "Could not build config API URL for this shard."
-msgstr ""
+msgstr "Kon Config API-URL voor deze shard niet bouwen."
 
 msgid "Config updated from API (WORDPRESS/APP merged with local when present)."
-msgstr ""
+msgstr "Config bijgewerkt vanuit API (WORDPRESS/APP samengevoegd met lokaal indien aanwezig)."
 
 msgid "Using local config (API unavailable or invalid response)."
-msgstr ""
+msgstr "Lokale config wordt gebruikt (API niet beschikbaar of ongeldig antwoord)."
 
 msgid "Security verification failed. Please try again."
-msgstr ""
+msgstr "Beveiligingsverificatie mislukt. Probeer het opnieuw."
 
 msgid "The plugin assets folder is not writable."
-msgstr ""
+msgstr "De plugin-assetsmap is niet beschrijfbaar."
 
 msgid "Unable to replace the default image."
-msgstr ""
+msgstr "Kan standaardafbeelding niet vervangen."
 
 msgid "Default image updated successfully."
-msgstr ""
+msgstr "Standaardafbeelding succesvol bijgewerkt."
 
 msgid "WM Icon"
-msgstr ""
+msgstr "WM-pictogram"
 
 msgid "Do not close this page while it is loading"
-msgstr ""
+msgstr "Sluit deze pagina niet terwijl deze wordt geladen"
 
 msgid "Processing..."
-msgstr ""
+msgstr "Verwerken..."
 
 msgid "Please do not close or reload this page while the operation is in progress."
-msgstr ""
+msgstr "Sluit of herlaad deze pagina niet terwijl de bewerking bezig is."
 
 msgid "Backend Configuration:"
-msgstr ""
+msgstr "Backend-configuratie:"
 
 msgid "Shard"
-msgstr ""
+msgstr "Shard"
 
 msgid "Refresh Shards"
-msgstr ""
+msgstr "Shards vernieuwen"
 
 msgid "Refresh Config API"
-msgstr ""
+msgstr "Config API vernieuwen"
 
 msgid "Select the backend shard from which data will be retrieved."
-msgstr ""
+msgstr "Selecteer de backend-shard waaruit gegevens worden opgehaald."
 
 msgid "Configuration from:"
-msgstr ""
+msgstr "Configuratie van:"
 
 msgid "Available shards:"
-msgstr ""
+msgstr "Beschikbare shards:"
 
 msgid "(cached for 24 hours)"
-msgstr ""
+msgstr "(24 uur in cache)"
 
 msgid "APP ID"
-msgstr ""
+msgstr "APP ID"
 
 msgid "This APP ID refers to the ID of the app on the backend."
-msgstr ""
+msgstr "Deze APP ID verwijst naar de ID van de app op de backend."
 
 msgid "APIs:"
-msgstr ""
+msgstr "API's:"
 
 msgid "Tracks list API"
-msgstr ""
+msgstr "Tracks-lijst API"
 
 msgid "API endpoint used to retrieve the list of tracks for a specific app."
-msgstr ""
+msgstr "API-endpoint om de lijst met routes voor een app op te halen."
 
 msgid "Layer API"
-msgstr ""
+msgstr "Layer API"
 
 msgid "API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays."
-msgstr ""
+msgstr "API-endpoint voor layerinformatie (routes, metadata, inhoud) voor rasterweergaven."
 
 msgid "Single Track API"
-msgstr ""
+msgstr "Enkele route API"
 
 msgid "API endpoint used to retrieve detailed information for a single track by ID."
-msgstr ""
+msgstr "API-endpoint voor gedetailleerde informatie over een route op basis van ID."
 
 msgid "POI API"
-msgstr ""
+msgstr "POI API"
 
 msgid "API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app."
-msgstr ""
+msgstr "API-endpoint voor POI-gegevens in GeoJSON-formaat voor een app."
 
 msgid "POI Type API"
-msgstr ""
+msgstr "POI-type API"
 
 msgid "API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest."
-msgstr ""
+msgstr "API-endpoint voor POI-type-taxonomieën (filteren en categoriseren)."
 
 msgid "Elasticsearch API"
-msgstr ""
+msgstr "Elasticsearch API"
 
 msgid "Elasticsearch API used for advanced track filtering and search in grid views."
-msgstr ""
+msgstr "Elasticsearch API voor geavanceerd filteren en zoeken in rasterweergaven."
 
 msgid "Config API"
-msgstr ""
+msgstr "Config API"
 
 msgid "Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when \"Refresh Config API\" is used."
-msgstr ""
+msgstr "Config JSON voor deze app (shard + APP ID). Bron voor WORDPRESS/APP-opties bij \"Config API vernieuwen\"."
 
 msgid "Links:"
-msgstr ""
+msgstr "Links:"
 
 msgid "Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect."
-msgstr ""
+msgstr "Configureer de URL's voor de dynamische redirect: op desktop opent de link de website-URL, op iOS de iOS-app-URL (App Store), op Android de Android-app-URL (Play Store). Voeg de onderstaande CSS-klasse toe aan een element om de redirect in te schakelen."
 
 msgid "Webapp URL"
-msgstr ""
+msgstr "Webapp-URL"
 
 msgid "URL that display the Website version of the map"
-msgstr ""
+msgstr "URL die de websiteversie van de kaart toont"
 
 msgid "iOS App URL"
-msgstr ""
+msgstr "iOS-app-URL"
 
 msgid "URL that display the Mobile version of the map for iOS"
-msgstr ""
+msgstr "URL van de mobiele kaartversie voor iOS"
 
 msgid "Android App URL"
-msgstr ""
+msgstr "Android-app-URL"
 
 msgid "URL that display the Mobile version of the map for Android"
-msgstr ""
+msgstr "URL van de mobiele kaartversie voor Android"
 
 msgid "CSS class for redirect"
-msgstr ""
+msgstr "CSS-klasse voor redirect"
 
 msgid "Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in \"CSS Classes\"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab."
-msgstr ""
+msgstr "Voeg deze klasse toe aan een element om de redirect naar de bovenstaande URL's (per apparaat) in te schakelen. Gebruik op: menu-item (Weergave → Menu's, \"CSS-klassen\"), link, knop of container. De link opent in een nieuw tabblad."
 
 msgid "Default image"
-msgstr ""
+msgstr "Standaardafbeelding"
 
 msgid "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
-msgstr ""
+msgstr "Afbeelding voor routes en POI's wanneer geen foto beschikbaar is. Formaat: PNG. Aanbevolen: vierkant, max. 1024×1024 px."
 
 msgid "Current image"
-msgstr ""
+msgstr "Huidige afbeelding"
 
 msgid "View current image"
-msgstr ""
+msgstr "Huidige afbeelding bekijken"
 
 msgid "Opens the image currently used for tracks and POIs in a new tab."
-msgstr ""
+msgstr "Opent de afbeelding voor routes en POI's in een nieuw tabblad."
 
 msgid "Example image"
-msgstr ""
+msgstr "Voorbeeldafbeelding"
 
 msgid "View example image"
-msgstr ""
+msgstr "Voorbeeldafbeelding bekijken"
 
 msgid "Reference image."
-msgstr ""
+msgstr "Referentieafbeelding."
 
 msgid "Upload new image"
-msgstr ""
+msgstr "Nieuwe afbeelding uploaden"
 
 msgid "Replace default image"
-msgstr ""
+msgstr "Standaardafbeelding vervangen"
 
 msgid "PNG files only. The image will replace the current one."
-msgstr ""
+msgstr "Alleen PNG-bestanden. De afbeelding vervangt de huidige."
 
 msgid "Short codes:"
-msgstr ""
+msgstr "Shortcodes:"
 
 msgid "Track page:"
-msgstr ""
+msgstr "Routepagina:"
 
 msgid "Shortcode to display a single track with full details, map, and related POIs."
-msgstr ""
+msgstr "Shortcode om een route met details, kaart en gerelateerde POI's te tonen."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parameters:"
 
 msgid "(Required) The ID of the track to display."
-msgstr ""
+msgstr "(Verplicht) De ID van de weer te geven route."
 
 msgid "(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons)."
-msgstr ""
+msgstr "(Optioneel) Komma-gescheiden lijst van layer-ID's voor routenavigatie (Vorige/Volgende)."
 
 msgid "POI page:"
-msgstr ""
+msgstr "POI-pagina:"
 
 msgid "Shortcode to display a single Point of Interest (POI) with full details and map location."
-msgstr ""
+msgstr "Shortcode om een POI met details en kaartlocatie te tonen."
 
 msgid "(Required) The ID of the POI to display."
-msgstr ""
+msgstr "(Verplicht) De ID van de weer te geven POI."
 
 msgid "Grid Tracks page:"
-msgstr ""
+msgstr "Raster routes-pagina:"
 
 msgid "Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering."
-msgstr ""
+msgstr "Shortcode voor een raster van routes met optionele filters (afstand, regio, moeilijkheid, hoogte). Gebruikt Elasticsearch API."
 
 msgid "(Optional) ID of a single layer to display tracks from."
-msgstr ""
+msgstr "(Optioneel) ID van een layer om routes uit te tonen."
 
 msgid "(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided."
-msgstr ""
+msgstr "(Optioneel) Komma-gescheiden layer-ID's. Heeft voorrang op layer_id als beide zijn opgegeven."
 
 msgid "(Optional) Maximum number of tracks to display. Default: -1 (unlimited)."
-msgstr ""
+msgstr "(Optioneel) Maximaal aantal te tonen routes. Standaard: -1 (onbeperkt)."
 
 msgid "(Optional) Display tracks in random order. Values: \"true\" or \"false\". Default: \"false\"."
-msgstr ""
+msgstr "(Optioneel) Toon routes in willekeurige volgorde. Waarden: \"true\" of \"false\". Standaard: \"false\"."
 
 msgid "(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false."
-msgstr ""
+msgstr "(Optioneel) Toon layer-inhoud (titel, ondertitel, beschrijving, afbeelding). Waarden: true/false. Standaard: false."
 
 msgid "(Optional) Use Elasticsearch API for advanced filtering. Values: \"true\" or \"false\". Default: \"true\"."
-msgstr ""
+msgstr "(Optioneel) Gebruik Elasticsearch API voor filteren. Waarden: \"true\" of \"false\". Standaard: \"true\"."
 
 msgid "(Optional) Show filter interface (distance, region, difficulty, elevation). Values: \"true\" or \"false\". Default: \"true\"."
-msgstr ""
+msgstr "(Optioneel) Toon filterinterface (afstand, regio, moeilijkheid, hoogte). Waarden: \"true\" of \"false\". Standaard: \"true\"."
 
 msgid "Grid POIs page:"
-msgstr ""
+msgstr "Raster POI-pagina:"
 
 msgid "Shortcode to display a grid of POIs filtered by POI type taxonomy."
-msgstr ""
+msgstr "Shortcode voor een raster van POI's gefilterd op type."
 
 msgid "(Optional) ID of a single POI type to display POIs from."
-msgstr ""
+msgstr "(Optioneel) ID van een POI-type om POI's uit te tonen."
 
 msgid "(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided."
-msgstr ""
+msgstr "(Optioneel) Komma-gescheiden POI-type-ID's. Heeft voorrang op poi_type_id als beide zijn opgegeven."
 
 msgid "(Optional) Maximum number of POIs to display. Default: -1 (unlimited)."
-msgstr ""
+msgstr "(Optioneel) Maximaal aantal te tonen POI's. Standaard: -1 (onbeperkt)."
 
 msgid "(Optional) Display POIs in random order. Values: \"true\" or \"false\". Default: \"false\"."
-msgstr ""
+msgstr "(Optioneel) Toon POI's in willekeurige volgorde. Waarden: \"true\" of \"false\". Standaard: \"false\"."
 
 msgid "Track Configuration:"
-msgstr ""
+msgstr "Routeconfiguratie:"
 
 msgid "Enable Track Navigation"
-msgstr ""
+msgstr "Routenavigatie inschakelen"
 
 msgid "Enabled"
-msgstr ""
+msgstr "Ingeschakeld"
 
 msgid "When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks."
-msgstr ""
+msgstr "Wanneer ingeschakeld, verschijnen navigatieknoppen onderaan elke routepagina."
 
 msgid "Default Layer IDs for Navigation"
-msgstr ""
+msgstr "Standaard layer-ID's voor navigatie"
 
 msgid "e.g., 123,456,789"
-msgstr ""
+msgstr "bijv. 123,456,789"
 
 msgid "Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter."
-msgstr ""
+msgstr "Komma-gescheiden layer-ID's voor routenavigatie. Als leeg, werkt navigatie alleen als layer_ids via de shortcode worden meegegeven."
 
 msgid "Download Track"
-msgstr ""
+msgstr "Route downloaden"
 
 msgid "When enabled, a download button will appear on the map to allow users to download the track GPX file."
-msgstr ""
+msgstr "Wanneer ingeschakeld, verschijnt een downloadknop op de kaart voor het GPX-bestand van de route."
 
 msgid "Import and Sync:"
-msgstr ""
+msgstr "Importeren en synchroniseren:"
 
 msgid "Generate TRACK"
-msgstr ""
+msgstr "Routes genereren"
 
 msgid "Generate Tracks"
-msgstr ""
+msgstr "Routes genereren"
 
 msgid "Delete TRACK"
-msgstr ""
+msgstr "Routes verwijderen"
 
 msgid "Delete All Tracks"
-msgstr ""
+msgstr "Alle routes verwijderen"
 
 msgid "Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone."
-msgstr ""
+msgstr "Waarschuwing: Deze actie zal PERMANENT alle routeberichten verwijderen. Deze bewerking kan niet ongedaan worden gemaakt."
 
 msgid "Generate POI"
-msgstr ""
+msgstr "POI's genereren"
 
 msgid "Generate POIs"
-msgstr ""
+msgstr "POI's genereren"
 
 msgid "Delete POI"
-msgstr ""
+msgstr "POI's verwijderen"
 
 msgid "Delete All POIs"
-msgstr ""
+msgstr "Alle POI's verwijderen"
 
 msgid "Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone."
-msgstr ""
+msgstr "Waarschuwing: Deze actie zal PERMANENT alle POI-berichten verwijderen. Deze bewerking kan niet ongedaan worden gemaakt."
 
 msgid "Previous Track"
-msgstr ""
+msgstr "Vorige route"
 
 msgid "Next Track"
-msgstr ""
+msgstr "Volgende route"
 
 msgid "Region"
-msgstr ""
+msgstr "Regio"
 
 msgid "Select region"
-msgstr ""
+msgstr "Selecteer regio"
 
 msgid "Where"
-msgstr ""
+msgstr "Waar"
 
 msgid "Select where"
-msgstr ""
+msgstr "Selecteer waar"
 
 msgid "Reset filters"
-msgstr ""
+msgstr "Filters resetten"
 
 msgid "View"
-msgstr ""
+msgstr "Bekijken"
 
 msgid "Translations"
-msgstr ""
+msgstr "Vertalingen"
 
 msgid "You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings."
-msgstr ""
+msgstr "Je kunt de .po-vertaalbestanden hieronder downloaden en importeren in een vertaalplugin (bijv. WPML, Loco Translate, Poedit) om de pluginteksten te vertalen of te bewerken."
 
 msgid "Download .po"
-msgstr ""
+msgstr ".po downloaden"
 
 msgid "No .po translation files found in the languages folder."
-msgstr ""
+msgstr "Geen .po-vertaalbestanden gevonden in de map languages."
 
 msgid "Security check failed."
-msgstr ""
+msgstr "Beveiligingscontrole mislukt."
 
 msgid "File not found."
-msgstr ""
+msgstr "Bestand niet gevonden."
 
 msgid "German"
-msgstr ""
+msgstr "Duits"
 
 msgid "English"
-msgstr ""
+msgstr "Engels"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Spaans"
 
 msgid "French"
-msgstr ""
+msgstr "Frans"
 
 msgid "Italian"
-msgstr ""
+msgstr "Italiaans"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Nederlands"
 
 msgid "Albanian"
-msgstr ""
+msgstr "Albanees"
