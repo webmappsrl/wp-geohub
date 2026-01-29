@@ -94,3 +94,67 @@ msgstr ""
 #: shortcodes/single_track.php:257
 msgid "Download GPX"
 msgstr ""
+
+#: admin_page.php (default image section)
+msgid "No file uploaded or invalid file."
+msgstr ""
+
+msgid "File must be in PNG format. Current format not allowed."
+msgstr ""
+
+msgid "Extension not allowed. Use .png files only."
+msgstr ""
+
+msgid "The file is not a valid PNG image."
+msgstr ""
+
+msgid "The file must be a valid PNG."
+msgstr ""
+
+msgid "Maximum dimensions allowed: %1$d×%2$d pixels."
+msgstr ""
+
+msgid "Security verification failed. Please try again."
+msgstr ""
+
+msgid "The plugin assets folder is not writable."
+msgstr ""
+
+msgid "Unable to replace the default image."
+msgstr ""
+
+msgid "Default image updated successfully."
+msgstr ""
+
+msgid "Default image"
+msgstr ""
+
+msgid "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
+msgstr ""
+
+msgid "Current image"
+msgstr ""
+
+msgid "View current image"
+msgstr ""
+
+msgid "Opens the image currently used for tracks and POIs in a new tab."
+msgstr ""
+
+msgid "Example image"
+msgstr ""
+
+msgid "View example image"
+msgstr ""
+
+msgid "Reference image; never changed by upload."
+msgstr ""
+
+msgid "Upload new image"
+msgstr ""
+
+msgid "Replace default image"
+msgstr ""
+
+msgid "PNG files only. The image will replace the current one."
+msgstr ""

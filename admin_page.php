@@ -14,6 +14,51 @@ function wm_add_admin_menu()
 }
 
 /**
+ * Default image filename used for tracks/POIs when no image is available (can be overwritten by upload)
+ */
+define('WM_DEFAULT_IMAGE_FILENAME', 'default_image.png');
+
+/**
+ * Example image shown in admin as reference; never overwritten by upload
+ */
+define('WM_DEFAULT_IMAGE_EXAMPLE_FILENAME', 'default_image_example.png');
+
+/**
+ * Validate uploaded file as PNG with same format as current default image (PNG, optional max dimensions)
+ *
+ * @param array $file $_FILES['key'] entry
+ * @return true|WP_Error True on success, WP_Error on failure
+ */
+function wm_validate_default_image_upload($file)
+{
+	if (empty($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+		return new WP_Error('no_file', __('No file uploaded or invalid file.', 'wm-package'));
+	}
+	$allowed_type = 'image/png';
+	if (isset($file['type']) && $file['type'] !== $allowed_type) {
+		return new WP_Error('invalid_type', __('File must be in PNG format. Current format not allowed.', 'wm-package'));
+	}
+	$ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+	if ($ext !== 'png') {
+		return new WP_Error('invalid_extension', __('Extension not allowed. Use .png files only.', 'wm-package'));
+	}
+	$image_info = @getimagesize($file['tmp_name']);
+	if ($image_info === false) {
+		return new WP_Error('invalid_image', __('The file is not a valid PNG image.', 'wm-package'));
+	}
+	if (isset($image_info[2]) && $image_info[2] !== IMAGETYPE_PNG) {
+		return new WP_Error('invalid_image', __('The file must be a valid PNG.', 'wm-package'));
+	}
+	// Optional: limit dimensions (e.g. max 1024x1024, square recommended)
+	$max_w = 1024;
+	$max_h = 1024;
+	if (isset($image_info[0], $image_info[1]) && ($image_info[0] > $max_w || $image_info[1] > $max_h)) {
+		return new WP_Error('dimensions', sprintf(__('Maximum dimensions allowed: %1$d×%2$d pixels.', 'wm-package'), $max_w, $max_h));
+	}
+	return true;
+}
+
+/**
  * URL to fetch shards configuration from wm-types repository
  */
 define('WM_SHARDS_CONFIG_URL', 'https://raw.githubusercontent.com/webmappsrl/wm-types/refs/heads/main/src/environment.ts');
@@ -60,6 +105,10 @@ function wm_get_fallback_shards_config()
 		'osm2cai' => [
 			'origin' => 'https://osm2cai.cai.it',
 			'awsApi' => 'https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2',
+		],
+		'osm2cai2dev' => [
+			'origin' => 'https://osm2cai.dev.maphub.it',
+			'awsApi' => 'https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2dev',
 		],
 	];
 }
@@ -142,6 +191,100 @@ function wm_ajax_refresh_shards()
 add_action('wp_ajax_wm_refresh_shards', 'wm_ajax_refresh_shards');
 
 /**
+ * AJAX handler to refresh config from API (same check as on save).
+ * Uses current wm_shard and app_configuration_id; updates wm_cached_api_config and wm_config_source.
+ */
+function wm_ajax_refresh_config()
+{
+	if (!current_user_can('manage_options')) {
+		wp_send_json_error(['message' => __('Unauthorized', 'wm-package')]);
+		return;
+	}
+
+	$shard = get_option('wm_shard');
+	$app_id = get_option('app_configuration_id');
+	if (empty($shard) || !is_numeric($app_id) || empty($app_id)) {
+		wp_send_json_error(['message' => __('Shard and APP ID must be set.', 'wm-package')]);
+		return;
+	}
+
+	if (!function_exists('wm_get_config_api_url') || !function_exists('wm_fetch_remote_config') || !defined('WM_CONFIG_SOURCE_OPTION') || !defined('WM_CACHED_API_CONFIG_OPTION')) {
+		wp_send_json_error(['message' => __('Config API helpers not available.', 'wm-package')]);
+		return;
+	}
+
+	$config_url = wm_get_config_api_url($shard, $app_id);
+	if (!$config_url) {
+		wp_send_json_error(['message' => __('Could not build config API URL for this shard.', 'wm-package')]);
+		return;
+	}
+
+	$remote = wm_fetch_remote_config($config_url);
+	if (is_array($remote)) {
+		update_option(WM_CACHED_API_CONFIG_OPTION, $remote);
+		update_option(WM_CONFIG_SOURCE_OPTION, 'api');
+		wp_send_json_success([
+			'message' => __('Config updated from API (WORDPRESS/APP merged with local when present).', 'wm-package'),
+			'source'  => 'api',
+		]);
+	} else {
+		update_option(WM_CONFIG_SOURCE_OPTION, 'local');
+		wp_send_json_success([
+			'message' => __('Using local config (API unavailable or invalid response).', 'wm-package'),
+			'source'  => 'local',
+		]);
+	}
+}
+add_action('wp_ajax_wm_refresh_config', 'wm_ajax_refresh_config');
+
+/**
+ * AJAX handler to upload and replace the default image (tracks/POIs placeholder)
+ */
+function wm_ajax_upload_default_image()
+{
+	if (!current_user_can('manage_options')) {
+		wp_send_json_error(['message' => __('Unauthorized', 'wm-package')]);
+		return;
+	}
+	if (!isset($_POST['wm_default_image_nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['wm_default_image_nonce']), 'wm_upload_default_image')) {
+		wp_send_json_error(['message' => __('Security verification failed. Please try again.', 'wm-package')]);
+		return;
+	}
+	if (empty($_FILES['default_image_file']['tmp_name']) || !is_uploaded_file($_FILES['default_image_file']['tmp_name'])) {
+		wp_send_json_error(['message' => __('No file uploaded or invalid file.', 'wm-package')]);
+		return;
+	}
+	$valid = wm_validate_default_image_upload($_FILES['default_image_file']);
+	if (is_wp_error($valid)) {
+		wp_send_json_error(['message' => $valid->get_error_message()]);
+		return;
+	}
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	$overrides = array('test_form' => false, 'mimes' => array('png' => 'image/png'));
+	$upload = wp_handle_upload($_FILES['default_image_file'], $overrides);
+	if (isset($upload['error'])) {
+		wp_send_json_error(['message' => $upload['error']]);
+		return;
+	}
+	$plugin_assets_dir = dirname(__FILE__) . '/assets';
+	$dest_path = $plugin_assets_dir . '/' . WM_DEFAULT_IMAGE_FILENAME;
+	if (!is_dir($plugin_assets_dir) || !is_writable($plugin_assets_dir)) {
+		@unlink($upload['file']);
+		wp_send_json_error(['message' => __('The plugin assets folder is not writable.', 'wm-package')]);
+		return;
+	}
+	if (!copy($upload['file'], $dest_path)) {
+		@unlink($upload['file']);
+		wp_send_json_error(['message' => __('Unable to replace the default image.', 'wm-package')]);
+		return;
+	}
+	@unlink($upload['file']);
+	set_transient('wm_default_image_message', ['success', __('Default image updated successfully.', 'wm-package')], 45);
+	wp_send_json_success(['message' => __('Default image updated successfully.', 'wm-package')]);
+}
+add_action('wp_ajax_wm_upload_default_image', 'wm_ajax_upload_default_image');
+
+/**
  * Check if a shard is osm2cai-type (affects POI URL structure)
  */
 function wm_is_osm2cai_shard($shard)
@@ -215,6 +358,7 @@ function wm_settings_page()
 	$poi_type_api = $api_urls['poi_type_api'];
 	$elastic_api = $api_urls['elastic_api'];
 	$default_app_url = $api_urls['default_app_url'];
+	$config_api_url = function_exists('wm_get_config_api_url') ? wm_get_config_api_url($shard, $app_id) : '';
 
 ?>
 	<div class="wrap">
@@ -222,6 +366,16 @@ function wm_settings_page()
 			<img src="<?php echo plugins_url('assets/menu-icon.png', __FILE__); ?>" alt="<?php echo esc_attr__('WM Icon', 'wm-package'); ?>" style="margin-right: 10px; height: 30px; width: 30px;" />
 			<?php echo esc_html__('WM Package Settings', 'wm-package'); ?>
 		</h1>
+		<?php
+		$wm_default_image_msg = get_transient('wm_default_image_message');
+		if ($wm_default_image_msg && is_array($wm_default_image_msg) && count($wm_default_image_msg) >= 2) {
+			delete_transient('wm_default_image_message');
+			$msg_type = $wm_default_image_msg[0];
+			$msg_text = $wm_default_image_msg[1];
+			$notice_class = ($msg_type === 'success') ? 'notice-success' : 'notice-error';
+			echo '<div class="notice ' . esc_attr($notice_class) . ' is-dismissible"><p>' . esc_html($msg_text) . '</p></div>';
+		}
+		?>
 		<div style="display: none;" id="spinner" class="notice notice-warning">
 			<img src="<?php echo admin_url('images/spinner.gif'); ?>" style="margin:8px;">
 			<p><?php echo esc_html__('Do not close this page while it is loading', 'wm-package'); ?></p>
@@ -256,6 +410,9 @@ function wm_settings_page()
 						</select>
 						<button type="button" id="refresh_shards" class="button button-secondary" style="margin-left: 10px;">
 							🔄 <?php echo esc_html__('Refresh Shards', 'wm-package'); ?>
+						</button>
+						<button type="button" id="refresh_config" class="button button-secondary" style="margin-left: 10px;">
+							🔄 <?php echo esc_html__('Refresh Config API', 'wm-package'); ?>
 						</button>
 						<p class="description">
 							<?php echo esc_html__('Select the backend shard from which data will be retrieved.', 'wm-package'); ?>
@@ -357,8 +514,30 @@ function wm_settings_page()
 						</p>
 					</td>
 				</tr>
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Config API', 'wm-package'); ?></th>
+					<td>
+						<a href="<?php echo !empty($config_api_url) ? esc_url($config_api_url) : '#'; ?>" target="_blank" class="api-link-config">
+							<p class="api-url-config"><?php echo !empty($config_api_url) ? esc_html($config_api_url) : '—'; ?></p>
+						</a>
+						<p class="description">
+							<?php echo esc_html__('Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when "Refresh Config API" is used.', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
 			</table>
 			<h2><?php echo esc_html__('Links:', 'wm-package'); ?></h2>
+			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
+				<?php echo esc_html__('Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect.', 'wm-package'); ?>
+			</p>
+			<?php
+			// Get APP config for iOS/Android store URLs (from wm_default_config.json)
+			$links_config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+			$ios_store_from_config = !empty($links_config['APP']['iosStore']) ? $links_config['APP']['iosStore'] : '';
+			$android_store_from_config = !empty($links_config['APP']['androidStore']) ? $links_config['APP']['androidStore'] : '';
+			$ios_url_value = $ios_store_from_config ? $ios_store_from_config : get_option('ios_app_url');
+			$android_url_value = $android_store_from_config ? $android_store_from_config : get_option('android_app_url');
+			?>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
 					<th scope="row"><?php echo esc_html__('Website URL', 'wm-package'); ?></th>
@@ -372,7 +551,7 @@ function wm_settings_page()
 				<tr valign="top">
 					<th scope="row"><?php echo esc_html__('iOS App URL', 'wm-package'); ?></th>
 					<td>
-						<input type="text" size="50" value="<?php echo esc_attr(get_option('ios_app_url')) ?>" name="ios_app_url" />
+						<input type="text" size="50" value="<?php echo esc_attr($ios_url_value); ?>" name="ios_app_url" <?php echo $ios_store_from_config ? ' readonly' : ''; ?> />
 						<p class="description">
 							<?php echo esc_html__('URL that display the Mobile version of the map for iOS', 'wm-package'); ?>
 						</p>
@@ -381,9 +560,70 @@ function wm_settings_page()
 				<tr valign="top">
 					<th scope="row"><?php echo esc_html__('Android App URL', 'wm-package'); ?></th>
 					<td>
-						<input type="text" size="50" value="<?php echo esc_attr(get_option('android_app_url')) ?>" name="android_app_url" />
+						<input type="text" size="50" value="<?php echo esc_attr($android_url_value); ?>" name="android_app_url" <?php echo $android_store_from_config ? ' readonly' : ''; ?> />
 						<p class="description">
 							<?php echo esc_html__('URL that display the Mobile version of the map for Android', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('CSS class for redirect', 'wm-package'); ?></th>
+					<td>
+						<p class="copiable">wm-custom-link</p>
+						<p class="description">
+							<?php echo esc_html__('Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in "CSS Classes"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab.', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+			<h2><?php echo esc_html__('Default image', 'wm-package'); ?></h2>
+			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
+				<?php echo esc_html__('Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px.', 'wm-package'); ?>
+			</p>
+			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Current image', 'wm-package'); ?></th>
+					<td>
+						<?php
+						$wm_current_image_path = dirname(__FILE__) . '/assets/' . WM_DEFAULT_IMAGE_FILENAME;
+						$wm_current_image_ver = file_exists($wm_current_image_path) ? (string) filemtime($wm_current_image_path) : (string) time();
+						?>
+						<p class="wm-default-image-row">
+							<a href="<?php echo esc_url(plugins_url('assets/' . WM_DEFAULT_IMAGE_FILENAME, __FILE__)); ?>?v=<?php echo esc_attr($wm_current_image_ver); ?>" target="_blank" rel="noopener noreferrer" class="button button-secondary">
+								<?php echo esc_html__('View current image', 'wm-package'); ?>
+							</a>
+						</p>
+						<p class="description">
+							<?php echo esc_html__('Opens the image currently used for tracks and POIs in a new tab.', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Example image', 'wm-package'); ?></th>
+					<td>
+						<?php
+						$wm_example_image_path = dirname(__FILE__) . '/assets/' . WM_DEFAULT_IMAGE_EXAMPLE_FILENAME;
+						$wm_example_image_ver = file_exists($wm_example_image_path) ? (string) filemtime($wm_example_image_path) : (string) time();
+						?>
+						<p class="wm-default-image-row">
+							<a href="<?php echo esc_url(plugins_url('assets/' . WM_DEFAULT_IMAGE_EXAMPLE_FILENAME, __FILE__)); ?>?v=<?php echo esc_attr($wm_example_image_ver); ?>" target="_blank" rel="noopener noreferrer" class="button button-secondary">
+								<?php echo esc_html__('View example image', 'wm-package'); ?>
+							</a>
+						</p>
+						<p class="description">
+							<?php echo esc_html__('Reference image.', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Upload new image', 'wm-package'); ?></th>
+					<td>
+						<p class="wm-default-image-row" id="wm-default-image-upload-wrap" data-nonce="<?php echo esc_attr(wp_create_nonce('wm_upload_default_image')); ?>">
+							<input type="file" id="wm_default_image_file" name="default_image_file" accept=".png,image/png" />
+							<button type="button" id="wm_replace_default_image_btn" class="button button-secondary"><?php echo esc_html__('Replace default image', 'wm-package'); ?></button>
+						</p>
+						<p class="description">
+							<?php echo esc_html__('PNG files only. The image will replace the current one.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
@@ -454,19 +694,6 @@ function wm_settings_page()
 				</tr>
 			</table>
 
-			<h2><?php echo esc_html__('Classes for map:', 'wm-package'); ?></h2>
-			<table class="form-table" style="margin-left: 30px;">
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Map Class', 'wm-package'); ?></th>
-					<td>
-						<p class="copiable">wm-custom-link</p>
-						<p class="description"><?php echo esc_html__('Class for the map button in the menu.', 'wm-package'); ?> <br>
-							<?php echo esc_html__('Has to be added inside the map button inside the header menu, from the interface', 'wm-package'); ?> <br>
-						</p>
-					</td>
-				</tr>
-			</table>
-
 			<?php
 			// Check config JSON values to determine which fields to show
 			$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
@@ -474,11 +701,11 @@ function wm_settings_page()
 			$download_track_enabled = false;
 
 			if ($config) {
-				if (isset($config['WM_PLUGIN']['generate_edges'])) {
-					$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+				if (isset($config['WORDPRESS']['generate_edges'])) {
+					$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
 				}
-				if (isset($config['WM_PLUGIN']['download_track_enable'])) {
-					$download_track_enabled = (bool) $config['WM_PLUGIN']['download_track_enable'];
+				if (isset($config['WORDPRESS']['download_track_enable'])) {
+					$download_track_enabled = (bool) $config['WORDPRESS']['download_track_enable'];
 				}
 			}
 
@@ -602,8 +829,8 @@ function wm_settings_init()
 	// track_navigation fields are only shown if generate_edges is enabled in wm_default_config.json
 	$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
 	$generate_edges_enabled = false;
-	if ($config && isset($config['WM_PLUGIN']['generate_edges'])) {
-		$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+	if ($config && isset($config['WORDPRESS']['generate_edges'])) {
+		$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
 	}
 	if ($generate_edges_enabled) {
 		// track_navigation_enabled is now controlled by wm_default_config.json (generate_edges), not WordPress options
@@ -663,6 +890,21 @@ function wm_admin_footer()
 			font-size: 14px;
 			line-height: 1.6;
 		}
+
+		.wm-default-image-row {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin: 0 0 4px 0;
+		}
+
+		.wm-default-image-row .button {
+			margin: 0;
+		}
+
+		.wm-default-image-row input[type="file"] {
+			margin: 0;
+		}
 	</style>
 	<script type="text/javascript">
 		jQuery(document).ready(function($) {
@@ -688,7 +930,10 @@ function wm_admin_footer()
 				errorTimeout: '<?php echo esc_js(__('Request timeout. The operation may still be processing. Please check the results.', 'wm-package')); ?>',
 				errorFormat: '<?php echo esc_js(__('Response format error, but operation may have completed. Please check the results.', 'wm-package')); ?>',
 				errorRefresh: '<?php echo esc_js(__('Failed to refresh', 'wm-package')); ?>',
-				shards: '<?php echo esc_js(__('shards', 'wm-package')); ?>'
+				errorRefreshConfig: '<?php echo esc_js(__('Failed to refresh config', 'wm-package')); ?>',
+				shards: '<?php echo esc_js(__('shards', 'wm-package')); ?>',
+				defaultImageSelectFile: '<?php echo esc_js(__('Please select a PNG file first.', 'wm-package')); ?>',
+				defaultImageSuccess: '<?php echo esc_js(__('Default image updated successfully.', 'wm-package')); ?>'
 			};
 
 			// Shards configuration dynamically loaded from wm-types/environment.ts via PHP
@@ -736,6 +981,77 @@ function wm_admin_footer()
 					},
 					complete: function() {
 						$btn.prop('disabled', false).text(originalText);
+					}
+				});
+			});
+
+			// Refresh config API button handler
+			$('#refresh_config').on('click', function() {
+				var $btn = $(this);
+				var originalText = $btn.text();
+				$btn.prop('disabled', true).text('⏳ ' + wmPackageStrings.loading);
+
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wm_refresh_config'
+					},
+					dataType: 'json',
+					success: function(response) {
+						if (response.success) {
+							alert('✅ ' + response.data.message);
+						} else {
+							alert('❌ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.errorRefreshConfig));
+						}
+					},
+					error: function() {
+						alert('❌ ' + wmPackageStrings.errorRefreshConfig);
+					},
+					complete: function() {
+						$btn.prop('disabled', false).text(originalText);
+					}
+				});
+			});
+
+			// Default image upload (AJAX to avoid nested form)
+			$('#wm_replace_default_image_btn').on('click', function() {
+				var $wrap = $('#wm-default-image-upload-wrap');
+				var $fileInput = $('#wm_default_image_file');
+				var file = $fileInput[0] && $fileInput[0].files && $fileInput[0].files[0];
+				if (!file) {
+					alert(wmPackageStrings.defaultImageSelectFile);
+					return;
+				}
+				var formData = new FormData();
+				formData.append('action', 'wm_upload_default_image');
+				formData.append('wm_default_image_nonce', $wrap.data('nonce'));
+				formData.append('default_image_file', file);
+				var $btn = $(this);
+				$btn.prop('disabled', true);
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: formData,
+					processData: false,
+					contentType: false,
+					dataType: 'json',
+					success: function(response) {
+						if (response && response.success) {
+							location.reload();
+						} else {
+							alert('❌ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.errorUnknown));
+						}
+					},
+					error: function(xhr) {
+						var msg = wmPackageStrings.errorServer;
+						if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+							msg = xhr.responseJSON.data.message;
+						}
+						alert('❌ ' + msg);
+					},
+					complete: function() {
+						$btn.prop('disabled', false);
 					}
 				});
 			});
@@ -805,6 +1121,11 @@ function wm_admin_footer()
 				$('.api-link-elastic').attr('href', apiUrls.elastic);
 				$('.api-url-elastic').text(apiUrls.elastic);
 				$('.api-input-elastic').val(apiUrls.elastic);
+
+				// Config API: {awsApi}/{app_id}/config.json
+				var configApiUrl = awsApi + '/' + appId + '/config.json';
+				$('.api-link-config').attr('href', configApiUrl);
+				$('.api-url-config').text(configApiUrl);
 			}
 
 			// Update APIs when shard or app_id changes
@@ -1036,19 +1357,39 @@ function wm_save_options()
 		wm_update_config_id($app_id);
 	}
 
+	// Check API config at save: if API returns WORDPRESS/APP use that, otherwise use local (no merge)
+	if (function_exists('wm_get_config_api_url') && function_exists('wm_fetch_remote_config') && defined('WM_CONFIG_SOURCE_OPTION') && defined('WM_CACHED_API_CONFIG_OPTION')) {
+		$config_url = wm_get_config_api_url($shard, $app_id);
+		if ($config_url) {
+			$remote = wm_fetch_remote_config($config_url);
+			if (is_array($remote)) {
+				update_option(WM_CACHED_API_CONFIG_OPTION, $remote);
+				update_option(WM_CONFIG_SOURCE_OPTION, 'api');
+			} else {
+				update_option(WM_CONFIG_SOURCE_OPTION, 'local');
+			}
+		} else {
+			update_option(WM_CONFIG_SOURCE_OPTION, 'local');
+		}
+	}
+
 	update_option('layer_api', $api_urls['layer_api']);
 	update_option('poi_type_api', $api_urls['poi_type_api']);
 	update_option('elastic_api', $api_urls['elastic_api']);
-	update_option('ios_app_url', sanitize_text_field($_POST['ios_app_url']));
-	update_option('android_app_url', sanitize_text_field($_POST['android_app_url']));
+	// iOS/Android URLs: use config values when present in wm_default_config.json (APP.iosStore / APP.androidStore)
+	$links_config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+	$ios_from_config = !empty($links_config['APP']['iosStore']) ? $links_config['APP']['iosStore'] : null;
+	$android_from_config = !empty($links_config['APP']['androidStore']) ? $links_config['APP']['androidStore'] : null;
+	update_option('ios_app_url', $ios_from_config !== null ? $ios_from_config : sanitize_text_field($_POST['ios_app_url'] ?? ''));
+	update_option('android_app_url', $android_from_config !== null ? $android_from_config : sanitize_text_field($_POST['android_app_url'] ?? ''));
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
 
 	// Only save track_navigation_layer_ids if generate_edges is enabled in config JSON
 	// track_navigation_enabled is now controlled by wm_default_config.json (generate_edges), not WordPress options
 	$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
 	$generate_edges_enabled = false;
-	if ($config && isset($config['WM_PLUGIN']['generate_edges'])) {
-		$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+	if ($config && isset($config['WORDPRESS']['generate_edges'])) {
+		$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
 	}
 	if ($generate_edges_enabled) {
 		update_option('track_navigation_layer_ids', sanitize_text_field($_POST['track_navigation_layer_ids'] ?? ''));

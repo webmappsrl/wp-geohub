@@ -182,8 +182,8 @@ function wm_single_track($atts)
 						$download_enabled = false;
 						if (function_exists('wm_get_default_config')) {
 							$config = wm_get_default_config();
-							if ($config && isset($config['WM_PLUGIN']['download_track_enable'])) {
-								$download_enabled = (bool) $config['WM_PLUGIN']['download_track_enable'];
+							if ($config && isset($config['WORDPRESS']['download_track_enable'])) {
+								$download_enabled = (bool) $config['WORDPRESS']['download_track_enable'];
 							}
 						}
 						if ($download_enabled && !empty($gpx)) : ?>
@@ -209,27 +209,27 @@ function wm_single_track($atts)
 					$show_ele_from = true;
 					$show_ele_to = true;
 
-					if ($config && isset($config['WM_PLUGIN'])) {
-						if (isset($config['WM_PLUGIN']['showDistance'])) {
-							$show_distance = (bool) $config['WM_PLUGIN']['showDistance'];
+					if ($config && isset($config['WORDPRESS'])) {
+						if (isset($config['WORDPRESS']['showDistance'])) {
+							$show_distance = (bool) $config['WORDPRESS']['showDistance'];
 						}
-						if (isset($config['WM_PLUGIN']['showDurationForward'])) {
-							$show_duration_forward = (bool) $config['WM_PLUGIN']['showDurationForward'];
+						if (isset($config['WORDPRESS']['showDurationForward'])) {
+							$show_duration_forward = (bool) $config['WORDPRESS']['showDurationForward'];
 						}
-						if (isset($config['WM_PLUGIN']['showDurationBackward'])) {
-							$show_duration_backward = (bool) $config['WM_PLUGIN']['showDurationBackward'];
+						if (isset($config['WORDPRESS']['showDurationBackward'])) {
+							$show_duration_backward = (bool) $config['WORDPRESS']['showDurationBackward'];
 						}
-						if (isset($config['WM_PLUGIN']['showAscent'])) {
-							$show_ascent = (bool) $config['WM_PLUGIN']['showAscent'];
+						if (isset($config['WORDPRESS']['showAscent'])) {
+							$show_ascent = (bool) $config['WORDPRESS']['showAscent'];
 						}
-						if (isset($config['WM_PLUGIN']['showDescent'])) {
-							$show_descent = (bool) $config['WM_PLUGIN']['showDescent'];
+						if (isset($config['WORDPRESS']['showDescent'])) {
+							$show_descent = (bool) $config['WORDPRESS']['showDescent'];
 						}
-						if (isset($config['WM_PLUGIN']['showEleFrom'])) {
-							$show_ele_from = (bool) $config['WM_PLUGIN']['showEleFrom'];
+						if (isset($config['WORDPRESS']['showEleFrom'])) {
+							$show_ele_from = (bool) $config['WORDPRESS']['showEleFrom'];
 						}
-						if (isset($config['WM_PLUGIN']['showEleTo'])) {
-							$show_ele_to = (bool) $config['WM_PLUGIN']['showEleTo'];
+						if (isset($config['WORDPRESS']['showEleTo'])) {
+							$show_ele_to = (bool) $config['WORDPRESS']['showEleTo'];
 						}
 					}
 
@@ -367,7 +367,7 @@ function wm_single_track($atts)
 		<?php if (!empty($related_pois)) : ?>
 			<div class="wm_related_pois">
 				<h2 class="wm_related_pois_title"><?= __('Related POIs', 'wm-package') ?></h2>
-				<div class="swiper-container wm_swiper">
+				<div class="swiper-container wm_swiper wm_related_pois_swiper">
 					<div class="swiper-wrapper">
 						<?php foreach ($related_pois as $poi_feature) : ?>
 							<?php
@@ -442,8 +442,8 @@ function wm_single_track($atts)
 		$generate_edges_enabled = false;
 		if (function_exists('wm_get_default_config')) {
 			$config = wm_get_default_config();
-			if ($config && isset($config['WM_PLUGIN']['generate_edges'])) {
-				$generate_edges_enabled = (bool) $config['WM_PLUGIN']['generate_edges'];
+			if ($config && isset($config['WORDPRESS']['generate_edges'])) {
+				$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
 			}
 		}
 

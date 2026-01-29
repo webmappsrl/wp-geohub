@@ -1,5 +1,12 @@
 {
-    "WM_PLUGIN": {
-        "id": 29
+    "WORDPRESS": {
+        "showDistance": true,
+        "showDurationBackward": true,
+        "showDurationForward": true,
+        "showAscent": true,
+        "showDescent": true,
+        "showEleTo": true,
+        "showEleFrom": true,
+        "primary": "#de1b0d"
     }
 }

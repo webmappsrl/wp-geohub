@@ -109,7 +109,7 @@ function wm_get_iframe_url($type, $id, $language = 'it')
     return '';
 }
 
-// Add custom script to change menu link based on device
+// Add custom script: any element with class .wm-custom-link (link, menu item, button, container) redirects to the URL configured in admin based on device
 function add_custom_menu_script()
 {
     $hrefdefault = get_option("website_url");
@@ -119,22 +119,28 @@ function add_custom_menu_script()
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            var menuLink = document.querySelector('.wm-custom-link > a');
-
-            if (menuLink) {
-                if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                    // iOS
-                    menuLink.href = "<?php echo $hrefios; ?>";
-                } else if (/android/i.test(userAgent)) {
-                    // Android
-                    menuLink.href = "<?php echo $hrefandroid; ?>";
-                } else {
-                    // Not mobile
-                    menuLink.href = "<?php echo $hrefdefault; ?>";
-                }
-                console.log(menuLink.href);
-                menuLink.target = "_blank";
+            var url;
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                url = <?php echo json_encode($hrefios); ?>;
+            } else if (/android/i.test(userAgent)) {
+                url = <?php echo json_encode($hrefandroid); ?>;
+            } else {
+                url = <?php echo json_encode($hrefdefault); ?>;
             }
+            if (!url) return;
+            document.querySelectorAll('.wm-custom-link').forEach(function(el) {
+                var link = el.tagName === 'A' ? el : el.querySelector('a');
+                if (link) {
+                    link.href = url;
+                    link.target = '_blank';
+                } else {
+                    el.style.cursor = 'pointer';
+                    el.setAttribute('role', 'link');
+                    el.addEventListener('click', function() {
+                        window.open(url, '_blank');
+                    });
+                }
+            });
         });
     </script>
 <?php
@@ -648,6 +654,19 @@ function wm_package_enqueue_styles()
         array(),
         $plugin_version
     );
+
+    // Primary color from wm_default_config.json (WORDPRESS.primary) overrides --wm-primary-color; fallback #0073AA is in CSS
+    $config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+    $primary_color = !empty($config['WORDPRESS']['primary']) ? trim($config['WORDPRESS']['primary']) : '';
+    if ($primary_color !== '') {
+        $primary_css = ':root { --wm-primary-color: ' . esc_attr($primary_color) . ';';
+        // RGB components for rgba() (e.g. focus box-shadow)
+        if (preg_match('/^#?([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})$/', $primary_color, $m)) {
+            $primary_css .= ' --wm-primary-color-rgb: ' . (int) hexdec($m[1]) . ', ' . (int) hexdec($m[2]) . ', ' . (int) hexdec($m[3]) . ';';
+        }
+        $primary_css .= ' }';
+        wp_add_inline_style('wm-package-default', $primary_css);
+    }
 }
 add_action('wp_enqueue_scripts', 'wm_package_enqueue_styles');
 
@@ -738,16 +757,71 @@ function wm_render_svg_icon($svg_code)
     return wp_kses($svg_code, $allowed_svg_tags);
 }
 
+define('WM_CONFIG_SOURCE_OPTION', 'wm_config_source');
+define('WM_CACHED_API_CONFIG_OPTION', 'wm_cached_api_config');
+
 /**
- * Get WM default configuration from JSON file with dynamic ID
- * The 'id' field is always updated with the current app_configuration_id from WordPress options
- * 
+ * Build the config.json API URL for the given shard and app id.
+ * Pattern: {awsApi}/{app_id}/config.json (e.g. https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2dev/2/config.json)
+ * where awsApi is the shard's awsApi base (e.g. .../osm2cai2dev) and app_id is the APP ID.
+ *
+ * @param string $shard Shard name (e.g. osm2cai2dev, geohub)
+ * @param string $app_id App configuration ID
+ * @return string|null Full URL or null if shard config not available
+ */
+function wm_get_config_api_url($shard, $app_id)
+{
+    if (!function_exists('wm_get_shards_config')) {
+        return null;
+    }
+    $shards = wm_get_shards_config();
+    if (empty($shard) || empty($app_id) || !isset($shards[$shard]['awsApi'])) {
+        return null;
+    }
+    $aws_api = rtrim($shards[$shard]['awsApi'], '/');
+    return $aws_api . '/' . $app_id . '/config.json';
+}
+
+/**
+ * Fetch remote config from API (no cache). Used only when saving from dashboard.
+ *
+ * @param string $url Full config.json URL
+ * @return array|null Decoded config array or null on failure
+ */
+function wm_fetch_remote_config($url)
+{
+    $response = wp_remote_get($url, [
+        'timeout' => 8,
+        'sslverify' => true,
+    ]);
+
+    if (is_wp_error($response)) {
+        return null;
+    }
+    if (wp_remote_retrieve_response_code($response) !== 200) {
+        return null;
+    }
+
+    $data = json_decode(wp_remote_retrieve_body($response), true);
+    return is_array($data) ? $data : null;
+}
+
+/**
+ * Get WM default configuration.
+ * Base is always wm_default_config.json. If the cached API response contains WORDPRESS
+ * and/or APP, those sections override the local ones; missing sections in the API use local.
+ * APP.geohubId is always set to current app_configuration_id.
+ *
  * @return array|false Configuration array or false on error
  */
 function wm_get_default_config()
 {
-    $config_file = plugin_dir_path(dirname(__FILE__)) . 'config/wm_default_config.json';
+    $app_id = get_option('app_configuration_id');
+    if (!is_numeric($app_id) || empty($app_id)) {
+        $app_id = '49';
+    }
 
+    $config_file = plugin_dir_path(dirname(__FILE__)) . 'config/wm_default_config.json';
     if (!file_exists($config_file)) {
         return false;
     }
@@ -758,26 +832,32 @@ function wm_get_default_config()
     }
 
     $config = json_decode($config_content, true);
-    if ($config === null || !isset($config['WM_PLUGIN'])) {
+    if ($config === null) {
         return false;
     }
 
-    // Get the current app_configuration_id from WordPress options
-    $app_id = get_option('app_configuration_id');
-    if (!is_numeric($app_id) || empty($app_id)) {
-        $app_id = '49'; // Default fallback
+    $cached = get_option(WM_CACHED_API_CONFIG_OPTION);
+    if (is_array($cached)) {
+        if (isset($cached['WORDPRESS']) && is_array($cached['WORDPRESS'])) {
+            $config['WORDPRESS'] = $cached['WORDPRESS'];
+        }
+        if (isset($cached['APP']) && is_array($cached['APP'])) {
+            $config['APP'] = $cached['APP'];
+        }
     }
 
-    // Update the id field dynamically
-    $config['WM_PLUGIN']['id'] = (int) $app_id;
+    if (!isset($config['APP'])) {
+        $config['APP'] = [];
+    }
+    $config['APP']['geohubId'] = (int) $app_id;
 
     return $config;
 }
 
 /**
- * Update the ID field in wm_default_config.json file
+ * Update the geohubId field in wm_default_config.json file (APP section)
  * Called when app_configuration_id is saved in admin_page.php
- * 
+ *
  * @param int|string $app_id The app configuration ID to save
  * @return bool True on success, false on failure
  */
@@ -795,12 +875,15 @@ function wm_update_config_id($app_id)
     }
 
     $config = json_decode($config_content, true);
-    if ($config === null || !isset($config['WM_PLUGIN'])) {
+    if ($config === null) {
         return false;
     }
 
-    // Update the id field
-    $config['WM_PLUGIN']['id'] = (int) $app_id;
+    // Update APP.geohubId
+    if (!isset($config['APP'])) {
+        $config['APP'] = [];
+    }
+    $config['APP']['geohubId'] = (int) $app_id;
 
     // Write back to file with pretty print
     $updated_content = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
