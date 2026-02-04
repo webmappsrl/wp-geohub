@@ -446,9 +446,15 @@ function wm_settings_page()
 					<img src="<?php echo admin_url('images/spinner.gif'); ?>" alt="<?php echo esc_attr__('Loading...', 'wm-package'); ?>">
 				</div>
 				<h2 id="modal-title"><?php echo esc_html__('Processing...', 'wm-package'); ?></h2>
+				<div id="sync-progress-bar" style="width: 100%; background-color: #f0f0f0; border-radius: 4px; height: 20px; margin: 15px 0; overflow: hidden;">
+					<div id="sync-progress-bar-fill" style="width: 0%; background-color: #2271b1; height: 100%; transition: width 0.3s ease;"></div>
+				</div>
 				<p id="sync-progress-message">
 					<?php echo esc_html__('Please do not close or reload this page while the operation is in progress.', 'wm-package'); ?>
 				</p>
+				<button type="button" id="stop-sync-btn" class="button button-secondary" style="margin-top: 15px; display: none;">
+					<?php echo esc_html__('Stop Synchronization', 'wm-package'); ?>
+				</button>
 			</div>
 		</div>
 		<form method="post" action="options.php">
@@ -631,6 +637,29 @@ function wm_settings_page()
 						<p class="copiable">wm-custom-link</p>
 						<p class="description">
 							<?php echo esc_html__('Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in "CSS Classes"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab.', 'wm-package'); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+			<h2><?php echo esc_html__('Featured Image Display', 'wm-package'); ?></h2>
+			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
+				<?php echo esc_html__('Choose where to display featured images for tracks and POIs.', 'wm-package'); ?>
+			</p>
+			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Featured Image Location', 'wm-package'); ?></th>
+					<td>
+						<label>
+							<input type="radio" name="featured_image_location" value="content" <?php checked(get_option('featured_image_location', 'content'), 'content'); ?> />
+							<?php echo esc_html__('In content area (default)', 'wm-package'); ?>
+						</label>
+						<br>
+						<label>
+							<input type="radio" name="featured_image_location" value="page-header" <?php checked(get_option('featured_image_location', 'content'), 'page-header'); ?> />
+							<?php echo esc_html__('In WordPress page-header section', 'wm-package'); ?>
+						</label>
+						<p class="description">
+							<?php echo esc_html__('Select where featured images should be displayed. "In content area" shows images in the standard content wrapper. "In WordPress page-header section" displays images in the theme\'s page-header area.', 'wm-package'); ?>
 						</p>
 					</td>
 				</tr>
@@ -915,6 +944,7 @@ function wm_settings_init()
 	register_setting('wm-settings', 'ios_app_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'android_app_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'website_url', 'sanitize_text_field');
+	register_setting('wm-settings', 'featured_image_location', 'sanitize_text_field');
 	// track_navigation fields are only shown if generate_edges is enabled in wm_default_config.json
 	$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
 	$generate_edges_enabled = false;
@@ -1006,10 +1036,10 @@ function wm_admin_footer()
 				deletingPois: '<?php echo esc_js(__('Deleting POIs...', 'wm-package')); ?>',
 				doNotCloseSync: '<?php echo esc_js(__('Please do not close or reload this page while synchronization is in progress.', 'wm-package')); ?>',
 				doNotCloseDelete: '<?php echo esc_js(__('Please do not close or reload this page while deletion is in progress.', 'wm-package')); ?>',
-				warningSyncTracks: '<?php echo esc_js(__('⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
-				warningSyncPois: '<?php echo esc_js(__('⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
-				warningDeleteTracks: '<?php echo esc_js(__('⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
-				warningDeletePois: '<?php echo esc_js(__('⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone.\n\nAre you sure you want to proceed?', 'wm-package')); ?>',
+				warningSyncTracks: '<?php echo esc_js(__('⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?', 'wm-package')); ?>',
+				warningSyncPois: '<?php echo esc_js(__('⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?', 'wm-package')); ?>',
+				warningDeleteTracks: '<?php echo esc_js(__('⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?', 'wm-package')); ?>',
+				warningDeletePois: '<?php echo esc_js(__('⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?', 'wm-package')); ?>',
 				confirmDeleteTracks: '<?php echo esc_js(__('Final confirmation: Delete ALL Tracks?', 'wm-package')); ?>',
 				confirmDeletePois: '<?php echo esc_js(__('Final confirmation: Delete ALL POIs?', 'wm-package')); ?>',
 				tracksSynced: '<?php echo esc_js(__('Tracks synchronized successfully!', 'wm-package')); ?>',
@@ -1022,7 +1052,39 @@ function wm_admin_footer()
 				errorRefreshConfig: '<?php echo esc_js(__('Failed to refresh config', 'wm-package')); ?>',
 				shards: '<?php echo esc_js(__('shards', 'wm-package')); ?>',
 				defaultImageSelectFile: '<?php echo esc_js(__('Please select a PNG file first.', 'wm-package')); ?>',
-				defaultImageSuccess: '<?php echo esc_js(__('Default image updated successfully.', 'wm-package')); ?>'
+				defaultImageSuccess: '<?php echo esc_js(__('Default image updated successfully.', 'wm-package')); ?>',
+				syncSessionExpired: '<?php echo esc_js(__('Synchronization session expired. Please start over.', 'wm-package')); ?>',
+				syncStuckProcess: '<?php echo esc_js(__('Stuck process detected. Synchronization has been stopped. Please start over.', 'wm-package')); ?>',
+				syncGlobalTimeout: '<?php echo esc_js(__('Global timeout reached (%d minutes). Synchronization has been stopped. Please start over.', 'wm-package')); ?>',
+				syncTooManyErrors: '<?php echo esc_js(__('Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop.', 'wm-package')); ?>',
+				syncCompleted: '<?php echo esc_js(__('Synchronization completed! Processed %d tracks.', 'wm-package')); ?>',
+				syncBatchCompleted: '<?php echo esc_js(__('Batch completed: %d/%d tracks (%d%%)', 'wm-package')); ?>',
+				syncProcessed: '<?php echo esc_js(__('Processed', 'wm-package')); ?>',
+				syncSkipped: '<?php echo esc_js(__('Skipped', 'wm-package')); ?>',
+				syncErrors: '<?php echo esc_js(__('Errors', 'wm-package')); ?>',
+				syncTime: '<?php echo esc_js(__('Time', 'wm-package')); ?>',
+				syncMinutes: '<?php echo esc_js(__('min', 'wm-package')); ?>',
+				syncTracks: '<?php echo esc_js(__('tracks', 'wm-package')); ?>',
+				syncStopConfirm: '<?php echo esc_js(__('Do you want to stop the synchronization?', 'wm-package')); ?>',
+				syncStoppedByUser: '<?php echo esc_js(__('Synchronization stopped by user.', 'wm-package')); ?>',
+				syncGlobalTimeoutReached: '<?php echo esc_js(__('Global timeout reached (30 minutes). Synchronization has been stopped for safety.', 'wm-package')); ?>',
+				syncStuckDetected: '<?php echo esc_js(__('Stuck process detected (no progress for 5 minutes). Synchronization has been stopped.', 'wm-package')); ?>',
+				syncTooManyErrorsStopped: '<?php echo esc_js(__('Too many consecutive errors. Synchronization has been stopped.', 'wm-package')); ?>',
+				syncTooManyErrorsStoppedLoop: '<?php echo esc_js(__('Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop.', 'wm-package')); ?>',
+				syncAlreadyRunning: '<?php echo esc_js(__('A synchronization is already in progress. Do you want to stop it and start over?', 'wm-package')); ?>',
+				stopSynchronization: '<?php echo esc_js(__('Stop Synchronization', 'wm-package')); ?>',
+				syncProcessStoppedByServer: '<?php echo esc_js(__('Process stopped by server', 'wm-package')); ?>',
+				deleteTracksCompleted: '<?php echo esc_js(__('Deletion completed! Deleted %d tracks.', 'wm-package')); ?>',
+				deleteDeleted: '<?php echo esc_js(__('Deleted', 'wm-package')); ?>',
+				deleteBatchMayProcessed: '<?php echo esc_js(__('The batch may have been processed. Check the results.', 'wm-package')); ?>',
+				deleteAlreadyRunning: '<?php echo esc_js(__('A deletion is already in progress. Do you want to stop it and start over?', 'wm-package')); ?>',
+				deleteSessionExpired: '<?php echo esc_js(__('Deletion session expired. Please start over.', 'wm-package')); ?>',
+				deletePoisCompleted: '<?php echo esc_js(__('Deletion completed! Deleted %d POIs.', 'wm-package')); ?>',
+				poisSyncedProgress: '<?php echo esc_js(__('POIs synchronized successfully!', 'wm-package')); ?>',
+				apiPoiListInvalid: '<?php echo esc_js(__('API POI list invalid or unavailable.', 'wm-package')); ?>',
+				noPoisProvided: '<?php echo esc_js(__('No POIs provided or invalid format.', 'wm-package')); ?>',
+				syncPoisCompleted: '<?php echo esc_js(__('Synchronization completed! Processed %d POIs.', 'wm-package')); ?>',
+				syncPoisBatchCompleted: '<?php echo esc_js(__('Batch completed: %d/%d POIs (%d%%)', 'wm-package')); ?>'
 			};
 
 			// Shards configuration dynamically loaded from wm-types/environment.ts via PHP
@@ -1223,13 +1285,17 @@ function wm_admin_footer()
 			// Function to show sync progress modal
 			function showSyncModal(message, title) {
 				if (message) {
-					$('#sync-progress-message').text(message);
+					$('#sync-progress-message').html(message);
 				}
 				if (title) {
 					$('#modal-title').text(title);
 				} else {
 					$('#modal-title').text(wmPackageStrings.processing);
 				}
+				// Reset progress bar
+				$('#sync-progress-bar-fill').css('width', '0%');
+				// Show stop button
+				$('#stop-sync-btn').show();
 				$('#sync-progress-modal').css('display', 'flex');
 				// Prevent closing modal by clicking outside or pressing ESC
 				$('#sync-progress-modal').on('click', function(e) {
@@ -1249,92 +1315,563 @@ function wm_admin_footer()
 			// Function to hide sync progress modal
 			function hideSyncModal() {
 				$('#sync-progress-modal').hide();
+				$('#stop-sync-btn').hide();
 				$(document).off('keydown.syncModal');
+			}
+
+			// Stop sync/delete button handler
+			$('#stop-sync-btn').on('click', function() {
+				if (confirm(wmPackageStrings.syncStopConfirm)) {
+					// Stop all sync and delete processes
+					syncTracksState.isRunning = false;
+					deleteTracksState.isRunning = false;
+					syncPoisState.isRunning = false;
+					deletePoisState.isRunning = false;
+					hideSyncModal();
+					alert(wmPackageStrings.syncStoppedByUser);
+				}
+			});
+
+			// Batch sync state tracking
+			var syncTracksState = {
+				startTime: null,
+				lastUpdate: null,
+				consecutiveErrors: 0,
+				maxConsecutiveErrors: 3,
+				maxTotalTime: 30 * 60 * 1000, // 30 minutes in milliseconds
+				maxStuckTime: 5 * 60 * 1000, // 5 minutes without progress
+				isRunning: false
+			};
+
+			// Batch sync function for tracks
+			function syncTracksBatch(offset, batchSize) {
+				batchSize = batchSize || 10;
+				offset = offset || 0;
+
+				// Initialize state on first batch
+				if (offset === 0) {
+					syncTracksState.startTime = Date.now();
+					syncTracksState.lastUpdate = Date.now();
+					syncTracksState.consecutiveErrors = 0;
+					syncTracksState.isRunning = true;
+				}
+
+				// Check if process should be stopped
+				var currentTime = Date.now();
+				var totalTime = currentTime - syncTracksState.startTime;
+				var timeSinceLastUpdate = currentTime - syncTracksState.lastUpdate;
+
+				if (totalTime > syncTracksState.maxTotalTime) {
+					syncTracksState.isRunning = false;
+					hideSyncModal();
+					alert('❌ ' + wmPackageStrings.syncGlobalTimeoutReached);
+					return;
+				}
+
+				if (timeSinceLastUpdate > syncTracksState.maxStuckTime && offset > 0) {
+					syncTracksState.isRunning = false;
+					hideSyncModal();
+					alert('❌ ' + wmPackageStrings.syncStuckDetected);
+					return;
+				}
+
+				if (syncTracksState.consecutiveErrors >= syncTracksState.maxConsecutiveErrors) {
+					syncTracksState.isRunning = false;
+					hideSyncModal();
+					alert('❌ ' + wmPackageStrings.syncTooManyErrorsStoppedLoop.replace('%d', syncTracksState.maxConsecutiveErrors));
+					return;
+				}
+
+				if (!syncTracksState.isRunning) {
+					return; // Process was stopped
+				}
+
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'sync_tracks_action',
+						offset: offset,
+						batch_size: batchSize
+					},
+					dataType: 'json',
+					timeout: 120000, // 2 minutes per batch
+					success: function(response) {
+						if (!syncTracksState.isRunning) {
+							return; // Process was stopped
+						}
+
+						if (response && response.success) {
+							var progress = response.data && response.data.progress;
+							
+							// Reset error counter on success
+							syncTracksState.consecutiveErrors = 0;
+							syncTracksState.lastUpdate = Date.now();
+							
+							if (progress) {
+								// Check if process was stopped server-side
+								if (progress.stopped) {
+									syncTracksState.isRunning = false;
+									hideSyncModal();
+									var stopReason = progress.reason === 'too_many_errors' 
+										? wmPackageStrings.syncTooManyErrorsStopped
+										: wmPackageStrings.syncProcessStoppedByServer;
+									alert('❌ ' + stopReason + '. ' + (response.data.message || ''));
+									return;
+								}
+
+								// Update progress bar
+								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
+								
+								// Update modal with progress
+								var progressText = progress.complete 
+									? wmPackageStrings.tracksSynced + ' (' + progress.total + ' ' + wmPackageStrings.syncTracks + ')'
+									: progress.current + '/' + progress.total + ' ' + wmPackageStrings.syncTracks + ' (' + progress.percent + '%)';
+								
+								var elapsedMinutes = Math.floor((Date.now() - syncTracksState.startTime) / 60000);
+								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
+								
+								// Use cumulative totals instead of batch values
+								var totalProcessed = progress.total_processed !== undefined ? progress.total_processed : progress.processed;
+								var totalSkipped = progress.total_skipped !== undefined ? progress.total_skipped : progress.skipped;
+								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
+								
+								$('#sync-progress-message').html(
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.syncProcessed + ': ' + totalProcessed + 
+									' | ' + wmPackageStrings.syncSkipped + ': ' + totalSkipped + 
+									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
+								);
+								
+								// Update title
+								if (!progress.complete) {
+									$('#modal-title').text(wmPackageStrings.synchronizing + ' (' + progress.percent + '%)');
+								}
+							}
+
+							// If not complete, continue with next batch
+							if (progress && !progress.complete && progress.next_offset !== null && syncTracksState.isRunning) {
+								setTimeout(function() {
+									if (syncTracksState.isRunning) {
+										syncTracksBatch(progress.next_offset, batchSize);
+									}
+								}, 500); // Small delay between batches
+							} else {
+								// Complete!
+								syncTracksState.isRunning = false;
+								hideSyncModal();
+								alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.tracksSynced));
+								location.reload();
+							}
+						} else {
+							syncTracksState.consecutiveErrors++;
+							if (syncTracksState.consecutiveErrors >= syncTracksState.maxConsecutiveErrors) {
+								syncTracksState.isRunning = false;
+								hideSyncModal();
+								alert('❌ ' + wmPackageStrings.syncTooManyErrorsStopped);
+							} else {
+								// Retry after a delay
+								setTimeout(function() {
+									if (syncTracksState.isRunning) {
+										syncTracksBatch(offset, batchSize);
+									}
+								}, 2000);
+							}
+						}
+					},
+					error: function(xhr, status, error) {
+						syncTracksState.consecutiveErrors++;
+						
+						// Try to parse error response if available
+						var errorMessage = wmPackageStrings.errorServer;
+						var shouldStop = false;
+						
+						if (status === 'timeout') {
+							errorMessage = wmPackageStrings.errorTimeout + ' Il batch potrebbe essere stato processato.';
+							// Don't stop on timeout, might have succeeded
+							syncTracksState.consecutiveErrors = Math.max(0, syncTracksState.consecutiveErrors - 1);
+						} else if (xhr.responseJSON && xhr.responseJSON.data) {
+							if (xhr.responseJSON.data.message) {
+								errorMessage = xhr.responseJSON.data.message;
+							}
+							// Check if server stopped the process
+							if (xhr.responseJSON.data.progress && xhr.responseJSON.data.progress.stopped) {
+								shouldStop = true;
+							}
+						} else if (xhr.responseText) {
+							try {
+								var parsed = JSON.parse(xhr.responseText);
+								if (parsed.data && parsed.data.message) {
+									errorMessage = parsed.data.message;
+								}
+								if (parsed.data && parsed.data.progress && parsed.data.progress.stopped) {
+									shouldStop = true;
+								}
+							} catch (e) {
+								// If parsing fails, check if operation might have succeeded
+								if (xhr.status === 200) {
+									errorMessage = wmPackageStrings.errorFormat;
+									syncTracksState.consecutiveErrors = Math.max(0, syncTracksState.consecutiveErrors - 1);
+								}
+							}
+						}
+
+						if (shouldStop || syncTracksState.consecutiveErrors >= syncTracksState.maxConsecutiveErrors) {
+							syncTracksState.isRunning = false;
+							hideSyncModal();
+							alert('❌ ' + errorMessage + (shouldStop ? '' : ' ' + wmPackageStrings.syncTooManyErrorsStopped));
+						} else {
+							// Retry after a delay
+							setTimeout(function() {
+								if (syncTracksState.isRunning) {
+									syncTracksBatch(offset, batchSize);
+								}
+							}, 2000);
+						}
+					}
+				});
 			}
 
 			$('#generate_track').click(function(e) {
 				e.preventDefault();
+				
+				// Check if sync is already running
+				if (syncTracksState.isRunning) {
+					if (!confirm(wmPackageStrings.syncAlreadyRunning)) {
+						return false;
+					}
+					syncTracksState.isRunning = false;
+				}
+				
 				if (!confirm(wmPackageStrings.warningSyncTracks)) {
 					return false;
 				}
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseSync, wmPackageStrings.synchronizing);
+				
+				// Start batch processing from the beginning
+				syncTracksBatch(0, 10);
+			});
+			// Batch sync state tracking for POIs
+			var syncPoisState = {
+				startTime: null,
+				lastUpdate: null,
+				consecutiveErrors: 0,
+				maxConsecutiveErrors: 3,
+				maxTotalTime: 30 * 60 * 1000, // 30 minutes in milliseconds
+				maxStuckTime: 5 * 60 * 1000, // 5 minutes without progress
+				isRunning: false
+			};
+
+			// Batch sync function for POIs
+			function syncPoisBatch(offset, batchSize) {
+				batchSize = batchSize || 10;
+				offset = offset || 0;
+
+				// Initialize state on first batch
+				if (offset === 0) {
+					syncPoisState.startTime = Date.now();
+					syncPoisState.lastUpdate = Date.now();
+					syncPoisState.consecutiveErrors = 0;
+					syncPoisState.isRunning = true;
+				}
+
+				// Check if process should be stopped
+				var currentTime = Date.now();
+				var totalTime = currentTime - syncPoisState.startTime;
+				var timeSinceLastUpdate = currentTime - syncPoisState.lastUpdate;
+
+				if (totalTime > syncPoisState.maxTotalTime) {
+					syncPoisState.isRunning = false;
+					hideSyncModal();
+					alert('❌ ' + wmPackageStrings.syncGlobalTimeoutReached);
+					return;
+				}
+
+				if (timeSinceLastUpdate > syncPoisState.maxStuckTime && offset > 0) {
+					syncPoisState.isRunning = false;
+					hideSyncModal();
+					alert('❌ ' + wmPackageStrings.syncStuckDetected);
+					return;
+				}
+
+				if (syncPoisState.consecutiveErrors >= syncPoisState.maxConsecutiveErrors) {
+					syncPoisState.isRunning = false;
+					hideSyncModal();
+					alert('❌ ' + wmPackageStrings.syncTooManyErrorsStoppedLoop.replace('%d', syncPoisState.maxConsecutiveErrors));
+					return;
+				}
+
+				if (!syncPoisState.isRunning) {
+					return; // Process was stopped
+				}
 
 				$.ajax({
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'sync_tracks_action'
+						action: 'sync_pois_action',
+						offset: offset,
+						batch_size: batchSize
 					},
 					dataType: 'json',
-					timeout: 300000, // 5 minutes timeout
+					timeout: 120000, // 2 minutes per batch
 					success: function(response) {
-						hideSyncModal();
+						if (!syncPoisState.isRunning) {
+							return; // Process was stopped
+						}
+
 						if (response && response.success) {
-							alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.tracksSynced));
-							location.reload();
+							var progress = response.data && response.data.progress;
+							
+							// Reset error counter on success
+							syncPoisState.consecutiveErrors = 0;
+							syncPoisState.lastUpdate = Date.now();
+							
+							if (progress) {
+								// Check if process was stopped server-side
+								if (progress.stopped) {
+									syncPoisState.isRunning = false;
+									hideSyncModal();
+									var stopReason = progress.reason === 'too_many_errors' 
+										? wmPackageStrings.syncTooManyErrorsStopped
+										: wmPackageStrings.syncProcessStoppedByServer;
+									alert('❌ ' + stopReason + '. ' + (response.data.message || ''));
+									return;
+								}
+
+								// Update progress bar
+								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
+								
+								// Update modal with progress
+								var progressText = progress.complete 
+									? wmPackageStrings.poisSynced + ' (' + progress.total + ' POI)'
+									: progress.current + '/' + progress.total + ' POI (' + progress.percent + '%)';
+								
+								var elapsedMinutes = Math.floor((Date.now() - syncPoisState.startTime) / 60000);
+								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
+								
+								// Use cumulative totals instead of batch values
+								var totalProcessed = progress.total_processed !== undefined ? progress.total_processed : progress.processed;
+								var totalSkipped = progress.total_skipped !== undefined ? progress.total_skipped : progress.skipped;
+								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
+								
+								$('#sync-progress-message').html(
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.syncProcessed + ': ' + totalProcessed + 
+									' | ' + wmPackageStrings.syncSkipped + ': ' + totalSkipped + 
+									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
+								);
+								
+								// Update title
+								if (!progress.complete) {
+									$('#modal-title').text(wmPackageStrings.synchronizing + ' (' + progress.percent + '%)');
+								}
+							}
+
+							// If not complete, continue with next batch
+							if (progress && !progress.complete && progress.next_offset !== null && syncPoisState.isRunning) {
+								setTimeout(function() {
+									if (syncPoisState.isRunning) {
+										syncPoisBatch(progress.next_offset, batchSize);
+									}
+								}, 500); // Small delay between batches
+							} else {
+								// Complete!
+								syncPoisState.isRunning = false;
+								hideSyncModal();
+								alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.poisSynced));
+								location.reload();
+							}
 						} else {
-							alert('❌ Error: ' + (response && response.data && response.data.message ? response.data.message : wmPackageStrings.errorUnknown));
+							syncPoisState.consecutiveErrors++;
+							if (syncPoisState.consecutiveErrors >= syncPoisState.maxConsecutiveErrors) {
+								syncPoisState.isRunning = false;
+								hideSyncModal();
+								alert('❌ ' + wmPackageStrings.syncTooManyErrorsStopped);
+							} else {
+								// Retry after a delay
+								setTimeout(function() {
+									if (syncPoisState.isRunning) {
+										syncPoisBatch(offset, batchSize);
+									}
+								}, 2000);
+							}
 						}
 					},
 					error: function(xhr, status, error) {
-						hideSyncModal();
+						syncPoisState.consecutiveErrors++;
+						
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
+						var shouldStop = false;
+						
 						if (status === 'timeout') {
-							errorMessage = wmPackageStrings.errorTimeout;
-						} else if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
-							errorMessage = xhr.responseJSON.data.message;
+							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
+							// Don't stop on timeout, might have succeeded
+							syncPoisState.consecutiveErrors = Math.max(0, syncPoisState.consecutiveErrors - 1);
+						} else if (xhr.responseJSON && xhr.responseJSON.data) {
+							if (xhr.responseJSON.data.message) {
+								errorMessage = xhr.responseJSON.data.message;
+							}
+							// Check if server stopped the process
+							if (xhr.responseJSON.data.progress && xhr.responseJSON.data.progress.stopped) {
+								shouldStop = true;
+							}
 						} else if (xhr.responseText) {
 							try {
 								var parsed = JSON.parse(xhr.responseText);
 								if (parsed.data && parsed.data.message) {
 									errorMessage = parsed.data.message;
 								}
+								if (parsed.data && parsed.data.progress && parsed.data.progress.stopped) {
+									shouldStop = true;
+								}
 							} catch (e) {
 								// If parsing fails, check if operation might have succeeded
 								if (xhr.status === 200) {
 									errorMessage = wmPackageStrings.errorFormat;
+									syncPoisState.consecutiveErrors = Math.max(0, syncPoisState.consecutiveErrors - 1);
 								}
 							}
 						}
-						alert('❌ ' + errorMessage);
+
+						if (shouldStop || syncPoisState.consecutiveErrors >= syncPoisState.maxConsecutiveErrors) {
+							syncPoisState.isRunning = false;
+							hideSyncModal();
+							alert('❌ ' + errorMessage + (shouldStop ? '' : ' ' + wmPackageStrings.syncTooManyErrorsStopped));
+						} else {
+							// Retry after a delay
+							setTimeout(function() {
+								if (syncPoisState.isRunning) {
+									syncPoisBatch(offset, batchSize);
+								}
+							}, 2000);
+						}
 					}
 				});
-			});
+			}
+
 			$('#generate_poi').click(function(e) {
 				e.preventDefault();
+				
+				// Check if sync is already running
+				if (syncPoisState.isRunning) {
+					if (!confirm(wmPackageStrings.syncAlreadyRunning)) {
+						return false;
+					}
+					syncPoisState.isRunning = false;
+				}
+				
 				if (!confirm(wmPackageStrings.warningSyncPois)) {
 					return false;
 				}
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseSync, wmPackageStrings.synchronizing);
+				
+				// Start batch processing from the beginning
+				syncPoisBatch(0, 10);
+			});
+
+			// Batch delete state tracking
+			var deleteTracksState = {
+				startTime: null,
+				lastUpdate: null,
+				isRunning: false
+			};
+
+			// Batch delete function for tracks
+			function deleteTracksBatch(offset, batchSize) {
+				batchSize = batchSize || 20;
+				offset = offset || 0;
+
+				// Initialize state on first batch
+				if (offset === 0) {
+					deleteTracksState.startTime = Date.now();
+					deleteTracksState.lastUpdate = Date.now();
+					deleteTracksState.isRunning = true;
+				}
+
+				if (!deleteTracksState.isRunning) {
+					return; // Process was stopped
+				}
 
 				$.ajax({
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'sync_pois_action'
+						action: 'delete_all_tracks_action',
+						nonce: '<?php echo wp_create_nonce("delete_all_tracks"); ?>',
+						offset: offset,
+						batch_size: batchSize
 					},
 					dataType: 'json',
-					timeout: 300000, // 5 minutes timeout
+					timeout: 120000, // 2 minutes per batch
 					success: function(response) {
-						hideSyncModal();
+						if (!deleteTracksState.isRunning) {
+							return; // Process was stopped
+						}
+
 						if (response && response.success) {
-							alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.poisSynced));
-							location.reload();
+							var progress = response.data && response.data.progress;
+							
+							// Reset last update on success
+							deleteTracksState.lastUpdate = Date.now();
+							
+							if (progress) {
+								// Update progress bar
+								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
+								
+								// Update modal with progress
+								var progressText = progress.complete 
+									? wmPackageStrings.deleteTracksCompleted.replace('%d', progress.total_deleted)
+									: progress.current + '/' + progress.total + ' ' + wmPackageStrings.syncTracks + ' (' + progress.percent + '%)';
+								
+								var elapsedMinutes = Math.floor((Date.now() - deleteTracksState.startTime) / 60000);
+								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
+								
+								// Use cumulative totals instead of batch values
+								var totalDeleted = progress.total_deleted !== undefined ? progress.total_deleted : progress.deleted;
+								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
+								
+								$('#sync-progress-message').html(
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.deleteDeleted + ': ' + totalDeleted + 
+									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
+								);
+								
+								// Update title
+								if (!progress.complete) {
+									$('#modal-title').text(wmPackageStrings.deletingTracks + ' (' + progress.percent + '%)');
+								}
+							}
+
+							// If not complete, continue with next batch
+							if (progress && !progress.complete && progress.next_offset !== null && deleteTracksState.isRunning) {
+								setTimeout(function() {
+									if (deleteTracksState.isRunning) {
+										deleteTracksBatch(progress.next_offset, batchSize);
+									}
+								}, 500); // Small delay between batches
+							} else {
+								// Complete!
+								deleteTracksState.isRunning = false;
+								hideSyncModal();
+								alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.deleteTracksCompleted.replace('%d', progress.total_deleted)));
+								location.reload();
+							}
 						} else {
+							deleteTracksState.isRunning = false;
+							hideSyncModal();
 							alert('❌ Error: ' + (response && response.data && response.data.message ? response.data.message : wmPackageStrings.errorUnknown));
 						}
 					},
 					error: function(xhr, status, error) {
+						deleteTracksState.isRunning = false;
 						hideSyncModal();
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
 						if (status === 'timeout') {
-							errorMessage = wmPackageStrings.errorTimeout;
+							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
 						} else if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
 							errorMessage = xhr.responseJSON.data.message;
 						} else if (xhr.responseText) {
@@ -1344,7 +1881,6 @@ function wm_admin_footer()
 									errorMessage = parsed.data.message;
 								}
 							} catch (e) {
-								// If parsing fails, check if operation might have succeeded
 								if (xhr.status === 200) {
 									errorMessage = wmPackageStrings.errorFormat;
 								}
@@ -1353,10 +1889,19 @@ function wm_admin_footer()
 						alert('❌ ' + errorMessage);
 					}
 				});
-			});
+			}
 
 			$('#delete_track').click(function(e) {
 				e.preventDefault();
+				
+				// Check if delete is already running
+				if (deleteTracksState.isRunning) {
+					if (!confirm(wmPackageStrings.deleteAlreadyRunning)) {
+						return false;
+					}
+					deleteTracksState.isRunning = false;
+				}
+				
 				if (!confirm(wmPackageStrings.warningDeleteTracks)) {
 					return false;
 				}
@@ -1366,26 +1911,140 @@ function wm_admin_footer()
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseDelete, wmPackageStrings.deletingTracks);
-
-				$.post(ajaxurl, {
-					action: 'delete_all_tracks_action',
-					nonce: '<?php echo wp_create_nonce("delete_all_tracks"); ?>'
-				}, function(response) {
-					hideSyncModal();
-					if (response.success) {
-						alert('✅ ' + response.data.message);
-						location.reload();
-					} else {
-						alert('❌ Error: ' + (response.data.message || wmPackageStrings.errorUnknown));
-					}
-				}).fail(function() {
-					hideSyncModal();
-					alert('❌ ' + wmPackageStrings.errorServer);
-				});
+				
+				// Start batch processing from the beginning
+				deleteTracksBatch(0, 20);
 			});
+
+			// Batch delete state tracking for POIs
+			var deletePoisState = {
+				startTime: null,
+				lastUpdate: null,
+				isRunning: false
+			};
+
+			// Batch delete function for POIs
+			function deletePoisBatch(offset, batchSize) {
+				batchSize = batchSize || 20;
+				offset = offset || 0;
+
+				// Initialize state on first batch
+				if (offset === 0) {
+					deletePoisState.startTime = Date.now();
+					deletePoisState.lastUpdate = Date.now();
+					deletePoisState.isRunning = true;
+				}
+
+				if (!deletePoisState.isRunning) {
+					return; // Process was stopped
+				}
+
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'delete_all_pois_action',
+						nonce: '<?php echo wp_create_nonce("delete_all_pois"); ?>',
+						offset: offset,
+						batch_size: batchSize
+					},
+					dataType: 'json',
+					timeout: 120000, // 2 minutes per batch
+					success: function(response) {
+						if (!deletePoisState.isRunning) {
+							return; // Process was stopped
+						}
+
+						if (response && response.success) {
+							var progress = response.data && response.data.progress;
+							
+							// Reset last update on success
+							deletePoisState.lastUpdate = Date.now();
+							
+							if (progress) {
+								// Update progress bar
+								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
+								
+								// Update modal with progress
+								var progressText = progress.complete 
+									? wmPackageStrings.deletePoisCompleted.replace('%d', progress.total_deleted)
+									: progress.current + '/' + progress.total + ' POI (' + progress.percent + '%)';
+								
+								var elapsedMinutes = Math.floor((Date.now() - deletePoisState.startTime) / 60000);
+								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
+								
+								// Use cumulative totals instead of batch values
+								var totalDeleted = progress.total_deleted !== undefined ? progress.total_deleted : progress.deleted;
+								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
+								
+								$('#sync-progress-message').html(
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.deleteDeleted + ': ' + totalDeleted + 
+									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
+								);
+								
+								// Update title
+								if (!progress.complete) {
+									$('#modal-title').text(wmPackageStrings.deletingPois + ' (' + progress.percent + '%)');
+								}
+							}
+
+							// If not complete, continue with next batch
+							if (progress && !progress.complete && progress.next_offset !== null && deletePoisState.isRunning) {
+								setTimeout(function() {
+									if (deletePoisState.isRunning) {
+										deletePoisBatch(progress.next_offset, batchSize);
+									}
+								}, 500); // Small delay between batches
+							} else {
+								// Complete!
+								deletePoisState.isRunning = false;
+								hideSyncModal();
+								alert('✅ ' + (response.data && response.data.message ? response.data.message : wmPackageStrings.deletePoisCompleted.replace('%d', progress.total_deleted)));
+								location.reload();
+							}
+						} else {
+							deletePoisState.isRunning = false;
+							hideSyncModal();
+							alert('❌ Error: ' + (response && response.data && response.data.message ? response.data.message : wmPackageStrings.errorUnknown));
+						}
+					},
+					error: function(xhr, status, error) {
+						deletePoisState.isRunning = false;
+						hideSyncModal();
+						// Try to parse error response if available
+						var errorMessage = wmPackageStrings.errorServer;
+						if (status === 'timeout') {
+							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
+						} else if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+							errorMessage = xhr.responseJSON.data.message;
+						} else if (xhr.responseText) {
+							try {
+								var parsed = JSON.parse(xhr.responseText);
+								if (parsed.data && parsed.data.message) {
+									errorMessage = parsed.data.message;
+								}
+							} catch (e) {
+								if (xhr.status === 200) {
+									errorMessage = wmPackageStrings.errorFormat;
+								}
+							}
+						}
+						alert('❌ ' + errorMessage);
+					}
+				});
+			}
 
 			$('#delete_poi').click(function(e) {
 				e.preventDefault();
+				
+				// Check if delete is already running
+				if (deletePoisState.isRunning) {
+					if (!confirm(wmPackageStrings.deleteAlreadyRunning)) {
+						return false;
+					}
+					deletePoisState.isRunning = false;
+				}
+				
 				if (!confirm(wmPackageStrings.warningDeletePois)) {
 					return false;
 				}
@@ -1395,22 +2054,9 @@ function wm_admin_footer()
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseDelete, wmPackageStrings.deletingPois);
-
-				$.post(ajaxurl, {
-					action: 'delete_all_pois_action',
-					nonce: '<?php echo wp_create_nonce("delete_all_pois"); ?>'
-				}, function(response) {
-					hideSyncModal();
-					if (response.success) {
-						alert('✅ ' + response.data.message);
-						location.reload();
-					} else {
-						alert('❌ Error: ' + (response.data.message || wmPackageStrings.errorUnknown));
-					}
-				}).fail(function() {
-					hideSyncModal();
-					alert('❌ ' + wmPackageStrings.errorServer);
-				});
+				
+				// Start batch processing from the beginning
+				deletePoisBatch(0, 20);
 			});
 		});
 	</script>
@@ -1472,6 +2118,7 @@ function wm_save_options()
 	update_option('ios_app_url', $ios_from_config !== null ? $ios_from_config : sanitize_text_field($_POST['ios_app_url'] ?? ''));
 	update_option('android_app_url', $android_from_config !== null ? $android_from_config : sanitize_text_field($_POST['android_app_url'] ?? ''));
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
+	update_option('featured_image_location', sanitize_text_field($_POST['featured_image_location'] ?? 'content'));
 
 	// Only save track_navigation_layer_ids if generate_edges is enabled in config JSON
 	// track_navigation_enabled is now controlled by wm_default_config.json (generate_edges), not WordPress options

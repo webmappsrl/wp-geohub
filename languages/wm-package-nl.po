@@ -537,3 +537,222 @@ msgstr "Nederlands"
 
 msgid "Albanian"
 msgstr "Albanees"
+
+msgid "Featured Image Display"
+msgstr "Uitgelichte afbeelding weergave"
+
+msgid "Choose where to display featured images for tracks and POIs."
+msgstr "Kies waar uitgelichte afbeeldingen voor tracks en POI's worden weergegeven."
+
+msgid "Featured Image Location"
+msgstr "Locatie uitgelichte afbeelding"
+
+msgid "In content area (default)"
+msgstr "In het inhoudsgebied (standaard)"
+
+msgid "In WordPress page-header section"
+msgstr "In de WordPress page-header sectie"
+
+msgid "Select where featured images should be displayed. \"In content area\" shows images in the standard content wrapper. \"In WordPress page-header section\" displays images in the theme's page-header area."
+msgstr "Selecteer waar uitgelichte afbeeldingen moeten worden weergegeven. \"In het inhoudsgebied\" toont afbeeldingen in de standaard inhoudswrapper. \"In de WordPress page-header sectie\" toont afbeeldingen in het page-header gebied van het thema."
+
+msgid "Synchronizing..."
+msgstr "Synchroniseren..."
+
+msgid "Deleting Tracks..."
+msgstr "Tracks verwijderen..."
+
+msgid "Deleting POIs..."
+msgstr "POIs verwijderen..."
+
+msgid "Please do not close or reload this page while synchronization is in progress."
+msgstr "Sluit of herlaad deze pagina niet terwijl de synchronisatie bezig is."
+
+msgid "Please do not close or reload this page while deletion is in progress."
+msgstr "Sluit of herlaad deze pagina niet terwijl de verwijdering bezig is."
+
+msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle Tracks te synchroniseren/genereren. Dit kan enige tijd duren en zal Track-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle POIs te synchroniseren/genereren. Dit kan enige tijd duren en zal POI-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle Track-berichten PERMANENT te verwijderen. Deze bewerking kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle POI-berichten PERMANENT te verwijderen. Deze bewerking kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+msgid "Final confirmation: Delete ALL Tracks?"
+msgstr "Laatste bevestiging: ALLE Tracks verwijderen?"
+
+msgid "Final confirmation: Delete ALL POIs?"
+msgstr "Laatste bevestiging: ALLE POIs verwijderen?"
+
+msgid "Tracks synchronized successfully!"
+msgstr "Tracks succesvol gesynchroniseerd!"
+
+msgid "POIs synchronized successfully!"
+msgstr "POIs succesvol gesynchroniseerd!"
+
+msgid "Unknown error occurred"
+msgstr "Onbekende fout opgetreden"
+
+msgid "Error communicating with the server"
+msgstr "Fout bij communiceren met de server"
+
+msgid "Request timeout. The operation may still be processing. Please check the results."
+msgstr "Verzoek timeout. De bewerking wordt mogelijk nog verwerkt. Controleer de resultaten."
+
+msgid "Response format error, but operation may have completed. Please check the results."
+msgstr "Antwoordformaatfout, maar de bewerking kan zijn voltooid. Controleer de resultaten."
+
+msgid "Failed to refresh"
+msgstr "Vernieuwen mislukt"
+
+msgid "Failed to refresh config"
+msgstr "Configuratie vernieuwen mislukt"
+
+msgid "shards"
+msgstr "shards"
+
+msgid "Please select a PNG file first."
+msgstr "Selecteer eerst een PNG-bestand."
+
+msgid "Synchronization session expired. Please start over."
+msgstr "Synchronisatiesessie verlopen. Start opnieuw."
+
+msgid "Synchronization session expired."
+msgstr "Synchronisatiesessie verlopen."
+
+msgid "Stuck process detected. Synchronization has been stopped. Please start over."
+msgstr "Vastgelopen proces gedetecteerd. Synchronisatie is gestopt. Start opnieuw."
+
+msgid "Stuck process detected."
+msgstr "Vastgelopen proces gedetecteerd."
+
+msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
+msgstr "Globale timeout bereikt (%d minuten). Synchronisatie is gestopt. Start opnieuw."
+
+msgid "Global timeout reached."
+msgstr "Globale timeout bereikt."
+
+msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
+msgstr "Te veel opeenvolgende fouten (%d). Synchronisatie is gestopt om een oneindige lus te voorkomen."
+
+msgid "Too many consecutive errors."
+msgstr "Te veel opeenvolgende fouten."
+
+msgid "Great! Tracks synchronized successfully."
+msgstr "Geweldig! Tracks succesvol gesynchroniseerd."
+
+msgid "Synchronization completed! Processed %d tracks."
+msgstr "Synchronisatie voltooid! %d tracks verwerkt."
+
+msgid "Batch completed: %d/%d tracks (%d%%)"
+msgstr "Batch voltooid: %d/%d tracks (%d%%)"
+
+msgid "Processed"
+msgstr "Verwerkt"
+
+msgid "Skipped"
+msgstr "Overgeslagen"
+
+msgid "Errors"
+msgstr "Fouten"
+
+msgid "Time"
+msgstr "Tijd"
+
+msgid "min"
+msgstr "min"
+
+msgid "tracks"
+msgstr "tracks"
+
+msgid "Do you want to stop the synchronization?"
+msgstr "Wilt u de synchronisatie stoppen?"
+
+msgid "Synchronization stopped by user."
+msgstr "Synchronisatie gestopt door gebruiker."
+
+msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
+msgstr "Globale timeout bereikt (30 minuten). Synchronisatie is gestopt voor de veiligheid."
+
+msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
+msgstr "Vastgelopen proces gedetecteerd (geen voortgang gedurende 5 minuten). Synchronisatie is gestopt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped."
+msgstr "Te veel opeenvolgende fouten. Synchronisatie is gestopt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
+msgstr "Te veel opeenvolgende fouten. Synchronisatie is gestopt om een oneindige lus te voorkomen."
+
+msgid "A synchronization is already in progress. Do you want to stop it and start over?"
+msgstr "Er is al een synchronisatie bezig. Wilt u deze stoppen en opnieuw beginnen?"
+
+msgid "Stop Synchronization"
+msgstr "Synchronisatie stoppen"
+
+msgid "Process stopped by server"
+msgstr "Proces gestopt door server"
+
+msgid "Deletion completed! Deleted %d tracks."
+msgstr "Verwijdering voltooid! %d tracks verwijderd."
+
+msgid "Deleted"
+msgstr "Verwijderd"
+
+msgid "The batch may have been processed. Check the results."
+msgstr "De batch is mogelijk verwerkt. Controleer de resultaten."
+
+msgid "A deletion is already in progress. Do you want to stop it and start over?"
+msgstr "Er is al een verwijdering bezig. Wilt u deze stoppen en opnieuw beginnen?"
+
+msgid "Deletion session expired. Please start over."
+msgstr "Verwijderingssessie verlopen. Start opnieuw."
+
+msgid "Insufficient permissions"
+msgstr "Onvoldoende rechten"
+
+msgid "Invalid nonce"
+msgstr "Ongeldige nonce"
+
+msgid "Error deleting track ID: %d"
+msgstr "Fout bij verwijderen van track ID: %d"
+
+msgid "Deleted %d tracks. Some errors occurred."
+msgstr "%d tracks verwijderd. Er zijn enkele fouten opgetreden."
+
+msgid "Successfully deleted %d tracks."
+msgstr "%d tracks succesvol verwijderd."
+
+msgid "Required plugins are not installed or activated"
+msgstr "Vereiste plugins zijn niet geïnstalleerd of geactiveerd"
+
+msgid "API POI list invalid or unavailable."
+msgstr "API POI-lijst ongeldig of niet beschikbaar."
+
+msgid "No POIs provided or invalid format."
+msgstr "Geen POIs opgegeven of ongeldig formaat."
+
+msgid "Synchronization completed! Processed %d POIs."
+msgstr "Synchronisatie voltooid! %d POIs verwerkt."
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr "Batch voltooid: %d/%d POIs (%d%%)"
+
+msgid "Great! POIs synchronized successfully."
+msgstr "Geweldig! POIs succesvol gesynchroniseerd."
+
+msgid "Deletion completed! Deleted %d POIs."
+msgstr "Verwijdering voltooid! %d POIs verwijderd."
+
+msgid "Deleted %d POIs. Some errors occurred."
+msgstr "%d POIs verwijderd. Er zijn enkele fouten opgetreden."
+
+msgid "Successfully deleted %d POIs."
+msgstr "%d POIs succesvol verwijderd."
+
+msgid "Error deleting POI ID: %d"
+msgstr "Fout bij verwijderen van POI ID: %d"

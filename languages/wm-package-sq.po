@@ -537,3 +537,222 @@ msgstr "Holandisht"
 
 msgid "Albanian"
 msgstr "Shqip"
+
+msgid "Featured Image Display"
+msgstr "Shfaqja e imazhit të nxjerrë në pah"
+
+msgid "Choose where to display featured images for tracks and POIs."
+msgstr "Zgjidhni ku të shfaqen imazhet e nxjerra në pah për shtigjet dhe POI-të."
+
+msgid "Featured Image Location"
+msgstr "Vendndodhja e imazhit të nxjerrë në pah"
+
+msgid "In content area (default)"
+msgstr "Në zonën e përmbajtjes (parazgjedhje)"
+
+msgid "In WordPress page-header section"
+msgstr "Në seksionin page-header të WordPress"
+
+msgid "Select where featured images should be displayed. \"In content area\" shows images in the standard content wrapper. \"In WordPress page-header section\" displays images in the theme's page-header area."
+msgstr "Zgjidhni ku duhet të shfaqen imazhet e nxjerra në pah. \"Në zonën e përmbajtjes\" tregon imazhet në mbështjellësin standard të përmbajtjes. \"Në seksionin page-header të WordPress\" shfaq imazhet në zonën page-header të temës."
+
+msgid "Synchronizing..."
+msgstr "Sinkronizim..."
+
+msgid "Deleting Tracks..."
+msgstr "Fshirje Tracks..."
+
+msgid "Deleting POIs..."
+msgstr "Fshirje POIs..."
+
+msgid "Please do not close or reload this page while synchronization is in progress."
+msgstr "Ju lutemi mos mbyllni ose ringarkoni këtë faqe ndërsa sinkronizimi është në progres."
+
+msgid "Please do not close or reload this page while deletion is in progress."
+msgstr "Ju lutemi mos mbyllni ose ringarkoni këtë faqe ndërsa fshirja është në progres."
+
+msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të sinkronizoni/gjeneroni të gjitha Tracks. Kjo mund të zgjasë pak kohë dhe do të përditësojë ose krijojë postime Track. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të sinkronizoni/gjeneroni të gjitha POIs. Kjo mund të zgjasë pak kohë dhe do të përditësojë ose krijojë postime POI. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të fshini PERMANENTISHT të gjitha postimet Track. Kjo operacion nuk mund të zhbëhet. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të fshini PERMANENTISHT të gjitha postimet POI. Kjo operacion nuk mund të zhbëhet. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "Final confirmation: Delete ALL Tracks?"
+msgstr "Konfirmim përfundimtar: Fshini TË GJITHA Tracks?"
+
+msgid "Final confirmation: Delete ALL POIs?"
+msgstr "Konfirmim përfundimtar: Fshini TË GJITHA POIs?"
+
+msgid "Tracks synchronized successfully!"
+msgstr "Tracks u sinkronizuan me sukses!"
+
+msgid "POIs synchronized successfully!"
+msgstr "POIs u sinkronizuan me sukses!"
+
+msgid "Unknown error occurred"
+msgstr "Ndodhi një gabim i panjohur"
+
+msgid "Error communicating with the server"
+msgstr "Gabim në komunikim me serverin"
+
+msgid "Request timeout. The operation may still be processing. Please check the results."
+msgstr "Koha e kërkesës skadoi. Operacioni mund të jetë ende në procesim. Ju lutemi kontrolloni rezultatet."
+
+msgid "Response format error, but operation may have completed. Please check the results."
+msgstr "Gabim në formatin e përgjigjes, por operacioni mund të jetë përfunduar. Ju lutemi kontrolloni rezultatet."
+
+msgid "Failed to refresh"
+msgstr "Dështoi përditësimi"
+
+msgid "Failed to refresh config"
+msgstr "Dështoi përditësimi i konfigurimit"
+
+msgid "shards"
+msgstr "shards"
+
+msgid "Please select a PNG file first."
+msgstr "Ju lutemi zgjidhni fillimisht një skedar PNG."
+
+msgid "Synchronization session expired. Please start over."
+msgstr "Sesioni i sinkronizimit ka skaduar. Ju lutemi filloni përsëri."
+
+msgid "Synchronization session expired."
+msgstr "Sesioni i sinkronizimit ka skaduar."
+
+msgid "Stuck process detected. Synchronization has been stopped. Please start over."
+msgstr "Procesi i bllokuar u zbulua. Sinkronizimi u ndal. Ju lutemi filloni përsëri."
+
+msgid "Stuck process detected."
+msgstr "Procesi i bllokuar u zbulua."
+
+msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
+msgstr "Koha globale e pritjes u arrit (%d minuta). Sinkronizimi u ndal. Ju lutemi filloni përsëri."
+
+msgid "Global timeout reached."
+msgstr "Koha globale e pritjes u arrit."
+
+msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
+msgstr "Shumë gabime të njëpasnjëshme (%d). Sinkronizimi u ndal për të shmangur një lak të pafund."
+
+msgid "Too many consecutive errors."
+msgstr "Shumë gabime të njëpasnjëshme."
+
+msgid "Great! Tracks synchronized successfully."
+msgstr "E shkëlqyer! Gjurmët u sinkronizuan me sukses."
+
+msgid "Synchronization completed! Processed %d tracks."
+msgstr "Sinkronizimi u përfundua! %d gjurmë të përpunuara."
+
+msgid "Batch completed: %d/%d tracks (%d%%)"
+msgstr "Grupi u përfundua: %d/%d gjurmë (%d%%)"
+
+msgid "Processed"
+msgstr "Të përpunuara"
+
+msgid "Skipped"
+msgstr "Të anashkaluara"
+
+msgid "Errors"
+msgstr "Gabime"
+
+msgid "Time"
+msgstr "Koha"
+
+msgid "min"
+msgstr "min"
+
+msgid "tracks"
+msgstr "gjurmë"
+
+msgid "Do you want to stop the synchronization?"
+msgstr "Dëshironi të ndaloni sinkronizimin?"
+
+msgid "Synchronization stopped by user."
+msgstr "Sinkronizimi u ndal nga përdoruesi."
+
+msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
+msgstr "Koha globale e pritjes u arrit (30 minuta). Sinkronizimi u ndal për siguri."
+
+msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
+msgstr "Procesi i bllokuar u zbulua (pa progres për 5 minuta). Sinkronizimi u ndal."
+
+msgid "Too many consecutive errors. Synchronization has been stopped."
+msgstr "Shumë gabime të njëpasnjëshme. Sinkronizimi u ndal."
+
+msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
+msgstr "Shumë gabime të njëpasnjëshme. Sinkronizimi u ndal për të shmangur një lak të pafund."
+
+msgid "A synchronization is already in progress. Do you want to stop it and start over?"
+msgstr "Një sinkronizim është tashmë në proces. Dëshironi ta ndalni dhe të filloni përsëri?"
+
+msgid "Stop Synchronization"
+msgstr "Ndaloni sinkronizimin"
+
+msgid "Process stopped by server"
+msgstr "Procesi u ndal nga serveri"
+
+msgid "Deletion completed! Deleted %d tracks."
+msgstr "Fshirja u përfundua! %d gjurmë të fshira."
+
+msgid "Deleted"
+msgstr "Të fshira"
+
+msgid "The batch may have been processed. Check the results."
+msgstr "Grupi mund të jetë përpunuar. Kontrolloni rezultatet."
+
+msgid "A deletion is already in progress. Do you want to stop it and start over?"
+msgstr "Një fshirje është tashmë në proces. Dëshironi ta ndalni dhe të filloni përsëri?"
+
+msgid "Deletion session expired. Please start over."
+msgstr "Sesioni i fshirjes ka skaduar. Ju lutemi filloni përsëri."
+
+msgid "Insufficient permissions"
+msgstr "Leje të pamjaftueshme"
+
+msgid "Invalid nonce"
+msgstr "Nonce e pavlefshme"
+
+msgid "Error deleting track ID: %d"
+msgstr "Gabim në fshirjen e ID-së së gjurmës: %d"
+
+msgid "Deleted %d tracks. Some errors occurred."
+msgstr "%d gjurmë të fshira. Disa gabime u ndodhën."
+
+msgid "Successfully deleted %d tracks."
+msgstr "%d gjurmë u fshinë me sukses."
+
+msgid "Required plugins are not installed or activated"
+msgstr "Plugin-et e kërkuara nuk janë instaluar ose aktivizuar"
+
+msgid "API POI list invalid or unavailable."
+msgstr "Lista e API POI është e pavlefshme ose e padisponueshme."
+
+msgid "No POIs provided or invalid format."
+msgstr "Asnjë POI nuk u dha ose formati është i pavlefshëm."
+
+msgid "Synchronization completed! Processed %d POIs."
+msgstr "Sinkronizimi u përfundua! %d POI të përpunuara."
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr "Grupi u përfundua: %d/%d POI (%d%%)"
+
+msgid "Great! POIs synchronized successfully."
+msgstr "E shkëlqyer! POI-të u sinkronizuan me sukses."
+
+msgid "Deletion completed! Deleted %d POIs."
+msgstr "Fshirja u përfundua! %d POI të fshira."
+
+msgid "Deleted %d POIs. Some errors occurred."
+msgstr "%d POI të fshira. Disa gabime u ndodhën."
+
+msgid "Successfully deleted %d POIs."
+msgstr "%d POI u fshinë me sukses."
+
+msgid "Error deleting POI ID: %d"
+msgstr "Gabim në fshirjen e ID-së së POI: %d"

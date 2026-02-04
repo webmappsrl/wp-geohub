@@ -83,6 +83,8 @@ function wm_single_track($atts)
 	wp_enqueue_style('leaflet-fullscreen-css', 'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.css', array('leaflet-css'), '1.0.2');
 	wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true);
 	wp_enqueue_script('leaflet-fullscreen-js', 'https://unpkg.com/leaflet-fullscreen@1.0.2/dist/Leaflet.fullscreen.min.js', array('leaflet-js'), '1.0.2', true);
+	// Enqueue togpx library for GPX generation from GeoJSON
+	wp_enqueue_script('togpx-js', 'https://cdn.jsdelivr.net/npm/togpx@0.5.4/togpx.min.js', array(), '0.5.4', true);
 
 	$description = null;
 	$excerpt = null;
@@ -131,11 +133,15 @@ function wm_single_track($atts)
 			}
 		}
 	}
+	// Get featured image display location setting
+	$featured_image_location = get_option('featured_image_location', 'content');
+	$use_page_header = ($featured_image_location === 'page-header');
+
 	ob_start();
 ?>
 	<div class="wm_content_wrapper">
 		<!-- 1. Featured Image -->
-		<?php if ($featured_image) : ?>
+		<?php if ($featured_image && !$use_page_header) : ?>
 			<div class="wm_featured_image">
 				<img src="<?= esc_url($featured_image) ?>" alt="<?= esc_attr($title) ?>" />
 			</div>
@@ -186,12 +192,44 @@ function wm_single_track($atts)
 								$download_enabled = (bool) $config['WORDPRESS']['download_track_enable'];
 							}
 						}
-						if ($download_enabled && !empty($gpx)) : ?>
+						// Show download button if enabled and (gpx_url exists OR track geometry exists for generation)
+						if ($download_enabled && (!empty($gpx) || !empty($track_geometry))) : 
+							// Prepare track data for JavaScript (for GPX generation if needed)
+							$track_feature = null;
+							if (!empty($track_geometry) && !empty($track)) {
+								$track_feature = [
+									'type' => 'Feature',
+									'geometry' => $track_geometry,
+									'properties' => $track
+								];
+							}
+							// Get track name for filename
+							$track_name = 'track';
+							if (!empty($track['name'])) {
+								if (is_array($track['name'])) {
+									$track_name = $track['name'][$language] ?? reset($track['name']) ?? 'track';
+								} else {
+									$track_name = $track['name'];
+								}
+							}
+							?>
 							<div class="wm_download_links wm_download_links--map">
-								<a class="wm_download_link" href="<?= esc_url($gpx) ?>">
-									<i class="fa fa-download"></i>
-									<?= __('Download GPX', 'wm-package') ?>
-								</a>
+								<?php if (!empty($gpx)) : ?>
+									<!-- Use existing GPX URL -->
+									<a class="wm_download_link" href="<?= esc_url($gpx) ?>" download>
+										<i class="fa fa-download"></i>
+										<?= __('Download GPX', 'wm-package') ?>
+									</a>
+								<?php else : ?>
+									<!-- Generate GPX from GeoJSON -->
+									<a class="wm_download_link wm_download_link--generate" 
+									   href="#" 
+									   data-track-feature='<?= esc_attr(wp_json_encode($track_feature)) ?>'
+									   data-track-name="<?= esc_attr($track_name) ?>">
+										<i class="fa fa-download"></i>
+										<?= __('Download GPX', 'wm-package') ?>
+									</a>
+								<?php endif; ?>
 							</div>
 						<?php endif; ?>
 					</div>
@@ -606,6 +644,17 @@ function wm_single_track($atts)
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
+			<?php if ($use_page_header && $featured_image) : ?>
+			// Set featured image in page-header section
+			var pageHeader = document.querySelector('header.page-header');
+			if (pageHeader) {
+				pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
+				pageHeader.style.backgroundSize = 'cover';
+				pageHeader.style.backgroundPosition = 'center';
+				pageHeader.style.backgroundRepeat = 'no-repeat';
+			}
+			<?php endif; ?>
+
 			if (typeof Swiper !== 'undefined') {
 				var swiperContainers = document.querySelectorAll('.wm_swiper');
 				swiperContainers.forEach(function(container) {
@@ -647,6 +696,81 @@ function wm_single_track($atts)
 					wmInitLeafletMap('wm-leaflet-map-track-<?= esc_js($track_id) ?>', geometryJson, relatedPoisJson, defaultImageUrl);
 				}
 			<?php endif; ?>
+
+			// Handle GPX generation from GeoJSON
+			var gpxGenerateLinks = document.querySelectorAll('.wm_download_link--generate');
+			gpxGenerateLinks.forEach(function(link) {
+				link.addEventListener('click', function(e) {
+					e.preventDefault();
+					
+					var trackFeatureJson = this.getAttribute('data-track-feature');
+					var trackName = this.getAttribute('data-track-name') || 'track';
+					
+					if (!trackFeatureJson) {
+						console.error('Track feature data not found');
+						alert('<?= esc_js(__('Error: Track data not available', 'wm-package')) ?>');
+						return;
+					}
+					
+					// Function to generate and download GPX
+					function generateAndDownloadGPX() {
+						try {
+							var trackFeature = JSON.parse(trackFeatureJson);
+							
+							// Check if togpx is available
+							if (typeof togpx === 'undefined') {
+								console.error('togpx library not loaded');
+								alert('<?= esc_js(__('Error: GPX generation library not available. Please refresh the page.', 'wm-package')) ?>');
+								return;
+							}
+							
+							// Generate GPX from GeoJSON
+							var gpxString = togpx(trackFeature);
+							
+							if (!gpxString || gpxString.trim() === '') {
+								console.error('Failed to generate GPX');
+								alert('<?= esc_js(__('Error: Failed to generate GPX file', 'wm-package')) ?>');
+								return;
+							}
+							
+							// Clean track name for filename (remove spaces and special chars)
+							var cleanName = trackName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9-_]/g, '') || 'track';
+							
+							// Create blob and download
+							var blob = new Blob([gpxString], { type: 'application/gpx+xml' });
+							var url = window.URL.createObjectURL(blob);
+							var a = document.createElement('a');
+							a.href = url;
+							a.download = cleanName + '.gpx';
+							document.body.appendChild(a);
+							a.click();
+							document.body.removeChild(a);
+							window.URL.revokeObjectURL(url);
+						} catch (error) {
+							console.error('Error generating GPX:', error);
+							alert('<?= esc_js(__('Error: Failed to generate GPX file', 'wm-package')) ?>');
+						}
+					}
+					
+					// Wait for togpx library to be loaded if not already available
+					if (typeof togpx !== 'undefined') {
+						generateAndDownloadGPX();
+					} else {
+						// Wait a bit for the library to load
+						var attempts = 0;
+						var checkInterval = setInterval(function() {
+							attempts++;
+							if (typeof togpx !== 'undefined') {
+								clearInterval(checkInterval);
+								generateAndDownloadGPX();
+							} else if (attempts > 20) {
+								clearInterval(checkInterval);
+								alert('<?= esc_js(__('Error: GPX generation library failed to load. Please refresh the page.', 'wm-package')) ?>');
+							}
+						}, 100);
+					}
+				});
+			});
 		});
 	</script>
 

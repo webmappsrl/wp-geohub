@@ -92,11 +92,15 @@ function wm_single_poi($atts)
 		$related_urls = $poi_properties['related_url'] ?? [];
 		$poi_types = $poi_properties['taxonomy']['poi_types'] ?? [];
 	}
+	// Get featured image display location setting
+	$featured_image_location = get_option('featured_image_location', 'content');
+	$use_page_header = ($featured_image_location === 'page-header');
+
 	ob_start();
 ?>
 	<div class="wm_content_wrapper">
 		<!-- 1. Featured Image -->
-		<?php if ($featured_image) : ?>
+		<?php if ($featured_image && !$use_page_header) : ?>
 			<div class="wm_featured_image">
 				<img src="<?= esc_url($featured_image) ?>" alt="<?= esc_attr($title) ?>" />
 			</div>
@@ -233,6 +237,17 @@ function wm_single_poi($atts)
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
+			<?php if ($use_page_header && $featured_image) : ?>
+			// Set featured image in page-header section
+			var pageHeader = document.querySelector('header.page-header');
+			if (pageHeader) {
+				pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
+				pageHeader.style.backgroundSize = 'cover';
+				pageHeader.style.backgroundPosition = 'center';
+				pageHeader.style.backgroundRepeat = 'no-repeat';
+			}
+			<?php endif; ?>
+
 			if (typeof Swiper !== 'undefined') {
 				var swiper = new Swiper('.swiper-container', {
 					slidesPerView: 1,

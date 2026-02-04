@@ -537,3 +537,222 @@ msgstr "Niederländisch"
 
 msgid "Albanian"
 msgstr "Albanisch"
+
+msgid "Featured Image Display"
+msgstr "Hervorgehobenes Bild anzeigen"
+
+msgid "Choose where to display featured images for tracks and POIs."
+msgstr "Wählen Sie, wo hervorgehobene Bilder für Tracks und POIs angezeigt werden sollen."
+
+msgid "Featured Image Location"
+msgstr "Position des hervorgehobenen Bildes"
+
+msgid "In content area (default)"
+msgstr "Im Inhaltsbereich (Standard)"
+
+msgid "In WordPress page-header section"
+msgstr "Im WordPress page-header-Bereich"
+
+msgid "Select where featured images should be displayed. \"In content area\" shows images in the standard content wrapper. \"In WordPress page-header section\" displays images in the theme's page-header area."
+msgstr "Wählen Sie, wo hervorgehobene Bilder angezeigt werden sollen. \"Im Inhaltsbereich\" zeigt Bilder im Standard-Inhaltscontainer. \"Im WordPress page-header-Bereich\" zeigt Bilder im page-header-Bereich des Themes."
+
+msgid "Synchronizing..."
+msgstr "Synchronisierung läuft..."
+
+msgid "Deleting Tracks..."
+msgstr "Tracks werden gelöscht..."
+
+msgid "Deleting POIs..."
+msgstr "POIs werden gelöscht..."
+
+msgid "Please do not close or reload this page while synchronization is in progress."
+msgstr "Bitte schließen oder neu laden Sie diese Seite nicht, während die Synchronisierung läuft."
+
+msgid "Please do not close or reload this page while deletion is in progress."
+msgstr "Bitte schließen oder neu laden Sie diese Seite nicht, während die Löschung läuft."
+
+msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle Tracks zu synchronisieren/zu generieren. Dies kann einige Zeit dauern und wird Track-Beiträge aktualisieren oder erstellen. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle POIs zu synchronisieren/zu generieren. Dies kann einige Zeit dauern und wird POI-Beiträge aktualisieren oder erstellen. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle Track-Beiträge PERMANENT zu löschen. Diese Operation kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle POI-Beiträge PERMANENT zu löschen. Diese Operation kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "Final confirmation: Delete ALL Tracks?"
+msgstr "Endgültige Bestätigung: ALLE Tracks löschen?"
+
+msgid "Final confirmation: Delete ALL POIs?"
+msgstr "Endgültige Bestätigung: ALLE POIs löschen?"
+
+msgid "Tracks synchronized successfully!"
+msgstr "Tracks erfolgreich synchronisiert!"
+
+msgid "POIs synchronized successfully!"
+msgstr "POIs erfolgreich synchronisiert!"
+
+msgid "Unknown error occurred"
+msgstr "Unbekannter Fehler aufgetreten"
+
+msgid "Error communicating with the server"
+msgstr "Fehler bei der Kommunikation mit dem Server"
+
+msgid "Request timeout. The operation may still be processing. Please check the results."
+msgstr "Anfrage-Timeout. Die Operation wird möglicherweise noch verarbeitet. Bitte überprüfen Sie die Ergebnisse."
+
+msgid "Response format error, but operation may have completed. Please check the results."
+msgstr "Antwortformatfehler, aber die Operation wurde möglicherweise abgeschlossen. Bitte überprüfen Sie die Ergebnisse."
+
+msgid "Failed to refresh"
+msgstr "Aktualisierung fehlgeschlagen"
+
+msgid "Failed to refresh config"
+msgstr "Konfiguration konnte nicht aktualisiert werden"
+
+msgid "shards"
+msgstr "Shards"
+
+msgid "Please select a PNG file first."
+msgstr "Bitte wählen Sie zuerst eine PNG-Datei aus."
+
+msgid "Synchronization session expired. Please start over."
+msgstr "Synchronisierungssitzung abgelaufen. Bitte starten Sie von vorne."
+
+msgid "Synchronization session expired."
+msgstr "Synchronisierungssitzung abgelaufen."
+
+msgid "Stuck process detected. Synchronization has been stopped. Please start over."
+msgstr "Hängender Prozess erkannt. Die Synchronisierung wurde gestoppt. Bitte starten Sie von vorne."
+
+msgid "Stuck process detected."
+msgstr "Hängender Prozess erkannt."
+
+msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
+msgstr "Globales Timeout erreicht (%d Minuten). Die Synchronisierung wurde gestoppt. Bitte starten Sie von vorne."
+
+msgid "Global timeout reached."
+msgstr "Globales Timeout erreicht."
+
+msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
+msgstr "Zu viele aufeinanderfolgende Fehler (%d). Die Synchronisierung wurde gestoppt, um eine Endlosschleife zu vermeiden."
+
+msgid "Too many consecutive errors."
+msgstr "Zu viele aufeinanderfolgende Fehler."
+
+msgid "Great! Tracks synchronized successfully."
+msgstr "Großartig! Tracks erfolgreich synchronisiert."
+
+msgid "Synchronization completed! Processed %d tracks."
+msgstr "Synchronisierung abgeschlossen! %d Tracks verarbeitet."
+
+msgid "Batch completed: %d/%d tracks (%d%%)"
+msgstr "Batch abgeschlossen: %d/%d Tracks (%d%%)"
+
+msgid "Processed"
+msgstr "Verarbeitet"
+
+msgid "Skipped"
+msgstr "Übersprungen"
+
+msgid "Errors"
+msgstr "Fehler"
+
+msgid "Time"
+msgstr "Zeit"
+
+msgid "min"
+msgstr "Min"
+
+msgid "tracks"
+msgstr "Tracks"
+
+msgid "Do you want to stop the synchronization?"
+msgstr "Möchten Sie die Synchronisierung stoppen?"
+
+msgid "Synchronization stopped by user."
+msgstr "Synchronisierung vom Benutzer gestoppt."
+
+msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
+msgstr "Globales Timeout erreicht (30 Minuten). Die Synchronisierung wurde aus Sicherheitsgründen gestoppt."
+
+msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
+msgstr "Hängender Prozess erkannt (kein Fortschritt für 5 Minuten). Die Synchronisierung wurde gestoppt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped."
+msgstr "Zu viele aufeinanderfolgende Fehler. Die Synchronisierung wurde gestoppt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
+msgstr "Zu viele aufeinanderfolgende Fehler. Die Synchronisierung wurde gestoppt, um eine Endlosschleife zu vermeiden."
+
+msgid "A synchronization is already in progress. Do you want to stop it and start over?"
+msgstr "Eine Synchronisierung läuft bereits. Möchten Sie sie stoppen und von vorne beginnen?"
+
+msgid "Stop Synchronization"
+msgstr "Synchronisierung stoppen"
+
+msgid "Process stopped by server"
+msgstr "Prozess vom Server gestoppt"
+
+msgid "Deletion completed! Deleted %d tracks."
+msgstr "Löschung abgeschlossen! %d Tracks gelöscht."
+
+msgid "Deleted"
+msgstr "Gelöscht"
+
+msgid "The batch may have been processed. Check the results."
+msgstr "Der Batch wurde möglicherweise verarbeitet. Überprüfen Sie die Ergebnisse."
+
+msgid "A deletion is already in progress. Do you want to stop it and start over?"
+msgstr "Eine Löschung läuft bereits. Möchten Sie sie stoppen und von vorne beginnen?"
+
+msgid "Deletion session expired. Please start over."
+msgstr "Löschungssitzung abgelaufen. Bitte starten Sie von vorne."
+
+msgid "Insufficient permissions"
+msgstr "Unzureichende Berechtigungen"
+
+msgid "Invalid nonce"
+msgstr "Ungültiger Nonce"
+
+msgid "Error deleting track ID: %d"
+msgstr "Fehler beim Löschen der Track-ID: %d"
+
+msgid "Deleted %d tracks. Some errors occurred."
+msgstr "%d Tracks gelöscht. Einige Fehler sind aufgetreten."
+
+msgid "Successfully deleted %d tracks."
+msgstr "%d Tracks erfolgreich gelöscht."
+
+msgid "Required plugins are not installed or activated"
+msgstr "Erforderliche Plugins sind nicht installiert oder aktiviert"
+
+msgid "API POI list invalid or unavailable."
+msgstr "POI-API-Liste ungültig oder nicht verfügbar."
+
+msgid "No POIs provided or invalid format."
+msgstr "Keine POIs bereitgestellt oder ungültiges Format."
+
+msgid "Synchronization completed! Processed %d POIs."
+msgstr "Synchronisierung abgeschlossen! %d POIs verarbeitet."
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr "Batch abgeschlossen: %d/%d POIs (%d%%)"
+
+msgid "Great! POIs synchronized successfully."
+msgstr "Großartig! POIs erfolgreich synchronisiert."
+
+msgid "Deletion completed! Deleted %d POIs."
+msgstr "Löschung abgeschlossen! %d POIs gelöscht."
+
+msgid "Deleted %d POIs. Some errors occurred."
+msgstr "%d POIs gelöscht. Einige Fehler sind aufgetreten."
+
+msgid "Successfully deleted %d POIs."
+msgstr "%d POIs erfolgreich gelöscht."
+
+msgid "Error deleting POI ID: %d"
+msgstr "Fehler beim Löschen der POI-ID: %d"

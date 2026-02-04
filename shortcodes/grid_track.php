@@ -18,9 +18,11 @@ function wm_grid_track($atts)
         'random' => 'false',
         'content' => false,
         'use_elastic' => 'true', // Use Elasticsearch API by default
-        'show_filters' => 'true' // Show filters interface
+        'show_filters' => 'false' // Show filters interface
     ), $atts));
 
+    // When content is true, layer endpoint wins: bypass Elastic (data + filters)
+    $content = ($content === 'true' || $content === true);
     $tracks = [];
 
     $elastic_api_base = get_option('elastic_api');
@@ -119,8 +121,8 @@ function wm_grid_track($atts)
         }
     }
 
-    // Try to use Elasticsearch API first if enabled and available
-    $use_elastic = ($use_elastic === 'true' || $use_elastic === true) && !empty($elastic_api_base) && !empty($layer_ids_array);
+    // Try to use Elasticsearch API only when content is false (when content is true, layer API is used)
+    $use_elastic = ($use_elastic === 'true' || $use_elastic === true) && !empty($elastic_api_base) && !empty($layer_ids_array) && !$content;
 
     if ($use_elastic) {
         // Use Elasticsearch API (like wm-home-result)

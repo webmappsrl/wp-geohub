@@ -23,27 +23,124 @@ function sync_tracks_action()
         return new WP_Error('missing_config', $error_message);
     }
 
+    // Batch processing parameters
+    $batch_size = isset($_POST['batch_size']) ? intval($_POST['batch_size']) : 10;
+    $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
+    $is_first_batch = ($offset === 0);
+    $transient_key = 'wm_sync_tracks_list';
+    $progress_key = 'wm_sync_tracks_progress';
+    $max_consecutive_errors = 3; // Stop after 3 consecutive batch errors
+    $max_total_time = 30 * MINUTE_IN_SECONDS; // Maximum 30 minutes total sync time
+
     if (!empty($track_url) && !empty($tracks_list) && !empty($track_shortcode)) {
 
-        $tracks = wp_remote_get($tracks_list);
-        if (is_wp_error($tracks)) {
-            $error_message = 'API track list non valida o non disponibile.';
-            set_transient('wm_sync_tracks_notification', $error_message, 60);
-            if (wp_doing_ajax()) {
-                wp_send_json_error(['message' => $error_message]);
+        // On first batch, fetch and cache the tracks list
+        if ($is_first_batch) {
+            $tracks_response = wp_remote_get($tracks_list);
+            if (is_wp_error($tracks_response)) {
+                $error_message = 'API track list non valida o non disponibile.';
+                set_transient('wm_sync_tracks_notification', $error_message, 60);
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => $error_message]);
+                }
+                return new WP_Error('invalid_api', $error_message);
             }
-            return new WP_Error('invalid_api', $error_message);
-        }
-        $tracks = json_decode(wp_remote_retrieve_body($tracks), true);
-        if (empty($tracks) || !is_array($tracks)) {
-            $error_message = 'Nessun track fornito o formato non valido.';
-            set_transient('wm_sync_tracks_notification', $error_message, 60);
-            if (wp_doing_ajax()) {
-                wp_send_json_error(['message' => $error_message]);
+            $tracks = json_decode(wp_remote_retrieve_body($tracks_response), true);
+            if (empty($tracks) || !is_array($tracks)) {
+                $error_message = 'Nessun track fornito o formato non valido.';
+                set_transient('wm_sync_tracks_notification', $error_message, 60);
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => $error_message]);
+                }
+                return new WP_Error('invalid_input', $error_message);
             }
-            return new WP_Error('invalid_input', $error_message);
+            // Cache the tracks list for 1 hour
+            set_transient($transient_key, $tracks, HOUR_IN_SECONDS);
+            // Initialize progress tracking
+            $progress_data = [
+                'start_time' => time(),
+                'last_update' => time(),
+                'last_offset' => 0,
+                'consecutive_errors' => 0,
+                'total_processed' => 0,
+                'total_skipped' => 0,
+                'total_errors' => 0
+            ];
+            set_transient($progress_key, $progress_data, HOUR_IN_SECONDS);
+        } else {
+            // Get cached tracks list
+            $tracks = get_transient($transient_key);
+            if ($tracks === false) {
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => __('Synchronization session expired. Please start over.', 'wm-package')]);
+                }
+                return new WP_Error('session_expired', __('Synchronization session expired.', 'wm-package'));
+            }
+            
+            // Check progress and detect if stuck
+            $progress_data = get_transient($progress_key);
+            if ($progress_data === false) {
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => __('Synchronization session expired. Please start over.', 'wm-package')]);
+                }
+                return new WP_Error('session_expired', __('Synchronization session expired.', 'wm-package'));
+            }
+            
+            // Check if process is stuck (no progress for more than 5 minutes)
+            $time_since_last_update = time() - $progress_data['last_update'];
+            if ($time_since_last_update > 5 * MINUTE_IN_SECONDS) {
+                delete_transient($transient_key);
+                delete_transient($progress_key);
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => __('Stuck process detected. Synchronization has been stopped. Please start over.', 'wm-package')]);
+                }
+                return new WP_Error('process_stuck', __('Stuck process detected.', 'wm-package'));
+            }
+            
+            // Check if total time exceeded
+            $total_time = time() - $progress_data['start_time'];
+            if ($total_time > $max_total_time) {
+                delete_transient($transient_key);
+                delete_transient($progress_key);
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => sprintf(__('Global timeout reached (%d minutes). Synchronization has been stopped. Please start over.', 'wm-package'), round($max_total_time / 60))]);
+                }
+                return new WP_Error('global_timeout', __('Global timeout reached.', 'wm-package'));
+            }
+            
+            // Check if offset hasn't changed (stuck on same batch)
+            if ($offset <= $progress_data['last_offset'] && $offset > 0) {
+                $progress_data['consecutive_errors']++;
+                if ($progress_data['consecutive_errors'] >= $max_consecutive_errors) {
+                    delete_transient($transient_key);
+                    delete_transient($progress_key);
+                    if (wp_doing_ajax()) {
+                        wp_send_json_error(['message' => sprintf(__('Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop.', 'wm-package'), $max_consecutive_errors)]);
+                    }
+                    return new WP_Error('too_many_errors', __('Too many consecutive errors.', 'wm-package'));
+                }
+            } else {
+                // Reset error counter on successful progress
+                $progress_data['consecutive_errors'] = 0;
+            }
         }
+
+        // Convert tracks array to indexed array for batch processing
+        $tracks_array = [];
         foreach ($tracks as $source_id => $updated_at) {
+            $tracks_array[] = ['id' => $source_id, 'updated_at' => $updated_at];
+        }
+        $total_tracks = count($tracks_array);
+        
+        // Get batch slice
+        $batch_tracks = array_slice($tracks_array, $offset, $batch_size);
+        $processed_count = 0;
+        $skipped_count = 0;
+        $error_count = 0;
+
+        foreach ($batch_tracks as $track_item) {
+            $source_id = $track_item['id'];
+            $updated_at = $track_item['updated_at'];
             $post_id = null;
             $track_shortcode_final = '';
 
@@ -62,17 +159,20 @@ function sync_tracks_action()
             $new_updated_time = strtotime($updated_at);
 
             if ($existing_posts && $new_updated_time <= $existing_post_modified_time) {
+                $skipped_count++;
                 continue;
             }
 
             $response = wp_remote_get($track_url . $source_id . ".json");
             if (is_wp_error($response)) {
+                $error_count++;
                 continue;
             }
 
             $body = wp_remote_retrieve_body($response);
             $data = json_decode($body, true);
             if (empty($data)) {
+                $error_count++;
                 continue;
             }
 
@@ -98,11 +198,13 @@ function sync_tracks_action()
 
             // Check for errors
             if (is_wp_error($post_id)) {
+                $error_count++;
                 continue;
             }
 
             // Update post meta field
             update_post_meta($post_id, 'wm_track_id', $source_id);
+            $processed_count++;
 
             // WPML integration: Set the language information for the inserted/updated post
             // and create translations for available languages
@@ -144,6 +246,82 @@ function sync_tracks_action()
                 }
             }
         }
+
+        // Calculate progress
+        $next_offset = $offset + $batch_size;
+        $is_complete = ($next_offset >= $total_tracks);
+        $progress_percent = min(100, round(($next_offset / $total_tracks) * 100));
+
+        // Update progress tracking
+        $progress_data['last_update'] = time();
+        $progress_data['last_offset'] = $next_offset;
+        $progress_data['total_processed'] += $processed_count;
+        $progress_data['total_skipped'] += $skipped_count;
+        $progress_data['total_errors'] += $error_count;
+        
+        // If batch had errors but we made progress, reset consecutive errors
+        if ($processed_count > 0 || $skipped_count > 0) {
+            $progress_data['consecutive_errors'] = 0;
+        } elseif ($error_count > 0) {
+            // If batch had only errors and no progress, increment error counter
+            $progress_data['consecutive_errors']++;
+        }
+        
+        set_transient($progress_key, $progress_data, HOUR_IN_SECONDS);
+
+        // Check if too many consecutive errors
+        if ($progress_data['consecutive_errors'] >= $max_consecutive_errors) {
+            delete_transient($transient_key);
+            delete_transient($progress_key);
+            if (wp_doing_ajax()) {
+                wp_send_json_error([
+                    'message' => sprintf(__('Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop.', 'wm-package'), $max_consecutive_errors),
+                    'progress' => [
+                        'processed' => $processed_count,
+                        'skipped' => $skipped_count,
+                        'errors' => $error_count,
+                        'current' => $next_offset,
+                        'total' => $total_tracks,
+                        'percent' => $progress_percent,
+                        'complete' => false,
+                        'stopped' => true,
+                        'reason' => 'too_many_errors'
+                    ]
+                ]);
+            }
+            return;
+        }
+
+        // Clean up cache if complete
+        if ($is_complete) {
+            delete_transient($transient_key);
+            delete_transient($progress_key);
+            delete_transient('wm_transient_warning_message');
+            set_transient('wm_transient_success_message', __('Great! Tracks synchronized successfully.', 'wm-package'), 60);
+        }
+
+        // AJAX response - always send response when called via AJAX
+        if (wp_doing_ajax()) {
+            wp_send_json_success([
+                'message' => $is_complete 
+                    ? sprintf(__('Synchronization completed! Processed %d tracks.', 'wm-package'), $total_tracks)
+                    : sprintf(__('Batch completed: %d/%d tracks (%d%%)', 'wm-package'), $next_offset, $total_tracks, $progress_percent),
+                'progress' => [
+                    'processed' => $processed_count, // Batch current
+                    'skipped' => $skipped_count, // Batch current
+                    'errors' => $error_count, // Batch current
+                    'total_processed' => $progress_data['total_processed'], // Cumulative total
+                    'total_skipped' => $progress_data['total_skipped'], // Cumulative total
+                    'total_errors' => $progress_data['total_errors'], // Cumulative total
+                    'current' => $next_offset,
+                    'total' => $total_tracks,
+                    'percent' => $progress_percent,
+                    'complete' => $is_complete,
+                    'next_offset' => $is_complete ? null : $next_offset
+                ]
+            ]);
+            return; // Ensure execution stops after sending JSON
+        }
     } else {
         // If configuration is missing, this should have been caught earlier, but handle it here too
         if (wp_doing_ajax()) {
@@ -152,16 +330,9 @@ function sync_tracks_action()
         }
     }
 
+    // Non-AJAX fallback (for backward compatibility)
     delete_transient('wm_transient_warning_message');
     set_transient('wm_transient_success_message', 'Greate! Tracks synchronized successfully.', 60);
-
-    // AJAX response - always send response when called via AJAX
-    if (wp_doing_ajax()) {
-        wp_send_json_success([
-            'message' => 'Tracks synchronized successfully!'
-        ]);
-        return; // Ensure execution stops after sending JSON
-    }
 }
 
 // Register AJAX action
