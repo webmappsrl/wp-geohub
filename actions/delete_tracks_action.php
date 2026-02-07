@@ -25,6 +25,16 @@ function delete_all_tracks_action()
 
     // On first batch, get all tracks and cache the list
     if ($is_first_batch) {
+        // Initialize progress tracking early to show we're working
+        $progress_data = [
+            'start_time' => time(),
+            'last_update' => time(),
+            'last_offset' => 0,
+            'total_deleted' => 0,
+            'total_errors' => 0
+        ];
+        set_transient($progress_key, $progress_data, HOUR_IN_SECONDS);
+        
         // Get all posts of type 'track' including trashed ones
         $tracks = get_posts([
             'post_type' => 'track',
@@ -34,10 +44,13 @@ function delete_all_tracks_action()
         ]);
 
         $posts_to_delete = [];
+        $total_tracks = count($tracks);
+        $processed = 0;
 
         // Collect all post IDs to delete (including translations)
         foreach ($tracks as $track_id) {
             $posts_to_delete[] = $track_id;
+            $processed++;
 
             // If WPML is active, collect translations as well
             if (function_exists('apply_filters') && function_exists('wpml_get_language_information')) {
@@ -55,6 +68,12 @@ function delete_all_tracks_action()
                     }
                 }
             }
+            
+            // Update progress every 100 tracks to show we're working
+            if ($processed % 100 === 0) {
+                $progress_data['last_update'] = time();
+                set_transient($progress_key, $progress_data, HOUR_IN_SECONDS);
+            }
         }
 
         // Remove duplicates
@@ -63,14 +82,8 @@ function delete_all_tracks_action()
         // Cache the list for 1 hour
         set_transient($transient_key, $posts_to_delete, HOUR_IN_SECONDS);
         
-        // Initialize progress tracking
-        $progress_data = [
-            'start_time' => time(),
-            'last_update' => time(),
-            'last_offset' => 0,
-            'total_deleted' => 0,
-            'total_errors' => 0
-        ];
+        // Update progress tracking
+        $progress_data['last_update'] = time();
         set_transient($progress_key, $progress_data, HOUR_IN_SECONDS);
     } else {
         // Get cached list

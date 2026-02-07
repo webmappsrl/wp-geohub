@@ -756,3 +756,12 @@ msgstr "%d POIs erfolgreich gelöscht."
 
 msgid "Error deleting POI ID: %d"
 msgstr "Fehler beim Löschen der POI-ID: %d"
+
+msgid "Preparing deletion..."
+msgstr "Löschung wird vorbereitet..."
+
+msgid "Assuming batch was processed. Continuing with next batch..."
+msgstr "Annahme: Batch wurde verarbeitet. Fortsetzen mit dem nächsten Batch..."
+
+msgid "Too many consecutive timeouts. Process stopped."
+msgstr "Zu viele aufeinanderfolgende Timeouts. Prozess gestoppt."

@@ -184,16 +184,16 @@ function wm_single_track($atts)
 							data-geometry='<?= esc_attr(json_encode($track_geometry)) ?>'
 							data-related-pois='<?= esc_attr(wp_json_encode($related_pois)) ?>'></div>
 						<?php
-						// Get download_track_enable from config JSON
+						// Get downloadTrackEnable from config JSON
 						$download_enabled = false;
 						if (function_exists('wm_get_default_config')) {
 							$config = wm_get_default_config();
-							if ($config && isset($config['WORDPRESS']['download_track_enable'])) {
-								$download_enabled = (bool) $config['WORDPRESS']['download_track_enable'];
+							if ($config && isset($config['WORDPRESS']['downloadTrackEnable'])) {
+								$download_enabled = (bool) $config['WORDPRESS']['downloadTrackEnable'];
 							}
 						}
 						// Show download button if enabled and (gpx_url exists OR track geometry exists for generation)
-						if ($download_enabled && (!empty($gpx) || !empty($track_geometry))) : 
+						if ($download_enabled && (!empty($gpx) || !empty($track_geometry))) :
 							// Prepare track data for JavaScript (for GPX generation if needed)
 							$track_feature = null;
 							if (!empty($track_geometry) && !empty($track)) {
@@ -212,7 +212,7 @@ function wm_single_track($atts)
 									$track_name = $track['name'];
 								}
 							}
-							?>
+						?>
 							<div class="wm_download_links wm_download_links--map">
 								<?php if (!empty($gpx)) : ?>
 									<!-- Use existing GPX URL -->
@@ -222,10 +222,10 @@ function wm_single_track($atts)
 									</a>
 								<?php else : ?>
 									<!-- Generate GPX from GeoJSON -->
-									<a class="wm_download_link wm_download_link--generate" 
-									   href="#" 
-									   data-track-feature='<?= esc_attr(wp_json_encode($track_feature)) ?>'
-									   data-track-name="<?= esc_attr($track_name) ?>">
+									<a class="wm_download_link wm_download_link--generate"
+										href="#"
+										data-track-feature='<?= esc_attr(wp_json_encode($track_feature)) ?>'
+										data-track-name="<?= esc_attr($track_name) ?>">
 										<i class="fa fa-download"></i>
 										<?= __('Download GPX', 'wm-package') ?>
 									</a>
@@ -475,17 +475,17 @@ function wm_single_track($atts)
 
 		<!-- 8. Track Navigation -->
 		<?php
-		// Get generate_edges from config JSON to determine if navigation should be enabled
-		// track_navigation_enabled is now controlled by generate_edges in wm_default_config.json
+		// Get generateEdges from config JSON to determine if navigation should be enabled
+		// track_navigation_enabled is now controlled by generateEdges in wm_default_config.json
 		$generate_edges_enabled = false;
 		if (function_exists('wm_get_default_config')) {
 			$config = wm_get_default_config();
-			if ($config && isset($config['WORDPRESS']['generate_edges'])) {
-				$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
+			if ($config && isset($config['WORDPRESS']['generateEdges'])) {
+				$generate_edges_enabled = (bool) $config['WORDPRESS']['generateEdges'];
 			}
 		}
 
-		// Only show navigation if generate_edges is enabled in config JSON
+		// Only show navigation if generateEdges is enabled in config JSON
 		if ($generate_edges_enabled) {
 			// Get layer IDs from shortcode parameter or admin option
 			$nav_layer_ids = !empty($layer_ids) ? $layer_ids : get_option('track_navigation_layer_ids');
@@ -645,14 +645,14 @@ function wm_single_track($atts)
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			<?php if ($use_page_header && $featured_image) : ?>
-			// Set featured image in page-header section
-			var pageHeader = document.querySelector('header.page-header');
-			if (pageHeader) {
-				pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
-				pageHeader.style.backgroundSize = 'cover';
-				pageHeader.style.backgroundPosition = 'center';
-				pageHeader.style.backgroundRepeat = 'no-repeat';
-			}
+				// Set featured image in page-header section
+				var pageHeader = document.querySelector('header.page-header');
+				if (pageHeader) {
+					pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
+					pageHeader.style.backgroundSize = 'cover';
+					pageHeader.style.backgroundPosition = 'center';
+					pageHeader.style.backgroundRepeat = 'no-repeat';
+				}
 			<?php endif; ?>
 
 			if (typeof Swiper !== 'undefined') {
@@ -702,42 +702,44 @@ function wm_single_track($atts)
 			gpxGenerateLinks.forEach(function(link) {
 				link.addEventListener('click', function(e) {
 					e.preventDefault();
-					
+
 					var trackFeatureJson = this.getAttribute('data-track-feature');
 					var trackName = this.getAttribute('data-track-name') || 'track';
-					
+
 					if (!trackFeatureJson) {
 						console.error('Track feature data not found');
 						alert('<?= esc_js(__('Error: Track data not available', 'wm-package')) ?>');
 						return;
 					}
-					
+
 					// Function to generate and download GPX
 					function generateAndDownloadGPX() {
 						try {
 							var trackFeature = JSON.parse(trackFeatureJson);
-							
+
 							// Check if togpx is available
 							if (typeof togpx === 'undefined') {
 								console.error('togpx library not loaded');
 								alert('<?= esc_js(__('Error: GPX generation library not available. Please refresh the page.', 'wm-package')) ?>');
 								return;
 							}
-							
+
 							// Generate GPX from GeoJSON
 							var gpxString = togpx(trackFeature);
-							
+
 							if (!gpxString || gpxString.trim() === '') {
 								console.error('Failed to generate GPX');
 								alert('<?= esc_js(__('Error: Failed to generate GPX file', 'wm-package')) ?>');
 								return;
 							}
-							
+
 							// Clean track name for filename (remove spaces and special chars)
 							var cleanName = trackName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9-_]/g, '') || 'track';
-							
+
 							// Create blob and download
-							var blob = new Blob([gpxString], { type: 'application/gpx+xml' });
+							var blob = new Blob([gpxString], {
+								type: 'application/gpx+xml'
+							});
 							var url = window.URL.createObjectURL(blob);
 							var a = document.createElement('a');
 							a.href = url;
@@ -751,7 +753,7 @@ function wm_single_track($atts)
 							alert('<?= esc_js(__('Error: Failed to generate GPX file', 'wm-package')) ?>');
 						}
 					}
-					
+
 					// Wait for togpx library to be loaded if not already available
 					if (typeof togpx !== 'undefined') {
 						generateAndDownloadGPX();

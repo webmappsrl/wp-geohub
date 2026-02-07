@@ -819,11 +819,11 @@ function wm_settings_page()
 			$download_track_enabled = false;
 
 			if ($config) {
-				if (isset($config['WORDPRESS']['generate_edges'])) {
-					$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
+				if (isset($config['WORDPRESS']['generateEdges'])) {
+					$generate_edges_enabled = (bool) $config['WORDPRESS']['generateEdges'];
 				}
-				if (isset($config['WORDPRESS']['download_track_enable'])) {
-					$download_track_enabled = (bool) $config['WORDPRESS']['download_track_enable'];
+				if (isset($config['WORDPRESS']['downloadTrackEnable'])) {
+					$download_track_enabled = (bool) $config['WORDPRESS']['downloadTrackEnable'];
 				}
 			}
 
@@ -832,7 +832,7 @@ function wm_settings_page()
 				<h2><?php echo esc_html__('Track Configuration:', 'wm-package'); ?></h2>
 				<table class="form-table" style="margin-left: 30px;">
 					<?php
-					// Only show navigation fields if generate_edges is enabled in config JSON
+					// Only show navigation fields if generateEdges is enabled in config JSON
 					if ($generate_edges_enabled) : ?>
 						<tr valign="top">
 							<th scope="row"><?php echo esc_html__('Enable Track Navigation', 'wm-package'); ?></th>
@@ -945,14 +945,14 @@ function wm_settings_init()
 	register_setting('wm-settings', 'android_app_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'website_url', 'sanitize_text_field');
 	register_setting('wm-settings', 'featured_image_location', 'sanitize_text_field');
-	// track_navigation fields are only shown if generate_edges is enabled in wm_default_config.json
+	// track_navigation fields are only shown if generateEdges is enabled in wm_default_config.json
 	$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
 	$generate_edges_enabled = false;
-	if ($config && isset($config['WORDPRESS']['generate_edges'])) {
-		$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
+	if ($config && isset($config['WORDPRESS']['generateEdges'])) {
+		$generate_edges_enabled = (bool) $config['WORDPRESS']['generateEdges'];
 	}
 	if ($generate_edges_enabled) {
-		// track_navigation_enabled is now controlled by wm_default_config.json (generate_edges), not WordPress options
+		// track_navigation_enabled is now controlled by wm_default_config.json (generateEdges), not WordPress options
 		register_setting('wm-settings', 'track_navigation_layer_ids', 'sanitize_text_field');
 	}
 	// track_download_enabled is now controlled by wm_default_config.json, not WordPress options
@@ -1084,7 +1084,10 @@ function wm_admin_footer()
 				apiPoiListInvalid: '<?php echo esc_js(__('API POI list invalid or unavailable.', 'wm-package')); ?>',
 				noPoisProvided: '<?php echo esc_js(__('No POIs provided or invalid format.', 'wm-package')); ?>',
 				syncPoisCompleted: '<?php echo esc_js(__('Synchronization completed! Processed %d POIs.', 'wm-package')); ?>',
-				syncPoisBatchCompleted: '<?php echo esc_js(__('Batch completed: %d/%d POIs (%d%%)', 'wm-package')); ?>'
+				syncPoisBatchCompleted: '<?php echo esc_js(__('Batch completed: %d/%d POIs (%d%%)', 'wm-package')); ?>',
+				preparingDeletion: '<?php echo esc_js(__('Preparing deletion...', 'wm-package')); ?>',
+				continuingNextBatch: '<?php echo esc_js(__('Assuming batch was processed. Continuing with next batch...', 'wm-package')); ?>',
+				tooManyTimeouts: '<?php echo esc_js(__('Too many consecutive timeouts. Process stopped.', 'wm-package')); ?>'
 			};
 
 			// Shards configuration dynamically loaded from wm-types/environment.ts via PHP
@@ -1777,7 +1780,9 @@ function wm_admin_footer()
 			var deleteTracksState = {
 				startTime: null,
 				lastUpdate: null,
-				isRunning: false
+				isRunning: false,
+				consecutiveTimeouts: 0,
+				maxConsecutiveTimeouts: 2
 			};
 
 			// Batch delete function for tracks
@@ -1790,11 +1795,23 @@ function wm_admin_footer()
 					deleteTracksState.startTime = Date.now();
 					deleteTracksState.lastUpdate = Date.now();
 					deleteTracksState.isRunning = true;
+					deleteTracksState.consecutiveTimeouts = 0;
+					deleteTracksState.maxConsecutiveTimeouts = 2; // Allow 2 consecutive timeouts before stopping
 				}
 
 				if (!deleteTracksState.isRunning) {
 					return; // Process was stopped
 				}
+
+				// Show initial progress for first batch
+				if (offset === 0) {
+					$('#sync-progress-message').html(
+						wmPackageStrings.deletingTracks + '<br><small style="color: #666;">' + wmPackageStrings.preparingDeletion + '</small>'
+					);
+				}
+
+				// Longer timeout for first batch (needs to collect all tracks and translations)
+				var timeoutDuration = (offset === 0) ? 300000 : 120000; // 5 minutes for first batch, 2 minutes for others
 
 				$.ajax({
 					url: ajaxurl,
@@ -1806,17 +1823,18 @@ function wm_admin_footer()
 						batch_size: batchSize
 					},
 					dataType: 'json',
-					timeout: 120000, // 2 minutes per batch
+					timeout: timeoutDuration,
 					success: function(response) {
 						if (!deleteTracksState.isRunning) {
 							return; // Process was stopped
 						}
 
+						// Reset timeout counter on success
+						deleteTracksState.consecutiveTimeouts = 0;
+						deleteTracksState.lastUpdate = Date.now();
+
 						if (response && response.success) {
 							var progress = response.data && response.data.progress;
-							
-							// Reset last update on success
-							deleteTracksState.lastUpdate = Date.now();
 							
 							if (progress) {
 								// Update progress bar
@@ -1866,12 +1884,43 @@ function wm_admin_footer()
 						}
 					},
 					error: function(xhr, status, error) {
-						deleteTracksState.isRunning = false;
-						hideSyncModal();
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
+						var shouldContinue = false;
+						
 						if (status === 'timeout') {
-							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
+							deleteTracksState.consecutiveTimeouts++;
+							
+							// If too many consecutive timeouts, stop
+							if (deleteTracksState.consecutiveTimeouts >= deleteTracksState.maxConsecutiveTimeouts) {
+								deleteTracksState.isRunning = false;
+								hideSyncModal();
+								alert('❌ ' + wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.tooManyTimeouts);
+								return;
+							}
+							
+							// On timeout, assume batch was processed and continue
+							// This handles cases where the server processed the batch but response was slow
+							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.continuingNextBatch;
+							shouldContinue = true;
+							
+							// Update progress message to show we're continuing
+							$('#sync-progress-message').html(
+								$('#sync-progress-message').html() + '<br><small style="color: #ff9800;">⚠️ ' + errorMessage + '</small>'
+							);
+							
+							// Calculate next offset (assume batch was processed)
+							var nextOffset = offset + batchSize;
+							
+							// Continue with next batch after a short delay
+							if (deleteTracksState.isRunning) {
+								setTimeout(function() {
+									if (deleteTracksState.isRunning) {
+										deleteTracksBatch(nextOffset, batchSize);
+									}
+								}, 1000);
+								return; // Don't show error alert, continue processing
+							}
 						} else if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
 							errorMessage = xhr.responseJSON.data.message;
 						} else if (xhr.responseText) {
@@ -1883,10 +1932,17 @@ function wm_admin_footer()
 							} catch (e) {
 								if (xhr.status === 200) {
 									errorMessage = wmPackageStrings.errorFormat;
+									shouldContinue = true;
 								}
 							}
 						}
-						alert('❌ ' + errorMessage);
+						
+						// Only stop and show error if we shouldn't continue
+						if (!shouldContinue) {
+							deleteTracksState.isRunning = false;
+							hideSyncModal();
+							alert('❌ ' + errorMessage);
+						}
 					}
 				});
 			}
@@ -1920,7 +1976,9 @@ function wm_admin_footer()
 			var deletePoisState = {
 				startTime: null,
 				lastUpdate: null,
-				isRunning: false
+				isRunning: false,
+				consecutiveTimeouts: 0,
+				maxConsecutiveTimeouts: 2
 			};
 
 			// Batch delete function for POIs
@@ -1933,11 +1991,23 @@ function wm_admin_footer()
 					deletePoisState.startTime = Date.now();
 					deletePoisState.lastUpdate = Date.now();
 					deletePoisState.isRunning = true;
+					deletePoisState.consecutiveTimeouts = 0;
+					deletePoisState.maxConsecutiveTimeouts = 2; // Allow 2 consecutive timeouts before stopping
 				}
 
 				if (!deletePoisState.isRunning) {
 					return; // Process was stopped
 				}
+
+				// Show initial progress for first batch
+				if (offset === 0) {
+					$('#sync-progress-message').html(
+						wmPackageStrings.deletingPois + '<br><small style="color: #666;">' + wmPackageStrings.preparingDeletion + '</small>'
+					);
+				}
+
+				// Longer timeout for first batch (needs to collect all POIs and translations)
+				var timeoutDuration = (offset === 0) ? 300000 : 120000; // 5 minutes for first batch, 2 minutes for others
 
 				$.ajax({
 					url: ajaxurl,
@@ -1949,17 +2019,18 @@ function wm_admin_footer()
 						batch_size: batchSize
 					},
 					dataType: 'json',
-					timeout: 120000, // 2 minutes per batch
+					timeout: timeoutDuration,
 					success: function(response) {
 						if (!deletePoisState.isRunning) {
 							return; // Process was stopped
 						}
 
+						// Reset timeout counter on success
+						deletePoisState.consecutiveTimeouts = 0;
+						deletePoisState.lastUpdate = Date.now();
+
 						if (response && response.success) {
 							var progress = response.data && response.data.progress;
-							
-							// Reset last update on success
-							deletePoisState.lastUpdate = Date.now();
 							
 							if (progress) {
 								// Update progress bar
@@ -2009,12 +2080,43 @@ function wm_admin_footer()
 						}
 					},
 					error: function(xhr, status, error) {
-						deletePoisState.isRunning = false;
-						hideSyncModal();
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
+						var shouldContinue = false;
+						
 						if (status === 'timeout') {
-							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
+							deletePoisState.consecutiveTimeouts++;
+							
+							// If too many consecutive timeouts, stop
+							if (deletePoisState.consecutiveTimeouts >= deletePoisState.maxConsecutiveTimeouts) {
+								deletePoisState.isRunning = false;
+								hideSyncModal();
+								alert('❌ ' + wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.tooManyTimeouts);
+								return;
+							}
+							
+							// On timeout, assume batch was processed and continue
+							// This handles cases where the server processed the batch but response was slow
+							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.continuingNextBatch;
+							shouldContinue = true;
+							
+							// Update progress message to show we're continuing
+							$('#sync-progress-message').html(
+								$('#sync-progress-message').html() + '<br><small style="color: #ff9800;">⚠️ ' + errorMessage + '</small>'
+							);
+							
+							// Calculate next offset (assume batch was processed)
+							var nextOffset = offset + batchSize;
+							
+							// Continue with next batch after a short delay
+							if (deletePoisState.isRunning) {
+								setTimeout(function() {
+									if (deletePoisState.isRunning) {
+										deletePoisBatch(nextOffset, batchSize);
+									}
+								}, 1000);
+								return; // Don't show error alert, continue processing
+							}
 						} else if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
 							errorMessage = xhr.responseJSON.data.message;
 						} else if (xhr.responseText) {
@@ -2026,10 +2128,17 @@ function wm_admin_footer()
 							} catch (e) {
 								if (xhr.status === 200) {
 									errorMessage = wmPackageStrings.errorFormat;
+									shouldContinue = true;
 								}
 							}
 						}
-						alert('❌ ' + errorMessage);
+						
+						// Only stop and show error if we shouldn't continue
+						if (!shouldContinue) {
+							deletePoisState.isRunning = false;
+							hideSyncModal();
+							alert('❌ ' + errorMessage);
+						}
 					}
 				});
 			}
@@ -2120,12 +2229,12 @@ function wm_save_options()
 	update_option('website_url', sanitize_text_field($_POST['website_url']));
 	update_option('featured_image_location', sanitize_text_field($_POST['featured_image_location'] ?? 'content'));
 
-	// Only save track_navigation_layer_ids if generate_edges is enabled in config JSON
-	// track_navigation_enabled is now controlled by wm_default_config.json (generate_edges), not WordPress options
+	// Only save track_navigation_layer_ids if generateEdges is enabled in config JSON
+	// track_navigation_enabled is now controlled by wm_default_config.json (generateEdges), not WordPress options
 	$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
 	$generate_edges_enabled = false;
-	if ($config && isset($config['WORDPRESS']['generate_edges'])) {
-		$generate_edges_enabled = (bool) $config['WORDPRESS']['generate_edges'];
+	if ($config && isset($config['WORDPRESS']['generateEdges'])) {
+		$generate_edges_enabled = (bool) $config['WORDPRESS']['generateEdges'];
 	}
 	if ($generate_edges_enabled) {
 		update_option('track_navigation_layer_ids', sanitize_text_field($_POST['track_navigation_layer_ids'] ?? ''));

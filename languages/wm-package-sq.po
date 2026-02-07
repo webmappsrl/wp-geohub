@@ -756,3 +756,12 @@ msgstr "%d POI u fshinë me sukses."
 
 msgid "Error deleting POI ID: %d"
 msgstr "Gabim në fshirjen e ID-së së POI: %d"
+
+msgid "Preparing deletion..."
+msgstr "Duke përgatitur fshirjen..."
+
+msgid "Assuming batch was processed. Continuing with next batch..."
+msgstr "Duke supozuar se grupi u përpunua. Duke vazhduar me grupin tjetër..."
+
+msgid "Too many consecutive timeouts. Process stopped."
+msgstr "Shumë timeout të njëpasnjëshëm. Procesi u ndal."
