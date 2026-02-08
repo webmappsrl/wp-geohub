@@ -166,7 +166,7 @@ function wm_single_track($atts)
 			<div class="wm_taxonomies">
 				<?php foreach ($activity as $type) : ?>
 					<span class="wm_taxonomy_item">
-						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
+						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? __('N/A', 'wm-package')) ?></span>
 					</span>
 				<?php endforeach; ?>
 			</div>
@@ -302,7 +302,7 @@ function wm_single_track($atts)
 								<?php if ($show_distance && isset($dem_data['distance']) && $dem_data['distance'] !== null) : ?>
 									<div class="wm_technical_detail_item">
 										<span class="wm_technical_detail_label"><?= __('Distance', 'wm-package') ?>:</span>
-										<span class="wm_technical_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> km</span>
+										<span class="wm_technical_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> <?= esc_html(__('km', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
 
@@ -323,28 +323,28 @@ function wm_single_track($atts)
 								<?php if ($show_ascent && isset($dem_data['ascent']) && $dem_data['ascent'] !== null) : ?>
 									<div class="wm_technical_detail_item">
 										<span class="wm_technical_detail_label"><?= __('Ascent', 'wm-package') ?>:</span>
-										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ascent']) ?> m</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ascent']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
 
 								<?php if ($show_descent && isset($dem_data['descent']) && $dem_data['descent'] !== null) : ?>
 									<div class="wm_technical_detail_item">
 										<span class="wm_technical_detail_label"><?= __('Descent', 'wm-package') ?>:</span>
-										<span class="wm_technical_detail_value"><?= esc_html($dem_data['descent']) ?> m</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['descent']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
 
 								<?php if ($show_ele_from && isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) : ?>
 									<div class="wm_technical_detail_item">
 										<span class="wm_technical_detail_label"><?= __('Start Elevation', 'wm-package') ?>:</span>
-										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_from']) ?> m</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_from']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
 
 								<?php if ($show_ele_to && isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) : ?>
 									<div class="wm_technical_detail_item">
 										<span class="wm_technical_detail_label"><?= __('End Elevation', 'wm-package') ?>:</span>
-										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_to']) ?> m</span>
+										<span class="wm_technical_detail_value"><?= esc_html($dem_data['ele_to']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
 							</div>

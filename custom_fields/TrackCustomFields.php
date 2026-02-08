@@ -7,7 +7,7 @@ function wm_track_meta_box()
 {
     add_meta_box(
         'wm_track_details',
-        'Dettagli Track',
+        __('Track Details', 'wm-package'),
         'wm_track_meta_box_callback',
         'track',
         'normal',
@@ -31,7 +31,7 @@ function wm_track_meta_box_callback($post)
             </th>
             <td>
                 <input type="number" id="wm_track_id" name="wm_track_id" value="<?php echo esc_attr($value); ?>" class="regular-text" />
-                <p class="description">Inserisci l'ID originale della track</p>
+                <p class="description"><?php echo esc_html(__('Enter the original Track ID', 'wm-package')); ?></p>
             </td>
         </tr>
     </table>

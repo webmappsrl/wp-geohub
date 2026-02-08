@@ -665,9 +665,6 @@ msgstr "Errors"
 msgid "Time"
 msgstr "Time"
 
-msgid "min"
-msgstr "min"
-
 msgid "tracks"
 msgstr "tracks"
 
@@ -737,6 +734,9 @@ msgstr "API POI list invalid or unavailable."
 msgid "No POIs provided or invalid format."
 msgstr "No POIs provided or invalid format."
 
+msgid "No POIs in the source. The features array is empty."
+msgstr "No POIs in the source. The features array is empty."
+
 msgid "Synchronization completed! Processed %d POIs."
 msgstr "Synchronization completed! Processed %d POIs."
 
@@ -766,3 +766,222 @@ msgstr "Assuming batch was processed. Continuing with next batch..."
 
 msgid "Too many consecutive timeouts. Process stopped."
 msgstr "Too many consecutive timeouts. Process stopped."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "POI Archives"
+
+msgid "POI Attributes"
+msgstr "POI Attributes"
+
+msgid "Parent POI:"
+msgstr "Parent POI:"
+
+msgid "All POIs"
+msgstr "All POIs"
+
+msgid "Add New POI"
+msgstr "Add New POI"
+
+msgid "Add New"
+msgstr "Add New"
+
+msgid "New POI"
+msgstr "New POI"
+
+msgid "Edit POI"
+msgstr "Edit POI"
+
+msgid "Update POI"
+msgstr "Update POI"
+
+msgid "View POI"
+msgstr "View POI"
+
+msgid "View POIs"
+msgstr "View POIs"
+
+msgid "Search POIs"
+msgstr "Search POIs"
+
+msgid "Not Found"
+msgstr "Not Found"
+
+msgid "Not Found in Trash"
+msgstr "Not Found in Trash"
+
+msgid "Featured Image"
+msgstr "Featured Image"
+
+msgid "Set Featured Image"
+msgstr "Set Featured Image"
+
+msgid "Remove Featured Image"
+msgstr "Remove Featured Image"
+
+msgid "Use as Featured Image"
+msgstr "Use as Featured Image"
+
+msgid "Insert into POI"
+msgstr "Insert into POI"
+
+msgid "Uploaded to this POI"
+msgstr "Uploaded to this POI"
+
+msgid "POIs List"
+msgstr "POIs List"
+
+msgid "POIs List Navigation"
+msgstr "POIs List Navigation"
+
+msgid "Filter POIs List"
+msgstr "Filter POIs List"
+
+msgid "Post type for Points of Interest"
+msgstr "Post type for Points of Interest"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Track Archives"
+
+msgid "Track Attributes"
+msgstr "Track Attributes"
+
+msgid "Parent Track:"
+msgstr "Parent Track:"
+
+msgid "All Tracks"
+msgstr "All Tracks"
+
+msgid "Add New Track"
+msgstr "Add New Track"
+
+msgid "New Track"
+msgstr "New Track"
+
+msgid "Edit Track"
+msgstr "Edit Track"
+
+msgid "Update Track"
+msgstr "Update Track"
+
+msgid "View Track"
+msgstr "View Track"
+
+msgid "View Tracks"
+msgstr "View Tracks"
+
+msgid "Search Tracks"
+msgstr "Search Tracks"
+
+msgid "Insert into Track"
+msgstr "Insert into Track"
+
+msgid "Uploaded to this Track"
+msgstr "Uploaded to this Track"
+
+msgid "Tracks List"
+msgstr "Tracks List"
+
+msgid "Tracks List Navigation"
+msgstr "Tracks List Navigation"
+
+msgid "Filter Tracks List"
+msgstr "Filter Tracks List"
+
+msgid "Post type for Tracks"
+msgstr "Post type for Tracks"
+
+# Custom fields
+msgid "POI Details"
+msgstr "POI Details"
+
+msgid "Enter the original POI ID"
+msgstr "Enter the original POI ID"
+
+msgid "Track Details"
+msgstr "Track Details"
+
+msgid "Enter the original Track ID"
+msgstr "Enter the original Track ID"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Text copied to clipboard!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Unable to copy text. Please copy manually."
+
+# Admin page - JavaScript localized strings (WARNING variants without emoji)
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+
+# Shortcodes
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Failed to load POI data."
+msgstr "Failed to load POI data."
+
+# Sync actions
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Required configuration options are missing. Please check your settings."
+
+msgid "API track list invalid or unavailable."
+msgstr "API track list invalid or unavailable."
+
+msgid "No tracks provided or invalid format."
+msgstr "No tracks provided or invalid format."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "No tracks in the source. The list is empty."
+
+msgid "Track no title"
+msgstr "Track no title"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Configuration incomplete. Please check your settings."
+
+msgid "POI no title"
+msgstr "POI no title"
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr "Source POIs number:"
+
+msgid "Source Tracks number:"
+msgstr "Source Tracks number:"
+
+msgid "Current POIs number:"
+msgstr "Current POIs number:"
+
+msgid "Current Tracks number:"
+msgstr "Current Tracks number:"
+
+msgid "published"
+msgstr "published"
+
+msgid "Manage Import and Sync:"
+msgstr "Manage Import and Sync:"
+
+msgid "Go to WM Settings"
+msgstr "Go to WM Settings"
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+
+msgid "ERROR:"
+msgstr "ERROR:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."

@@ -160,7 +160,7 @@ function add_custom_copy_script()
             const copiableElements = document.querySelectorAll('.copiable');
 
             copiableElements.forEach(element => {
-                // Rendi l'elemento focusabile per l'accessibilità
+                // Make element focusable for accessibility
                 element.setAttribute('tabindex', '0');
 
                 const copyText = () => {
@@ -178,27 +178,27 @@ function add_custom_copy_script()
                     }
                 };
 
-                // Aggiungi l'event listener per il click
+                // Add click event listener
                 element.addEventListener('click', copyText);
             });
         }
 
         function showCopySuccess(element) {
-            // Aggiungi una classe per fornire feedback visivo
+            // Add class for visual feedback
             element.classList.add('copied');
 
-            // Rimuovi la classe dopo 2 secondi
+            // Remove class after 2 seconds
             setTimeout(() => {
                 element.classList.remove('copied');
             }, 2000);
         }
 
         function fallbackCopyText(text) {
-            // Crea un'area di testo temporanea
+            // Create a temporary textarea
             const textarea = document.createElement('textarea');
             textarea.value = text;
-            textarea.style.position = 'fixed'; // Evita lo scroll
-            textarea.style.left = '-9999px'; // Nascondi l'area di testo
+            textarea.style.position = 'fixed'; // Avoid scroll
+            textarea.style.left = '-9999px'; // Hide the textarea
             document.body.appendChild(textarea);
             textarea.focus();
             textarea.select();
@@ -206,19 +206,19 @@ function add_custom_copy_script()
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
-                    alert('Testo copiato negli appunti!');
+                    alert('<?php echo esc_js(__('Text copied to clipboard!', 'wm-package')); ?>');
                 } else {
-                    throw new Error('Comando di copia non riuscito');
+                    throw new Error('Copy command failed');
                 }
             } catch {
-                alert('Impossibile copiare il testo. Per favore, copia manualmente.');
+                alert('<?php echo esc_js(__('Unable to copy text. Please copy manually.', 'wm-package')); ?>');
             }
 
-            // Rimuovi l'area di testo temporanea
+            // Remove the temporary textarea
             document.body.removeChild(textarea);
         }
 
-        // Inizializza la funzione al caricamento del DOM
+        // Initialize function on DOM load
         document.addEventListener('DOMContentLoaded', copyCopiableElements);
     </script>
 <?php

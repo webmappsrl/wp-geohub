@@ -664,9 +664,6 @@ msgstr "Fehler"
 msgid "Time"
 msgstr "Zeit"
 
-msgid "min"
-msgstr "Min"
-
 msgid "tracks"
 msgstr "Tracks"
 
@@ -736,6 +733,9 @@ msgstr "POI-API-Liste ungültig oder nicht verfügbar."
 msgid "No POIs provided or invalid format."
 msgstr "Keine POIs bereitgestellt oder ungültiges Format."
 
+msgid "No POIs in the source. The features array is empty."
+msgstr "Keine POIs in der Quelle. Das features-Array ist leer."
+
 msgid "Synchronization completed! Processed %d POIs."
 msgstr "Synchronisierung abgeschlossen! %d POIs verarbeitet."
 
@@ -765,3 +765,222 @@ msgstr "Annahme: Batch wurde verarbeitet. Fortsetzen mit dem nächsten Batch..."
 
 msgid "Too many consecutive timeouts. Process stopped."
 msgstr "Zu viele aufeinanderfolgende Timeouts. Prozess gestoppt."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "POI-Archiv"
+
+msgid "POI Attributes"
+msgstr "POI-Attribute"
+
+msgid "Parent POI:"
+msgstr "Übergeordneter POI:"
+
+msgid "All POIs"
+msgstr "Alle POIs"
+
+msgid "Add New POI"
+msgstr "Neuen POI hinzufügen"
+
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+msgid "New POI"
+msgstr "Neuer POI"
+
+msgid "Edit POI"
+msgstr "POI bearbeiten"
+
+msgid "Update POI"
+msgstr "POI aktualisieren"
+
+msgid "View POI"
+msgstr "POI ansehen"
+
+msgid "View POIs"
+msgstr "POIs ansehen"
+
+msgid "Search POIs"
+msgstr "POIs suchen"
+
+msgid "Not Found"
+msgstr "Nicht gefunden"
+
+msgid "Not Found in Trash"
+msgstr "Nicht im Papierkorb gefunden"
+
+msgid "Featured Image"
+msgstr "Beitragsbild"
+
+msgid "Set Featured Image"
+msgstr "Beitragsbild festlegen"
+
+msgid "Remove Featured Image"
+msgstr "Beitragsbild entfernen"
+
+msgid "Use as Featured Image"
+msgstr "Als Beitragsbild verwenden"
+
+msgid "Insert into POI"
+msgstr "In POI einfügen"
+
+msgid "Uploaded to this POI"
+msgstr "Zu diesem POI hochgeladen"
+
+msgid "POIs List"
+msgstr "POI-Liste"
+
+msgid "POIs List Navigation"
+msgstr "POI-Listen-Navigation"
+
+msgid "Filter POIs List"
+msgstr "POI-Liste filtern"
+
+msgid "Post type for Points of Interest"
+msgstr "Beitragstyp für Points of Interest"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Track-Archiv"
+
+msgid "Track Attributes"
+msgstr "Track-Attribute"
+
+msgid "Parent Track:"
+msgstr "Übergeordneter Track:"
+
+msgid "All Tracks"
+msgstr "Alle Tracks"
+
+msgid "Add New Track"
+msgstr "Neuen Track hinzufügen"
+
+msgid "New Track"
+msgstr "Neuer Track"
+
+msgid "Edit Track"
+msgstr "Track bearbeiten"
+
+msgid "Update Track"
+msgstr "Track aktualisieren"
+
+msgid "View Track"
+msgstr "Track ansehen"
+
+msgid "View Tracks"
+msgstr "Tracks ansehen"
+
+msgid "Search Tracks"
+msgstr "Tracks suchen"
+
+msgid "Insert into Track"
+msgstr "In Track einfügen"
+
+msgid "Uploaded to this Track"
+msgstr "Zu diesem Track hochgeladen"
+
+msgid "Tracks List"
+msgstr "Track-Liste"
+
+msgid "Tracks List Navigation"
+msgstr "Track-Listen-Navigation"
+
+msgid "Filter Tracks List"
+msgstr "Track-Liste filtern"
+
+msgid "Post type for Tracks"
+msgstr "Beitragstyp für Tracks"
+
+# Custom fields
+msgid "POI Details"
+msgstr "POI-Details"
+
+msgid "Enter the original POI ID"
+msgstr "Geben Sie die ursprüngliche POI-ID ein"
+
+msgid "Track Details"
+msgstr "Track-Details"
+
+msgid "Enter the original Track ID"
+msgstr "Geben Sie die ursprüngliche Track-ID ein"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Text in die Zwischenablage kopiert!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Text konnte nicht kopiert werden. Bitte manuell kopieren."
+
+# Admin page - JavaScript localized strings (non-emoji variants)
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle Tracks zu synchronisieren/generieren. Dies kann einige Zeit dauern und wird Track-Beiträge aktualisieren oder erstellen. Möchten Sie fortfahren?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle POIs zu synchronisieren/generieren. Dies kann einige Zeit dauern und wird POI-Beiträge aktualisieren oder erstellen. Möchten Sie fortfahren?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle Track-Beiträge DAUERHAFT zu löschen. Dieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle POI-Beiträge DAUERHAFT zu löschen. Dieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?"
+
+# Shortcodes
+msgid "N/A"
+msgstr "N/V"
+
+msgid "Failed to load POI data."
+msgstr "POI-Daten konnten nicht geladen werden."
+
+# Sync actions
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Erforderliche Konfigurationsoptionen fehlen. Bitte überprüfen Sie Ihre Einstellungen."
+
+msgid "API track list invalid or unavailable."
+msgstr "API-Track-Liste ungültig oder nicht verfügbar."
+
+msgid "No tracks provided or invalid format."
+msgstr "Keine Tracks angegeben oder ungültiges Format."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "Keine Tracks in der Quelle. Die Liste ist leer."
+
+msgid "Track no title"
+msgstr "Track ohne Titel"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Konfiguration unvollständig. Bitte überprüfen Sie Ihre Einstellungen."
+
+msgid "POI no title"
+msgstr "POI ohne Titel"
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr "Anzahl Quell-POIs:"
+
+msgid "Source Tracks number:"
+msgstr "Anzahl Quell-Tracks:"
+
+msgid "Current POIs number:"
+msgstr "Aktuelle Anzahl POIs:"
+
+msgid "Current Tracks number:"
+msgstr "Aktuelle Anzahl Tracks:"
+
+msgid "published"
+msgstr "veröffentlicht"
+
+msgid "Manage Import and Sync:"
+msgstr "Import und Synchronisierung verwalten:"
+
+msgid "Go to WM Settings"
+msgstr "Zu WM-Einstellungen gehen"
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "Das WPML-Plugin ist nicht installiert oder aktiviert. Dieses Plugin benötigt WPML, um korrekt zu funktionieren."
+
+msgid "ERROR:"
+msgstr "FEHLER:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "FEHLER: Der Beitragstyp %s ist nicht übersetzbar. Bitte aktivieren Sie die Übersetzung für den Beitragstyp %s in den WPML-Einstellungen > Beitragstyp-Übersetzung."

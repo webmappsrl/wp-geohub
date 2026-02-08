@@ -664,9 +664,6 @@ msgstr "Gabime"
 msgid "Time"
 msgstr "Koha"
 
-msgid "min"
-msgstr "min"
-
 msgid "tracks"
 msgstr "gjurmë"
 
@@ -736,6 +733,9 @@ msgstr "Lista e API POI është e pavlefshme ose e padisponueshme."
 msgid "No POIs provided or invalid format."
 msgstr "Asnjë POI nuk u dha ose formati është i pavlefshëm."
 
+msgid "No POIs in the source. The features array is empty."
+msgstr "Nuk ka POI në burim. Vargu features është bosh."
+
 msgid "Synchronization completed! Processed %d POIs."
 msgstr "Sinkronizimi u përfundua! %d POI të përpunuara."
 
@@ -765,3 +765,222 @@ msgstr "Duke supozuar se grupi u përpunua. Duke vazhduar me grupin tjetër..."
 
 msgid "Too many consecutive timeouts. Process stopped."
 msgstr "Shumë timeout të njëpasnjëshëm. Procesi u ndal."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "Arkivat POI"
+
+msgid "POI Attributes"
+msgstr "Atributet POI"
+
+msgid "Parent POI:"
+msgstr "POI prind:"
+
+msgid "All POIs"
+msgstr "Të gjithë POI-të"
+
+msgid "Add New POI"
+msgstr "Shto POI të ri"
+
+msgid "Add New"
+msgstr "Shto të ri"
+
+msgid "New POI"
+msgstr "POI i ri"
+
+msgid "Edit POI"
+msgstr "Redakto POI"
+
+msgid "Update POI"
+msgstr "Përditëso POI"
+
+msgid "View POI"
+msgstr "Shiko POI"
+
+msgid "View POIs"
+msgstr "Shiko POI-të"
+
+msgid "Search POIs"
+msgstr "Kërko POI"
+
+msgid "Not Found"
+msgstr "Nuk u gjet"
+
+msgid "Not Found in Trash"
+msgstr "Nuk u gjet në kosh"
+
+msgid "Featured Image"
+msgstr "Imazhi i nxjerrë në pah"
+
+msgid "Set Featured Image"
+msgstr "Vendos imazhin e nxjerrë në pah"
+
+msgid "Remove Featured Image"
+msgstr "Hiq imazhin e nxjerrë në pah"
+
+msgid "Use as Featured Image"
+msgstr "Përdor si imazh të nxjerrë në pah"
+
+msgid "Insert into POI"
+msgstr "Fut në POI"
+
+msgid "Uploaded to this POI"
+msgstr "Ngarkuar në këtë POI"
+
+msgid "POIs List"
+msgstr "Lista e POI-ve"
+
+msgid "POIs List Navigation"
+msgstr "Navigimi i listës së POI-ve"
+
+msgid "Filter POIs List"
+msgstr "Filtro listën e POI-ve"
+
+msgid "Post type for Points of Interest"
+msgstr "Lloj postimi për Pikat e Interesit"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Arkivat e rrugëve"
+
+msgid "Track Attributes"
+msgstr "Atributet e rrugës"
+
+msgid "Parent Track:"
+msgstr "Rruga prind:"
+
+msgid "All Tracks"
+msgstr "Të gjitha rrugët"
+
+msgid "Add New Track"
+msgstr "Shto rrugë të re"
+
+msgid "New Track"
+msgstr "Rrugë e re"
+
+msgid "Edit Track"
+msgstr "Redakto rrugën"
+
+msgid "Update Track"
+msgstr "Përditëso rrugën"
+
+msgid "View Track"
+msgstr "Shiko rrugën"
+
+msgid "View Tracks"
+msgstr "Shiko rrugët"
+
+msgid "Search Tracks"
+msgstr "Kërko rrugë"
+
+msgid "Insert into Track"
+msgstr "Fut në rrugë"
+
+msgid "Uploaded to this Track"
+msgstr "Ngarkuar në këtë rrugë"
+
+msgid "Tracks List"
+msgstr "Lista e rrugëve"
+
+msgid "Tracks List Navigation"
+msgstr "Navigimi i listës së rrugëve"
+
+msgid "Filter Tracks List"
+msgstr "Filtro listën e rrugëve"
+
+msgid "Post type for Tracks"
+msgstr "Lloj postimi për rrugët"
+
+# Custom fields
+msgid "POI Details"
+msgstr "Detajet e POI"
+
+msgid "Enter the original POI ID"
+msgstr "Fut ID origjinale të POI"
+
+msgid "Track Details"
+msgstr "Detajet e rrugës"
+
+msgid "Enter the original Track ID"
+msgstr "Fut ID origjinale të rrugës"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Teksti u kopjua në clipboard!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Nuk mund të kopjohet teksti. Ju lutemi kopjojeni manualisht."
+
+# Admin page - JavaScript localized strings (without emoji prefix)
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të sinkronizoni/gjeneroni të gjitha Gjurmët. Kjo mund të marrë pak kohë dhe do të përditësojë ose krijojë postime të Gjurmëve. A jeni i sigurt që dëshironi të vazhdoni?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të sinkronizoni/gjeneroni të gjitha POI-të. Kjo mund të marrë pak kohë dhe do të përditësojë ose krijojë postime të POI-ve. A jeni i sigurt që dëshironi të vazhdoni?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të fshini PËRGJITHMONË të gjitha postimet e Gjurmëve. Ky veprim nuk mund të zhbëhet. A jeni i sigurt që dëshironi të vazhdoni?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të fshini PËRGJITHMONË të gjitha postimet e POI-ve. Ky veprim nuk mund të zhbëhet. A jeni i sigurt që dëshironi të vazhdoni?"
+
+# Shortcodes
+msgid "N/A"
+msgstr "N/D"
+
+msgid "Failed to load POI data."
+msgstr "Dështoi ngarkimi i të dhënave të POI."
+
+# Sync actions
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Opsionet e konfigurimit të kërkuara mungojnë. Ju lutem kontrolloni cilësimet tuaja."
+
+msgid "API track list invalid or unavailable."
+msgstr "Lista API e gjurmëve e pavlefshme ose e padisponueshme."
+
+msgid "No tracks provided or invalid format."
+msgstr "Asnjë gjurmë nuk u dha ose format i pavlefshëm."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "Nuk ka gjurma në burim. Lista është bosh."
+
+msgid "Track no title"
+msgstr "Gjurmë pa titull"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Konfigurimi i paplotë. Ju lutem kontrolloni cilësimet tuaja."
+
+msgid "POI no title"
+msgstr "POI pa titull"
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr "Numri i POI-ve burimore:"
+
+msgid "Source Tracks number:"
+msgstr "Numri i Gjurmëve burimore:"
+
+msgid "Current POIs number:"
+msgstr "Numri aktual i POI-ve:"
+
+msgid "Current Tracks number:"
+msgstr "Numri aktual i Gjurmëve:"
+
+msgid "published"
+msgstr "të publikuara"
+
+msgid "Manage Import and Sync:"
+msgstr "Menaxho Importimin dhe Sinkronizimin:"
+
+msgid "Go to WM Settings"
+msgstr "Shko te Cilësimet WM"
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "Shtojca WPML nuk është instaluar ose aktivizuar. Kjo shtojcë kërkon WPML për të funksionuar saktë."
+
+msgid "ERROR:"
+msgstr "GABIM:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "GABIM: Lloji i postimit %s nuk është i përkthyeshëm. Ju lutem aktivizoni përkthimin për llojin e postimit %s në cilësimet e WPML > Përkthimi i llojit të postimit."

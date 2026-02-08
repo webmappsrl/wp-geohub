@@ -664,9 +664,6 @@ msgstr "Errores"
 msgid "Time"
 msgstr "Tiempo"
 
-msgid "min"
-msgstr "min"
-
 msgid "tracks"
 msgstr "tracks"
 
@@ -736,6 +733,9 @@ msgstr "Lista de API POI no válida o no disponible."
 msgid "No POIs provided or invalid format."
 msgstr "No se proporcionaron POIs o el formato no es válido."
 
+msgid "No POIs in the source. The features array is empty."
+msgstr "No hay POIs en la fuente. El array features está vacío."
+
 msgid "Synchronization completed! Processed %d POIs."
 msgstr "¡Sincronización completada! %d POIs procesados."
 
@@ -765,3 +765,222 @@ msgstr "Asumiendo que el lote fue procesado. Continuando con el siguiente lote..
 
 msgid "Too many consecutive timeouts. Process stopped."
 msgstr "Demasiados timeouts consecutivos. Proceso detenido."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "Archivos de POI"
+
+msgid "POI Attributes"
+msgstr "Atributos de POI"
+
+msgid "Parent POI:"
+msgstr "POI padre:"
+
+msgid "All POIs"
+msgstr "Todos los POI"
+
+msgid "Add New POI"
+msgstr "Añadir nuevo POI"
+
+msgid "Add New"
+msgstr "Añadir nuevo"
+
+msgid "New POI"
+msgstr "Nuevo POI"
+
+msgid "Edit POI"
+msgstr "Editar POI"
+
+msgid "Update POI"
+msgstr "Actualizar POI"
+
+msgid "View POI"
+msgstr "Ver POI"
+
+msgid "View POIs"
+msgstr "Ver POI"
+
+msgid "Search POIs"
+msgstr "Buscar POI"
+
+msgid "Not Found"
+msgstr "No encontrado"
+
+msgid "Not Found in Trash"
+msgstr "No encontrado en la papelera"
+
+msgid "Featured Image"
+msgstr "Imagen destacada"
+
+msgid "Set Featured Image"
+msgstr "Establecer imagen destacada"
+
+msgid "Remove Featured Image"
+msgstr "Eliminar imagen destacada"
+
+msgid "Use as Featured Image"
+msgstr "Usar como imagen destacada"
+
+msgid "Insert into POI"
+msgstr "Insertar en el POI"
+
+msgid "Uploaded to this POI"
+msgstr "Subido a este POI"
+
+msgid "POIs List"
+msgstr "Lista de POI"
+
+msgid "POIs List Navigation"
+msgstr "Navegación de la lista de POI"
+
+msgid "Filter POIs List"
+msgstr "Filtrar lista de POI"
+
+msgid "Post type for Points of Interest"
+msgstr "Tipo de publicación para Puntos de Interés"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Archivos de rutas"
+
+msgid "Track Attributes"
+msgstr "Atributos de ruta"
+
+msgid "Parent Track:"
+msgstr "Ruta padre:"
+
+msgid "All Tracks"
+msgstr "Todas las rutas"
+
+msgid "Add New Track"
+msgstr "Añadir nueva ruta"
+
+msgid "New Track"
+msgstr "Nueva ruta"
+
+msgid "Edit Track"
+msgstr "Editar ruta"
+
+msgid "Update Track"
+msgstr "Actualizar ruta"
+
+msgid "View Track"
+msgstr "Ver ruta"
+
+msgid "View Tracks"
+msgstr "Ver rutas"
+
+msgid "Search Tracks"
+msgstr "Buscar rutas"
+
+msgid "Insert into Track"
+msgstr "Insertar en la ruta"
+
+msgid "Uploaded to this Track"
+msgstr "Subido a esta ruta"
+
+msgid "Tracks List"
+msgstr "Lista de rutas"
+
+msgid "Tracks List Navigation"
+msgstr "Navegación de la lista de rutas"
+
+msgid "Filter Tracks List"
+msgstr "Filtrar lista de rutas"
+
+msgid "Post type for Tracks"
+msgstr "Tipo de publicación para rutas"
+
+# Custom fields
+msgid "POI Details"
+msgstr "Detalles del POI"
+
+msgid "Enter the original POI ID"
+msgstr "Ingrese el ID original del POI"
+
+msgid "Track Details"
+msgstr "Detalles de la ruta"
+
+msgid "Enter the original Track ID"
+msgstr "Ingrese el ID original de la ruta"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "¡Texto copiado al portapapeles!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "No se puede copiar el texto. Por favor, copie manualmente."
+
+# Admin page - JavaScript localized strings (without emoji prefix)
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "ADVERTENCIA: Está a punto de sincronizar/generar todas las Rutas. Esto puede tardar un tiempo y actualizará o creará publicaciones de Rutas. ¿Está seguro de que desea continuar?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "ADVERTENCIA: Está a punto de sincronizar/generar todos los POIs. Esto puede tardar un tiempo y actualizará o creará publicaciones de POIs. ¿Está seguro de que desea continuar?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "ADVERTENCIA: Está a punto de eliminar PERMANENTEMENTE todas las publicaciones de Rutas. Esta operación no se puede deshacer. ¿Está seguro de que desea continuar?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "ADVERTENCIA: Está a punto de eliminar PERMANENTEMENTE todas las publicaciones de POIs. Esta operación no se puede deshacer. ¿Está seguro de que desea continuar?"
+
+# Shortcodes
+msgid "N/A"
+msgstr "N/D"
+
+msgid "Failed to load POI data."
+msgstr "Error al cargar los datos del POI."
+
+# Sync actions
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Faltan las opciones de configuración requeridas. Por favor, compruebe su configuración."
+
+msgid "API track list invalid or unavailable."
+msgstr "Lista API de rutas no válida o no disponible."
+
+msgid "No tracks provided or invalid format."
+msgstr "No se proporcionaron rutas o formato no válido."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "No hay rutas en la fuente. La lista está vacía."
+
+msgid "Track no title"
+msgstr "Ruta sin título"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Configuración incompleta. Por favor, compruebe su configuración."
+
+msgid "POI no title"
+msgstr "POI sin título"
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr "Número de POIs fuente:"
+
+msgid "Source Tracks number:"
+msgstr "Número de Rutas fuente:"
+
+msgid "Current POIs number:"
+msgstr "Número de POIs actuales:"
+
+msgid "Current Tracks number:"
+msgstr "Número de Rutas actuales:"
+
+msgid "published"
+msgstr "publicados"
+
+msgid "Manage Import and Sync:"
+msgstr "Gestionar importación y sincronización:"
+
+msgid "Go to WM Settings"
+msgstr "Ir a configuración WM"
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "El plugin WPML no está instalado o activado. Este plugin requiere WPML para funcionar correctamente."
+
+msgid "ERROR:"
+msgstr "ERROR:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "ERROR: El tipo de contenido %s no es traducible. Habilite la traducción para el tipo de contenido %s en Configuración de WPML > Traducción de tipos de contenido."

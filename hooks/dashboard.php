@@ -4,7 +4,7 @@ function wm_admin_dashboard_widget()
 {
     wp_add_dashboard_widget(
         'wm_dashboard_widget',
-        'WM Package',
+        __('WM Package', 'wm-package'),
         'wm_dashboard_widget_content'
     );
 }
@@ -50,14 +50,14 @@ function wm_dashboard_widget_content()
     $adminPageURL = admin_url('admin.php?page=wm-settings');
 ?>
     <div class="wrap">
-        <p>Source POIs number: <strong><?php echo count($pois) ?></strong></p>
-        <p>Source Tracks number: <strong><?php echo count($tracks) ?></strong></p>
+        <p><?php echo esc_html(__('Source POIs number:', 'wm-package')); ?> <strong><?php echo count($pois) ?></strong></p>
+        <p><?php echo esc_html(__('Source Tracks number:', 'wm-package')); ?> <strong><?php echo count($tracks) ?></strong></p>
         </br>
-        <p>Current POIs number: <strong><?php echo $current_pois ?></strong> (published)</p>
-        <p>Current Tracks number: <strong><?php echo $current_tracks ?></strong> (published)</p>
+        <p><?php echo esc_html(__('Current POIs number:', 'wm-package')); ?> <strong><?php echo $current_pois ?></strong> (<?php echo esc_html(__('published', 'wm-package')); ?>)</p>
+        <p><?php echo esc_html(__('Current Tracks number:', 'wm-package')); ?> <strong><?php echo $current_tracks ?></strong> (<?php echo esc_html(__('published', 'wm-package')); ?>)</p>
         </br>
-        <p>Manage Import and Sync:</p>
-        <a href="<?php echo esc_url($adminPageURL) ?>" class="button button-primary">Go to WM Settings</a>
+        <p><?php echo esc_html(__('Manage Import and Sync:', 'wm-package')); ?></p>
+        <a href="<?php echo esc_url($adminPageURL) ?>" class="button button-primary"><?php echo esc_html(__('Go to WM Settings', 'wm-package')); ?></a>
     </div>
 
 <?php

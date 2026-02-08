@@ -53,6 +53,14 @@ function sync_pois_action()
                 }
                 return new WP_Error('invalid_input', $error_message);
             }
+            if (empty($pois_data['features'])) {
+                $error_message = __('No POIs in the source. The features array is empty.', 'wm-package');
+                set_transient('wm_sync_pois_notification', $error_message, 60);
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => $error_message]);
+                }
+                return new WP_Error('empty_features', $error_message);
+            }
             // Cache the POIs list for 1 hour
             set_transient($transient_key, $pois_data['features'], HOUR_IN_SECONDS);
             // Initialize progress tracking
@@ -161,7 +169,7 @@ function sync_pois_action()
             }
 
             // Generate post data from poi information
-            $post_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : 'poi no title ' . $source_id;
+            $post_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : __('POI no title', 'wm-package') . ' ' . $source_id;
             $post_slug = sanitize_title($post_title);
             $poi_shortcode_final = str_replace('$1', $source_id, $poi_shortcode);
 
@@ -200,7 +208,7 @@ function sync_pois_action()
                 if ($lang_code == $original_language_info->language_code) continue;
 
                 // Generate post data from poi information
-                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : 'Poi no title ' . $source_id;
+                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : __('POI no title', 'wm-package') . ' ' . $source_id;
                 $post_slug = sanitize_title($post_title);
 
                 // Create translation post object (you should modify this part according to how you manage translations)
@@ -231,10 +239,10 @@ function sync_pois_action()
             }
         }
 
-        // Calculate progress
+        // Calculate progress (avoid division by zero when total_pois is 0)
         $next_offset = $offset + $batch_size;
         $is_complete = ($next_offset >= $total_pois);
-        $progress_percent = min(100, round(($next_offset / $total_pois) * 100));
+        $progress_percent = $total_pois > 0 ? min(100, round(($next_offset / $total_pois) * 100)) : 100;
 
         // Update progress tracking
         $progress_data['last_update'] = time();

@@ -7,7 +7,7 @@ function wm_poi_meta_box()
 {
     add_meta_box(
         'wm_poi_details',
-        'Dettagli Poi',
+        __('POI Details', 'wm-package'),
         'wm_poi_meta_box_callback',
         'poi',
         'normal',
@@ -31,7 +31,7 @@ function wm_poi_meta_box_callback($post)
             </th>
             <td>
                 <input type="number" id="wm_poi_id" name="wm_poi_id" value="<?php echo esc_attr($value); ?>" class="regular-text" />
-                <p class="description">Inserisci l'ID originale della poi</p>
+                <p class="description"><?php echo esc_html(__('Enter the original POI ID', 'wm-package')); ?></p>
             </td>
         </tr>
     </table>

@@ -665,9 +665,6 @@ msgstr "Errori"
 msgid "Time"
 msgstr "Tempo"
 
-msgid "min"
-msgstr "min"
-
 msgid "tracks"
 msgstr "tracce"
 
@@ -713,9 +710,6 @@ msgstr "Un'eliminazione è già in corso. Vuoi interromperla e ricominciare?"
 msgid "Deletion session expired. Please start over."
 msgstr "Sessione di eliminazione scaduta. Ricomincia da capo."
 
-msgid "Batch completed: %d/%d tracks (%d%%)"
-msgstr "Batch completato: %d/%d tracce (%d%%)"
-
 msgid "Insufficient permissions"
 msgstr "Permessi insufficienti"
 
@@ -739,6 +733,9 @@ msgstr "Lista API POI non valida o non disponibile."
 
 msgid "No POIs provided or invalid format."
 msgstr "Nessun POI fornito o formato non valido."
+
+msgid "No POIs in the source. The features array is empty."
+msgstr "Nessun POI nella sorgente. L'array features è vuoto."
 
 msgid "Synchronization completed! Processed %d POIs."
 msgstr "Sincronizzazione completata! Processati %d POI."
@@ -766,3 +763,225 @@ msgstr "Presumendo che il batch sia stato processato. Continuo con il batch succ
 
 msgid "Too many consecutive timeouts. Process stopped."
 msgstr "Troppi timeout consecutivi. Processo interrotto."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "Archivi POI"
+
+msgid "POI Attributes"
+msgstr "Attributi POI"
+
+msgid "Parent POI:"
+msgstr "POI genitore:"
+
+msgid "All POIs"
+msgstr "Tutti i POI"
+
+msgid "Add New POI"
+msgstr "Aggiungi nuovo POI"
+
+msgid "Add New"
+msgstr "Aggiungi nuovo"
+
+msgid "New POI"
+msgstr "Nuovo POI"
+
+msgid "Edit POI"
+msgstr "Modifica POI"
+
+msgid "Update POI"
+msgstr "Aggiorna POI"
+
+msgid "View POI"
+msgstr "Vedi POI"
+
+msgid "View POIs"
+msgstr "Vedi POI"
+
+msgid "Search POIs"
+msgstr "Cerca POI"
+
+msgid "Not Found"
+msgstr "Non trovato"
+
+msgid "Not Found in Trash"
+msgstr "Non trovato nel cestino"
+
+msgid "Featured Image"
+msgstr "Immagine in evidenza"
+
+msgid "Set Featured Image"
+msgstr "Imposta immagine in evidenza"
+
+msgid "Remove Featured Image"
+msgstr "Rimuovi immagine in evidenza"
+
+msgid "Use as Featured Image"
+msgstr "Usa come immagine in evidenza"
+
+msgid "Insert into POI"
+msgstr "Inserisci nel POI"
+
+msgid "Uploaded to this POI"
+msgstr "Caricato su questo POI"
+
+msgid "POIs List"
+msgstr "Elenco POI"
+
+msgid "POIs List Navigation"
+msgstr "Navigazione elenco POI"
+
+msgid "Filter POIs List"
+msgstr "Filtra elenco POI"
+
+msgid "Post type for Points of Interest"
+msgstr "Post type per i Punti di Interesse"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Archivi tracce"
+
+msgid "Track Attributes"
+msgstr "Attributi traccia"
+
+msgid "Parent Track:"
+msgstr "Traccia genitore:"
+
+msgid "All Tracks"
+msgstr "Tutte le tracce"
+
+msgid "Add New Track"
+msgstr "Aggiungi nuova traccia"
+
+msgid "New Track"
+msgstr "Nuova traccia"
+
+msgid "Edit Track"
+msgstr "Modifica traccia"
+
+msgid "Update Track"
+msgstr "Aggiorna traccia"
+
+msgid "View Track"
+msgstr "Vedi traccia"
+
+msgid "View Tracks"
+msgstr "Vedi tracce"
+
+msgid "Search Tracks"
+msgstr "Cerca tracce"
+
+msgid "Insert into Track"
+msgstr "Inserisci nella traccia"
+
+msgid "Uploaded to this Track"
+msgstr "Caricato su questa traccia"
+
+msgid "Tracks List"
+msgstr "Elenco tracce"
+
+msgid "Tracks List Navigation"
+msgstr "Navigazione elenco tracce"
+
+msgid "Filter Tracks List"
+msgstr "Filtra elenco tracce"
+
+msgid "Post type for Tracks"
+msgstr "Post type per le tracce"
+
+# Custom fields
+msgid "POI Details"
+msgstr "Dettagli POI"
+
+msgid "Enter the original POI ID"
+msgstr "Inserisci l'ID originale del POI"
+
+msgid "Track Details"
+msgstr "Dettagli traccia"
+
+msgid "Enter the original Track ID"
+msgstr "Inserisci l'ID originale della traccia"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Testo copiato negli appunti!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Impossibile copiare il testo. Per favore, copia manualmente."
+
+# Admin page - JavaScript localized strings (without emoji)
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "ATTENZIONE: Stai per sincronizzare/generare tutte le Tracce. Questa operazione potrebbe richiedere del tempo e aggiornerà o creerà i post delle Tracce. Sei sicuro di voler procedere?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "ATTENZIONE: Stai per sincronizzare/generare tutti i POI. Questa operazione potrebbe richiedere del tempo e aggiornerà o creerà i post dei POI. Sei sicuro di voler procedere?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "ATTENZIONE: Stai per eliminare PERMANENTEMENTE tutti i post delle Tracce. Questa operazione non può essere annullata. Sei sicuro di voler procedere?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "ATTENZIONE: Stai per eliminare PERMANENTEMENTE tutti i post dei POI. Questa operazione non può essere annullata. Sei sicuro di voler procedere?"
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr "Batch completato: %d/%d POI (%d%%)"
+
+# Shortcodes
+msgid "N/A"
+msgstr "N/D"
+
+msgid "Failed to load POI data."
+msgstr "Impossibile caricare i dati del POI."
+
+# Sync actions
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Le opzioni di configurazione richieste sono mancanti. Controlla le impostazioni."
+
+msgid "API track list invalid or unavailable."
+msgstr "Lista API tracce non valida o non disponibile."
+
+msgid "No tracks provided or invalid format."
+msgstr "Nessuna traccia fornita o formato non valido."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "Nessuna traccia nella sorgente. La lista è vuota."
+
+msgid "Track no title"
+msgstr "Traccia senza titolo"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Configurazione incompleta. Controlla le impostazioni."
+
+msgid "POI no title"
+msgstr "POI senza titolo"
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr "Numero POI sorgente:"
+
+msgid "Source Tracks number:"
+msgstr "Numero Tracce sorgente:"
+
+msgid "Current POIs number:"
+msgstr "Numero POI attuali:"
+
+msgid "Current Tracks number:"
+msgstr "Numero Tracce attuali:"
+
+msgid "published"
+msgstr "pubblicati"
+
+msgid "Manage Import and Sync:"
+msgstr "Gestisci Importazione e Sincronizzazione:"
+
+msgid "Go to WM Settings"
+msgstr "Vai alle Impostazioni WM"
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "Il plugin WPML non è installato o attivato. Questo plugin richiede WPML per funzionare correttamente."
+
+msgid "ERROR:"
+msgstr "ERRORE:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "ERRORE: Il tipo di post %s non è traducibile. Abilita la traduzione per il tipo di post %s nelle impostazioni di WPML > Traduzione tipo di post."

@@ -560,16 +560,16 @@ msgid "Synchronizing..."
 msgstr "Synchroniseren..."
 
 msgid "Deleting Tracks..."
-msgstr "Tracks verwijderen..."
+msgstr "Routes verwijderen..."
 
 msgid "Deleting POIs..."
-msgstr "POIs verwijderen..."
+msgstr "POI's verwijderen..."
 
 msgid "Please do not close or reload this page while synchronization is in progress."
 msgstr "Sluit of herlaad deze pagina niet terwijl de synchronisatie bezig is."
 
 msgid "Please do not close or reload this page while deletion is in progress."
-msgstr "Sluit of herlaad deze pagina niet terwijl de verwijdering bezig is."
+msgstr "Sluit of herlaad deze pagina niet terwijl het verwijderen bezig is."
 
 msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
 msgstr "⚠️ WAARSCHUWING: U staat op het punt alle Tracks te synchroniseren/genereren. Dit kan enige tijd duren en zal Track-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
@@ -584,28 +584,28 @@ msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This o
 msgstr "⚠️ WAARSCHUWING: U staat op het punt alle POI-berichten PERMANENT te verwijderen. Deze bewerking kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
 
 msgid "Final confirmation: Delete ALL Tracks?"
-msgstr "Laatste bevestiging: ALLE Tracks verwijderen?"
+msgstr "Laatste bevestiging: ALLE Routes verwijderen?"
 
 msgid "Final confirmation: Delete ALL POIs?"
-msgstr "Laatste bevestiging: ALLE POIs verwijderen?"
+msgstr "Laatste bevestiging: ALLE POI's verwijderen?"
 
 msgid "Tracks synchronized successfully!"
-msgstr "Tracks succesvol gesynchroniseerd!"
+msgstr "Routes succesvol gesynchroniseerd!"
 
 msgid "POIs synchronized successfully!"
-msgstr "POIs succesvol gesynchroniseerd!"
+msgstr "POI's succesvol gesynchroniseerd!"
 
 msgid "Unknown error occurred"
 msgstr "Onbekende fout opgetreden"
 
 msgid "Error communicating with the server"
-msgstr "Fout bij communiceren met de server"
+msgstr "Fout bij communicatie met de server"
 
 msgid "Request timeout. The operation may still be processing. Please check the results."
-msgstr "Verzoek timeout. De bewerking wordt mogelijk nog verwerkt. Controleer de resultaten."
+msgstr "Time-out van het verzoek. De bewerking wordt mogelijk nog verwerkt. Controleer de resultaten."
 
 msgid "Response format error, but operation may have completed. Please check the results."
-msgstr "Antwoordformaatfout, maar de bewerking kan zijn voltooid. Controleer de resultaten."
+msgstr "Fout in antwoordformaat, maar de bewerking is mogelijk voltooid. Controleer de resultaten."
 
 msgid "Failed to refresh"
 msgstr "Vernieuwen mislukt"
@@ -620,37 +620,37 @@ msgid "Please select a PNG file first."
 msgstr "Selecteer eerst een PNG-bestand."
 
 msgid "Synchronization session expired. Please start over."
-msgstr "Synchronisatiesessie verlopen. Start opnieuw."
+msgstr "Synchronisatiesessie verlopen. Begin opnieuw."
 
 msgid "Synchronization session expired."
 msgstr "Synchronisatiesessie verlopen."
 
 msgid "Stuck process detected. Synchronization has been stopped. Please start over."
-msgstr "Vastgelopen proces gedetecteerd. Synchronisatie is gestopt. Start opnieuw."
+msgstr "Vastgelopen proces gedetecteerd. De synchronisatie is gestopt. Begin opnieuw."
 
 msgid "Stuck process detected."
 msgstr "Vastgelopen proces gedetecteerd."
 
 msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
-msgstr "Globale timeout bereikt (%d minuten). Synchronisatie is gestopt. Start opnieuw."
+msgstr "Globale time-out bereikt (%d minuten). De synchronisatie is gestopt. Begin opnieuw."
 
 msgid "Global timeout reached."
 msgstr "Globale timeout bereikt."
 
 msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
-msgstr "Te veel opeenvolgende fouten (%d). Synchronisatie is gestopt om een oneindige lus te voorkomen."
+msgstr "Te veel opeenvolgende fouten (%d). De synchronisatie is gestopt om een oneindige lus te voorkomen."
 
 msgid "Too many consecutive errors."
 msgstr "Te veel opeenvolgende fouten."
 
 msgid "Great! Tracks synchronized successfully."
-msgstr "Geweldig! Tracks succesvol gesynchroniseerd."
+msgstr "Geweldig! Routes succesvol gesynchroniseerd."
 
 msgid "Synchronization completed! Processed %d tracks."
-msgstr "Synchronisatie voltooid! %d tracks verwerkt."
+msgstr "Synchronisatie voltooid! %d routes verwerkt."
 
 msgid "Batch completed: %d/%d tracks (%d%%)"
-msgstr "Batch voltooid: %d/%d tracks (%d%%)"
+msgstr "Batch voltooid: %d/%d routes (%d%%)"
 
 msgid "Processed"
 msgstr "Verwerkt"
@@ -664,11 +664,8 @@ msgstr "Fouten"
 msgid "Time"
 msgstr "Tijd"
 
-msgid "min"
-msgstr "min"
-
 msgid "tracks"
-msgstr "tracks"
+msgstr "routes"
 
 msgid "Do you want to stop the synchronization?"
 msgstr "Wilt u de synchronisatie stoppen?"
@@ -677,16 +674,16 @@ msgid "Synchronization stopped by user."
 msgstr "Synchronisatie gestopt door gebruiker."
 
 msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
-msgstr "Globale timeout bereikt (30 minuten). Synchronisatie is gestopt voor de veiligheid."
+msgstr "Globale time-out bereikt (30 minuten). De synchronisatie is uit veiligheid gestopt."
 
 msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
-msgstr "Vastgelopen proces gedetecteerd (geen voortgang gedurende 5 minuten). Synchronisatie is gestopt."
+msgstr "Vastgelopen proces gedetecteerd (geen voortgang gedurende 5 minuten). De synchronisatie is gestopt."
 
 msgid "Too many consecutive errors. Synchronization has been stopped."
-msgstr "Te veel opeenvolgende fouten. Synchronisatie is gestopt."
+msgstr "Te veel opeenvolgende fouten. De synchronisatie is gestopt."
 
 msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
-msgstr "Te veel opeenvolgende fouten. Synchronisatie is gestopt om een oneindige lus te voorkomen."
+msgstr "Te veel opeenvolgende fouten. De synchronisatie is gestopt om een oneindige lus te voorkomen."
 
 msgid "A synchronization is already in progress. Do you want to stop it and start over?"
 msgstr "Er is al een synchronisatie bezig. Wilt u deze stoppen en opnieuw beginnen?"
@@ -698,7 +695,7 @@ msgid "Process stopped by server"
 msgstr "Proces gestopt door server"
 
 msgid "Deletion completed! Deleted %d tracks."
-msgstr "Verwijdering voltooid! %d tracks verwijderd."
+msgstr "Verwijdering voltooid! %d routes verwijderd."
 
 msgid "Deleted"
 msgstr "Verwijderd"
@@ -710,7 +707,7 @@ msgid "A deletion is already in progress. Do you want to stop it and start over?
 msgstr "Er is al een verwijdering bezig. Wilt u deze stoppen en opnieuw beginnen?"
 
 msgid "Deletion session expired. Please start over."
-msgstr "Verwijderingssessie verlopen. Start opnieuw."
+msgstr "Verwijderingssessie verlopen. Begin opnieuw."
 
 msgid "Insufficient permissions"
 msgstr "Onvoldoende rechten"
@@ -719,13 +716,13 @@ msgid "Invalid nonce"
 msgstr "Ongeldige nonce"
 
 msgid "Error deleting track ID: %d"
-msgstr "Fout bij verwijderen van track ID: %d"
+msgstr "Fout bij verwijderen van route-ID: %d"
 
 msgid "Deleted %d tracks. Some errors occurred."
-msgstr "%d tracks verwijderd. Er zijn enkele fouten opgetreden."
+msgstr "%d routes verwijderd. Er zijn enkele fouten opgetreden."
 
 msgid "Successfully deleted %d tracks."
-msgstr "%d tracks succesvol verwijderd."
+msgstr "%d routes succesvol verwijderd."
 
 msgid "Required plugins are not installed or activated"
 msgstr "Vereiste plugins zijn niet geïnstalleerd of geactiveerd"
@@ -734,34 +731,261 @@ msgid "API POI list invalid or unavailable."
 msgstr "API POI-lijst ongeldig of niet beschikbaar."
 
 msgid "No POIs provided or invalid format."
-msgstr "Geen POIs opgegeven of ongeldig formaat."
+msgstr "Geen POI's opgegeven of ongeldig formaat."
+
+msgid "No POIs in the source. The features array is empty."
+msgstr "Geen POI's in de bron. De features-array is leeg."
 
 msgid "Synchronization completed! Processed %d POIs."
-msgstr "Synchronisatie voltooid! %d POIs verwerkt."
+msgstr "Synchronisatie voltooid! %d POI's verwerkt."
 
 msgid "Batch completed: %d/%d POIs (%d%%)"
-msgstr "Batch voltooid: %d/%d POIs (%d%%)"
+msgstr "Batch voltooid: %d/%d POI's (%d%%)"
 
 msgid "Great! POIs synchronized successfully."
 msgstr "Geweldig! POIs succesvol gesynchroniseerd."
 
 msgid "Deletion completed! Deleted %d POIs."
-msgstr "Verwijdering voltooid! %d POIs verwijderd."
+msgstr "Verwijdering voltooid! %d POI's verwijderd."
 
 msgid "Deleted %d POIs. Some errors occurred."
-msgstr "%d POIs verwijderd. Er zijn enkele fouten opgetreden."
+msgstr "%d POI's verwijderd. Er zijn enkele fouten opgetreden."
 
 msgid "Successfully deleted %d POIs."
-msgstr "%d POIs succesvol verwijderd."
+msgstr "%d POI's succesvol verwijderd."
 
 msgid "Error deleting POI ID: %d"
-msgstr "Fout bij verwijderen van POI ID: %d"
+msgstr "Fout bij verwijderen van POI-ID: %d"
 
 msgid "Preparing deletion..."
-msgstr "Voorbereiden van verwijdering..."
+msgstr "Verwijdering voorbereiden..."
 
 msgid "Assuming batch was processed. Continuing with next batch..."
-msgstr "Aannemen dat batch is verwerkt. Doorgaan met volgende batch..."
+msgstr "Aangenomen dat de batch is verwerkt. Doorgaan met volgende batch..."
 
 msgid "Too many consecutive timeouts. Process stopped."
 msgstr "Te veel opeenvolgende timeouts. Proces gestopt."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "POI-archief"
+
+msgid "POI Attributes"
+msgstr "POI-attributen"
+
+msgid "Parent POI:"
+msgstr "Bovenliggende POI:"
+
+msgid "All POIs"
+msgstr "Alle POI's"
+
+msgid "Add New POI"
+msgstr "Nieuwe POI toevoegen"
+
+msgid "Add New"
+msgstr "Nieuwe toevoegen"
+
+msgid "New POI"
+msgstr "Nieuwe POI"
+
+msgid "Edit POI"
+msgstr "POI bewerken"
+
+msgid "Update POI"
+msgstr "POI bijwerken"
+
+msgid "View POI"
+msgstr "POI bekijken"
+
+msgid "View POIs"
+msgstr "POI's bekijken"
+
+msgid "Search POIs"
+msgstr "POI's zoeken"
+
+msgid "Not Found"
+msgstr "Niet gevonden"
+
+msgid "Not Found in Trash"
+msgstr "Niet gevonden in prullenbak"
+
+msgid "Featured Image"
+msgstr "Uitgelichte afbeelding"
+
+msgid "Set Featured Image"
+msgstr "Uitgelichte afbeelding instellen"
+
+msgid "Remove Featured Image"
+msgstr "Uitgelichte afbeelding verwijderen"
+
+msgid "Use as Featured Image"
+msgstr "Gebruiken als uitgelichte afbeelding"
+
+msgid "Insert into POI"
+msgstr "Invoegen in POI"
+
+msgid "Uploaded to this POI"
+msgstr "Geüpload naar deze POI"
+
+msgid "POIs List"
+msgstr "POI-lijst"
+
+msgid "POIs List Navigation"
+msgstr "POI-lijst navigatie"
+
+msgid "Filter POIs List"
+msgstr "POI-lijst filteren"
+
+msgid "Post type for Points of Interest"
+msgstr "Berichttype voor Points of Interest"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Route-archief"
+
+msgid "Track Attributes"
+msgstr "Route-attributen"
+
+msgid "Parent Track:"
+msgstr "Bovenliggende route:"
+
+msgid "All Tracks"
+msgstr "Alle routes"
+
+msgid "Add New Track"
+msgstr "Nieuwe route toevoegen"
+
+msgid "New Track"
+msgstr "Nieuwe route"
+
+msgid "Edit Track"
+msgstr "Route bewerken"
+
+msgid "Update Track"
+msgstr "Route bijwerken"
+
+msgid "View Track"
+msgstr "Route bekijken"
+
+msgid "View Tracks"
+msgstr "Routes bekijken"
+
+msgid "Search Tracks"
+msgstr "Routes zoeken"
+
+msgid "Insert into Track"
+msgstr "Invoegen in route"
+
+msgid "Uploaded to this Track"
+msgstr "Geüpload naar deze route"
+
+msgid "Tracks List"
+msgstr "Routelijst"
+
+msgid "Tracks List Navigation"
+msgstr "Routelijst navigatie"
+
+msgid "Filter Tracks List"
+msgstr "Routelijst filteren"
+
+msgid "Post type for Tracks"
+msgstr "Berichttype voor routes"
+
+# Custom fields
+msgid "POI Details"
+msgstr "POI-details"
+
+msgid "Enter the original POI ID"
+msgstr "Voer de originele POI-ID in"
+
+msgid "Track Details"
+msgstr "Route-details"
+
+msgid "Enter the original Track ID"
+msgstr "Voer de originele route-ID in"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Tekst gekopieerd naar klembord!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Kan tekst niet kopiëren. Kopieer handmatig."
+
+# Admin page - JavaScript localized strings (without emoji)
+
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle Routes te synchroniseren/genereren. Dit kan enige tijd duren en zal Route-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle POI's te synchroniseren/genereren. Dit kan enige tijd duren en zal POI-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle Route-berichten PERMANENT te verwijderen. Deze actie kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle POI-berichten PERMANENT te verwijderen. Deze actie kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+# Shortcodes
+
+msgid "N/A"
+msgstr "N.v.t."
+
+msgid "Failed to load POI data."
+msgstr "Kan POI-gegevens niet laden."
+
+# Sync actions
+
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Vereiste configuratieopties ontbreken. Controleer uw instellingen."
+
+msgid "API track list invalid or unavailable."
+msgstr "API-routelijst ongeldig of niet beschikbaar."
+
+msgid "No tracks provided or invalid format."
+msgstr "Geen routes opgegeven of ongeldig formaat."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "Geen routes in de bron. De lijst is leeg."
+
+msgid "Track no title"
+msgstr "Route zonder titel"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Configuratie onvolledig. Controleer uw instellingen."
+
+msgid "POI no title"
+msgstr "POI zonder titel"
+
+# Dashboard
+
+msgid "Source POIs number:"
+msgstr "Aantal bron-POI's:"
+
+msgid "Source Tracks number:"
+msgstr "Aantal bronroutes:"
+
+msgid "Current POIs number:"
+msgstr "Huidig aantal POI's:"
+
+msgid "Current Tracks number:"
+msgstr "Huidig aantal routes:"
+
+msgid "published"
+msgstr "gepubliceerd"
+
+msgid "Manage Import and Sync:"
+msgstr "Import en synchronisatie beheren:"
+
+msgid "Go to WM Settings"
+msgstr "Ga naar WM-instellingen"
+
+# Controls
+
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "De WPML-plugin is niet geïnstalleerd of geactiveerd. Deze plugin vereist WPML om correct te functioneren."
+
+msgid "ERROR:"
+msgstr "FOUT:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "FOUT: Het berichttype %s is niet vertaalbaar. Schakel de vertaling in voor het berichttype %s in WPML-instellingen > Berichttype-vertaling."

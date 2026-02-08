@@ -44,7 +44,6 @@ function delete_all_tracks_action()
         ]);
 
         $posts_to_delete = [];
-        $total_tracks = count($tracks);
         $processed = 0;
 
         // Collect all post IDs to delete (including translations)

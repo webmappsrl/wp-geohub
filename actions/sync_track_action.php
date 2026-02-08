@@ -3,7 +3,7 @@ function sync_tracks_action()
 {
     if (is_wp_error(required_plugins())) {
         if (wp_doing_ajax()) {
-            wp_send_json_error(['message' => 'Required plugins are not installed or activated']);
+            wp_send_json_error(['message' => __('Required plugins are not installed or activated', 'wm-package')]);
         }
         return;
     }
@@ -15,7 +15,7 @@ function sync_tracks_action()
 
     // Check if required options are set
     if (empty($track_url) || empty($tracks_list) || empty($track_shortcode)) {
-        $error_message = 'Required configuration options are missing. Please check your settings.';
+        $error_message = __('Required configuration options are missing. Please check your settings.', 'wm-package');
         set_transient('wm_sync_tracks_notification', $error_message, 60);
         if (wp_doing_ajax()) {
             wp_send_json_error(['message' => $error_message]);
@@ -38,7 +38,7 @@ function sync_tracks_action()
         if ($is_first_batch) {
             $tracks_response = wp_remote_get($tracks_list);
             if (is_wp_error($tracks_response)) {
-                $error_message = 'API track list non valida o non disponibile.';
+                $error_message = __('API track list invalid or unavailable.', 'wm-package');
                 set_transient('wm_sync_tracks_notification', $error_message, 60);
                 if (wp_doing_ajax()) {
                     wp_send_json_error(['message' => $error_message]);
@@ -46,13 +46,21 @@ function sync_tracks_action()
                 return new WP_Error('invalid_api', $error_message);
             }
             $tracks = json_decode(wp_remote_retrieve_body($tracks_response), true);
-            if (empty($tracks) || !is_array($tracks)) {
-                $error_message = 'Nessun track fornito o formato non valido.';
+            if (!is_array($tracks)) {
+                $error_message = __('No tracks provided or invalid format.', 'wm-package');
                 set_transient('wm_sync_tracks_notification', $error_message, 60);
                 if (wp_doing_ajax()) {
                     wp_send_json_error(['message' => $error_message]);
                 }
                 return new WP_Error('invalid_input', $error_message);
+            }
+            if (empty($tracks)) {
+                $error_message = __('No tracks in the source. The list is empty.', 'wm-package');
+                set_transient('wm_sync_tracks_notification', $error_message, 60);
+                if (wp_doing_ajax()) {
+                    wp_send_json_error(['message' => $error_message]);
+                }
+                return new WP_Error('empty_list', $error_message);
             }
             // Cache the tracks list for 1 hour
             set_transient($transient_key, $tracks, HOUR_IN_SECONDS);
@@ -177,7 +185,7 @@ function sync_tracks_action()
             }
 
             // Generate post data from track information
-            $post_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : 'Track no title ' . $source_id;
+            $post_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : __('Track no title', 'wm-package') . ' ' . $source_id;
             $post_slug = sanitize_title($post_title);
             $track_shortcode_final = str_replace('$1', $source_id, $track_shortcode);
 
@@ -216,7 +224,7 @@ function sync_tracks_action()
                 if ($lang_code == $original_language_info->language_code) continue;
 
                 // Generate post data from track information
-                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : 'Track no title ' . $source_id;
+                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : __('Track no title', 'wm-package') . ' ' . $source_id;
                 $post_slug = sanitize_title($post_title);
 
                 // Create translation post object (you should modify this part according to how you manage translations)
@@ -247,10 +255,10 @@ function sync_tracks_action()
             }
         }
 
-        // Calculate progress
+        // Calculate progress (avoid division by zero when total_tracks is 0)
         $next_offset = $offset + $batch_size;
         $is_complete = ($next_offset >= $total_tracks);
-        $progress_percent = min(100, round(($next_offset / $total_tracks) * 100));
+        $progress_percent = $total_tracks > 0 ? min(100, round(($next_offset / $total_tracks) * 100)) : 100;
 
         // Update progress tracking
         $progress_data['last_update'] = time();
@@ -325,14 +333,14 @@ function sync_tracks_action()
     } else {
         // If configuration is missing, this should have been caught earlier, but handle it here too
         if (wp_doing_ajax()) {
-            wp_send_json_error(['message' => 'Configuration incomplete. Please check your settings.']);
+            wp_send_json_error(['message' => __('Configuration incomplete. Please check your settings.', 'wm-package')]);
             return;
         }
     }
 
     // Non-AJAX fallback (for backward compatibility)
     delete_transient('wm_transient_warning_message');
-    set_transient('wm_transient_success_message', 'Greate! Tracks synchronized successfully.', 60);
+    set_transient('wm_transient_success_message', __('Great! Tracks synchronized successfully.', 'wm-package'), 60);
 }
 
 // Register AJAX action

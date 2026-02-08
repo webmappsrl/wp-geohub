@@ -538,3 +538,403 @@ msgstr ""
 
 msgid "Albanian"
 msgstr ""
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr ""
+
+msgid "POI Attributes"
+msgstr ""
+
+msgid "Parent POI:"
+msgstr ""
+
+msgid "All POIs"
+msgstr ""
+
+msgid "Add New POI"
+msgstr ""
+
+msgid "Add New"
+msgstr ""
+
+msgid "New POI"
+msgstr ""
+
+msgid "Edit POI"
+msgstr ""
+
+msgid "Update POI"
+msgstr ""
+
+msgid "View POI"
+msgstr ""
+
+msgid "View POIs"
+msgstr ""
+
+msgid "Search POIs"
+msgstr ""
+
+msgid "Not Found"
+msgstr ""
+
+msgid "Not Found in Trash"
+msgstr ""
+
+msgid "Featured Image"
+msgstr ""
+
+msgid "Set Featured Image"
+msgstr ""
+
+msgid "Remove Featured Image"
+msgstr ""
+
+msgid "Use as Featured Image"
+msgstr ""
+
+msgid "Insert into POI"
+msgstr ""
+
+msgid "Uploaded to this POI"
+msgstr ""
+
+msgid "POIs List"
+msgstr ""
+
+msgid "POIs List Navigation"
+msgstr ""
+
+msgid "Filter POIs List"
+msgstr ""
+
+msgid "Post type for Points of Interest"
+msgstr ""
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr ""
+
+msgid "Track Attributes"
+msgstr ""
+
+msgid "Parent Track:"
+msgstr ""
+
+msgid "All Tracks"
+msgstr ""
+
+msgid "Add New Track"
+msgstr ""
+
+msgid "New Track"
+msgstr ""
+
+msgid "Edit Track"
+msgstr ""
+
+msgid "Update Track"
+msgstr ""
+
+msgid "View Track"
+msgstr ""
+
+msgid "View Tracks"
+msgstr ""
+
+msgid "Search Tracks"
+msgstr ""
+
+msgid "Insert into Track"
+msgstr ""
+
+msgid "Uploaded to this Track"
+msgstr ""
+
+msgid "Tracks List"
+msgstr ""
+
+msgid "Tracks List Navigation"
+msgstr ""
+
+msgid "Filter Tracks List"
+msgstr ""
+
+msgid "Post type for Tracks"
+msgstr ""
+
+# Custom fields
+msgid "POI Details"
+msgstr ""
+
+msgid "Enter the original POI ID"
+msgstr ""
+
+msgid "Track Details"
+msgstr ""
+
+msgid "Enter the original Track ID"
+msgstr ""
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr ""
+
+msgid "Unable to copy text. Please copy manually."
+msgstr ""
+
+# Admin page - JavaScript localized strings
+msgid "Synchronizing..."
+msgstr ""
+
+msgid "Deleting Tracks..."
+msgstr ""
+
+msgid "Deleting POIs..."
+msgstr ""
+
+msgid "Please do not close or reload this page while synchronization is in progress."
+msgstr ""
+
+msgid "Please do not close or reload this page while deletion is in progress."
+msgstr ""
+
+msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr ""
+
+msgid "⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr ""
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr ""
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr ""
+
+msgid "Final confirmation: Delete ALL Tracks?"
+msgstr ""
+
+msgid "Final confirmation: Delete ALL POIs?"
+msgstr ""
+
+msgid "Tracks synchronized successfully!"
+msgstr ""
+
+msgid "POIs synchronized successfully!"
+msgstr ""
+
+msgid "Unknown error occurred"
+msgstr ""
+
+msgid "Error communicating with the server"
+msgstr ""
+
+msgid "Request timeout. The operation may still be processing. Please check the results."
+msgstr ""
+
+msgid "Response format error, but operation may have completed. Please check the results."
+msgstr ""
+
+msgid "Failed to refresh"
+msgstr ""
+
+msgid "Failed to refresh config"
+msgstr ""
+
+msgid "shards"
+msgstr ""
+
+msgid "Please select a PNG file first."
+msgstr ""
+
+msgid "Synchronization session expired. Please start over."
+msgstr ""
+
+msgid "Stuck process detected. Synchronization has been stopped. Please start over."
+msgstr ""
+
+msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
+msgstr ""
+
+msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
+msgstr ""
+
+msgid "Synchronization completed! Processed %d tracks."
+msgstr ""
+
+msgid "Batch completed: %d/%d tracks (%d%%)"
+msgstr ""
+
+msgid "Processed"
+msgstr ""
+
+msgid "Skipped"
+msgstr ""
+
+msgid "Errors"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "tracks"
+msgstr ""
+
+msgid "Do you want to stop the synchronization?"
+msgstr ""
+
+msgid "Synchronization stopped by user."
+msgstr ""
+
+msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
+msgstr ""
+
+msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
+msgstr ""
+
+msgid "Too many consecutive errors. Synchronization has been stopped."
+msgstr ""
+
+msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
+msgstr ""
+
+msgid "A synchronization is already in progress. Do you want to stop it and start over?"
+msgstr ""
+
+msgid "Process stopped by server"
+msgstr ""
+
+msgid "Deletion completed! Deleted %d tracks."
+msgstr ""
+
+msgid "Deleted"
+msgstr ""
+
+msgid "The batch may have been processed. Check the results."
+msgstr ""
+
+msgid "A deletion is already in progress. Do you want to stop it and start over?"
+msgstr ""
+
+msgid "Deletion session expired. Please start over."
+msgstr ""
+
+msgid "Deletion completed! Deleted %d POIs."
+msgstr ""
+
+msgid "API POI list invalid or unavailable."
+msgstr ""
+
+msgid "No POIs provided or invalid format."
+msgstr ""
+
+msgid "No POIs in the source. The features array is empty."
+msgstr ""
+
+msgid "Synchronization completed! Processed %d POIs."
+msgstr ""
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr ""
+
+msgid "Preparing deletion..."
+msgstr ""
+
+msgid "Assuming batch was processed. Continuing with next batch..."
+msgstr ""
+
+msgid "Too many consecutive timeouts. Process stopped."
+msgstr ""
+
+# Delete actions
+msgid "Insufficient permissions"
+msgstr ""
+
+msgid "Invalid nonce"
+msgstr ""
+
+msgid "Error deleting track ID: %d"
+msgstr ""
+
+msgid "Deleted %d tracks. Some errors occurred."
+msgstr ""
+
+msgid "Successfully deleted %d tracks."
+msgstr ""
+
+msgid "Error deleting POI ID: %d"
+msgstr ""
+
+msgid "Deleted %d POIs. Some errors occurred."
+msgstr ""
+
+msgid "Successfully deleted %d POIs."
+msgstr ""
+
+# Shortcodes
+msgid "N/A"
+msgstr ""
+
+msgid "Failed to load POI data."
+msgstr ""
+
+# Sync actions
+msgid "Required plugins are not installed or activated"
+msgstr ""
+
+msgid "Required configuration options are missing. Please check your settings."
+msgstr ""
+
+msgid "API track list invalid or unavailable."
+msgstr ""
+
+msgid "No tracks provided or invalid format."
+msgstr ""
+
+msgid "No tracks in the source. The list is empty."
+msgstr ""
+
+msgid "Track no title"
+msgstr ""
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr ""
+
+msgid "Great! Tracks synchronized successfully."
+msgstr ""
+
+msgid "POI no title"
+msgstr ""
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr ""
+
+msgid "Source Tracks number:"
+msgstr ""
+
+msgid "Current POIs number:"
+msgstr ""
+
+msgid "Current Tracks number:"
+msgstr ""
+
+msgid "published"
+msgstr ""
+
+msgid "Manage Import and Sync:"
+msgstr ""
+
+msgid "Go to WM Settings"
+msgstr ""
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr ""
+
+msgid "ERROR:"
+msgstr ""
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr ""

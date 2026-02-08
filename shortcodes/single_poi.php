@@ -39,14 +39,14 @@ function wm_single_poi($atts)
 
 	$response = wp_remote_get($base_url);
 	if (is_wp_error($response)) {
-		return 'Failed to load POI data.';
+		return __('Failed to load POI data.', 'wm-package');
 	}
 	$pois = json_decode($response["body"], true);
 
 	$poi = getPoiById($pois, $poi_id);
 
 	if (!$poi || !isset($poi['properties'])) {
-		return 'Failed to load POI data.';
+		return __('Failed to load POI data.', 'wm-package');
 	}
 
 	$poi_properties = $poi['properties'];
@@ -118,7 +118,7 @@ function wm_single_poi($atts)
 			<div class="wm_taxonomies">
 				<?php foreach ($poi_types as $type) : ?>
 					<span class="wm_taxonomy_item">
-						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? 'N/A') ?></span>
+						<span class="wm_taxonomy_name"><?= esc_html($type['name'][$language] ?? __('N/A', 'wm-package')) ?></span>
 					</span>
 				<?php endforeach; ?>
 			</div>

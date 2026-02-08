@@ -1467,6 +1467,14 @@ function wm_admin_footer()
 							}
 						} else {
 							syncTracksState.consecutiveErrors++;
+							var serverMessage = response.data && response.data.message ? response.data.message : '';
+							// If server sent a specific error message (e.g. empty list), show it immediately and stop
+							if (serverMessage) {
+								syncTracksState.isRunning = false;
+								hideSyncModal();
+								alert('❌ ' + serverMessage);
+								return;
+							}
 							if (syncTracksState.consecutiveErrors >= syncTracksState.maxConsecutiveErrors) {
 								syncTracksState.isRunning = false;
 								hideSyncModal();
@@ -1489,7 +1497,7 @@ function wm_admin_footer()
 						var shouldStop = false;
 						
 						if (status === 'timeout') {
-							errorMessage = wmPackageStrings.errorTimeout + ' Il batch potrebbe essere stato processato.';
+							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
 							// Don't stop on timeout, might have succeeded
 							syncTracksState.consecutiveErrors = Math.max(0, syncTracksState.consecutiveErrors - 1);
 						} else if (xhr.responseJSON && xhr.responseJSON.data) {
@@ -1687,6 +1695,14 @@ function wm_admin_footer()
 							}
 						} else {
 							syncPoisState.consecutiveErrors++;
+							var serverMessage = response.data && response.data.message ? response.data.message : '';
+							// If server sent a specific error message (e.g. empty features), show it immediately and stop
+							if (serverMessage) {
+								syncPoisState.isRunning = false;
+								hideSyncModal();
+								alert('❌ ' + serverMessage);
+								return;
+							}
 							if (syncPoisState.consecutiveErrors >= syncPoisState.maxConsecutiveErrors) {
 								syncPoisState.isRunning = false;
 								hideSyncModal();

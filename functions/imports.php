@@ -7,7 +7,7 @@ $shortcodesPath = 'wp-content/plugins/wm-package/shortcodes';
 requireAllPHPFilesInDirectory($shortcodesPath);
 
 
-//Swiper Slider CSS da CDN
+//Swiper Slider CSS from CDN
 function child_theme_enqueue_swiper()
 {
     wp_enqueue_style('swiper-css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
