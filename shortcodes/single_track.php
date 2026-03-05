@@ -3,6 +3,23 @@ if (!is_admin()) {
 	add_shortcode('wm_single_track', 'wm_single_track');
 }
 
+/**
+ * Normalizza una stringa per il confronto nome POI (lowercase, trim, spazi multipli → uno).
+ *
+ * @param string $name
+ * @return string
+ */
+function wm_normalize_poi_name_for_match($name)
+{
+	if (!is_string($name) || $name === '') {
+		return '';
+	}
+	$n = trim($name);
+	$n = mb_strtolower($n, 'UTF-8');
+	$n = preg_replace('/\s+/u', ' ', $n);
+	return $n;
+}
+
 function wm_single_track($atts)
 {
 	if (defined('ICL_LANGUAGE_CODE')) {
@@ -46,6 +63,7 @@ function wm_single_track($atts)
 		}
 		$related_poi_ids = array_values(array_unique($related_poi_ids));
 
+		$related_poi_urls = [];
 		if (!empty($related_poi_ids)) {
 			$poi_posts = get_posts([
 				'post_type' => 'poi',
@@ -59,23 +77,62 @@ function wm_single_track($atts)
 					],
 				],
 			]);
-
-			$related_poi_urls = [];
 			foreach ($poi_posts as $poi_post) {
 				$source_id = get_post_meta($poi_post->ID, 'wm_poi_id', true);
 				if (!empty($source_id)) {
 					$related_poi_urls[(string)$source_id] = get_permalink($poi_post->ID);
 				}
 			}
+		}
 
-			foreach ($related_pois as &$poi_feature) {
-				$source_id = $poi_feature['properties']['id'] ?? null;
-				if (!empty($source_id) && isset($related_poi_urls[(string)$source_id])) {
-					$poi_feature['properties']['wm_poi_url'] = $related_poi_urls[(string)$source_id];
+		// Fallback: mappa nome normalizzato → URL (tutti i POI pubblicati) per match quando l'id non combacia
+		$related_poi_urls_by_name = [];
+		$all_poi_posts = get_posts([
+			'post_type' => 'poi',
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+		]);
+		foreach ($all_poi_posts as $poi_post) {
+			$title = $poi_post->post_title;
+			if ($title !== '') {
+				$key = wm_normalize_poi_name_for_match($title);
+				if ($key !== '') {
+					$related_poi_urls_by_name[$key] = get_permalink($poi_post->ID);
 				}
 			}
-			unset($poi_feature);
 		}
+
+		foreach ($related_pois as &$poi_feature) {
+			$source_id = $poi_feature['properties']['id'] ?? null;
+			if (!empty($source_id) && isset($related_poi_urls[(string)$source_id])) {
+				$poi_feature['properties']['wm_poi_url'] = $related_poi_urls[(string)$source_id];
+			} else {
+				// Fallback: match per name (stesso criterio usato per il titolo in pagina)
+				$props = $poi_feature['properties'] ?? [];
+				$name = null;
+				if (!empty($props['name'])) {
+					if (is_string($props['name'])) {
+						$name = $props['name'];
+					} elseif (!empty($props['name'][$language])) {
+						$name = $props['name'][$language];
+					} else {
+						foreach (is_array($props['name']) ? $props['name'] : [] as $v) {
+							if ($v !== '' && $v !== null) {
+								$name = $v;
+								break;
+							}
+						}
+					}
+				}
+				if ($name !== '' && $name !== null) {
+					$key = wm_normalize_poi_name_for_match($name);
+					if ($key !== '' && isset($related_poi_urls_by_name[$key])) {
+						$poi_feature['properties']['wm_poi_url'] = $related_poi_urls_by_name[$key];
+					}
+				}
+			}
+		}
+		unset($poi_feature);
 	}
 
 	// Enqueue Leaflet for shortcode
