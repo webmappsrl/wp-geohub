@@ -28,6 +28,9 @@ msgstr ""
 msgid "Related POIs"
 msgstr ""
 
+msgid "Points of interest"
+msgstr ""
+
 msgid "Download GPX"
 msgstr ""
 
@@ -128,9 +131,6 @@ msgid "Min Elevation"
 msgstr ""
 
 msgid "Distance"
-msgstr ""
-
-msgid "Technical Details"
 msgstr ""
 
 # Admin / Dashboard strings
@@ -877,6 +877,15 @@ msgid "N/A"
 msgstr ""
 
 msgid "Failed to load POI data."
+msgstr ""
+
+msgid "Error: Track data not available"
+msgstr ""
+
+msgid "Error: GPX generation library not available. Please refresh the page."
+msgstr ""
+
+msgid "Error: Failed to generate GPX file"
 msgstr ""
 
 # Sync actions

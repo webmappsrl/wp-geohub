@@ -14,6 +14,8 @@
     flex-direction: column;
     gap: 30px;
     width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 /* 1. Featured Image */
@@ -69,28 +71,77 @@
     font-size: 0.9em;
 }
 
-/* 4. Map and Technical Details Wrapper / Map and Info Details Wrapper */
-.wm_map_technical_wrapper,
-.wm_map_info_wrapper {
+/* 4. Map and Technical Details Wrapper (tracks) */
+.wm_map_technical_wrapper {
     display: flex;
     gap: 20px;
     width: 100%;
     margin: 0;
 }
 
+/* Detail layout (POI + Track): main content + sidebar (map/description left | info/technical right) */
+.wm_detail_with_sidebar {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    align-items: flex-start;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.wm_detail_main_content {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-sizing: border-box;
+}
+
+/* Detail sidebar: fixed width, sticky below fixed nav so full column stays visible */
+.wm_detail_sidebar {
+    flex: 0 0 auto;
+    width: 320px;
+    max-width: 100%;
+    position: sticky;
+    top: 150px;
+    align-self: flex-start;
+}
+
+.wm_detail_sidebar .wm_info_details {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+}
+
+.wm_detail_sidebar .wm_info_details_grid {
+    overflow-y: visible;
+}
+
 /* 4. Map */
 .wm_map {
     flex: 3;
     width: 100%;
+    max-width: 100%;
     margin: 0;
+    min-width: 0;
+}
+
+.wm_detail_main_content .wm_map {
+    flex: 0 0 auto;
 }
 
 .wm_leaflet_map {
     width: 100%;
+    max-width: 100%;
     height: 540px;
     border-radius: 8px;
     display: block;
     z-index: 0;
+    min-width: 0;
 }
 
 /* 5. Description */
@@ -98,10 +149,16 @@
     line-height: 1.7;
     font-size: 1em;
     margin: 0;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .wm_description p {
     margin-bottom: 15px;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .wm_description p:last-child {
@@ -111,13 +168,17 @@
 /* 6. Gallery */
 .wm_gallery {
     width: 100%;
+    max-width: 100%;
     margin: 0;
+    min-width: 0;
 }
 
 .swiper-container {
     width: 100%;
+    max-width: 100%;
     height: 400px;
     margin-bottom: 0;
+    min-width: 0;
 }
 
 .swiper-slide {
@@ -179,18 +240,21 @@
     transform: translateY(-50%);
 }
 
+/* Fixed card width so both Welcome points and Points of interest galleries look identical */
 .wm_related_poi_card {
-    width: 100%;
-    max-width: 320px;
+    width: 320px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
 }
 
 .wm_related_poi_image {
     width: 100%;
     height: 220px;
+    min-height: 220px;
     overflow: hidden;
     border-radius: 8px;
 }
@@ -319,6 +383,15 @@
     overflow-y: auto;
 }
 
+/* POI Contact Information: no fixed height, show all fields without scroll */
+.wm_info_details {
+    height: auto;
+    min-height: 0;
+}
+.wm_info_details_grid {
+    overflow-y: visible;
+}
+
 .wm_technical_detail_item,
 .wm_info_detail_item {
     display: flex;
@@ -343,6 +416,12 @@
     letter-spacing: 0.5px;
 }
 
+.wm_info_detail_label .fa {
+    margin-right: 6px;
+    color: #666;
+    font-size: 1.1em;
+}
+
 .wm_technical_detail_value,
 .wm_info_detail_value {
     font-size: 0.7em;
@@ -361,6 +440,57 @@
     text-decoration: underline;
 }
 
+/* POI info: two columns – label left, value right (title and button unchanged) */
+.wm_info_detail_item {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.wm_info_detail_item .wm_info_detail_label {
+    flex: 0 0 auto;
+    min-width: 0;
+    margin-bottom: 0;
+    width: auto;
+}
+
+.wm_info_detail_item .wm_info_detail_value {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: right;
+}
+
+/* Book refuge button (POI - SICAI): keep full width, centered – no two columns */
+.wm_info_detail_item--button {
+    flex-direction: column;
+    align-items: center;
+}
+
+.wm_btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: opacity 0.2s, background-color 0.2s;
+    width: fit-content;
+}
+
+.wm_btn:hover {
+    opacity: 0.9;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.wm_btn--prenota_rifugio {
+    min-width: 140px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .wm_content_wrapper {
@@ -376,14 +506,54 @@
         font-size: 1.6em;
     }
 
-    .wm_map_technical_wrapper,
-    .wm_map_info_wrapper {
+    .wm_map_technical_wrapper {
         flex-direction: column;
         gap: 20px;
     }
 
+    /* Detail layout: stack everything in one column, full width, no clipping */
+    .wm_detail_with_sidebar {
+        flex-direction: column;
+        gap: 24px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .wm_detail_main_content {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .wm_detail_sidebar {
+        width: 100%;
+        max-width: none;
+        position: static;
+        min-width: 0;
+    }
+
+    .wm_detail_sidebar .wm_info_details {
+        height: auto;
+        min-height: 0;
+    }
+
+    .wm_detail_sidebar .wm_info_details_grid {
+        overflow-y: visible;
+    }
+
     .wm_map {
         flex: 1;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .wm_leaflet_map {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: 350px;
     }
 
     .wm_technical_details,
@@ -391,11 +561,16 @@
         flex: 1;
     }
 
-    .wm_leaflet_map {
-        height: 350px;
+    .wm_gallery {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
     }
 
     .swiper-container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
         height: 300px;
     }
 
@@ -425,6 +600,13 @@
 
     .wm_leaflet_map {
         height: 300px;
+    }
+
+    .wm_detail_main_content .wm_map,
+    .wm_detail_main_content .wm_description,
+    .wm_detail_main_content .wm_gallery {
+        min-width: 0;
+        max-width: 100%;
     }
 
     .swiper-container {
@@ -911,14 +1093,30 @@
 }
 
 @media (max-width: 768px) {
+    /* Sticky nav at bottom on mobile: reserve space so content isn't hidden */
+    .wm_content_wrapper:has(.wm_track_navigation) {
+        padding-bottom: 120px;
+    }
+
     .wm_track_navigation {
-        flex-direction: column;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        flex-direction: row;
+        margin: 0;
+        padding: 10px 15px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+        border-top: 1px solid #e0e0e0;
+        background: #fff;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+        z-index: 1000;
     }
-    
+
     .wm_track_nav_button {
-        max-width: 100%;
+        max-width: 50%;
     }
-    
+
     .wm_track_nav_name {
         display: none;
     }

@@ -28,6 +28,9 @@ msgstr "Informations de contact"
 msgid "Related POIs"
 msgstr "POI connexes"
 
+msgid "Points of interest"
+msgstr "Points d'intérêt"
+
 msgid "Download GPX"
 msgstr "Télécharger GPX"
 
@@ -130,8 +133,6 @@ msgstr "Altitude minimale"
 msgid "Distance"
 msgstr "Distance"
 
-msgid "Technical Details"
-msgstr "Détails techniques"
 # Admin / Dashboard
 msgid "WM Package Settings"
 msgstr "Paramètres WM Package"
@@ -930,6 +931,15 @@ msgstr "N/D"
 
 msgid "Failed to load POI data."
 msgstr "Impossible de charger les données du POI."
+
+msgid "Error: Track data not available"
+msgstr "Erreur : données de l'itinéraire non disponibles"
+
+msgid "Error: GPX generation library not available. Please refresh the page."
+msgstr "Erreur : bibliothèque de génération GPX non disponible. Veuillez actualiser la page."
+
+msgid "Error: Failed to generate GPX file"
+msgstr "Erreur : impossible de générer le fichier GPX"
 
 # Sync actions
 msgid "Required configuration options are missing. Please check your settings."

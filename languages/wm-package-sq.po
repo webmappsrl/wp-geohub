@@ -28,6 +28,9 @@ msgstr "Informacione kontakti"
 msgid "Related POIs"
 msgstr "POI të ngjashme"
 
+msgid "Points of interest"
+msgstr "Pikat e interesit"
+
 msgid "Download GPX"
 msgstr "Shkarko GPX"
 
@@ -130,8 +133,6 @@ msgstr "Lartësia minimale"
 msgid "Distance"
 msgstr "Distancë"
 
-msgid "Technical Details"
-msgstr "Detaje teknike"
 # Admin / Dashboard
 msgid "WM Package Settings"
 msgstr "Cilësimet WM Package"
@@ -930,6 +931,15 @@ msgstr "N/D"
 
 msgid "Failed to load POI data."
 msgstr "Dështoi ngarkimi i të dhënave të POI."
+
+msgid "Error: Track data not available"
+msgstr "Gabim: Të dhënat e shtegut nuk janë të disponueshme"
+
+msgid "Error: GPX generation library not available. Please refresh the page."
+msgstr "Gabim: Libraria e gjenerimit GPX nuk është e disponueshme. Ju lutemi rifreskoni faqen."
+
+msgid "Error: Failed to generate GPX file"
+msgstr "Gabim: Dështoi gjenerimi i skedarit GPX"
 
 # Sync actions
 msgid "Required configuration options are missing. Please check your settings."

@@ -10,23 +10,41 @@ msgstr ""
 "Language:it\n"
 "MIME-Version: 1.0\n"
 
+msgid "City"
+msgstr "Città"
+
 msgid "Address"
 msgstr "Indirizzo"
 
 msgid "Phone"
 msgstr "Telefono"
 
-msgid "Related Links"
-msgstr "Link correlati"
+msgid "Website"
+msgstr "Sito web"
+
+msgid "Click here"
+msgstr "Clicca qui"
+
+msgid "Stage"
+msgstr "Tappa"
+
+msgid "Book"
+msgstr "Prenota"
 
 msgid "Email"
 msgstr "Email"
 
-msgid "Contact Information"
-msgstr "Informazioni di contatto"
+msgid "Information"
+msgstr "Informazioni"
 
 msgid "Related POIs"
 msgstr "POI correlati"
+
+msgid "Welcome points"
+msgstr "Punti accoglienza"
+
+msgid "Points of interest"
+msgstr "Punti di interesse"
 
 msgid "Download GPX"
 msgstr "Scarica GPX"
@@ -129,9 +147,6 @@ msgstr "Quota minima"
 
 msgid "Distance"
 msgstr "Distanza"
-
-msgid "Technical Details"
-msgstr "Dettagli tecnici"
 
 # Admin / Dashboard
 msgid "WM Package Settings"
@@ -931,6 +946,15 @@ msgstr "N/D"
 
 msgid "Failed to load POI data."
 msgstr "Impossibile caricare i dati del POI."
+
+msgid "Error: Track data not available"
+msgstr "Errore: dati della traccia non disponibili"
+
+msgid "Error: GPX generation library not available. Please refresh the page."
+msgstr "Errore: libreria per la generazione GPX non disponibile. Ricarica la pagina."
+
+msgid "Error: Failed to generate GPX file"
+msgstr "Errore: impossibile generare il file GPX"
 
 # Sync actions
 msgid "Required configuration options are missing. Please check your settings."

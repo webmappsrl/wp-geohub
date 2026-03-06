@@ -203,12 +203,13 @@ function sync_pois_action()
             $wpml_element_type = apply_filters('wpml_element_type', 'post_poi');
             $original_language_info = apply_filters('wpml_element_language_details', null, ['element_id' => $post_id, 'element_type' => $wpml_element_type]);
             $languages = apply_filters('wpml_active_languages', NULL, 'orderby=id&order=desc');
+            $default_lang_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : __('POI no title', 'wm-package') . ' ' . $source_id;
 
             foreach ($languages as $lang_code => $lang_details) {
                 if ($lang_code == $original_language_info->language_code) continue;
 
-                // Generate post data from poi information
-                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : __('POI no title', 'wm-package') . ' ' . $source_id;
+                // Generate post data from poi information (fallback: same title as default language)
+                $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : $default_lang_title;
                 $post_slug = sanitize_title($post_title);
 
                 // Create translation post object (you should modify this part according to how you manage translations)

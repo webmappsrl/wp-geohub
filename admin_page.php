@@ -1406,45 +1406,45 @@ function wm_admin_footer()
 
 						if (response && response.success) {
 							var progress = response.data && response.data.progress;
-							
+
 							// Reset error counter on success
 							syncTracksState.consecutiveErrors = 0;
 							syncTracksState.lastUpdate = Date.now();
-							
+
 							if (progress) {
 								// Check if process was stopped server-side
 								if (progress.stopped) {
 									syncTracksState.isRunning = false;
 									hideSyncModal();
-									var stopReason = progress.reason === 'too_many_errors' 
-										? wmPackageStrings.syncTooManyErrorsStopped
-										: wmPackageStrings.syncProcessStoppedByServer;
+									var stopReason = progress.reason === 'too_many_errors' ?
+										wmPackageStrings.syncTooManyErrorsStopped :
+										wmPackageStrings.syncProcessStoppedByServer;
 									alert('❌ ' + stopReason + '. ' + (response.data.message || ''));
 									return;
 								}
 
 								// Update progress bar
 								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
-								
+
 								// Update modal with progress
-								var progressText = progress.complete 
-									? wmPackageStrings.tracksSynced + ' (' + progress.total + ' ' + wmPackageStrings.syncTracks + ')'
-									: progress.current + '/' + progress.total + ' ' + wmPackageStrings.syncTracks + ' (' + progress.percent + '%)';
-								
+								var progressText = progress.complete ?
+									wmPackageStrings.tracksSynced + ' (' + progress.total + ' ' + wmPackageStrings.syncTracks + ')' :
+									progress.current + '/' + progress.total + ' ' + wmPackageStrings.syncTracks + ' (' + progress.percent + '%)';
+
 								var elapsedMinutes = Math.floor((Date.now() - syncTracksState.startTime) / 60000);
 								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
-								
+
 								// Use cumulative totals instead of batch values
 								var totalProcessed = progress.total_processed !== undefined ? progress.total_processed : progress.processed;
 								var totalSkipped = progress.total_skipped !== undefined ? progress.total_skipped : progress.skipped;
 								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
-								
+
 								$('#sync-progress-message').html(
-									progressText + '<br><small style="color: #666;">' + wmPackageStrings.syncProcessed + ': ' + totalProcessed + 
-									' | ' + wmPackageStrings.syncSkipped + ': ' + totalSkipped + 
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.syncProcessed + ': ' + totalProcessed +
+									' | ' + wmPackageStrings.syncSkipped + ': ' + totalSkipped +
 									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
 								);
-								
+
 								// Update title
 								if (!progress.complete) {
 									$('#modal-title').text(wmPackageStrings.synchronizing + ' (' + progress.percent + '%)');
@@ -1491,11 +1491,11 @@ function wm_admin_footer()
 					},
 					error: function(xhr, status, error) {
 						syncTracksState.consecutiveErrors++;
-						
+
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
 						var shouldStop = false;
-						
+
 						if (status === 'timeout') {
 							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
 							// Don't stop on timeout, might have succeeded
@@ -1544,7 +1544,7 @@ function wm_admin_footer()
 
 			$('#generate_track').click(function(e) {
 				e.preventDefault();
-				
+
 				// Check if sync is already running
 				if (syncTracksState.isRunning) {
 					if (!confirm(wmPackageStrings.syncAlreadyRunning)) {
@@ -1552,14 +1552,14 @@ function wm_admin_footer()
 					}
 					syncTracksState.isRunning = false;
 				}
-				
+
 				if (!confirm(wmPackageStrings.warningSyncTracks)) {
 					return false;
 				}
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseSync, wmPackageStrings.synchronizing);
-				
+
 				// Start batch processing from the beginning
 				syncTracksBatch(0, 10);
 			});
@@ -1634,45 +1634,45 @@ function wm_admin_footer()
 
 						if (response && response.success) {
 							var progress = response.data && response.data.progress;
-							
+
 							// Reset error counter on success
 							syncPoisState.consecutiveErrors = 0;
 							syncPoisState.lastUpdate = Date.now();
-							
+
 							if (progress) {
 								// Check if process was stopped server-side
 								if (progress.stopped) {
 									syncPoisState.isRunning = false;
 									hideSyncModal();
-									var stopReason = progress.reason === 'too_many_errors' 
-										? wmPackageStrings.syncTooManyErrorsStopped
-										: wmPackageStrings.syncProcessStoppedByServer;
+									var stopReason = progress.reason === 'too_many_errors' ?
+										wmPackageStrings.syncTooManyErrorsStopped :
+										wmPackageStrings.syncProcessStoppedByServer;
 									alert('❌ ' + stopReason + '. ' + (response.data.message || ''));
 									return;
 								}
 
 								// Update progress bar
 								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
-								
+
 								// Update modal with progress
-								var progressText = progress.complete 
-									? wmPackageStrings.poisSynced + ' (' + progress.total + ' POI)'
-									: progress.current + '/' + progress.total + ' POI (' + progress.percent + '%)';
-								
+								var progressText = progress.complete ?
+									wmPackageStrings.poisSynced + ' (' + progress.total + ' POI)' :
+									progress.current + '/' + progress.total + ' POI (' + progress.percent + '%)';
+
 								var elapsedMinutes = Math.floor((Date.now() - syncPoisState.startTime) / 60000);
 								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
-								
+
 								// Use cumulative totals instead of batch values
 								var totalProcessed = progress.total_processed !== undefined ? progress.total_processed : progress.processed;
 								var totalSkipped = progress.total_skipped !== undefined ? progress.total_skipped : progress.skipped;
 								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
-								
+
 								$('#sync-progress-message').html(
-									progressText + '<br><small style="color: #666;">' + wmPackageStrings.syncProcessed + ': ' + totalProcessed + 
-									' | ' + wmPackageStrings.syncSkipped + ': ' + totalSkipped + 
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.syncProcessed + ': ' + totalProcessed +
+									' | ' + wmPackageStrings.syncSkipped + ': ' + totalSkipped +
 									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
 								);
-								
+
 								// Update title
 								if (!progress.complete) {
 									$('#modal-title').text(wmPackageStrings.synchronizing + ' (' + progress.percent + '%)');
@@ -1719,11 +1719,11 @@ function wm_admin_footer()
 					},
 					error: function(xhr, status, error) {
 						syncPoisState.consecutiveErrors++;
-						
+
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
 						var shouldStop = false;
-						
+
 						if (status === 'timeout') {
 							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.deleteBatchMayProcessed;
 							// Don't stop on timeout, might have succeeded
@@ -1772,7 +1772,7 @@ function wm_admin_footer()
 
 			$('#generate_poi').click(function(e) {
 				e.preventDefault();
-				
+
 				// Check if sync is already running
 				if (syncPoisState.isRunning) {
 					if (!confirm(wmPackageStrings.syncAlreadyRunning)) {
@@ -1780,14 +1780,14 @@ function wm_admin_footer()
 					}
 					syncPoisState.isRunning = false;
 				}
-				
+
 				if (!confirm(wmPackageStrings.warningSyncPois)) {
 					return false;
 				}
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseSync, wmPackageStrings.synchronizing);
-				
+
 				// Start batch processing from the beginning
 				syncPoisBatch(0, 10);
 			});
@@ -1851,28 +1851,28 @@ function wm_admin_footer()
 
 						if (response && response.success) {
 							var progress = response.data && response.data.progress;
-							
+
 							if (progress) {
 								// Update progress bar
 								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
-								
+
 								// Update modal with progress
-								var progressText = progress.complete 
-									? wmPackageStrings.deleteTracksCompleted.replace('%d', progress.total_deleted)
-									: progress.current + '/' + progress.total + ' ' + wmPackageStrings.syncTracks + ' (' + progress.percent + '%)';
-								
+								var progressText = progress.complete ?
+									wmPackageStrings.deleteTracksCompleted.replace('%d', progress.total_deleted) :
+									progress.current + '/' + progress.total + ' ' + wmPackageStrings.syncTracks + ' (' + progress.percent + '%)';
+
 								var elapsedMinutes = Math.floor((Date.now() - deleteTracksState.startTime) / 60000);
 								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
-								
+
 								// Use cumulative totals instead of batch values
 								var totalDeleted = progress.total_deleted !== undefined ? progress.total_deleted : progress.deleted;
 								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
-								
+
 								$('#sync-progress-message').html(
-									progressText + '<br><small style="color: #666;">' + wmPackageStrings.deleteDeleted + ': ' + totalDeleted + 
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.deleteDeleted + ': ' + totalDeleted +
 									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
 								);
-								
+
 								// Update title
 								if (!progress.complete) {
 									$('#modal-title').text(wmPackageStrings.deletingTracks + ' (' + progress.percent + '%)');
@@ -1903,10 +1903,10 @@ function wm_admin_footer()
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
 						var shouldContinue = false;
-						
+
 						if (status === 'timeout') {
 							deleteTracksState.consecutiveTimeouts++;
-							
+
 							// If too many consecutive timeouts, stop
 							if (deleteTracksState.consecutiveTimeouts >= deleteTracksState.maxConsecutiveTimeouts) {
 								deleteTracksState.isRunning = false;
@@ -1914,20 +1914,20 @@ function wm_admin_footer()
 								alert('❌ ' + wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.tooManyTimeouts);
 								return;
 							}
-							
+
 							// On timeout, assume batch was processed and continue
 							// This handles cases where the server processed the batch but response was slow
 							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.continuingNextBatch;
 							shouldContinue = true;
-							
+
 							// Update progress message to show we're continuing
 							$('#sync-progress-message').html(
 								$('#sync-progress-message').html() + '<br><small style="color: #ff9800;">⚠️ ' + errorMessage + '</small>'
 							);
-							
+
 							// Calculate next offset (assume batch was processed)
 							var nextOffset = offset + batchSize;
-							
+
 							// Continue with next batch after a short delay
 							if (deleteTracksState.isRunning) {
 								setTimeout(function() {
@@ -1952,7 +1952,7 @@ function wm_admin_footer()
 								}
 							}
 						}
-						
+
 						// Only stop and show error if we shouldn't continue
 						if (!shouldContinue) {
 							deleteTracksState.isRunning = false;
@@ -1965,7 +1965,7 @@ function wm_admin_footer()
 
 			$('#delete_track').click(function(e) {
 				e.preventDefault();
-				
+
 				// Check if delete is already running
 				if (deleteTracksState.isRunning) {
 					if (!confirm(wmPackageStrings.deleteAlreadyRunning)) {
@@ -1973,7 +1973,7 @@ function wm_admin_footer()
 					}
 					deleteTracksState.isRunning = false;
 				}
-				
+
 				if (!confirm(wmPackageStrings.warningDeleteTracks)) {
 					return false;
 				}
@@ -1983,7 +1983,7 @@ function wm_admin_footer()
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseDelete, wmPackageStrings.deletingTracks);
-				
+
 				// Start batch processing from the beginning
 				deleteTracksBatch(0, 20);
 			});
@@ -2047,28 +2047,28 @@ function wm_admin_footer()
 
 						if (response && response.success) {
 							var progress = response.data && response.data.progress;
-							
+
 							if (progress) {
 								// Update progress bar
 								$('#sync-progress-bar-fill').css('width', progress.percent + '%');
-								
+
 								// Update modal with progress
-								var progressText = progress.complete 
-									? wmPackageStrings.deletePoisCompleted.replace('%d', progress.total_deleted)
-									: progress.current + '/' + progress.total + ' POI (' + progress.percent + '%)';
-								
+								var progressText = progress.complete ?
+									wmPackageStrings.deletePoisCompleted.replace('%d', progress.total_deleted) :
+									progress.current + '/' + progress.total + ' POI (' + progress.percent + '%)';
+
 								var elapsedMinutes = Math.floor((Date.now() - deletePoisState.startTime) / 60000);
 								var timeInfo = elapsedMinutes > 0 ? ' | ' + wmPackageStrings.syncTime + ': ' + elapsedMinutes + ' ' + wmPackageStrings.syncMinutes : '';
-								
+
 								// Use cumulative totals instead of batch values
 								var totalDeleted = progress.total_deleted !== undefined ? progress.total_deleted : progress.deleted;
 								var totalErrors = progress.total_errors !== undefined ? progress.total_errors : progress.errors;
-								
+
 								$('#sync-progress-message').html(
-									progressText + '<br><small style="color: #666;">' + wmPackageStrings.deleteDeleted + ': ' + totalDeleted + 
+									progressText + '<br><small style="color: #666;">' + wmPackageStrings.deleteDeleted + ': ' + totalDeleted +
 									' | ' + wmPackageStrings.syncErrors + ': ' + totalErrors + timeInfo + '</small>'
 								);
-								
+
 								// Update title
 								if (!progress.complete) {
 									$('#modal-title').text(wmPackageStrings.deletingPois + ' (' + progress.percent + '%)');
@@ -2099,10 +2099,10 @@ function wm_admin_footer()
 						// Try to parse error response if available
 						var errorMessage = wmPackageStrings.errorServer;
 						var shouldContinue = false;
-						
+
 						if (status === 'timeout') {
 							deletePoisState.consecutiveTimeouts++;
-							
+
 							// If too many consecutive timeouts, stop
 							if (deletePoisState.consecutiveTimeouts >= deletePoisState.maxConsecutiveTimeouts) {
 								deletePoisState.isRunning = false;
@@ -2110,20 +2110,20 @@ function wm_admin_footer()
 								alert('❌ ' + wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.tooManyTimeouts);
 								return;
 							}
-							
+
 							// On timeout, assume batch was processed and continue
 							// This handles cases where the server processed the batch but response was slow
 							errorMessage = wmPackageStrings.errorTimeout + ' ' + wmPackageStrings.continuingNextBatch;
 							shouldContinue = true;
-							
+
 							// Update progress message to show we're continuing
 							$('#sync-progress-message').html(
 								$('#sync-progress-message').html() + '<br><small style="color: #ff9800;">⚠️ ' + errorMessage + '</small>'
 							);
-							
+
 							// Calculate next offset (assume batch was processed)
 							var nextOffset = offset + batchSize;
-							
+
 							// Continue with next batch after a short delay
 							if (deletePoisState.isRunning) {
 								setTimeout(function() {
@@ -2148,7 +2148,7 @@ function wm_admin_footer()
 								}
 							}
 						}
-						
+
 						// Only stop and show error if we shouldn't continue
 						if (!shouldContinue) {
 							deletePoisState.isRunning = false;
@@ -2161,7 +2161,7 @@ function wm_admin_footer()
 
 			$('#delete_poi').click(function(e) {
 				e.preventDefault();
-				
+
 				// Check if delete is already running
 				if (deletePoisState.isRunning) {
 					if (!confirm(wmPackageStrings.deleteAlreadyRunning)) {
@@ -2169,7 +2169,7 @@ function wm_admin_footer()
 					}
 					deletePoisState.isRunning = false;
 				}
-				
+
 				if (!confirm(wmPackageStrings.warningDeletePois)) {
 					return false;
 				}
@@ -2179,7 +2179,7 @@ function wm_admin_footer()
 
 				// Show modal with spinner
 				showSyncModal(wmPackageStrings.doNotCloseDelete, wmPackageStrings.deletingPois);
-				
+
 				// Start batch processing from the beginning
 				deletePoisBatch(0, 20);
 			});
