@@ -23,6 +23,7 @@ include_once('hooks/transient.php');
 include_once('hooks/dashboard.php');
 include_once('post_types/RegisterTrackPostType.php');
 include_once('post_types/RegisterPoiPostType.php');
+include_once('restrict-admin-capabilities.php');
 include_once('custom_fields/TrackCustomFields.php');
 include_once('custom_fields/PoiCustomFields.php');
 include_once('actions/sync_track_action.php');

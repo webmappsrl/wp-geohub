@@ -1,6 +1,10 @@
 <?php
 function sync_pois_action()
 {
+    if (wp_doing_ajax() && !current_user_can('manage_options')) {
+        wp_send_json_error(['message' => __('Insufficient permissions', 'wm-package')]);
+        return;
+    }
     if (is_wp_error(required_plugins())) {
         if (wp_doing_ajax()) {
             wp_send_json_error(['message' => __('Required plugins are not installed or activated', 'wm-package')]);

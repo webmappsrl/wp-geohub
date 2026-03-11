@@ -51,7 +51,7 @@ if (!class_exists('Poi_Post_Type')) {
             'has_archive'           => true,
             'exclude_from_search'   => false,
             'publicly_queryable'    => true,
-            'capability_type'       => 'post',
+            'capability_type'       => array('poi', 'pois'),
             'show_in_rest'          => true, // Set to 'false' if you don't want to enable Gutenberg support.
         );
 
