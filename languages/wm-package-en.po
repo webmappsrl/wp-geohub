@@ -500,6 +500,9 @@ msgstr "Where"
 msgid "Select where"
 msgstr "Select where"
 
+msgid "Search"
+msgstr "Search"
+
 msgid "Reset filters"
 msgstr "Reset filters"
 

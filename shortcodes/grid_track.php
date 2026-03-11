@@ -557,6 +557,13 @@ function wm_grid_track($atts)
             <?php endif; ?>
 
             <?php if ($show_filters === 'true' && $use_elastic && !empty($filter_options['has_any_filter_data'])) : ?>
+                <!-- Search (outside filters section) -->
+                <div class="wm_tracks_search_wrapper">
+                    <div class="wm_tracks_search">
+                        <label class="wm_filter_label" for="wm_search_query"><?= __('Search', 'wm-package'); ?></label>
+                        <input type="text" id="wm_search_query" class="wm_filter_input" placeholder="<?= esc_attr(__('Search', 'wm-package')); ?>" value="" autocomplete="off" />
+                    </div>
+                </div>
                 <!-- Filters Interface -->
                 <div class="wm_tracks_filters" data-layer-id="<?= esc_attr($layer_id ?: $layer_ids_array[0] ?? ''); ?>" data-elastic-api="<?= esc_attr($elastic_api_base); ?>" data-shard-app="<?= esc_attr($shard_app); ?>" data-app-id="<?= esc_attr($app_id); ?>">
                     <?php if (!empty($filter_options['has_distance_data'])) : ?>
@@ -606,7 +613,7 @@ function wm_grid_track($atts)
                             </select>
                         </div>
 
-                        <div class="wm_filter_item">
+                        <div class="wm_filter_item" id="wm_filter_where_container" style="display: none;">
                             <label class="wm_filter_label"><?= __('Where', 'wm-package'); ?></label>
                             <select id="filter_region" class="wm_filter_select">
                                 <option value=""><?= __('Select where', 'wm-package'); ?></option>
@@ -724,7 +731,7 @@ function wm_grid_track($atts)
 
                         <!-- Sezione superiore con immagine in evidenza -->
                         <div class="wm_grid_track_image_section" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
-                            <!-- Box tassonomia in alto a sinistra -->
+                            <!-- Taxonomy box top left -->
                             <?php if ($taxonomy_display) : ?>
                                 <div class="wm_grid_track_taxonomy_box">
                                     <span><?= esc_html($taxonomy_display); ?></span>
@@ -765,6 +772,7 @@ function wm_grid_track($atts)
                 const language = '<?= esc_js($language); ?>';
 
                 let filterTimeout;
+                let searchDebounceTimeout;
 
                 // Function to get URL parameter
                 function getUrlParameter(name) {
@@ -798,8 +806,29 @@ function wm_grid_track($atts)
                     window.history.pushState({}, '', url.toString());
                 }
 
-                // Get Where filter element
+                // Function to update URL with search parameter
+                function updateUrlWithSearch(searchValue) {
+                    const url = new URL(window.location.href);
+                    if (searchValue && searchValue.trim() !== '') {
+                        url.searchParams.set('search', searchValue.trim());
+                    } else {
+                        url.searchParams.delete('search');
+                    }
+                    window.history.pushState({}, '', url.toString());
+                }
+
+                // Get Where filter element and its container (shown only when region is selected)
                 const whereFilter = document.getElementById('filter_region');
+                const whereFilterContainer = document.getElementById('wm_filter_where_container');
+
+                // Show/hide "Dove" filter based on whether "Regione" is selected
+                function updateWhereFilterVisibility() {
+                    const regionFilterEl = document.getElementById('filter_italian_region');
+                    const regionSelected = regionFilterEl && regionFilterEl.value;
+                    if (whereFilterContainer) {
+                        whereFilterContainer.style.display = regionSelected ? 'block' : 'none';
+                    }
+                }
 
                 // Store original Where filter options
                 let originalWhereOptions = [];
@@ -1026,11 +1055,23 @@ function wm_grid_track($atts)
                         difficultyValue = difficultyElement.value;
                     }
 
+                    // Search query (Elastic full-text)
+                    let searchQuery = '';
+                    const searchInput = document.getElementById('wm_search_query');
+                    if (searchInput) {
+                        searchQuery = (searchInput.value || '').trim();
+                    }
+                    const searchParam = getUrlParameter('search');
+                    if (!searchQuery && searchParam) {
+                        searchQuery = searchParam.trim();
+                    }
+
                     return {
                         filters: filters,
                         whereValue: whereValue,
                         regionValue: regionValue,
-                        difficultyValue: difficultyValue
+                        difficultyValue: difficultyValue,
+                        searchQuery: searchQuery
                     };
                 }
 
@@ -1052,6 +1093,10 @@ function wm_grid_track($atts)
                     }
 
                     if (filterData.difficultyValue) {
+                        return true;
+                    }
+
+                    if (filterData.searchQuery) {
                         return true;
                     }
 
@@ -1132,10 +1177,20 @@ function wm_grid_track($atts)
                     // Restore original Where options
                     updateWhereOptionsForRegion(null);
 
+                    // Hide "Dove" filter when filters are reset (region not selected)
+                    updateWhereFilterVisibility();
+
+                    // Reset search input
+                    const searchInputEl = document.getElementById('wm_search_query');
+                    if (searchInputEl) {
+                        searchInputEl.value = '';
+                    }
+
                     // Clear URL parameters
                     const url = new URL(window.location.href);
                     url.searchParams.delete('where');
                     url.searchParams.delete('region');
+                    url.searchParams.delete('search');
                     window.history.pushState({}, '', url.toString());
 
                     // Update results
@@ -1150,6 +1205,7 @@ function wm_grid_track($atts)
                         const whereValue = filterData.whereValue;
                         const regionValue = filterData.regionValue;
                         const difficultyValue = filterData.difficultyValue;
+                        const searchQuery = filterData.searchQuery || '';
                         let url = elasticApi;
                         if (url.indexOf('?') === -1) {
                             url += '?';
@@ -1157,6 +1213,10 @@ function wm_grid_track($atts)
                             url += '&';
                         }
                         url += 'app=' + shardApp + '_' + appId + '&layer=' + encodeURIComponent(layerId);
+
+                        if (searchQuery) {
+                            url += '&query=' + encodeURIComponent(searchQuery.replace(/ /g, '%20'));
+                        }
 
                         // Priority: if region is selected, use it for taxonomyWheres
                         // If both region and where are selected, filter by region first, then filter client-side by where
@@ -1285,7 +1345,7 @@ function wm_grid_track($atts)
                         html += '<div class="wm_grid_track_item">';
                         // Sezione superiore con immagine
                         html += '<div class="wm_grid_track_image_section" style="background-image: url(\'' + escapeHtml(imageUrl) + '\');">';
-                        // Box tassonomia in alto a sinistra
+                        // Taxonomy box top left
                         if (taxonomyDisplay) {
                             html += '<div class="wm_grid_track_taxonomy_box">';
                             html += '<span>' + escapeHtml(taxonomyDisplay) + '</span>';
@@ -1465,6 +1525,8 @@ function wm_grid_track($atts)
                                 // Don't reset Where filter - allow both to work together
                                 // Update Where filter options for this region
                                 updateWhereOptionsForRegion(optionValue);
+                                // Show "Dove" filter when region is set from URL
+                                updateWhereFilterVisibility();
                                 // Trigger update to apply filter
                                 updateResults();
                                 break;
@@ -1500,8 +1562,33 @@ function wm_grid_track($atts)
                                 updateUrlWithWhere(null);
                             }
                         }
+                        // Show "Dove" only when Regione is selected, hide when not
+                        updateWhereFilterVisibility();
                         // Update results to apply filter
                         updateResults();
+                    });
+                }
+
+                // Search input: debounce 400ms, update URL and results
+                const searchInputEl = document.getElementById('wm_search_query');
+                if (searchInputEl) {
+                    searchInputEl.addEventListener('input', function() {
+                        clearTimeout(searchDebounceTimeout);
+                        const self = this;
+                        searchDebounceTimeout = setTimeout(function() {
+                            const val = (self.value || '').trim();
+                            updateUrlWithSearch(val);
+                            updateResults();
+                        }, 400);
+                    });
+                    searchInputEl.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            clearTimeout(searchDebounceTimeout);
+                            const val = (this.value || '').trim();
+                            updateUrlWithSearch(val);
+                            updateResults();
+                        }
                     });
                 }
 
@@ -1518,8 +1605,19 @@ function wm_grid_track($atts)
                     });
                 }
 
-                // Initial check for reset button visibility (with small delay to ensure all filters are initialized)
+                // Initial visibility: show "Dove" only if Regione is already selected (e.g. from URL)
+                updateWhereFilterVisibility();
+
+                // Initial check for reset button visibility and search param from URL
                 setTimeout(function() {
+                    const searchParam = getUrlParameter('search');
+                    if (searchParam) {
+                        const searchInput = document.getElementById('wm_search_query');
+                        if (searchInput) {
+                            searchInput.value = searchParam;
+                            updateResults();
+                        }
+                    }
                     updateResetButtonVisibility();
                 }, 100);
             })();

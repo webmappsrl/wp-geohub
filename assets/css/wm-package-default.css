@@ -655,7 +655,7 @@
     justify-content: center;
 }
 
-/* Box tassonomia in alto a sinistra */
+/* Taxonomy box top left */
 .wm_grid_track_taxonomy_box {
     position: absolute;
     top: 15px;
@@ -813,6 +813,30 @@
 }
 
 /* Filters Interface */
+/* Search bar - outside filters section */
+.wm_tracks_search_wrapper {
+    margin: 0 0 20px 0;
+}
+
+/* Desktop: smaller search bar aligned to the left */
+.wm_tracks_search {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 360px;
+}
+
+.wm_tracks_search .wm_filter_input {
+    max-width: 100%;
+}
+
+/* Mobile: search bar full width */
+@media (max-width: 768px) {
+    .wm_tracks_search {
+        max-width: 100%;
+    }
+}
+
 .wm_tracks_filters {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -859,6 +883,27 @@
 }
 
 .wm_filter_select:focus {
+    outline: none;
+    border-color: var(--wm-primary-color, #0073AA);
+    box-shadow: 0 0 0 3px rgba(var(--wm-primary-color-rgb, 0, 115, 170), 0.1);
+}
+
+.wm_filter_input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 0.95em;
+    color: #333;
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+.wm_filter_input:hover {
+    border-color: var(--wm-primary-color, #0073AA);
+}
+
+.wm_filter_input:focus {
     outline: none;
     border-color: var(--wm-primary-color, #0073AA);
     box-shadow: 0 0 0 3px rgba(var(--wm-primary-color-rgb, 0, 115, 170), 0.1);
@@ -1163,7 +1208,7 @@
     justify-content: center;
 }
 
-/* Box tassonomia in alto a sinistra */
+/* Taxonomy box top left */
 .wm_grid_poi_taxonomy_box {
     position: absolute;
     top: 15px;

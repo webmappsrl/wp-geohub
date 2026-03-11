@@ -509,6 +509,9 @@ msgstr "Dove"
 msgid "Select where"
 msgstr "Seleziona dove"
 
+msgid "Search"
+msgstr "Cerca"
+
 msgid "Reset filters"
 msgstr "Azzera filtri"
 

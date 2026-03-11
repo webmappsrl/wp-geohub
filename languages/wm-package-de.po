@@ -494,6 +494,9 @@ msgstr "Wo"
 msgid "Select where"
 msgstr "Ort auswählen"
 
+msgid "Search"
+msgstr "Suchen"
+
 msgid "Reset filters"
 msgstr "Filter zurücksetzen"
 

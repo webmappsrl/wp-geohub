@@ -385,7 +385,8 @@ function wm_single_track($atts)
 			($show_ascent && isset($dem_data['ascent']) && $dem_data['ascent'] !== null) ||
 			($show_descent && isset($dem_data['descent']) && $dem_data['descent'] !== null) ||
 			($show_ele_from && isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) ||
-			($show_ele_to && isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null)) {
+			($show_ele_to && isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null)
+		) {
 			$has_technical = true;
 		}
 	}
@@ -439,7 +440,7 @@ function wm_single_track($atts)
 		<?php if ($has_sidebar_layout) : ?>
 			<div class="wm_detail_with_sidebar">
 				<div class="wm_detail_main_content">
-		<?php endif; ?>
+				<?php endif; ?>
 
 				<!-- 4. Map -->
 				<?php if ($has_map) : ?>
@@ -491,313 +492,313 @@ function wm_single_track($atts)
 					</div>
 				<?php endif; ?>
 
-		<!-- 5. Description -->
-		<?php if ($description) : ?>
-			<div class="wm_description">
-				<?php echo wp_kses_post($description); ?>
-			</div>
-		<?php endif; ?>
-
-		<!-- 6. Gallery -->
-		<?php
-		// Filtra le immagini che hanno almeno url o thumbnail
-		$valid_gallery = [];
-		if (is_array($gallery) && !empty($gallery)) {
-			foreach ($gallery as $image) {
-				if ((isset($image['url']) && !empty($image['url'])) || (isset($image['thumbnail']) && !empty($image['thumbnail']))) {
-					$valid_gallery[] = $image;
-				}
-			}
-		}
-		if (!empty($valid_gallery)) : ?>
-			<div class="wm_gallery">
-				<div class="swiper-container wm_swiper">
-					<div class="swiper-wrapper">
-						<?php foreach ($valid_gallery as $image) : ?>
-							<div class="swiper-slide">
-								<?php
-								// Usa prima url (alta risoluzione), fallback a thumbnail
-								$high_res_url = isset($image['url']) && !empty($image['url']) ? esc_url($image['url']) : '';
-								$thumbnail_url = isset($image['thumbnail']) && !empty($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
-								$swiper_image_url = $high_res_url ?: $thumbnail_url;
-								// Per il lightbox usa sempre url se disponibile, altrimenti thumbnail
-								$lightbox_url = $high_res_url ?: $thumbnail_url;
-								$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
-								if ($swiper_image_url) : ?>
-									<a href="<?= esc_url($lightbox_url) ?>" data-lightbox="track-gallery" data-title="<?= esc_attr($caption) ?>">
-										<img src="<?= esc_url($swiper_image_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
-									</a>
-								<?php endif; ?>
-							</div>
-						<?php endforeach; ?>
+				<!-- 5. Description -->
+				<?php if ($description) : ?>
+					<div class="wm_description">
+						<?php echo wp_kses_post($description); ?>
 					</div>
-					<div class="swiper-pagination"></div>
-					<div class="swiper-button-prev"></div>
-					<div class="swiper-button-next"></div>
-				</div>
-			</div>
-		<?php endif; ?>
+				<?php endif; ?>
 
-		<?php
-		// Helper to render related POI cards (used for Welcome points and Related POIs galleries)
-		$wm_render_related_poi_cards = function ($poi_list) use ($language, $default_image) {
-			foreach ($poi_list as $poi_feature) {
-				$poi_properties = $poi_feature['properties'] ?? [];
-				$poi_name = '';
-				if (!empty($poi_properties['name'])) {
-					if (is_string($poi_properties['name'])) {
-						$poi_name = $poi_properties['name'];
-					} elseif (!empty($poi_properties['name'][$language])) {
-						$poi_name = $poi_properties['name'][$language];
-					} else {
-						foreach ($poi_properties['name'] as $name_value) {
-							if (!empty($name_value)) {
-								$poi_name = $name_value;
-								break;
-							}
+				<!-- 6. Gallery -->
+				<?php
+				// Filtra le immagini che hanno almeno url o thumbnail
+				$valid_gallery = [];
+				if (is_array($gallery) && !empty($gallery)) {
+					foreach ($gallery as $image) {
+						if ((isset($image['url']) && !empty($image['url'])) || (isset($image['thumbnail']) && !empty($image['thumbnail']))) {
+							$valid_gallery[] = $image;
 						}
 					}
 				}
-				$poi_image = $default_image;
-				if (!empty($poi_properties['feature_image']['sizes']['1440x500'])) {
-					$poi_image = $poi_properties['feature_image']['sizes']['1440x500'];
-				} elseif (!empty($poi_properties['feature_image']['url'])) {
-					$poi_image = $poi_properties['feature_image']['url'];
-				} elseif (!empty($poi_properties['featureImage']['thumbnail'])) {
-					$poi_image = $poi_properties['featureImage']['thumbnail'];
-				} elseif (!empty($poi_feature['featureImage']['thumbnail'])) {
-					$poi_image = $poi_feature['featureImage']['thumbnail'];
-				}
-				if (empty($poi_image)) {
-					$poi_image = $default_image;
-				}
-				$poi_url = $poi_properties['wm_poi_url'] ?? '';
-				if (empty($poi_name) && empty($poi_image)) {
-					continue;
-				}
-				?>
-				<div class="swiper-slide">
-					<?php if (!empty($poi_url)) : ?>
-						<a href="<?= esc_url($poi_url) ?>">
-					<?php endif; ?>
-					<div class="wm_related_poi_card">
-						<?php if (!empty($poi_image)) : ?>
-							<div class="wm_related_poi_image">
-								<img src="<?= esc_url($poi_image) ?>" alt="<?= esc_attr($poi_name) ?>" loading="lazy">
+				if (!empty($valid_gallery)) : ?>
+					<div class="wm_gallery">
+						<div class="swiper-container wm_swiper">
+							<div class="swiper-wrapper">
+								<?php foreach ($valid_gallery as $image) : ?>
+									<div class="swiper-slide">
+										<?php
+										// Usa prima url (alta risoluzione), fallback a thumbnail
+										$high_res_url = isset($image['url']) && !empty($image['url']) ? esc_url($image['url']) : '';
+										$thumbnail_url = isset($image['thumbnail']) && !empty($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
+										$swiper_image_url = $high_res_url ?: $thumbnail_url;
+										// Per il lightbox usa sempre url se disponibile, altrimenti thumbnail
+										$lightbox_url = $high_res_url ?: $thumbnail_url;
+										$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
+										if ($swiper_image_url) : ?>
+											<a href="<?= esc_url($lightbox_url) ?>" data-lightbox="track-gallery" data-title="<?= esc_attr($caption) ?>">
+												<img src="<?= esc_url($swiper_image_url) ?>" alt="<?= esc_attr($caption) ?>" loading="lazy">
+											</a>
+										<?php endif; ?>
+									</div>
+								<?php endforeach; ?>
 							</div>
-						<?php endif; ?>
-						<?php if (!empty($poi_name)) : ?>
-							<div class="wm_related_poi_name"><?= esc_html($poi_name) ?></div>
-						<?php endif; ?>
+							<div class="swiper-pagination"></div>
+							<div class="swiper-button-prev"></div>
+							<div class="swiper-button-next"></div>
+						</div>
 					</div>
-					<?php if (!empty($poi_url)) : ?>
-					</a>
-					<?php endif; ?>
-				</div>
-			<?php }
-		};
-		?>
-		<!-- 7a. Welcome points (osm2cai only: POIs with identifier punto-accoglienza) -->
-		<?php if ($is_osm2cai && !empty($related_pois_accoglienza)) : ?>
-			<div class="wm_related_pois">
-				<h2 class="wm_related_pois_title"><?= __('Welcome points', 'wm-package') ?></h2>
-				<div class="swiper-container wm_swiper wm_related_pois_swiper">
-					<div class="swiper-wrapper">
-						<?php $wm_render_related_poi_cards($related_pois_accoglienza); ?>
-					</div>
-					<div class="swiper-pagination"></div>
-					<div class="swiper-button-prev"></div>
-					<div class="swiper-button-next"></div>
-				</div>
-			</div>
-		<?php endif; ?>
+				<?php endif; ?>
 
-		<!-- 7b. Related POIs -->
-		<?php
-		$related_pois_main = $is_osm2cai ? $related_pois_other : $related_pois;
-		if (!empty($related_pois_main)) : ?>
-			<div class="wm_related_pois">
-				<h2 class="wm_related_pois_title"><?= __('Points of interest', 'wm-package') ?></h2>
-				<div class="swiper-container wm_swiper wm_related_pois_swiper">
-					<div class="swiper-wrapper">
-						<?php $wm_render_related_poi_cards($related_pois_main); ?>
-					</div>
-					<div class="swiper-pagination"></div>
-					<div class="swiper-button-prev"></div>
-					<div class="swiper-button-next"></div>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- 8. Track Navigation -->
-		<?php
-		// Get generateEdges from config JSON to determine if navigation should be enabled
-		// track_navigation_enabled is now controlled by generateEdges in wm_default_config.json
-		$generate_edges_enabled = false;
-		if (function_exists('wm_get_default_config')) {
-			$config = wm_get_default_config();
-			if ($config && isset($config['WORDPRESS']['generateEdges'])) {
-				$generate_edges_enabled = (bool) $config['WORDPRESS']['generateEdges'];
-			}
-		}
-
-		// Only show navigation if generateEdges is enabled in config JSON
-		if ($generate_edges_enabled) {
-			// Get layer IDs from shortcode parameter or admin option
-			$nav_layer_ids = !empty($layer_ids) ? $layer_ids : get_option('track_navigation_layer_ids');
-
-			if (!empty($nav_layer_ids)) {
-				$nav_layer_ids_array = array_map('trim', explode(',', $nav_layer_ids));
-
-				// Get Elasticsearch configuration
-				$elastic_api_base = get_option('elastic_api');
-				$app_id = get_option('app_configuration_id') ?: '49';
-				$shard = get_option('wm_shard') ?: 'geohub';
-				$shard_app = $shard . '_app';
-
-				// Fallback: if elastic_api is not set, try to construct it from origin
-				if (empty($elastic_api_base)) {
-					if (function_exists('wm_get_api_urls')) {
-						$api_urls = wm_get_api_urls($shard, $app_id);
-						$elastic_api_base = $api_urls['elastic_api'] ?? null;
-					}
-					if (empty($elastic_api_base)) {
-						$origin = get_option('layer_api');
-						if ($origin) {
-							$origin = preg_replace('#/api/app/webapp/.*$#', '', $origin);
-							if ($shard === 'geohub') {
-								$elastic_api_base = 'https://elastic-json.webmapp.it/v2/search/';
+				<?php
+				// Helper to render related POI cards (used for Welcome points and Related POIs galleries)
+				$wm_render_related_poi_cards = function ($poi_list) use ($language, $default_image) {
+					foreach ($poi_list as $poi_feature) {
+						$poi_properties = $poi_feature['properties'] ?? [];
+						$poi_name = '';
+						if (!empty($poi_properties['name'])) {
+							if (is_string($poi_properties['name'])) {
+								$poi_name = $poi_properties['name'];
+							} elseif (!empty($poi_properties['name'][$language])) {
+								$poi_name = $poi_properties['name'][$language];
 							} else {
-								$elastic_api_base = rtrim($origin, '/') . '/api/v2/elasticsearch';
-							}
-						}
-					}
-				}
-
-				// Fetch all tracks from Elasticsearch
-				$all_tracks = array();
-				if (!empty($elastic_api_base)) {
-					foreach ($nav_layer_ids_array as $layer_id) {
-						if (empty($layer_id)) continue;
-
-						$elastic_url = $elastic_api_base;
-						if (strpos($elastic_url, '?') === false) {
-							$elastic_url .= '?';
-						} else {
-							$elastic_url .= '&';
-						}
-						$elastic_url .= "app={$shard_app}_{$app_id}&layer=" . urlencode($layer_id) . "&size=1000";
-
-						$response = wp_remote_get($elastic_url, array('timeout' => 15));
-
-						if (!is_wp_error($response)) {
-							$elastic_data = json_decode(wp_remote_retrieve_body($response), true);
-
-							if (!empty($elastic_data['hits']) && is_array($elastic_data['hits'])) {
-								foreach ($elastic_data['hits'] as $hit) {
-									$track_item = array();
-									$track_item['id'] = $hit['id'] ?? null;
-									$track_item['name'] = is_array($hit['name'] ?? null) ? $hit['name'] : array($language => $hit['name'] ?? '');
-									$track_item['slug'] = is_array($hit['slug'] ?? null) ? $hit['slug'] : array($language => wm_custom_slugify($track_item['name'][$language] ?? ''));
-									$track_item['updatedAt'] = $hit['properties']['updatedAt'] ?? $hit['updatedAt'] ?? null;
-									$all_tracks[] = $track_item;
+								foreach ($poi_properties['name'] as $name_value) {
+									if (!empty($name_value)) {
+										$poi_name = $name_value;
+										break;
+									}
 								}
 							}
 						}
-					}
-
-					// Keep tracks in the exact order as returned by Elasticsearch API (no sorting)
-					// The order in hits array is the correct navigation order
-
-					// Find current track index
-					$current_index = -1;
-					$current_track_slug = $track['slug'][$language] ?? '';
-					$current_track_id = $track['id'] ?? $track_id;
-
-					// Also try to get slug from track name if slug is not available
-					if (empty($current_track_slug) && !empty($track['name'][$language])) {
-						$current_track_slug = wm_custom_slugify($track['name'][$language]);
-					}
-
-					foreach ($all_tracks as $index => $track_item) {
-						$item_slug = $track_item['slug'][$language] ?? '';
-						$item_id = $track_item['id'] ?? '';
-
-						// Match by ID or slug
-						if (!empty($current_track_id) && $item_id == $current_track_id) {
-							$current_index = $index;
-							break;
+						$poi_image = $default_image;
+						if (!empty($poi_properties['feature_image']['sizes']['1440x500'])) {
+							$poi_image = $poi_properties['feature_image']['sizes']['1440x500'];
+						} elseif (!empty($poi_properties['feature_image']['url'])) {
+							$poi_image = $poi_properties['feature_image']['url'];
+						} elseif (!empty($poi_properties['featureImage']['thumbnail'])) {
+							$poi_image = $poi_properties['featureImage']['thumbnail'];
+						} elseif (!empty($poi_feature['featureImage']['thumbnail'])) {
+							$poi_image = $poi_feature['featureImage']['thumbnail'];
 						}
-						if (!empty($current_track_slug) && $item_slug === $current_track_slug) {
-							$current_index = $index;
-							break;
+						if (empty($poi_image)) {
+							$poi_image = $default_image;
 						}
-						// Also try matching track_id parameter (might be a slug)
-						if ($track_id && ($item_id == $track_id || $item_slug === $track_id)) {
-							$current_index = $index;
-							break;
+						$poi_url = $poi_properties['wm_poi_url'] ?? '';
+						if (empty($poi_name) && empty($poi_image)) {
+							continue;
 						}
-					}
-
-					// Get previous and next tracks
-					$prev_track = null;
-					$next_track = null;
-
-					if ($current_index >= 0) {
-						if ($current_index > 0) {
-							$prev_track = $all_tracks[$current_index - 1];
-						}
-						if ($current_index < count($all_tracks) - 1) {
-							$next_track = $all_tracks[$current_index + 1];
-						}
-					}
-
-					// Display navigation buttons
-					if ($prev_track || $next_track) :
-						$base_url = apply_filters('wpml_home_url', get_site_url(), $language);
-		?>
-						<div class="wm_track_navigation">
-							<?php if ($prev_track) :
-								$prev_slug = $prev_track['slug'][$language] ?? '';
-								$prev_url = trailingslashit($base_url) . "track/{$prev_slug}/";
-								$prev_name = $prev_track['name'][$language] ?? __('Previous Track', 'wm-package');
-							?>
-								<a href="<?= esc_url($prev_url) ?>" class="wm_track_nav_button wm_track_nav_prev">
-									<span class="wm_track_nav_arrow">←</span>
-									<span class="wm_track_nav_label"><?= __('Previous', 'wm-package') ?></span>
-									<span class="wm_track_nav_name"><?= esc_html($prev_name) ?></span>
+				?>
+						<div class="swiper-slide">
+							<?php if (!empty($poi_url)) : ?>
+								<a href="<?= esc_url($poi_url) ?>">
+								<?php endif; ?>
+								<div class="wm_related_poi_card">
+									<?php if (!empty($poi_image)) : ?>
+										<div class="wm_related_poi_image">
+											<img src="<?= esc_url($poi_image) ?>" alt="<?= esc_attr($poi_name) ?>" loading="lazy">
+										</div>
+									<?php endif; ?>
+									<?php if (!empty($poi_name)) : ?>
+										<div class="wm_related_poi_name"><?= esc_html($poi_name) ?></div>
+									<?php endif; ?>
+								</div>
+								<?php if (!empty($poi_url)) : ?>
 								</a>
-							<?php else : ?>
-								<span class="wm_track_nav_button wm_track_nav_prev wm_track_nav_disabled">
-									<span class="wm_track_nav_arrow">←</span>
-									<span class="wm_track_nav_label"><?= __('Previous', 'wm-package') ?></span>
-								</span>
-							<?php endif; ?>
-
-							<?php if ($next_track) :
-								$next_slug = $next_track['slug'][$language] ?? '';
-								$next_url = trailingslashit($base_url) . "track/{$next_slug}/";
-								$next_name = $next_track['name'][$language] ?? __('Next Track', 'wm-package');
-							?>
-								<a href="<?= esc_url($next_url) ?>" class="wm_track_nav_button wm_track_nav_next">
-									<span class="wm_track_nav_label"><?= __('Next', 'wm-package') ?></span>
-									<span class="wm_track_nav_name"><?= esc_html($next_name) ?></span>
-									<span class="wm_track_nav_arrow">→</span>
-								</a>
-							<?php else : ?>
-								<span class="wm_track_nav_button wm_track_nav_next wm_track_nav_disabled">
-									<span class="wm_track_nav_label"><?= __('Next', 'wm-package') ?></span>
-									<span class="wm_track_nav_arrow">→</span>
-								</span>
 							<?php endif; ?>
 						</div>
-		<?php endif;
-				}
-			}
-		}
-		?>
+				<?php }
+				};
+				?>
+				<!-- 7a. Welcome points (osm2cai only: POIs with identifier punto-accoglienza) -->
+				<?php if ($is_osm2cai && !empty($related_pois_accoglienza)) : ?>
+					<div class="wm_related_pois">
+						<h2 class="wm_related_pois_title"><?= __('Welcome points', 'wm-package') ?></h2>
+						<div class="swiper-container wm_swiper wm_related_pois_swiper">
+							<div class="swiper-wrapper">
+								<?php $wm_render_related_poi_cards($related_pois_accoglienza); ?>
+							</div>
+							<div class="swiper-pagination"></div>
+							<div class="swiper-button-prev"></div>
+							<div class="swiper-button-next"></div>
+						</div>
+					</div>
+				<?php endif; ?>
 
-		<?php if ($has_sidebar_layout) : ?>
+				<!-- 7b. Related POIs -->
+				<?php
+				$related_pois_main = $is_osm2cai ? $related_pois_other : $related_pois;
+				if (!empty($related_pois_main)) : ?>
+					<div class="wm_related_pois">
+						<h2 class="wm_related_pois_title"><?= __('Points of interest', 'wm-package') ?></h2>
+						<div class="swiper-container wm_swiper wm_related_pois_swiper">
+							<div class="swiper-wrapper">
+								<?php $wm_render_related_poi_cards($related_pois_main); ?>
+							</div>
+							<div class="swiper-pagination"></div>
+							<div class="swiper-button-prev"></div>
+							<div class="swiper-button-next"></div>
+						</div>
+					</div>
+				<?php endif; ?>
+
+				<!-- 8. Track Navigation -->
+				<?php
+				// Get generateEdges from config JSON to determine if navigation should be enabled
+				// track_navigation_enabled is now controlled by generateEdges in wm_default_config.json
+				$generate_edges_enabled = false;
+				if (function_exists('wm_get_default_config')) {
+					$config = wm_get_default_config();
+					if ($config && isset($config['WORDPRESS']['generateEdges'])) {
+						$generate_edges_enabled = (bool) $config['WORDPRESS']['generateEdges'];
+					}
+				}
+
+				// Only show navigation if generateEdges is enabled in config JSON
+				if ($generate_edges_enabled) {
+					// Get layer IDs from shortcode parameter or admin option
+					$nav_layer_ids = !empty($layer_ids) ? $layer_ids : get_option('track_navigation_layer_ids');
+
+					if (!empty($nav_layer_ids)) {
+						$nav_layer_ids_array = array_map('trim', explode(',', $nav_layer_ids));
+
+						// Get Elasticsearch configuration
+						$elastic_api_base = get_option('elastic_api');
+						$app_id = get_option('app_configuration_id') ?: '49';
+						$shard = get_option('wm_shard') ?: 'geohub';
+						$shard_app = $shard . '_app';
+
+						// Fallback: if elastic_api is not set, try to construct it from origin
+						if (empty($elastic_api_base)) {
+							if (function_exists('wm_get_api_urls')) {
+								$api_urls = wm_get_api_urls($shard, $app_id);
+								$elastic_api_base = $api_urls['elastic_api'] ?? null;
+							}
+							if (empty($elastic_api_base)) {
+								$origin = get_option('layer_api');
+								if ($origin) {
+									$origin = preg_replace('#/api/app/webapp/.*$#', '', $origin);
+									if ($shard === 'geohub') {
+										$elastic_api_base = 'https://elastic-json.webmapp.it/v2/search/';
+									} else {
+										$elastic_api_base = rtrim($origin, '/') . '/api/v2/elasticsearch';
+									}
+								}
+							}
+						}
+
+						// Fetch all tracks from Elasticsearch
+						$all_tracks = array();
+						if (!empty($elastic_api_base)) {
+							foreach ($nav_layer_ids_array as $layer_id) {
+								if (empty($layer_id)) continue;
+
+								$elastic_url = $elastic_api_base;
+								if (strpos($elastic_url, '?') === false) {
+									$elastic_url .= '?';
+								} else {
+									$elastic_url .= '&';
+								}
+								$elastic_url .= "app={$shard_app}_{$app_id}&layer=" . urlencode($layer_id) . "&size=1000";
+
+								$response = wp_remote_get($elastic_url, array('timeout' => 15));
+
+								if (!is_wp_error($response)) {
+									$elastic_data = json_decode(wp_remote_retrieve_body($response), true);
+
+									if (!empty($elastic_data['hits']) && is_array($elastic_data['hits'])) {
+										foreach ($elastic_data['hits'] as $hit) {
+											$track_item = array();
+											$track_item['id'] = $hit['id'] ?? null;
+											$track_item['name'] = is_array($hit['name'] ?? null) ? $hit['name'] : array($language => $hit['name'] ?? '');
+											$track_item['slug'] = is_array($hit['slug'] ?? null) ? $hit['slug'] : array($language => wm_custom_slugify($track_item['name'][$language] ?? ''));
+											$track_item['updatedAt'] = $hit['properties']['updatedAt'] ?? $hit['updatedAt'] ?? null;
+											$all_tracks[] = $track_item;
+										}
+									}
+								}
+							}
+
+							// Keep tracks in the exact order as returned by Elasticsearch API (no sorting)
+							// The order in hits array is the correct navigation order
+
+							// Find current track index
+							$current_index = -1;
+							$current_track_slug = $track['slug'][$language] ?? '';
+							$current_track_id = $track['id'] ?? $track_id;
+
+							// Also try to get slug from track name if slug is not available
+							if (empty($current_track_slug) && !empty($track['name'][$language])) {
+								$current_track_slug = wm_custom_slugify($track['name'][$language]);
+							}
+
+							foreach ($all_tracks as $index => $track_item) {
+								$item_slug = $track_item['slug'][$language] ?? '';
+								$item_id = $track_item['id'] ?? '';
+
+								// Match by ID or slug
+								if (!empty($current_track_id) && $item_id == $current_track_id) {
+									$current_index = $index;
+									break;
+								}
+								if (!empty($current_track_slug) && $item_slug === $current_track_slug) {
+									$current_index = $index;
+									break;
+								}
+								// Also try matching track_id parameter (might be a slug)
+								if ($track_id && ($item_id == $track_id || $item_slug === $track_id)) {
+									$current_index = $index;
+									break;
+								}
+							}
+
+							// Get previous and next tracks
+							$prev_track = null;
+							$next_track = null;
+
+							if ($current_index >= 0) {
+								if ($current_index > 0) {
+									$prev_track = $all_tracks[$current_index - 1];
+								}
+								if ($current_index < count($all_tracks) - 1) {
+									$next_track = $all_tracks[$current_index + 1];
+								}
+							}
+
+							// Display navigation buttons
+							if ($prev_track || $next_track) :
+								$base_url = apply_filters('wpml_home_url', get_site_url(), $language);
+				?>
+								<div class="wm_track_navigation">
+									<?php if ($prev_track) :
+										$prev_slug = $prev_track['slug'][$language] ?? '';
+										$prev_url = trailingslashit($base_url) . "track/{$prev_slug}/";
+										$prev_name = $prev_track['name'][$language] ?? __('Previous Track', 'wm-package');
+									?>
+										<a href="<?= esc_url($prev_url) ?>" class="wm_track_nav_button wm_track_nav_prev">
+											<span class="wm_track_nav_arrow">←</span>
+											<span class="wm_track_nav_label"><?= __('Previous', 'wm-package') ?></span>
+											<span class="wm_track_nav_name"><?= esc_html($prev_name) ?></span>
+										</a>
+									<?php else : ?>
+										<span class="wm_track_nav_button wm_track_nav_prev wm_track_nav_disabled">
+											<span class="wm_track_nav_arrow">←</span>
+											<span class="wm_track_nav_label"><?= __('Previous', 'wm-package') ?></span>
+										</span>
+									<?php endif; ?>
+
+									<?php if ($next_track) :
+										$next_slug = $next_track['slug'][$language] ?? '';
+										$next_url = trailingslashit($base_url) . "track/{$next_slug}/";
+										$next_name = $next_track['name'][$language] ?? __('Next Track', 'wm-package');
+									?>
+										<a href="<?= esc_url($next_url) ?>" class="wm_track_nav_button wm_track_nav_next">
+											<span class="wm_track_nav_label"><?= __('Next', 'wm-package') ?></span>
+											<span class="wm_track_nav_name"><?= esc_html($next_name) ?></span>
+											<span class="wm_track_nav_arrow">→</span>
+										</a>
+									<?php else : ?>
+										<span class="wm_track_nav_button wm_track_nav_next wm_track_nav_disabled">
+											<span class="wm_track_nav_label"><?= __('Next', 'wm-package') ?></span>
+											<span class="wm_track_nav_arrow">→</span>
+										</span>
+									<?php endif; ?>
+								</div>
+				<?php endif;
+						}
+					}
+				}
+				?>
+
+				<?php if ($has_sidebar_layout) : ?>
 				</div><!-- .wm_detail_main_content -->
 				<?php if ($has_technical) : ?>
 					<?php $dem_data = $dem_data ?? []; ?>

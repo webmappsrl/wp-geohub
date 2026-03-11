@@ -494,6 +494,9 @@ msgstr "Waar"
 msgid "Select where"
 msgstr "Selecteer waar"
 
+msgid "Search"
+msgstr "Zoeken"
+
 msgid "Reset filters"
 msgstr "Filters resetten"
 

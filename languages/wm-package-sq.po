@@ -494,6 +494,9 @@ msgstr "Ku"
 msgid "Select where"
 msgstr "Zgjidh ku"
 
+msgid "Search"
+msgstr "Kërko"
+
 msgid "Reset filters"
 msgstr "Rivendos filtrat"
 
