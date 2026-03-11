@@ -114,35 +114,53 @@ function wm_single_poi($atts)
 		$related_urls = $poi_properties['related_url'] ?? [];
 		$poi_types = $poi_properties['taxonomy']['poi_types'] ?? [];
 
-		// For osm2cai shards: address, phone, email and links from properties.sicai when present, else fallback to standard fields
+		// For osm2cai shards: properties are primary; sicai is fallback only when the main field is empty
 		if (function_exists('wm_is_osm2cai_shard_type')) {
 			$shard = get_option('wm_shard', 'geohub');
 			$sicai = isset($poi_properties['sicai']) && is_array($poi_properties['sicai']) ? $poi_properties['sicai'] : [];
+			// Prenota button (osm2cai only): first from related_url["Prenota"], then fallback to sicai.link; if both missing, button is hidden
+			if (wm_is_osm2cai_shard_type($shard)) {
+				if (is_array($related_urls) && isset($related_urls['Prenota']) && trim((string) $related_urls['Prenota']) !== '') {
+					$prenota_rifugio_url = trim((string) $related_urls['Prenota']);
+				} elseif (!empty($sicai['link']) && trim((string) $sicai['link']) !== '') {
+					$prenota_rifugio_url = trim((string) $sicai['link']);
+				}
+			}
 			if (wm_is_osm2cai_shard_type($shard) && !empty($sicai)) {
-				$addr_street = (isset($sicai['addr:street']) && (string) $sicai['addr:street'] !== '') ? (string) $sicai['addr:street'] : $addr_street;
-				$addr_postcode = (isset($sicai['addr:postcode']) && (string) $sicai['addr:postcode'] !== '') ? (string) $sicai['addr:postcode'] : $addr_postcode;
-				$addr_locality = (isset($sicai['addr:city']) && (string) $sicai['addr:city'] !== '') ? (string) $sicai['addr:city'] : $addr_locality;
-				$contact_phone = (isset($sicai['phone']) && (string) $sicai['phone'] !== '') ? (string) $sicai['phone'] : $contact_phone;
-				$contact_email = (isset($sicai['email']) && (string) $sicai['email'] !== '') ? (string) $sicai['email'] : $contact_email;
-				// related_url maps only to website; sicai.link is a separate "Prenota rifugio" field
-				if (!empty($sicai['website'])) {
+				// Address, phone, email: use sicai only when the primary (properties) value is empty
+				if ((string) $addr_street === '') {
+					$addr_street = (isset($sicai['addr:street']) && (string) $sicai['addr:street'] !== '') ? (string) $sicai['addr:street'] : $addr_street;
+				}
+				if ((string) $addr_postcode === '') {
+					$addr_postcode = (isset($sicai['addr:postcode']) && (string) $sicai['addr:postcode'] !== '') ? (string) $sicai['addr:postcode'] : $addr_postcode;
+				}
+				if ((string) $addr_locality === '') {
+					$addr_locality = (isset($sicai['addr:city']) && (string) $sicai['addr:city'] !== '') ? (string) $sicai['addr:city'] : $addr_locality;
+				}
+				if ((string) $contact_phone === '') {
+					$contact_phone = (isset($sicai['phone']) && (string) $sicai['phone'] !== '') ? (string) $sicai['phone'] : $contact_phone;
+				}
+				if ((string) $contact_email === '') {
+					$contact_email = (isset($sicai['email']) && (string) $sicai['email'] !== '') ? (string) $sicai['email'] : $contact_email;
+				}
+				// related_url is primary; use sicai.website only when related_url is empty
+				if (empty($related_urls) && !empty($sicai['website'])) {
 					$related_urls = [__('Click here', 'wm-package') => $sicai['website']];
 				}
-				if (!empty($sicai['link'])) {
-					$prenota_rifugio_url = $sicai['link'];
-				}
-				if (isset($sicai['Regione']) && (string) $sicai['Regione'] !== '') {
+				if ((string) $regione === '' && isset($sicai['Regione']) && (string) $sicai['Regione'] !== '') {
 					$regione = (string) $sicai['Regione'];
 				}
-				// Collect stages from tappa01, tappa02, tappa03, ... (non-empty values only, numeric order)
-				$tappe = [];
-				foreach ($sicai as $key => $value) {
-					if (preg_match('/^tappa(\d+)$/', $key, $m) && $value !== null && (string) $value !== '') {
-						$tappe[(int) $m[1]] = (string) $value;
+				// Tappe: only in sicai, use as fallback when no tappe from elsewhere (currently only sicai provides tappe)
+				if (empty($tappe)) {
+					$tappe = [];
+					foreach ($sicai as $key => $value) {
+						if (preg_match('/^tappa(\d+)$/', $key, $m) && $value !== null && (string) $value !== '') {
+							$tappe[(int) $m[1]] = (string) $value;
+						}
 					}
+					ksort($tappe, SORT_NUMERIC);
+					$tappe = array_values($tappe);
 				}
-				ksort($tappe, SORT_NUMERIC);
-				$tappe = array_values($tappe);
 			}
 		}
 
@@ -171,7 +189,7 @@ function wm_single_poi($atts)
 			foreach ($tappe as $tappa_name) {
 				$url = isset($track_urls_by_id[(string) $tappa_name])
 					? $track_urls_by_id[(string) $tappa_name]
-				 : (isset($track_urls_by_name[wm_normalize_name_for_match($tappa_name)]) ? $track_urls_by_name[wm_normalize_name_for_match($tappa_name)] : null);
+					: (isset($track_urls_by_name[wm_normalize_name_for_match($tappa_name)]) ? $track_urls_by_name[wm_normalize_name_for_match($tappa_name)] : null);
 				$tappe_with_urls[] = ['name' => $tappa_name, 'url' => $url];
 			}
 		}
@@ -191,6 +209,11 @@ function wm_single_poi($atts)
 	}
 
 	$has_map = !empty($poi_geometry);
+	// For osm2cai: in Website section exclude "Prenota" (shown only in the Prenota button)
+	$related_urls_for_website = is_array($related_urls) ? $related_urls : [];
+	if (!empty($related_urls_for_website) && function_exists('wm_is_osm2cai_shard_type') && wm_is_osm2cai_shard_type(get_option('wm_shard', 'geohub')) && isset($related_urls_for_website['Prenota'])) {
+		$related_urls_for_website = array_diff_key($related_urls_for_website, ['Prenota' => true]);
+	}
 	$has_info = !empty($tappe_with_urls) || !empty($regione) || !empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality) || !empty($contact_phone) || !empty($contact_email) || !empty($related_urls) || !empty($prenota_rifugio_url);
 	$has_sidebar_layout = $has_map || $has_info;
 
@@ -330,14 +353,15 @@ function wm_single_poi($atts)
 									</div>
 								<?php endif; ?>
 
-								<?php if (!empty($related_urls)) : ?>
+								<?php if (!empty($related_urls_for_website)) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-globe" aria-hidden="true"></i> <?= __('Website', 'wm-package') ?>:</span>
 										<span class="wm_info_detail_value">
 											<?php
 											$urls_output = [];
-											foreach ($related_urls as $url_name => $url) {
-												$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($url_name) . '</a>';
+											foreach ($related_urls_for_website as $url_name => $url) {
+												$display_label = wm_website_link_label($url_name, $url);
+												$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($display_label) . '</a>';
 											}
 											echo implode(', ', $urls_output);
 											?>
@@ -394,14 +418,14 @@ function wm_single_poi($atts)
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			<?php if ($use_page_header && $featured_image) : ?>
-			// Set featured image in page-header section
-			var pageHeader = document.querySelector('header.page-header');
-			if (pageHeader) {
-				pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
-				pageHeader.style.backgroundSize = 'cover';
-				pageHeader.style.backgroundPosition = 'center';
-				pageHeader.style.backgroundRepeat = 'no-repeat';
-			}
+				// Set featured image in page-header section
+				var pageHeader = document.querySelector('header.page-header');
+				if (pageHeader) {
+					pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
+					pageHeader.style.backgroundSize = 'cover';
+					pageHeader.style.backgroundPosition = 'center';
+					pageHeader.style.backgroundRepeat = 'no-repeat';
+				}
 			<?php endif; ?>
 
 			if (typeof Swiper !== 'undefined') {

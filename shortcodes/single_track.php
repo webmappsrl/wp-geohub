@@ -35,6 +35,30 @@ function wm_normalize_poi_name_for_match($name)
 	return $n;
 }
 
+/**
+ * For osm2cai shards: strip from track description the blocks "Percorribilità", "Ultimo aggiornamento", "Stato di accatastamento" and "Modifica questo percorso" link.
+ *
+ * @param string $html
+ * @return string
+ */
+function wm_strip_osm2cai_track_description_blocks($html)
+{
+	if (!is_string($html) || $html === '') {
+		return $html;
+	}
+	// Remove <p>...</p> containing "Percorribilità"
+	$html = preg_replace('/<p[^>]*>.*?Percorribilità.*?<\/p>/isu', '', $html);
+	// Remove <p>...</p> containing "Ultimo aggiornamento"
+	$html = preg_replace('/<p[^>]*>.*?Ultimo aggiornamento.*?<\/p>/isu', '', $html);
+	// Remove "Stato di accatastamento:" and content up to next <br> (inclusive)
+	$html = preg_replace('/Stato di accatastamento:.*?<br\s*\/?>\s*/isu', '', $html);
+	// Remove link "Modifica questo percorso"
+	$html = preg_replace('/<a\s[^>]*>Modifica questo percorso<\/a>/iu', '', $html);
+	// Clean up repeated <br> and trim
+	$html = preg_replace('/(<br\s*\/?>\s*){2,}/i', '<br><br>', $html);
+	return trim($html);
+}
+
 function wm_single_track($atts)
 {
 	if (defined('ICL_LANGUAGE_CODE')) {
@@ -197,6 +221,7 @@ function wm_single_track($atts)
 	$not_accessible_message = null;
 	$region_name = '';
 	$city_name = '';
+	$related_urls = [];
 	$default_image = plugins_url('wm-package/assets/default_image.png');
 
 	if ($track) {
@@ -225,12 +250,20 @@ function wm_single_track($atts)
 			}
 		}
 
-		// Extract and decode dem_data
-		if (isset($track['dem_data'])) {
+		// Technical data: manual_data has priority over dem_data; if both missing, nothing is shown
+		if (isset($track['manual_data'])) {
+			$manual_raw = $track['manual_data'];
+			if (is_string($manual_raw)) {
+				$dem_data = json_decode($manual_raw, true);
+			} elseif (is_array($manual_raw)) {
+				$dem_data = $manual_raw;
+			}
+		}
+		if (empty($dem_data) && isset($track['dem_data'])) {
 			$dem_data_raw = $track['dem_data'];
 			if (is_string($dem_data_raw)) {
 				$dem_data = json_decode($dem_data_raw, true);
-			} else if (is_array($dem_data_raw)) {
+			} elseif (is_array($dem_data_raw)) {
 				$dem_data = $dem_data_raw;
 			}
 		}
@@ -289,6 +322,23 @@ function wm_single_track($atts)
 				}
 			}
 		}
+
+		// related_url (primary from properties, sicai.website fallback when empty)
+		$related_urls = $track['related_url'] ?? [];
+		if (!is_array($related_urls)) {
+			$related_urls = [];
+		}
+		$sicai = isset($track['sicai']) && is_array($track['sicai']) ? $track['sicai'] : [];
+		if (empty($related_urls) && !empty($sicai['website'])) {
+			$related_urls = [__('Click here', 'wm-package') => $sicai['website']];
+		}
+	}
+	// For osm2cai shards: strip Percorribilità, Ultimo aggiornamento, Stato di accatastamento and "Modifica questo percorso" from description
+	if (!empty($description) && function_exists('wm_is_osm2cai_shard_type') && wm_is_osm2cai_shard_type(get_option('wm_shard', 'geohub'))) {
+		$description = wm_strip_osm2cai_track_description_blocks($description);
+		if ($description === '') {
+			$description = null;
+		}
 	}
 	// Get featured image display location setting
 	$featured_image_location = get_option('featured_image_location', 'content');
@@ -343,6 +393,9 @@ function wm_single_track($atts)
 		$has_technical = true;
 	}
 	if (!empty($city_name)) {
+		$has_technical = true;
+	}
+	if (!empty($related_urls)) {
 		$has_technical = true;
 	}
 	$has_sidebar_layout = $has_map || $has_technical;
@@ -804,6 +857,22 @@ function wm_single_track($atts)
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-minus" aria-hidden="true"></i> <?= __('End Elevation', 'wm-package') ?>:</span>
 										<span class="wm_info_detail_value"><?= esc_html($dem_data['ele_to']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
+									</div>
+								<?php endif; ?>
+
+								<?php if (!empty($related_urls)) : ?>
+									<div class="wm_info_detail_item">
+										<span class="wm_info_detail_label"><i class="fa fa-globe" aria-hidden="true"></i> <?= __('Website', 'wm-package') ?>:</span>
+										<span class="wm_info_detail_value">
+											<?php
+											$urls_output = [];
+											foreach ($related_urls as $url_name => $url) {
+												$display_label = wm_website_link_label($url_name, $url);
+												$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($display_label) . '</a>';
+											}
+											echo implode(', ', $urls_output);
+											?>
+										</span>
 									</div>
 								<?php endif; ?>
 							</div>

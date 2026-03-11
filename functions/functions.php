@@ -77,6 +77,34 @@ function wm_is_osm2cai_shard_type($shard)
     return strpos($shard, 'osm2cai') === 0 || $shard === 'local';
 }
 
+/**
+ * If the label is a full URL (http/https), returns a short label: host without "www." and only the name part (e.g. "sitoweb" from "https://www.sitoweb.it").
+ * Used in POI and Track information sidebar for Website links.
+ *
+ * @param string $label
+ * @param string $url
+ * @return string
+ */
+function wm_website_link_label($label, $url)
+{
+    if (!is_string($label) || $label === '') {
+        return $label;
+    }
+    if (!preg_match('#^https?://#i', trim($label))) {
+        return $label;
+    }
+    $host = parse_url($url, PHP_URL_HOST);
+    if (!$host || !is_string($host)) {
+        return $label;
+    }
+    $host = preg_replace('/^www\./i', '', $host);
+    $parts = explode('.', $host);
+    if (count($parts) >= 1 && $parts[0] !== '') {
+        return $parts[0];
+    }
+    return $host;
+}
+
 // Helper function to get iframe URL based on shard
 function wm_get_iframe_url($type, $id, $language = 'it')
 {
