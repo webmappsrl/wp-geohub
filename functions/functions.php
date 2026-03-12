@@ -429,8 +429,9 @@ function wm_package_enqueue_leaflet_map_script()
         // Remove default Leaflet attribution prefix
         map.attributionControl.setPrefix(false);
 
-        // Add fullscreen control
-        map.addControl(new L.control.fullscreen());
+        // Add fullscreen control: on iOS use pseudo-fullscreen so the map stays above header/menu (z-index fix)
+        var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        map.addControl(new L.control.fullscreen({ pseudoFullscreen: isIOS }));
 
         // Function to create custom POI marker with circle and image
         function createPoiMarker(feature, latlng, defaultImg) {

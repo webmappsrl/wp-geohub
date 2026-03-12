@@ -144,6 +144,21 @@
     min-width: 0;
 }
 
+/* Fullscreen map for iOS */
+.leaflet-pseudo-fullscreen,
+.leaflet-container.leaflet-fullscreen-on {
+    z-index: 2147483647 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
 /* 5. Description */
 .wm_description {
     line-height: 1.7;
