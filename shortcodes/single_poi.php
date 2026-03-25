@@ -219,6 +219,13 @@ function wm_single_poi($atts)
 
 	ob_start();
 ?>
+	<?php if ($featured_image && $use_page_header) : ?>
+		<!-- Fallback featured image (same markup used by grid_poi / grid_track) -->
+		<section class="wm_featured_image_page_header_fallback l-section wpb_row height_small with_img with_overlay wm_header_section">
+			<div class="l-section-img loaded wm-header-image" style="background-image: url('<?= esc_url($featured_image) ?>');"></div>
+			<div class="l-section-h i-cf wm_header_wrapper"></div>
+		</section>
+	<?php endif; ?>
 	<div class="wm_content_wrapper">
 		<!-- 1. Featured Image -->
 		<?php if ($featured_image && !$use_page_header) : ?>
@@ -419,12 +426,22 @@ function wm_single_poi($atts)
 		document.addEventListener('DOMContentLoaded', function() {
 			<?php if ($use_page_header && $featured_image) : ?>
 				// Set featured image in page-header section
-				var pageHeader = document.querySelector('header.page-header');
+				var fallbackEl = document.querySelector('.wm_featured_image_page_header_fallback');
+				// Try both the original selector and a permissive one (some themes use .page-header on non-header tags).
+				var pageHeader = document.querySelector('header.page-header') || document.querySelector('.page-header');
 				if (pageHeader) {
-					pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
+					var wmFeaturedImageUrl = '<?= esc_js($featured_image) ?>';
+					pageHeader.style.backgroundImage = 'url(' + wmFeaturedImageUrl + ')';
 					pageHeader.style.backgroundSize = 'cover';
 					pageHeader.style.backgroundPosition = 'center';
 					pageHeader.style.backgroundRepeat = 'no-repeat';
+					if (fallbackEl) {
+						// Hide fallback only if the theme actually ended up applying a background image.
+						var computedBg = window.getComputedStyle(pageHeader).backgroundImage;
+						if (computedBg && computedBg !== 'none') {
+							fallbackEl.style.display = 'none';
+						}
+					}
 				}
 			<?php endif; ?>
 

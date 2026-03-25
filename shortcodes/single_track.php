@@ -250,22 +250,36 @@ function wm_single_track($atts)
 			}
 		}
 
-		// Technical data: manual_data has priority over dem_data; if both missing, nothing is shown
-		if (isset($track['manual_data'])) {
+		// Technical data.
+		// For some shards (e.g. geohub) manual_data can be partial: merge it with dem_data
+		// so that sidebar fields are not missing when manual_data lacks specific keys.
+		$manual_data_decoded = null;
+		if (array_key_exists('manual_data', $track)) {
 			$manual_raw = $track['manual_data'];
 			if (is_string($manual_raw)) {
-				$dem_data = json_decode($manual_raw, true);
+				$manual_data_decoded = json_decode($manual_raw, true);
 			} elseif (is_array($manual_raw)) {
-				$dem_data = $manual_raw;
+				$manual_data_decoded = $manual_raw;
 			}
 		}
-		if (empty($dem_data) && isset($track['dem_data'])) {
+
+		$dem_data_decoded = null;
+		if (array_key_exists('dem_data', $track)) {
 			$dem_data_raw = $track['dem_data'];
 			if (is_string($dem_data_raw)) {
-				$dem_data = json_decode($dem_data_raw, true);
+				$dem_data_decoded = json_decode($dem_data_raw, true);
 			} elseif (is_array($dem_data_raw)) {
-				$dem_data = $dem_data_raw;
+				$dem_data_decoded = $dem_data_raw;
 			}
+		}
+
+		if (is_array($manual_data_decoded) && is_array($dem_data_decoded)) {
+			// manual_data has priority for keys it provides; dem_data fills missing fields.
+			$dem_data = array_merge($dem_data_decoded, $manual_data_decoded);
+		} elseif (is_array($manual_data_decoded)) {
+			$dem_data = $manual_data_decoded;
+		} elseif (is_array($dem_data_decoded)) {
+			$dem_data = $dem_data_decoded;
 		}
 
 		// Region from taxonomy_where: entry with _admin_level 4 (translations in it, en, etc.)
@@ -403,6 +417,13 @@ function wm_single_track($atts)
 
 	ob_start();
 ?>
+	<?php if ($featured_image && $use_page_header) : ?>
+		<!-- Fallback featured image (same markup used by grid_track) -->
+		<section class="wm_featured_image_page_header_fallback l-section wpb_row height_small with_img with_overlay wm_header_section">
+			<div class="l-section-img loaded wm-header-image" style="background-image: url('<?= esc_url($featured_image) ?>');"></div>
+			<div class="l-section-h i-cf wm_header_wrapper"></div>
+		</section>
+	<?php endif; ?>
 	<div class="wm_content_wrapper">
 		<!-- 1. Featured Image -->
 		<?php if ($featured_image && !$use_page_header) : ?>
@@ -888,12 +909,22 @@ function wm_single_track($atts)
 		document.addEventListener('DOMContentLoaded', function() {
 			<?php if ($use_page_header && $featured_image) : ?>
 				// Set featured image in page-header section
-				var pageHeader = document.querySelector('header.page-header');
+				var fallbackEl = document.querySelector('.wm_featured_image_page_header_fallback');
+				// Try both the original selector and a permissive one (some themes use .page-header on non-header tags).
+				var pageHeader = document.querySelector('header.page-header') || document.querySelector('.page-header');
 				if (pageHeader) {
-					pageHeader.style.backgroundImage = 'url(<?= esc_js($featured_image) ?>)';
+					var wmFeaturedImageUrl = '<?= esc_js($featured_image) ?>';
+					pageHeader.style.backgroundImage = 'url(' + wmFeaturedImageUrl + ')';
 					pageHeader.style.backgroundSize = 'cover';
 					pageHeader.style.backgroundPosition = 'center';
 					pageHeader.style.backgroundRepeat = 'no-repeat';
+					if (fallbackEl) {
+						// Hide fallback only if the theme actually ended up applying a background image.
+						var computedBg = window.getComputedStyle(pageHeader).backgroundImage;
+						if (computedBg && computedBg !== 'none') {
+							fallbackEl.style.display = 'none';
+						}
+					}
 				}
 			<?php endif; ?>
 
