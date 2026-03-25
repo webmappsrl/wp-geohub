@@ -1,0 +1,999 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: wm-package\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language:de\n"
+"MIME-Version: 1.0\n"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Related Links"
+msgstr "Verwandte Links"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Contact Information"
+msgstr "Kontaktinformationen"
+
+msgid "Related POIs"
+msgstr "Verwandte POIs"
+
+msgid "Points of interest"
+msgstr "Interessenspunkte"
+
+msgid "Download GPX"
+msgstr "GPX herunterladen"
+
+msgid "No tracks found"
+msgstr "Keine Strecken gefunden"
+
+msgid "Error loading tracks"
+msgstr "Fehler beim Laden der Strecken"
+
+msgid "Loading..."
+msgstr "Wird geladen..."
+
+msgid "Go to track"
+msgstr "Zur Strecke"
+
+msgid "m"
+msgstr "m"
+
+msgid "Elevation gain +"
+msgstr "Höhengewinn +"
+
+msgid "Expert hiker with equipment"
+msgstr "Expertenwanderer mit Ausrüstung"
+
+msgid "Expert hiker"
+msgstr "Expertenwanderer"
+
+msgid "Hiker"
+msgstr "Wanderer"
+
+msgid "Tourist"
+msgstr "Tourist"
+
+msgid "Select difficulty"
+msgstr "Schwierigkeit wählen"
+
+msgid "Difficulty"
+msgstr "Schwierigkeit"
+
+msgid "km"
+msgstr "km"
+
+msgid "Length"
+msgstr "Länge"
+
+msgid "Next"
+msgstr "Weiter"
+
+msgid "Previous"
+msgstr "Zurück"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "min"
+msgstr "min"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Round Trip"
+msgstr "Rundweg"
+
+msgid "Duration Backward"
+msgstr "Rückwegdauer"
+
+msgid "Duration Forward"
+msgstr "Hinwegdauer"
+
+msgid "Duration Backward (Bike)"
+msgstr "Rückwegdauer (Fahrrad)"
+
+msgid "Duration Forward (Bike)"
+msgstr "Hinwegdauer (Fahrrad)"
+
+msgid "Duration Backward (Hiking)"
+msgstr "Rückwegdauer (Wandern)"
+
+msgid "Duration Forward (Hiking)"
+msgstr "Hinwegdauer (Wandern)"
+
+msgid "Descent"
+msgstr "Höhenverlust"
+
+msgid "Ascent"
+msgstr "Höhengewinn"
+
+msgid "End Elevation"
+msgstr "Endhöhe"
+
+msgid "Start Elevation"
+msgstr "Starthöhe"
+
+msgid "Max Elevation"
+msgstr "Maximale Höhe"
+
+msgid "Min Elevation"
+msgstr "Minimale Höhe"
+
+msgid "Distance"
+msgstr "Distanz"
+
+# Admin / Dashboard strings
+msgid "WM Package Settings"
+msgstr "WM Package Einstellungen"
+
+msgid "WM Package"
+msgstr "WM Package"
+
+msgid "No file uploaded or invalid file."
+msgstr "Keine Datei hochgeladen oder ungültige Datei."
+
+msgid "File must be in PNG format. Current format not allowed."
+msgstr "Die Datei muss im PNG-Format sein. Aktuelles Format nicht erlaubt."
+
+msgid "Extension not allowed. Use .png files only."
+msgstr "Erweiterung nicht erlaubt. Nur .png-Dateien verwenden."
+
+msgid "The file is not a valid PNG image."
+msgstr "Die Datei ist kein gültiges PNG-Bild."
+
+msgid "The file must be a valid PNG."
+msgstr "Die Datei muss eine gültige PNG-Datei sein."
+
+msgid "Maximum dimensions allowed: %1$d×%2$d pixels."
+msgstr "Maximal zulässige Abmessungen: %1$d×%2$d Pixel."
+
+msgid "Unauthorized"
+msgstr "Nicht autorisiert"
+
+msgid "Shards configuration refreshed successfully"
+msgstr "Shard-Konfiguration erfolgreich aktualisiert"
+
+msgid "Failed to refresh shards configuration"
+msgstr "Shard-Konfiguration konnte nicht aktualisiert werden"
+
+msgid "Shard and APP ID must be set."
+msgstr "Shard und APP-ID müssen festgelegt werden."
+
+msgid "Config API helpers not available."
+msgstr "Config-API-Helfer nicht verfügbar."
+
+msgid "Could not build config API URL for this shard."
+msgstr "Config-API-URL für diesen Shard konnte nicht erstellt werden."
+
+msgid "Config updated from API (WORDPRESS/APP merged with local when present)."
+msgstr "Config von API aktualisiert (WORDPRESS/APP mit lokalem zusammengeführt, falls vorhanden)."
+
+msgid "Using local config (API unavailable or invalid response)."
+msgstr "Lokale Config wird verwendet (API nicht verfügbar oder ungültige Antwort)."
+
+msgid "Security verification failed. Please try again."
+msgstr "Sicherheitsüberprüfung fehlgeschlagen. Bitte erneut versuchen."
+
+msgid "The plugin assets folder is not writable."
+msgstr "Der Plugin-Assets-Ordner ist nicht beschreibbar."
+
+msgid "Unable to replace the default image."
+msgstr "Standardbild kann nicht ersetzt werden."
+
+msgid "Default image updated successfully."
+msgstr "Standardbild erfolgreich aktualisiert."
+
+msgid "WM Icon"
+msgstr "WM-Symbol"
+
+msgid "Do not close this page while it is loading"
+msgstr "Diese Seite nicht schließen, während sie geladen wird"
+
+msgid "Processing..."
+msgstr "Wird verarbeitet..."
+
+msgid "Please do not close or reload this page while the operation is in progress."
+msgstr "Bitte schließen oder neu laden Sie diese Seite nicht, während der Vorgang läuft."
+
+msgid "Backend Configuration:"
+msgstr "Backend-Konfiguration:"
+
+msgid "Shard"
+msgstr "Shard"
+
+msgid "Refresh Shards"
+msgstr "Shards aktualisieren"
+
+msgid "Refresh Config API"
+msgstr "Config API aktualisieren"
+
+msgid "Select the backend shard from which data will be retrieved."
+msgstr "Wählen Sie den Backend-Shard, von dem Daten abgerufen werden."
+
+msgid "Configuration from:"
+msgstr "Konfiguration von:"
+
+msgid "Available shards:"
+msgstr "Verfügbare Shards:"
+
+msgid "(cached for 24 hours)"
+msgstr "(24 Stunden gecacht)"
+
+msgid "APP ID"
+msgstr "APP-ID"
+
+msgid "This APP ID refers to the ID of the app on the backend."
+msgstr "Diese APP-ID bezieht sich auf die ID der App im Backend."
+
+msgid "APIs:"
+msgstr "APIs:"
+
+msgid "Tracks list API"
+msgstr "Tracks-Listen-API"
+
+msgid "API endpoint used to retrieve the list of tracks for a specific app."
+msgstr "API-Endpunkt zum Abrufen der Tracks-Liste für eine bestimmte App."
+
+msgid "Layer API"
+msgstr "Layer-API"
+
+msgid "API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays."
+msgstr "API-Endpunkt für Layer-Informationen inkl. Tracks, Metadaten und Inhalten für Rasteransichten."
+
+msgid "Single Track API"
+msgstr "Einzelne-Track-API"
+
+msgid "API endpoint used to retrieve detailed information for a single track by ID."
+msgstr "API-Endpunkt für detaillierte Informationen zu einem Track anhand der ID."
+
+msgid "POI API"
+msgstr "POI-API"
+
+msgid "API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app."
+msgstr "API-Endpunkt für POI-Daten im GeoJSON-Format für eine bestimmte App."
+
+msgid "POI Type API"
+msgstr "POI-Typ-API"
+
+msgid "API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest."
+msgstr "API-Endpunkt für POI-Typ-Taxonomien zur Filterung und Kategorisierung von POIs."
+
+msgid "Elasticsearch API"
+msgstr "Elasticsearch-API"
+
+msgid "Elasticsearch API used for advanced track filtering and search in grid views."
+msgstr "Elasticsearch-API für erweiterte Track-Filterung und Suche in Rasteransichten."
+
+msgid "Config API"
+msgstr "Config-API"
+
+msgid "Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when \"Refresh Config API\" is used."
+msgstr "Config-JSON für diese App (Shard + APP-ID). Quelle für WORDPRESS/APP-Optionen bei \"Config API aktualisieren\"."
+
+msgid "Links:"
+msgstr "Links:"
+
+msgid "Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect."
+msgstr "Konfigurieren Sie die URLs für die dynamische Weiterleitung: Auf dem Desktop öffnet der Link die Website-URL, auf iOS die iOS-App-URL (App Store), auf Android die Android-App-URL (Play Store). Fügen Sie die folgende CSS-Klasse zu einem beliebigen Element hinzu, um die Weiterleitung zu aktivieren."
+
+msgid "Webapp URL"
+msgstr "Webapp-URL"
+
+msgid "URL that display the Website version of the map"
+msgstr "URL, die die Website-Version der Karte anzeigt"
+
+msgid "iOS App URL"
+msgstr "iOS-App-URL"
+
+msgid "URL that display the Mobile version of the map for iOS"
+msgstr "URL für die mobile Kartenversion auf iOS"
+
+msgid "Android App URL"
+msgstr "Android-App-URL"
+
+msgid "URL that display the Mobile version of the map for Android"
+msgstr "URL für die mobile Kartenversion auf Android"
+
+msgid "CSS class for redirect"
+msgstr "CSS-Klasse für Weiterleitung"
+
+msgid "Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in \"CSS Classes\"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab."
+msgstr "Fügen Sie diese Klasse zu einem beliebigen Element hinzu, um die Weiterleitung zu den obigen URLs (geräteabhängig) zu aktivieren. Z. B. bei Menüeinträgen (unter Design → Menüs, \"CSS-Klassen\"), bei einem Link, einer Schaltfläche oder einem umschließenden Container. Der Link öffnet sich in einem neuen Tab."
+
+msgid "Default image"
+msgstr "Standardbild"
+
+msgid "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
+msgstr "Bild für Tracks und POIs, wenn kein Foto vorhanden ist. Format: PNG. Empfohlen: quadratisch, max. 1024×1024 px."
+
+msgid "Current image"
+msgstr "Aktuelles Bild"
+
+msgid "View current image"
+msgstr "Aktuelles Bild anzeigen"
+
+msgid "Opens the image currently used for tracks and POIs in a new tab."
+msgstr "Öffnet das aktuell für Tracks und POIs verwendete Bild in einem neuen Tab."
+
+msgid "Example image"
+msgstr "Beispielbild"
+
+msgid "View example image"
+msgstr "Beispielbild anzeigen"
+
+msgid "Reference image."
+msgstr "Referenzbild."
+
+msgid "Upload new image"
+msgstr "Neues Bild hochladen"
+
+msgid "Replace default image"
+msgstr "Standardbild ersetzen"
+
+msgid "PNG files only. The image will replace the current one."
+msgstr "Nur PNG-Dateien. Das Bild ersetzt das aktuelle."
+
+msgid "Short codes:"
+msgstr "Shortcodes:"
+
+msgid "Track page:"
+msgstr "Track-Seite:"
+
+msgid "Shortcode to display a single track with full details, map, and related POIs."
+msgstr "Shortcode für einen einzelnen Track mit Details, Karte und zugehörigen POIs."
+
+msgid "Parameters:"
+msgstr "Parameter:"
+
+msgid "(Required) The ID of the track to display."
+msgstr "(Pflicht) Die ID des anzuzeigenden Tracks."
+
+msgid "(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons)."
+msgstr "(Optional) Kommagetrennte Liste von Layer-IDs für die Track-Navigation (Zurück/Weiter)."
+
+msgid "POI page:"
+msgstr "POI-Seite:"
+
+msgid "Shortcode to display a single Point of Interest (POI) with full details and map location."
+msgstr "Shortcode für einen einzelnen POI mit Details und Kartenposition."
+
+msgid "(Required) The ID of the POI to display."
+msgstr "(Pflicht) Die ID des anzuzeigenden POIs."
+
+msgid "Grid Tracks page:"
+msgstr "Tracks-Raster-Seite:"
+
+msgid "Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering."
+msgstr "Shortcode für ein Tracks-Raster mit optionalen Filtern (Distanz, Region, Schwierigkeit, Höhe). Nutzt die Elasticsearch-API."
+
+msgid "(Optional) ID of a single layer to display tracks from."
+msgstr "(Optional) ID eines einzelnen Layers, aus dem Tracks angezeigt werden."
+
+msgid "(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided."
+msgstr "(Optional) Kommagetrennte Layer-IDs. Hat Vorrang vor layer_id, wenn beide angegeben sind."
+
+msgid "(Optional) Maximum number of tracks to display. Default: -1 (unlimited)."
+msgstr "(Optional) Maximale Anzahl anzuzeigender Tracks. Standard: -1 (unbegrenzt)."
+
+msgid "(Optional) Display tracks in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Optional) Tracks in zufälliger Reihenfolge. Werte: \"true\" oder \"false\". Standard: \"false\"."
+
+msgid "(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false."
+msgstr "(Optional) Layer-Inhalt anzeigen (Titel, Untertitel, Beschreibung, Beitragsbild). Werte: true/false. Standard: false."
+
+msgid "(Optional) Use Elasticsearch API for advanced filtering. Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Optional) Elasticsearch-API für erweiterte Filterung. Werte: \"true\" oder \"false\". Standard: \"true\"."
+
+msgid "(Optional) Show filter interface (distance, region, difficulty, elevation). Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Optional) Filteroberfläche anzeigen (Distanz, Region, Schwierigkeit, Höhe). Werte: \"true\" oder \"false\". Standard: \"true\"."
+
+msgid "Grid POIs page:"
+msgstr "POI-Raster-Seite:"
+
+msgid "Shortcode to display a grid of POIs filtered by POI type taxonomy."
+msgstr "Shortcode für ein POI-Raster gefiltert nach POI-Typ-Taxonomie."
+
+msgid "(Optional) ID of a single POI type to display POIs from."
+msgstr "(Optional) ID eines POI-Typs, aus dem POIs angezeigt werden."
+
+msgid "(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided."
+msgstr "(Optional) Kommagetrennte POI-Typ-IDs. Hat Vorrang vor poi_type_id, wenn beide angegeben sind."
+
+msgid "(Optional) Maximum number of POIs to display. Default: -1 (unlimited)."
+msgstr "(Optional) Maximale Anzahl anzuzeigender POIs. Standard: -1 (unbegrenzt)."
+
+msgid "(Optional) Display POIs in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Optional) POIs in zufälliger Reihenfolge. Werte: \"true\" oder \"false\". Standard: \"false\"."
+
+msgid "Track Configuration:"
+msgstr "Track-Konfiguration:"
+
+msgid "Enable Track Navigation"
+msgstr "Track-Navigation aktivieren"
+
+msgid "Enabled"
+msgstr "Aktiviert"
+
+msgid "When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks."
+msgstr "Wenn aktiviert, erscheinen unten auf jeder Track-Seite Buttons zur Navigation zwischen Tracks."
+
+msgid "Default Layer IDs for Navigation"
+msgstr "Standard-Layer-IDs für Navigation"
+
+msgid "e.g., 123,456,789"
+msgstr "z. B. 123,456,789"
+
+msgid "Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter."
+msgstr "Kommagetrennte Layer-IDs für die Track-Navigation. Wenn leer, funktioniert die Navigation nur bei Angabe von layer_ids im Shortcode."
+
+msgid "Download Track"
+msgstr "Track herunterladen"
+
+msgid "When enabled, a download button will appear on the map to allow users to download the track GPX file."
+msgstr "Wenn aktiviert, erscheint auf der Karte ein Download-Button für die GPX-Datei des Tracks."
+
+msgid "Import and Sync:"
+msgstr "Import und Sync:"
+
+msgid "Generate TRACK"
+msgstr "TRACKS generieren"
+
+msgid "Generate Tracks"
+msgstr "Tracks generieren"
+
+msgid "Delete TRACK"
+msgstr "TRACKS löschen"
+
+msgid "Delete All Tracks"
+msgstr "Alle Tracks löschen"
+
+msgid "Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone."
+msgstr "Warnung: Diese Aktion löscht DAUERHAFT alle Track-Beiträge. Der Vorgang kann nicht rückgängig gemacht werden."
+
+msgid "Generate POI"
+msgstr "POIs generieren"
+
+msgid "Generate POIs"
+msgstr "POIs generieren"
+
+msgid "Delete POI"
+msgstr "POIs löschen"
+
+msgid "Delete All POIs"
+msgstr "Alle POIs löschen"
+
+msgid "Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone."
+msgstr "Warnung: Diese Aktion wird DAUERHAFT alle POI-Beiträge löschen. Dieser Vorgang kann nicht rückgängig gemacht werden."
+
+msgid "Previous Track"
+msgstr "Vorherige Strecke"
+
+msgid "Next Track"
+msgstr "Nächste Strecke"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Select region"
+msgstr "Region auswählen"
+
+msgid "Where"
+msgstr "Wo"
+
+msgid "Select where"
+msgstr "Ort auswählen"
+
+msgid "Search"
+msgstr "Suchen"
+
+msgid "Reset filters"
+msgstr "Filter zurücksetzen"
+
+msgid "View"
+msgstr "Ansehen"
+
+msgid "Translations"
+msgstr "Übersetzungen"
+
+msgid "You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings."
+msgstr "Sie können die .po-Übersetzungsdateien unten herunterladen und in ein Übersetzungs-Plugin (z. B. WPML, Loco Translate, Poedit) importieren, um die Plugin-Strings zu übersetzen oder zu bearbeiten."
+
+msgid "Download .po"
+msgstr ".po herunterladen"
+
+msgid "No .po translation files found in the languages folder."
+msgstr "Keine .po-Übersetzungsdateien im Ordner languages gefunden."
+
+msgid "Security check failed."
+msgstr "Sicherheitsprüfung fehlgeschlagen."
+
+msgid "File not found."
+msgstr "Datei nicht gefunden."
+
+msgid "German"
+msgstr "Deutsch"
+
+msgid "English"
+msgstr "Englisch"
+
+msgid "Spanish"
+msgstr "Spanisch"
+
+msgid "French"
+msgstr "Französisch"
+
+msgid "Italian"
+msgstr "Italienisch"
+
+msgid "Dutch"
+msgstr "Niederländisch"
+
+msgid "Albanian"
+msgstr "Albanisch"
+
+msgid "Featured Image Display"
+msgstr "Hervorgehobenes Bild anzeigen"
+
+msgid "Choose where to display featured images for tracks and POIs."
+msgstr "Wählen Sie, wo hervorgehobene Bilder für Tracks und POIs angezeigt werden sollen."
+
+msgid "Featured Image Location"
+msgstr "Position des hervorgehobenen Bildes"
+
+msgid "In content area (default)"
+msgstr "Im Inhaltsbereich (Standard)"
+
+msgid "In WordPress page-header section"
+msgstr "Im WordPress page-header-Bereich"
+
+msgid "Select where featured images should be displayed. \"In content area\" shows images in the standard content wrapper. \"In WordPress page-header section\" displays images in the theme's page-header area."
+msgstr "Wählen Sie, wo hervorgehobene Bilder angezeigt werden sollen. \"Im Inhaltsbereich\" zeigt Bilder im Standard-Inhaltscontainer. \"Im WordPress page-header-Bereich\" zeigt Bilder im page-header-Bereich des Themes."
+
+msgid "Synchronizing..."
+msgstr "Synchronisierung läuft..."
+
+msgid "Deleting Tracks..."
+msgstr "Tracks werden gelöscht..."
+
+msgid "Deleting POIs..."
+msgstr "POIs werden gelöscht..."
+
+msgid "Please do not close or reload this page while synchronization is in progress."
+msgstr "Bitte schließen oder neu laden Sie diese Seite nicht, während die Synchronisierung läuft."
+
+msgid "Please do not close or reload this page while deletion is in progress."
+msgstr "Bitte schließen oder neu laden Sie diese Seite nicht, während die Löschung läuft."
+
+msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle Tracks zu synchronisieren/zu generieren. Dies kann einige Zeit dauern und wird Track-Beiträge aktualisieren oder erstellen. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle POIs zu synchronisieren/zu generieren. Dies kann einige Zeit dauern und wird POI-Beiträge aktualisieren oder erstellen. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle Track-Beiträge PERMANENT zu löschen. Diese Operation kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WARNUNG: Sie sind dabei, alle POI-Beiträge PERMANENT zu löschen. Diese Operation kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren möchten?"
+
+msgid "Final confirmation: Delete ALL Tracks?"
+msgstr "Endgültige Bestätigung: ALLE Tracks löschen?"
+
+msgid "Final confirmation: Delete ALL POIs?"
+msgstr "Endgültige Bestätigung: ALLE POIs löschen?"
+
+msgid "Tracks synchronized successfully!"
+msgstr "Tracks erfolgreich synchronisiert!"
+
+msgid "POIs synchronized successfully!"
+msgstr "POIs erfolgreich synchronisiert!"
+
+msgid "Unknown error occurred"
+msgstr "Unbekannter Fehler aufgetreten"
+
+msgid "Error communicating with the server"
+msgstr "Fehler bei der Kommunikation mit dem Server"
+
+msgid "Request timeout. The operation may still be processing. Please check the results."
+msgstr "Anfrage-Timeout. Die Operation wird möglicherweise noch verarbeitet. Bitte überprüfen Sie die Ergebnisse."
+
+msgid "Response format error, but operation may have completed. Please check the results."
+msgstr "Antwortformatfehler, aber die Operation wurde möglicherweise abgeschlossen. Bitte überprüfen Sie die Ergebnisse."
+
+msgid "Failed to refresh"
+msgstr "Aktualisierung fehlgeschlagen"
+
+msgid "Failed to refresh config"
+msgstr "Konfiguration konnte nicht aktualisiert werden"
+
+msgid "shards"
+msgstr "Shards"
+
+msgid "Please select a PNG file first."
+msgstr "Bitte wählen Sie zuerst eine PNG-Datei aus."
+
+msgid "Synchronization session expired. Please start over."
+msgstr "Synchronisierungssitzung abgelaufen. Bitte starten Sie von vorne."
+
+msgid "Synchronization session expired."
+msgstr "Synchronisierungssitzung abgelaufen."
+
+msgid "Stuck process detected. Synchronization has been stopped. Please start over."
+msgstr "Hängender Prozess erkannt. Die Synchronisierung wurde gestoppt. Bitte starten Sie von vorne."
+
+msgid "Stuck process detected."
+msgstr "Hängender Prozess erkannt."
+
+msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
+msgstr "Globales Timeout erreicht (%d Minuten). Die Synchronisierung wurde gestoppt. Bitte starten Sie von vorne."
+
+msgid "Global timeout reached."
+msgstr "Globales Timeout erreicht."
+
+msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
+msgstr "Zu viele aufeinanderfolgende Fehler (%d). Die Synchronisierung wurde gestoppt, um eine Endlosschleife zu vermeiden."
+
+msgid "Too many consecutive errors."
+msgstr "Zu viele aufeinanderfolgende Fehler."
+
+msgid "Great! Tracks synchronized successfully."
+msgstr "Großartig! Tracks erfolgreich synchronisiert."
+
+msgid "Synchronization completed! Processed %d tracks."
+msgstr "Synchronisierung abgeschlossen! %d Tracks verarbeitet."
+
+msgid "Batch completed: %d/%d tracks (%d%%)"
+msgstr "Batch abgeschlossen: %d/%d Tracks (%d%%)"
+
+msgid "Processed"
+msgstr "Verarbeitet"
+
+msgid "Skipped"
+msgstr "Übersprungen"
+
+msgid "Errors"
+msgstr "Fehler"
+
+msgid "Time"
+msgstr "Zeit"
+
+msgid "tracks"
+msgstr "Tracks"
+
+msgid "Do you want to stop the synchronization?"
+msgstr "Möchten Sie die Synchronisierung stoppen?"
+
+msgid "Synchronization stopped by user."
+msgstr "Synchronisierung vom Benutzer gestoppt."
+
+msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
+msgstr "Globales Timeout erreicht (30 Minuten). Die Synchronisierung wurde aus Sicherheitsgründen gestoppt."
+
+msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
+msgstr "Hängender Prozess erkannt (kein Fortschritt für 5 Minuten). Die Synchronisierung wurde gestoppt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped."
+msgstr "Zu viele aufeinanderfolgende Fehler. Die Synchronisierung wurde gestoppt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
+msgstr "Zu viele aufeinanderfolgende Fehler. Die Synchronisierung wurde gestoppt, um eine Endlosschleife zu vermeiden."
+
+msgid "A synchronization is already in progress. Do you want to stop it and start over?"
+msgstr "Eine Synchronisierung läuft bereits. Möchten Sie sie stoppen und von vorne beginnen?"
+
+msgid "Stop Synchronization"
+msgstr "Synchronisierung stoppen"
+
+msgid "Process stopped by server"
+msgstr "Prozess vom Server gestoppt"
+
+msgid "Deletion completed! Deleted %d tracks."
+msgstr "Löschung abgeschlossen! %d Tracks gelöscht."
+
+msgid "Deleted"
+msgstr "Gelöscht"
+
+msgid "The batch may have been processed. Check the results."
+msgstr "Der Batch wurde möglicherweise verarbeitet. Überprüfen Sie die Ergebnisse."
+
+msgid "A deletion is already in progress. Do you want to stop it and start over?"
+msgstr "Eine Löschung läuft bereits. Möchten Sie sie stoppen und von vorne beginnen?"
+
+msgid "Deletion session expired. Please start over."
+msgstr "Löschungssitzung abgelaufen. Bitte starten Sie von vorne."
+
+msgid "Insufficient permissions"
+msgstr "Unzureichende Berechtigungen"
+
+msgid "Invalid nonce"
+msgstr "Ungültiger Nonce"
+
+msgid "Error deleting track ID: %d"
+msgstr "Fehler beim Löschen der Track-ID: %d"
+
+msgid "Deleted %d tracks. Some errors occurred."
+msgstr "%d Tracks gelöscht. Einige Fehler sind aufgetreten."
+
+msgid "Successfully deleted %d tracks."
+msgstr "%d Tracks erfolgreich gelöscht."
+
+msgid "Required plugins are not installed or activated"
+msgstr "Erforderliche Plugins sind nicht installiert oder aktiviert"
+
+msgid "API POI list invalid or unavailable."
+msgstr "POI-API-Liste ungültig oder nicht verfügbar."
+
+msgid "No POIs provided or invalid format."
+msgstr "Keine POIs bereitgestellt oder ungültiges Format."
+
+msgid "No POIs in the source. The features array is empty."
+msgstr "Keine POIs in der Quelle. Das features-Array ist leer."
+
+msgid "Synchronization completed! Processed %d POIs."
+msgstr "Synchronisierung abgeschlossen! %d POIs verarbeitet."
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr "Batch abgeschlossen: %d/%d POIs (%d%%)"
+
+msgid "Great! POIs synchronized successfully."
+msgstr "Großartig! POIs erfolgreich synchronisiert."
+
+msgid "Deletion completed! Deleted %d POIs."
+msgstr "Löschung abgeschlossen! %d POIs gelöscht."
+
+msgid "Deleted %d POIs. Some errors occurred."
+msgstr "%d POIs gelöscht. Einige Fehler sind aufgetreten."
+
+msgid "Successfully deleted %d POIs."
+msgstr "%d POIs erfolgreich gelöscht."
+
+msgid "Error deleting POI ID: %d"
+msgstr "Fehler beim Löschen der POI-ID: %d"
+
+msgid "Preparing deletion..."
+msgstr "Löschung wird vorbereitet..."
+
+msgid "Assuming batch was processed. Continuing with next batch..."
+msgstr "Annahme: Batch wurde verarbeitet. Fortsetzen mit dem nächsten Batch..."
+
+msgid "Too many consecutive timeouts. Process stopped."
+msgstr "Zu viele aufeinanderfolgende Timeouts. Prozess gestoppt."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "POI-Archiv"
+
+msgid "POI Attributes"
+msgstr "POI-Attribute"
+
+msgid "Parent POI:"
+msgstr "Übergeordneter POI:"
+
+msgid "All POIs"
+msgstr "Alle POIs"
+
+msgid "Add New POI"
+msgstr "Neuen POI hinzufügen"
+
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+msgid "New POI"
+msgstr "Neuer POI"
+
+msgid "Edit POI"
+msgstr "POI bearbeiten"
+
+msgid "Update POI"
+msgstr "POI aktualisieren"
+
+msgid "View POI"
+msgstr "POI ansehen"
+
+msgid "View POIs"
+msgstr "POIs ansehen"
+
+msgid "Search POIs"
+msgstr "POIs suchen"
+
+msgid "Not Found"
+msgstr "Nicht gefunden"
+
+msgid "Not Found in Trash"
+msgstr "Nicht im Papierkorb gefunden"
+
+msgid "Featured Image"
+msgstr "Beitragsbild"
+
+msgid "Set Featured Image"
+msgstr "Beitragsbild festlegen"
+
+msgid "Remove Featured Image"
+msgstr "Beitragsbild entfernen"
+
+msgid "Use as Featured Image"
+msgstr "Als Beitragsbild verwenden"
+
+msgid "Insert into POI"
+msgstr "In POI einfügen"
+
+msgid "Uploaded to this POI"
+msgstr "Zu diesem POI hochgeladen"
+
+msgid "POIs List"
+msgstr "POI-Liste"
+
+msgid "POIs List Navigation"
+msgstr "POI-Listen-Navigation"
+
+msgid "Filter POIs List"
+msgstr "POI-Liste filtern"
+
+msgid "Post type for Points of Interest"
+msgstr "Beitragstyp für Points of Interest"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Track-Archiv"
+
+msgid "Track Attributes"
+msgstr "Track-Attribute"
+
+msgid "Parent Track:"
+msgstr "Übergeordneter Track:"
+
+msgid "All Tracks"
+msgstr "Alle Tracks"
+
+msgid "Add New Track"
+msgstr "Neuen Track hinzufügen"
+
+msgid "New Track"
+msgstr "Neuer Track"
+
+msgid "Edit Track"
+msgstr "Track bearbeiten"
+
+msgid "Update Track"
+msgstr "Track aktualisieren"
+
+msgid "View Track"
+msgstr "Track ansehen"
+
+msgid "View Tracks"
+msgstr "Tracks ansehen"
+
+msgid "Search Tracks"
+msgstr "Tracks suchen"
+
+msgid "Insert into Track"
+msgstr "In Track einfügen"
+
+msgid "Uploaded to this Track"
+msgstr "Zu diesem Track hochgeladen"
+
+msgid "Tracks List"
+msgstr "Track-Liste"
+
+msgid "Tracks List Navigation"
+msgstr "Track-Listen-Navigation"
+
+msgid "Filter Tracks List"
+msgstr "Track-Liste filtern"
+
+msgid "Post type for Tracks"
+msgstr "Beitragstyp für Tracks"
+
+# Custom fields
+msgid "POI Details"
+msgstr "POI-Details"
+
+msgid "Enter the original POI ID"
+msgstr "Geben Sie die ursprüngliche POI-ID ein"
+
+msgid "Track Details"
+msgstr "Track-Details"
+
+msgid "Enter the original Track ID"
+msgstr "Geben Sie die ursprüngliche Track-ID ein"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Text in die Zwischenablage kopiert!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Text konnte nicht kopiert werden. Bitte manuell kopieren."
+
+# Admin page - JavaScript localized strings (non-emoji variants)
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle Tracks zu synchronisieren/generieren. Dies kann einige Zeit dauern und wird Track-Beiträge aktualisieren oder erstellen. Möchten Sie fortfahren?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle POIs zu synchronisieren/generieren. Dies kann einige Zeit dauern und wird POI-Beiträge aktualisieren oder erstellen. Möchten Sie fortfahren?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle Track-Beiträge DAUERHAFT zu löschen. Dieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WARNUNG: Sie sind dabei, alle POI-Beiträge DAUERHAFT zu löschen. Dieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?"
+
+# Shortcodes
+msgid "N/A"
+msgstr "N/V"
+
+msgid "Failed to load POI data."
+msgstr "POI-Daten konnten nicht geladen werden."
+
+msgid "Error: Track data not available"
+msgstr "Fehler: Trackdaten nicht verfügbar"
+
+msgid "Error: GPX generation library not available. Please refresh the page."
+msgstr "Fehler: GPX-Generierungsbibliothek nicht verfügbar. Bitte Seite neu laden."
+
+msgid "Error: Failed to generate GPX file"
+msgstr "Fehler: GPX-Datei konnte nicht erstellt werden"
+
+# Sync actions
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Erforderliche Konfigurationsoptionen fehlen. Bitte überprüfen Sie Ihre Einstellungen."
+
+msgid "API track list invalid or unavailable."
+msgstr "API-Track-Liste ungültig oder nicht verfügbar."
+
+msgid "No tracks provided or invalid format."
+msgstr "Keine Tracks angegeben oder ungültiges Format."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "Keine Tracks in der Quelle. Die Liste ist leer."
+
+msgid "Track no title"
+msgstr "Track ohne Titel"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Konfiguration unvollständig. Bitte überprüfen Sie Ihre Einstellungen."
+
+msgid "POI no title"
+msgstr "POI ohne Titel"
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr "Anzahl Quell-POIs:"
+
+msgid "Source Tracks number:"
+msgstr "Anzahl Quell-Tracks:"
+
+msgid "Current POIs number:"
+msgstr "Aktuelle Anzahl POIs:"
+
+msgid "Current Tracks number:"
+msgstr "Aktuelle Anzahl Tracks:"
+
+msgid "published"
+msgstr "veröffentlicht"
+
+msgid "Manage Import and Sync:"
+msgstr "Import und Synchronisierung verwalten:"
+
+msgid "Go to WM Settings"
+msgstr "Zu WM-Einstellungen gehen"
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "Das WPML-Plugin ist nicht installiert oder aktiviert. Dieses Plugin benötigt WPML, um korrekt zu funktionieren."
+
+msgid "ERROR:"
+msgstr "FEHLER:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "FEHLER: Der Beitragstyp %s ist nicht übersetzbar. Bitte aktivieren Sie die Übersetzung für den Beitragstyp %s in den WPML-Einstellungen > Beitragstyp-Übersetzung."

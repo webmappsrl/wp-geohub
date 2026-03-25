@@ -1,0 +1,1004 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: wm-package\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language:nl\n"
+"MIME-Version: 1.0\n"
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Phone"
+msgstr "Telefoon"
+
+msgid "Related Links"
+msgstr "Gerelateerde links"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Contact Information"
+msgstr "Contactgegevens"
+
+msgid "Related POIs"
+msgstr "Gerelateerde POI's"
+
+msgid "Points of interest"
+msgstr "Bezienswaardigheden"
+
+msgid "Download GPX"
+msgstr "GPX downloaden"
+
+msgid "No tracks found"
+msgstr "Geen routes gevonden"
+
+msgid "Error loading tracks"
+msgstr "Fout bij laden van routes"
+
+msgid "Loading..."
+msgstr "Laden..."
+
+msgid "Go to track"
+msgstr "Naar route"
+
+msgid "m"
+msgstr "m"
+
+msgid "Elevation gain +"
+msgstr "Hoogtewinst +"
+
+msgid "Expert hiker with equipment"
+msgstr "Ervaren wandelaar met uitrusting"
+
+msgid "Expert hiker"
+msgstr "Ervaren wandelaar"
+
+msgid "Hiker"
+msgstr "Wandelaar"
+
+msgid "Tourist"
+msgstr "Toerist"
+
+msgid "Select difficulty"
+msgstr "Selecteer moeilijkheid"
+
+msgid "Difficulty"
+msgstr "Moeilijkheid"
+
+msgid "km"
+msgstr "km"
+
+msgid "Length"
+msgstr "Lengte"
+
+msgid "Next"
+msgstr "Volgende"
+
+msgid "Previous"
+msgstr "Vorige"
+
+msgid "No"
+msgstr "Nee"
+
+msgid "min"
+msgstr "min"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Round Trip"
+msgstr "Rondwandeling"
+
+msgid "Duration Backward"
+msgstr "Duur terug"
+
+msgid "Duration Forward"
+msgstr "Duur heen"
+
+msgid "Duration Backward (Bike)"
+msgstr "Duur terug (fiets)"
+
+msgid "Duration Forward (Bike)"
+msgstr "Duur heen (fiets)"
+
+msgid "Duration Backward (Hiking)"
+msgstr "Duur terug (wandelen)"
+
+msgid "Duration Forward (Hiking)"
+msgstr "Duur heen (wandelen)"
+
+msgid "Descent"
+msgstr "Daling"
+
+msgid "Ascent"
+msgstr "Stijging"
+
+msgid "End Elevation"
+msgstr "Eindhoogte"
+
+msgid "Start Elevation"
+msgstr "Starthoogte"
+
+msgid "Max Elevation"
+msgstr "Maximale hoogte"
+
+msgid "Min Elevation"
+msgstr "Minimale hoogte"
+
+msgid "Distance"
+msgstr "Afstand"
+
+# Admin / Dashboard
+msgid "WM Package Settings"
+msgstr "WM Package-instellingen"
+
+msgid "WM Package"
+msgstr "WM Package"
+
+msgid "No file uploaded or invalid file."
+msgstr "Geen bestand geüpload of ongeldig bestand."
+
+msgid "File must be in PNG format. Current format not allowed."
+msgstr "Bestand moet in PNG-formaat zijn. Huidig formaat niet toegestaan."
+
+msgid "Extension not allowed. Use .png files only."
+msgstr "Extensie niet toegestaan. Gebruik alleen .png-bestanden."
+
+msgid "The file is not a valid PNG image."
+msgstr "Het bestand is geen geldige PNG-afbeelding."
+
+msgid "The file must be a valid PNG."
+msgstr "Het bestand moet een geldige PNG zijn."
+
+msgid "Maximum dimensions allowed: %1$d×%2$d pixels."
+msgstr "Maximaal toegestane afmetingen: %1$d×%2$d pixels."
+
+msgid "Unauthorized"
+msgstr "Niet geautoriseerd"
+
+msgid "Shards configuration refreshed successfully"
+msgstr "Shards-configuratie succesvol vernieuwd"
+
+msgid "Failed to refresh shards configuration"
+msgstr "Vernieuwen shards-configuratie mislukt"
+
+msgid "Shard and APP ID must be set."
+msgstr "Shard en APP ID moeten worden ingesteld."
+
+msgid "Config API helpers not available."
+msgstr "Config API-helpers niet beschikbaar."
+
+msgid "Could not build config API URL for this shard."
+msgstr "Kon Config API-URL voor deze shard niet bouwen."
+
+msgid "Config updated from API (WORDPRESS/APP merged with local when present)."
+msgstr "Config bijgewerkt vanuit API (WORDPRESS/APP samengevoegd met lokaal indien aanwezig)."
+
+msgid "Using local config (API unavailable or invalid response)."
+msgstr "Lokale config wordt gebruikt (API niet beschikbaar of ongeldig antwoord)."
+
+msgid "Security verification failed. Please try again."
+msgstr "Beveiligingsverificatie mislukt. Probeer het opnieuw."
+
+msgid "The plugin assets folder is not writable."
+msgstr "De plugin-assetsmap is niet beschrijfbaar."
+
+msgid "Unable to replace the default image."
+msgstr "Kan standaardafbeelding niet vervangen."
+
+msgid "Default image updated successfully."
+msgstr "Standaardafbeelding succesvol bijgewerkt."
+
+msgid "WM Icon"
+msgstr "WM-pictogram"
+
+msgid "Do not close this page while it is loading"
+msgstr "Sluit deze pagina niet terwijl deze wordt geladen"
+
+msgid "Processing..."
+msgstr "Verwerken..."
+
+msgid "Please do not close or reload this page while the operation is in progress."
+msgstr "Sluit of herlaad deze pagina niet terwijl de bewerking bezig is."
+
+msgid "Backend Configuration:"
+msgstr "Backend-configuratie:"
+
+msgid "Shard"
+msgstr "Shard"
+
+msgid "Refresh Shards"
+msgstr "Shards vernieuwen"
+
+msgid "Refresh Config API"
+msgstr "Config API vernieuwen"
+
+msgid "Select the backend shard from which data will be retrieved."
+msgstr "Selecteer de backend-shard waaruit gegevens worden opgehaald."
+
+msgid "Configuration from:"
+msgstr "Configuratie van:"
+
+msgid "Available shards:"
+msgstr "Beschikbare shards:"
+
+msgid "(cached for 24 hours)"
+msgstr "(24 uur in cache)"
+
+msgid "APP ID"
+msgstr "APP ID"
+
+msgid "This APP ID refers to the ID of the app on the backend."
+msgstr "Deze APP ID verwijst naar de ID van de app op de backend."
+
+msgid "APIs:"
+msgstr "API's:"
+
+msgid "Tracks list API"
+msgstr "Tracks-lijst API"
+
+msgid "API endpoint used to retrieve the list of tracks for a specific app."
+msgstr "API-endpoint om de lijst met routes voor een app op te halen."
+
+msgid "Layer API"
+msgstr "Layer API"
+
+msgid "API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays."
+msgstr "API-endpoint voor layerinformatie (routes, metadata, inhoud) voor rasterweergaven."
+
+msgid "Single Track API"
+msgstr "Enkele route API"
+
+msgid "API endpoint used to retrieve detailed information for a single track by ID."
+msgstr "API-endpoint voor gedetailleerde informatie over een route op basis van ID."
+
+msgid "POI API"
+msgstr "POI API"
+
+msgid "API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app."
+msgstr "API-endpoint voor POI-gegevens in GeoJSON-formaat voor een app."
+
+msgid "POI Type API"
+msgstr "POI-type API"
+
+msgid "API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest."
+msgstr "API-endpoint voor POI-type-taxonomieën (filteren en categoriseren)."
+
+msgid "Elasticsearch API"
+msgstr "Elasticsearch API"
+
+msgid "Elasticsearch API used for advanced track filtering and search in grid views."
+msgstr "Elasticsearch API voor geavanceerd filteren en zoeken in rasterweergaven."
+
+msgid "Config API"
+msgstr "Config API"
+
+msgid "Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when \"Refresh Config API\" is used."
+msgstr "Config JSON voor deze app (shard + APP ID). Bron voor WORDPRESS/APP-opties bij \"Config API vernieuwen\"."
+
+msgid "Links:"
+msgstr "Links:"
+
+msgid "Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect."
+msgstr "Configureer de URL's voor de dynamische redirect: op desktop opent de link de website-URL, op iOS de iOS-app-URL (App Store), op Android de Android-app-URL (Play Store). Voeg de onderstaande CSS-klasse toe aan een element om de redirect in te schakelen."
+
+msgid "Webapp URL"
+msgstr "Webapp-URL"
+
+msgid "URL that display the Website version of the map"
+msgstr "URL die de websiteversie van de kaart toont"
+
+msgid "iOS App URL"
+msgstr "iOS-app-URL"
+
+msgid "URL that display the Mobile version of the map for iOS"
+msgstr "URL van de mobiele kaartversie voor iOS"
+
+msgid "Android App URL"
+msgstr "Android-app-URL"
+
+msgid "URL that display the Mobile version of the map for Android"
+msgstr "URL van de mobiele kaartversie voor Android"
+
+msgid "CSS class for redirect"
+msgstr "CSS-klasse voor redirect"
+
+msgid "Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in \"CSS Classes\"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab."
+msgstr "Voeg deze klasse toe aan een element om de redirect naar de bovenstaande URL's (per apparaat) in te schakelen. Gebruik op: menu-item (Weergave → Menu's, \"CSS-klassen\"), link, knop of container. De link opent in een nieuw tabblad."
+
+msgid "Default image"
+msgstr "Standaardafbeelding"
+
+msgid "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
+msgstr "Afbeelding voor routes en POI's wanneer geen foto beschikbaar is. Formaat: PNG. Aanbevolen: vierkant, max. 1024×1024 px."
+
+msgid "Current image"
+msgstr "Huidige afbeelding"
+
+msgid "View current image"
+msgstr "Huidige afbeelding bekijken"
+
+msgid "Opens the image currently used for tracks and POIs in a new tab."
+msgstr "Opent de afbeelding voor routes en POI's in een nieuw tabblad."
+
+msgid "Example image"
+msgstr "Voorbeeldafbeelding"
+
+msgid "View example image"
+msgstr "Voorbeeldafbeelding bekijken"
+
+msgid "Reference image."
+msgstr "Referentieafbeelding."
+
+msgid "Upload new image"
+msgstr "Nieuwe afbeelding uploaden"
+
+msgid "Replace default image"
+msgstr "Standaardafbeelding vervangen"
+
+msgid "PNG files only. The image will replace the current one."
+msgstr "Alleen PNG-bestanden. De afbeelding vervangt de huidige."
+
+msgid "Short codes:"
+msgstr "Shortcodes:"
+
+msgid "Track page:"
+msgstr "Routepagina:"
+
+msgid "Shortcode to display a single track with full details, map, and related POIs."
+msgstr "Shortcode om een route met details, kaart en gerelateerde POI's te tonen."
+
+msgid "Parameters:"
+msgstr "Parameters:"
+
+msgid "(Required) The ID of the track to display."
+msgstr "(Verplicht) De ID van de weer te geven route."
+
+msgid "(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons)."
+msgstr "(Optioneel) Komma-gescheiden lijst van layer-ID's voor routenavigatie (Vorige/Volgende)."
+
+msgid "POI page:"
+msgstr "POI-pagina:"
+
+msgid "Shortcode to display a single Point of Interest (POI) with full details and map location."
+msgstr "Shortcode om een POI met details en kaartlocatie te tonen."
+
+msgid "(Required) The ID of the POI to display."
+msgstr "(Verplicht) De ID van de weer te geven POI."
+
+msgid "Grid Tracks page:"
+msgstr "Raster routes-pagina:"
+
+msgid "Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering."
+msgstr "Shortcode voor een raster van routes met optionele filters (afstand, regio, moeilijkheid, hoogte). Gebruikt Elasticsearch API."
+
+msgid "(Optional) ID of a single layer to display tracks from."
+msgstr "(Optioneel) ID van een layer om routes uit te tonen."
+
+msgid "(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided."
+msgstr "(Optioneel) Komma-gescheiden layer-ID's. Heeft voorrang op layer_id als beide zijn opgegeven."
+
+msgid "(Optional) Maximum number of tracks to display. Default: -1 (unlimited)."
+msgstr "(Optioneel) Maximaal aantal te tonen routes. Standaard: -1 (onbeperkt)."
+
+msgid "(Optional) Display tracks in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Optioneel) Toon routes in willekeurige volgorde. Waarden: \"true\" of \"false\". Standaard: \"false\"."
+
+msgid "(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false."
+msgstr "(Optioneel) Toon layer-inhoud (titel, ondertitel, beschrijving, afbeelding). Waarden: true/false. Standaard: false."
+
+msgid "(Optional) Use Elasticsearch API for advanced filtering. Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Optioneel) Gebruik Elasticsearch API voor filteren. Waarden: \"true\" of \"false\". Standaard: \"true\"."
+
+msgid "(Optional) Show filter interface (distance, region, difficulty, elevation). Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Optioneel) Toon filterinterface (afstand, regio, moeilijkheid, hoogte). Waarden: \"true\" of \"false\". Standaard: \"true\"."
+
+msgid "Grid POIs page:"
+msgstr "Raster POI-pagina:"
+
+msgid "Shortcode to display a grid of POIs filtered by POI type taxonomy."
+msgstr "Shortcode voor een raster van POI's gefilterd op type."
+
+msgid "(Optional) ID of a single POI type to display POIs from."
+msgstr "(Optioneel) ID van een POI-type om POI's uit te tonen."
+
+msgid "(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided."
+msgstr "(Optioneel) Komma-gescheiden POI-type-ID's. Heeft voorrang op poi_type_id als beide zijn opgegeven."
+
+msgid "(Optional) Maximum number of POIs to display. Default: -1 (unlimited)."
+msgstr "(Optioneel) Maximaal aantal te tonen POI's. Standaard: -1 (onbeperkt)."
+
+msgid "(Optional) Display POIs in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Optioneel) Toon POI's in willekeurige volgorde. Waarden: \"true\" of \"false\". Standaard: \"false\"."
+
+msgid "Track Configuration:"
+msgstr "Routeconfiguratie:"
+
+msgid "Enable Track Navigation"
+msgstr "Routenavigatie inschakelen"
+
+msgid "Enabled"
+msgstr "Ingeschakeld"
+
+msgid "When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks."
+msgstr "Wanneer ingeschakeld, verschijnen navigatieknoppen onderaan elke routepagina."
+
+msgid "Default Layer IDs for Navigation"
+msgstr "Standaard layer-ID's voor navigatie"
+
+msgid "e.g., 123,456,789"
+msgstr "bijv. 123,456,789"
+
+msgid "Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter."
+msgstr "Komma-gescheiden layer-ID's voor routenavigatie. Als leeg, werkt navigatie alleen als layer_ids via de shortcode worden meegegeven."
+
+msgid "Download Track"
+msgstr "Route downloaden"
+
+msgid "When enabled, a download button will appear on the map to allow users to download the track GPX file."
+msgstr "Wanneer ingeschakeld, verschijnt een downloadknop op de kaart voor het GPX-bestand van de route."
+
+msgid "Import and Sync:"
+msgstr "Importeren en synchroniseren:"
+
+msgid "Generate TRACK"
+msgstr "Routes genereren"
+
+msgid "Generate Tracks"
+msgstr "Routes genereren"
+
+msgid "Delete TRACK"
+msgstr "Routes verwijderen"
+
+msgid "Delete All Tracks"
+msgstr "Alle routes verwijderen"
+
+msgid "Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone."
+msgstr "Waarschuwing: Deze actie zal PERMANENT alle routeberichten verwijderen. Deze bewerking kan niet ongedaan worden gemaakt."
+
+msgid "Generate POI"
+msgstr "POI's genereren"
+
+msgid "Generate POIs"
+msgstr "POI's genereren"
+
+msgid "Delete POI"
+msgstr "POI's verwijderen"
+
+msgid "Delete All POIs"
+msgstr "Alle POI's verwijderen"
+
+msgid "Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone."
+msgstr "Waarschuwing: Deze actie zal PERMANENT alle POI-berichten verwijderen. Deze bewerking kan niet ongedaan worden gemaakt."
+
+msgid "Previous Track"
+msgstr "Vorige route"
+
+msgid "Next Track"
+msgstr "Volgende route"
+
+msgid "Region"
+msgstr "Regio"
+
+msgid "Select region"
+msgstr "Selecteer regio"
+
+msgid "Where"
+msgstr "Waar"
+
+msgid "Select where"
+msgstr "Selecteer waar"
+
+msgid "Search"
+msgstr "Zoeken"
+
+msgid "Reset filters"
+msgstr "Filters resetten"
+
+msgid "View"
+msgstr "Bekijken"
+
+msgid "Translations"
+msgstr "Vertalingen"
+
+msgid "You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings."
+msgstr "Je kunt de .po-vertaalbestanden hieronder downloaden en importeren in een vertaalplugin (bijv. WPML, Loco Translate, Poedit) om de pluginteksten te vertalen of te bewerken."
+
+msgid "Download .po"
+msgstr ".po downloaden"
+
+msgid "No .po translation files found in the languages folder."
+msgstr "Geen .po-vertaalbestanden gevonden in de map languages."
+
+msgid "Security check failed."
+msgstr "Beveiligingscontrole mislukt."
+
+msgid "File not found."
+msgstr "Bestand niet gevonden."
+
+msgid "German"
+msgstr "Duits"
+
+msgid "English"
+msgstr "Engels"
+
+msgid "Spanish"
+msgstr "Spaans"
+
+msgid "French"
+msgstr "Frans"
+
+msgid "Italian"
+msgstr "Italiaans"
+
+msgid "Dutch"
+msgstr "Nederlands"
+
+msgid "Albanian"
+msgstr "Albanees"
+
+msgid "Featured Image Display"
+msgstr "Uitgelichte afbeelding weergave"
+
+msgid "Choose where to display featured images for tracks and POIs."
+msgstr "Kies waar uitgelichte afbeeldingen voor tracks en POI's worden weergegeven."
+
+msgid "Featured Image Location"
+msgstr "Locatie uitgelichte afbeelding"
+
+msgid "In content area (default)"
+msgstr "In het inhoudsgebied (standaard)"
+
+msgid "In WordPress page-header section"
+msgstr "In de WordPress page-header sectie"
+
+msgid "Select where featured images should be displayed. \"In content area\" shows images in the standard content wrapper. \"In WordPress page-header section\" displays images in the theme's page-header area."
+msgstr "Selecteer waar uitgelichte afbeeldingen moeten worden weergegeven. \"In het inhoudsgebied\" toont afbeeldingen in de standaard inhoudswrapper. \"In de WordPress page-header sectie\" toont afbeeldingen in het page-header gebied van het thema."
+
+msgid "Synchronizing..."
+msgstr "Synchroniseren..."
+
+msgid "Deleting Tracks..."
+msgstr "Routes verwijderen..."
+
+msgid "Deleting POIs..."
+msgstr "POI's verwijderen..."
+
+msgid "Please do not close or reload this page while synchronization is in progress."
+msgstr "Sluit of herlaad deze pagina niet terwijl de synchronisatie bezig is."
+
+msgid "Please do not close or reload this page while deletion is in progress."
+msgstr "Sluit of herlaad deze pagina niet terwijl het verwijderen bezig is."
+
+msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle Tracks te synchroniseren/genereren. Dit kan enige tijd duren en zal Track-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle POIs te synchroniseren/genereren. Dit kan enige tijd duren en zal POI-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle Track-berichten PERMANENT te verwijderen. Deze bewerking kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ WAARSCHUWING: U staat op het punt alle POI-berichten PERMANENT te verwijderen. Deze bewerking kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+msgid "Final confirmation: Delete ALL Tracks?"
+msgstr "Laatste bevestiging: ALLE Routes verwijderen?"
+
+msgid "Final confirmation: Delete ALL POIs?"
+msgstr "Laatste bevestiging: ALLE POI's verwijderen?"
+
+msgid "Tracks synchronized successfully!"
+msgstr "Routes succesvol gesynchroniseerd!"
+
+msgid "POIs synchronized successfully!"
+msgstr "POI's succesvol gesynchroniseerd!"
+
+msgid "Unknown error occurred"
+msgstr "Onbekende fout opgetreden"
+
+msgid "Error communicating with the server"
+msgstr "Fout bij communicatie met de server"
+
+msgid "Request timeout. The operation may still be processing. Please check the results."
+msgstr "Time-out van het verzoek. De bewerking wordt mogelijk nog verwerkt. Controleer de resultaten."
+
+msgid "Response format error, but operation may have completed. Please check the results."
+msgstr "Fout in antwoordformaat, maar de bewerking is mogelijk voltooid. Controleer de resultaten."
+
+msgid "Failed to refresh"
+msgstr "Vernieuwen mislukt"
+
+msgid "Failed to refresh config"
+msgstr "Configuratie vernieuwen mislukt"
+
+msgid "shards"
+msgstr "shards"
+
+msgid "Please select a PNG file first."
+msgstr "Selecteer eerst een PNG-bestand."
+
+msgid "Synchronization session expired. Please start over."
+msgstr "Synchronisatiesessie verlopen. Begin opnieuw."
+
+msgid "Synchronization session expired."
+msgstr "Synchronisatiesessie verlopen."
+
+msgid "Stuck process detected. Synchronization has been stopped. Please start over."
+msgstr "Vastgelopen proces gedetecteerd. De synchronisatie is gestopt. Begin opnieuw."
+
+msgid "Stuck process detected."
+msgstr "Vastgelopen proces gedetecteerd."
+
+msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
+msgstr "Globale time-out bereikt (%d minuten). De synchronisatie is gestopt. Begin opnieuw."
+
+msgid "Global timeout reached."
+msgstr "Globale timeout bereikt."
+
+msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
+msgstr "Te veel opeenvolgende fouten (%d). De synchronisatie is gestopt om een oneindige lus te voorkomen."
+
+msgid "Too many consecutive errors."
+msgstr "Te veel opeenvolgende fouten."
+
+msgid "Great! Tracks synchronized successfully."
+msgstr "Geweldig! Routes succesvol gesynchroniseerd."
+
+msgid "Synchronization completed! Processed %d tracks."
+msgstr "Synchronisatie voltooid! %d routes verwerkt."
+
+msgid "Batch completed: %d/%d tracks (%d%%)"
+msgstr "Batch voltooid: %d/%d routes (%d%%)"
+
+msgid "Processed"
+msgstr "Verwerkt"
+
+msgid "Skipped"
+msgstr "Overgeslagen"
+
+msgid "Errors"
+msgstr "Fouten"
+
+msgid "Time"
+msgstr "Tijd"
+
+msgid "tracks"
+msgstr "routes"
+
+msgid "Do you want to stop the synchronization?"
+msgstr "Wilt u de synchronisatie stoppen?"
+
+msgid "Synchronization stopped by user."
+msgstr "Synchronisatie gestopt door gebruiker."
+
+msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
+msgstr "Globale time-out bereikt (30 minuten). De synchronisatie is uit veiligheid gestopt."
+
+msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
+msgstr "Vastgelopen proces gedetecteerd (geen voortgang gedurende 5 minuten). De synchronisatie is gestopt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped."
+msgstr "Te veel opeenvolgende fouten. De synchronisatie is gestopt."
+
+msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
+msgstr "Te veel opeenvolgende fouten. De synchronisatie is gestopt om een oneindige lus te voorkomen."
+
+msgid "A synchronization is already in progress. Do you want to stop it and start over?"
+msgstr "Er is al een synchronisatie bezig. Wilt u deze stoppen en opnieuw beginnen?"
+
+msgid "Stop Synchronization"
+msgstr "Synchronisatie stoppen"
+
+msgid "Process stopped by server"
+msgstr "Proces gestopt door server"
+
+msgid "Deletion completed! Deleted %d tracks."
+msgstr "Verwijdering voltooid! %d routes verwijderd."
+
+msgid "Deleted"
+msgstr "Verwijderd"
+
+msgid "The batch may have been processed. Check the results."
+msgstr "De batch is mogelijk verwerkt. Controleer de resultaten."
+
+msgid "A deletion is already in progress. Do you want to stop it and start over?"
+msgstr "Er is al een verwijdering bezig. Wilt u deze stoppen en opnieuw beginnen?"
+
+msgid "Deletion session expired. Please start over."
+msgstr "Verwijderingssessie verlopen. Begin opnieuw."
+
+msgid "Insufficient permissions"
+msgstr "Onvoldoende rechten"
+
+msgid "Invalid nonce"
+msgstr "Ongeldige nonce"
+
+msgid "Error deleting track ID: %d"
+msgstr "Fout bij verwijderen van route-ID: %d"
+
+msgid "Deleted %d tracks. Some errors occurred."
+msgstr "%d routes verwijderd. Er zijn enkele fouten opgetreden."
+
+msgid "Successfully deleted %d tracks."
+msgstr "%d routes succesvol verwijderd."
+
+msgid "Required plugins are not installed or activated"
+msgstr "Vereiste plugins zijn niet geïnstalleerd of geactiveerd"
+
+msgid "API POI list invalid or unavailable."
+msgstr "API POI-lijst ongeldig of niet beschikbaar."
+
+msgid "No POIs provided or invalid format."
+msgstr "Geen POI's opgegeven of ongeldig formaat."
+
+msgid "No POIs in the source. The features array is empty."
+msgstr "Geen POI's in de bron. De features-array is leeg."
+
+msgid "Synchronization completed! Processed %d POIs."
+msgstr "Synchronisatie voltooid! %d POI's verwerkt."
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr "Batch voltooid: %d/%d POI's (%d%%)"
+
+msgid "Great! POIs synchronized successfully."
+msgstr "Geweldig! POIs succesvol gesynchroniseerd."
+
+msgid "Deletion completed! Deleted %d POIs."
+msgstr "Verwijdering voltooid! %d POI's verwijderd."
+
+msgid "Deleted %d POIs. Some errors occurred."
+msgstr "%d POI's verwijderd. Er zijn enkele fouten opgetreden."
+
+msgid "Successfully deleted %d POIs."
+msgstr "%d POI's succesvol verwijderd."
+
+msgid "Error deleting POI ID: %d"
+msgstr "Fout bij verwijderen van POI-ID: %d"
+
+msgid "Preparing deletion..."
+msgstr "Verwijdering voorbereiden..."
+
+msgid "Assuming batch was processed. Continuing with next batch..."
+msgstr "Aangenomen dat de batch is verwerkt. Doorgaan met volgende batch..."
+
+msgid "Too many consecutive timeouts. Process stopped."
+msgstr "Te veel opeenvolgende timeouts. Proces gestopt."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "POI-archief"
+
+msgid "POI Attributes"
+msgstr "POI-attributen"
+
+msgid "Parent POI:"
+msgstr "Bovenliggende POI:"
+
+msgid "All POIs"
+msgstr "Alle POI's"
+
+msgid "Add New POI"
+msgstr "Nieuwe POI toevoegen"
+
+msgid "Add New"
+msgstr "Nieuwe toevoegen"
+
+msgid "New POI"
+msgstr "Nieuwe POI"
+
+msgid "Edit POI"
+msgstr "POI bewerken"
+
+msgid "Update POI"
+msgstr "POI bijwerken"
+
+msgid "View POI"
+msgstr "POI bekijken"
+
+msgid "View POIs"
+msgstr "POI's bekijken"
+
+msgid "Search POIs"
+msgstr "POI's zoeken"
+
+msgid "Not Found"
+msgstr "Niet gevonden"
+
+msgid "Not Found in Trash"
+msgstr "Niet gevonden in prullenbak"
+
+msgid "Featured Image"
+msgstr "Uitgelichte afbeelding"
+
+msgid "Set Featured Image"
+msgstr "Uitgelichte afbeelding instellen"
+
+msgid "Remove Featured Image"
+msgstr "Uitgelichte afbeelding verwijderen"
+
+msgid "Use as Featured Image"
+msgstr "Gebruiken als uitgelichte afbeelding"
+
+msgid "Insert into POI"
+msgstr "Invoegen in POI"
+
+msgid "Uploaded to this POI"
+msgstr "Geüpload naar deze POI"
+
+msgid "POIs List"
+msgstr "POI-lijst"
+
+msgid "POIs List Navigation"
+msgstr "POI-lijst navigatie"
+
+msgid "Filter POIs List"
+msgstr "POI-lijst filteren"
+
+msgid "Post type for Points of Interest"
+msgstr "Berichttype voor Points of Interest"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Route-archief"
+
+msgid "Track Attributes"
+msgstr "Route-attributen"
+
+msgid "Parent Track:"
+msgstr "Bovenliggende route:"
+
+msgid "All Tracks"
+msgstr "Alle routes"
+
+msgid "Add New Track"
+msgstr "Nieuwe route toevoegen"
+
+msgid "New Track"
+msgstr "Nieuwe route"
+
+msgid "Edit Track"
+msgstr "Route bewerken"
+
+msgid "Update Track"
+msgstr "Route bijwerken"
+
+msgid "View Track"
+msgstr "Route bekijken"
+
+msgid "View Tracks"
+msgstr "Routes bekijken"
+
+msgid "Search Tracks"
+msgstr "Routes zoeken"
+
+msgid "Insert into Track"
+msgstr "Invoegen in route"
+
+msgid "Uploaded to this Track"
+msgstr "Geüpload naar deze route"
+
+msgid "Tracks List"
+msgstr "Routelijst"
+
+msgid "Tracks List Navigation"
+msgstr "Routelijst navigatie"
+
+msgid "Filter Tracks List"
+msgstr "Routelijst filteren"
+
+msgid "Post type for Tracks"
+msgstr "Berichttype voor routes"
+
+# Custom fields
+msgid "POI Details"
+msgstr "POI-details"
+
+msgid "Enter the original POI ID"
+msgstr "Voer de originele POI-ID in"
+
+msgid "Track Details"
+msgstr "Route-details"
+
+msgid "Enter the original Track ID"
+msgstr "Voer de originele route-ID in"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Tekst gekopieerd naar klembord!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Kan tekst niet kopiëren. Kopieer handmatig."
+
+# Admin page - JavaScript localized strings (without emoji)
+
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle Routes te synchroniseren/genereren. Dit kan enige tijd duren en zal Route-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle POI's te synchroniseren/genereren. Dit kan enige tijd duren en zal POI-berichten bijwerken of aanmaken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle Route-berichten PERMANENT te verwijderen. Deze actie kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "WAARSCHUWING: U staat op het punt alle POI-berichten PERMANENT te verwijderen. Deze actie kan niet ongedaan worden gemaakt. Weet u zeker dat u wilt doorgaan?"
+
+# Shortcodes
+
+msgid "N/A"
+msgstr "N.v.t."
+
+msgid "Failed to load POI data."
+msgstr "Kan POI-gegevens niet laden."
+
+msgid "Error: Track data not available"
+msgstr "Fout: Trackgegevens niet beschikbaar"
+
+msgid "Error: GPX generation library not available. Please refresh the page."
+msgstr "Fout: GPX-generatiebibliotheek niet beschikbaar. Vernieuw de pagina."
+
+msgid "Error: Failed to generate GPX file"
+msgstr "Fout: GPX-bestand genereren mislukt"
+
+# Sync actions
+
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Vereiste configuratieopties ontbreken. Controleer uw instellingen."
+
+msgid "API track list invalid or unavailable."
+msgstr "API-routelijst ongeldig of niet beschikbaar."
+
+msgid "No tracks provided or invalid format."
+msgstr "Geen routes opgegeven of ongeldig formaat."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "Geen routes in de bron. De lijst is leeg."
+
+msgid "Track no title"
+msgstr "Route zonder titel"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Configuratie onvolledig. Controleer uw instellingen."
+
+msgid "POI no title"
+msgstr "POI zonder titel"
+
+# Dashboard
+
+msgid "Source POIs number:"
+msgstr "Aantal bron-POI's:"
+
+msgid "Source Tracks number:"
+msgstr "Aantal bronroutes:"
+
+msgid "Current POIs number:"
+msgstr "Huidig aantal POI's:"
+
+msgid "Current Tracks number:"
+msgstr "Huidig aantal routes:"
+
+msgid "published"
+msgstr "gepubliceerd"
+
+msgid "Manage Import and Sync:"
+msgstr "Import en synchronisatie beheren:"
+
+msgid "Go to WM Settings"
+msgstr "Ga naar WM-instellingen"
+
+# Controls
+
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "De WPML-plugin is niet geïnstalleerd of geactiveerd. Deze plugin vereist WPML om correct te functioneren."
+
+msgid "ERROR:"
+msgstr "FOUT:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "FOUT: Het berichttype %s is niet vertaalbaar. Schakel de vertaling in voor het berichttype %s in WPML-instellingen > Berichttype-vertaling."
