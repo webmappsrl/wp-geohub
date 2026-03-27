@@ -1,23 +1,23 @@
 <?php
 
-function admin_dashboard_widget()
+function wm_admin_dashboard_widget()
 {
     wp_add_dashboard_widget(
-        'geohub_dashboard_widget',
-        'Geohub',
-        'geohub_dashboard_widget_content'
+        'wm_dashboard_widget',
+        __('WM Package', 'wm-package'),
+        'wm_dashboard_widget_content'
     );
 }
-add_action('wp_dashboard_setup', 'admin_dashboard_widget');
+add_action('wp_dashboard_setup', 'wm_admin_dashboard_widget');
 
-function geohub_dashboard_widget_content()
+function wm_dashboard_widget_content()
 {
     $pois = 0;
     $tracks = 0;
     $current_pois = 0;
     $current_tracks = 0;
 
-    // Geohub
+    // API Data
     $pois_list = get_option('poi_url');
     $tracks_list = get_option('tracks_list');
     if (!empty($pois_list)) {
@@ -47,17 +47,17 @@ function geohub_dashboard_widget_content()
     $current_pois = $poi_query->found_posts;
 
     // Admin url
-    $adminPageURL = admin_url('admin.php?page=geohub-settings');
-    ?>
+    $adminPageURL = admin_url('admin.php?page=wm-settings');
+?>
     <div class="wrap">
-        <p>Geohub POIs number: <strong><?php echo count($pois) ?></strong></p>
-        <p>Geohub Tracks number: <strong><?php echo count($tracks) ?></strong></p>
+        <p><?php echo esc_html(__('Source POIs number:', 'wm-package')); ?> <strong><?php echo count($pois) ?></strong></p>
+        <p><?php echo esc_html(__('Source Tracks number:', 'wm-package')); ?> <strong><?php echo count($tracks) ?></strong></p>
         </br>
-        <p>Current POIs number: <strong><?php echo $current_pois ?></strong> (published)</p>
-        <p>Current Tracks number: <strong><?php echo $current_tracks ?></strong> (published)</p>
+        <p><?php echo esc_html(__('Current POIs number:', 'wm-package')); ?> <strong><?php echo $current_pois ?></strong> (<?php echo esc_html(__('published', 'wm-package')); ?>)</p>
+        <p><?php echo esc_html(__('Current Tracks number:', 'wm-package')); ?> <strong><?php echo $current_tracks ?></strong> (<?php echo esc_html(__('published', 'wm-package')); ?>)</p>
         </br>
-        <p>Manage Import and Sync:</p>
-        <a href="<?php echo esc_url($adminPageURL) ?>" class="button button-primary">Go to GeoHub Settings</a>
+        <p><?php echo esc_html(__('Manage Import and Sync:', 'wm-package')); ?></p>
+        <a href="<?php echo esc_url($adminPageURL) ?>" class="button button-primary"><?php echo esc_html(__('Go to WM Settings', 'wm-package')); ?></a>
     </div>
 
 <?php

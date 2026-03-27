@@ -1,0 +1,1380 @@
+/**
+ * Default styles for WM Package plugin templates
+ * 
+ * These styles can be overridden by adding custom CSS to your theme
+ * or by creating a wm-package-custom.css file in your theme directory
+ */
+
+/* Content Wrapper - Vertical Layout */
+.wm_content_wrapper {
+    max-width: 100%;
+    margin: 0;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* 1. Featured Image */
+.wm_featured_image {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
+}
+
+.wm_featured_image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* 2. Title */
+.wm_title {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    line-height: 1.3;
+}
+
+/* 3. Taxonomies */
+.wm_taxonomies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+}
+
+.wm_taxonomy_item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.wm_taxonomy_icon {
+    font-size: 1em;
+}
+
+.wm_taxonomy_name {
+    font-size: 0.9em;
+}
+
+/* 4. Map and Technical Details Wrapper (tracks) */
+.wm_map_technical_wrapper {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin: 0;
+}
+
+/* Detail layout (POI + Track): main content + sidebar (map/description left | info/technical right) */
+.wm_detail_with_sidebar {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    align-items: flex-start;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.wm_detail_main_content {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-sizing: border-box;
+}
+
+/* Detail sidebar: fixed width, sticky below fixed nav so full column stays visible */
+.wm_detail_sidebar {
+    flex: 0 0 auto;
+    width: 320px;
+    max-width: 100%;
+    position: sticky;
+    top: 150px;
+    align-self: flex-start;
+}
+
+.wm_detail_sidebar .wm_info_details {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+}
+
+.wm_detail_sidebar .wm_info_details_grid {
+    overflow-y: visible;
+}
+
+/* 4. Map */
+.wm_map {
+    flex: 3;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    min-width: 0;
+}
+
+.wm_detail_main_content .wm_map {
+    flex: 0 0 auto;
+}
+
+.wm_leaflet_map {
+    width: 100%;
+    max-width: 100%;
+    height: 540px;
+    border-radius: 8px;
+    display: block;
+    z-index: 0;
+    min-width: 0;
+}
+
+/* Fullscreen map for iOS */
+.leaflet-pseudo-fullscreen,
+.leaflet-container.leaflet-fullscreen-on {
+    z-index: 2147483647 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+/* 5. Description */
+.wm_description {
+    line-height: 1.7;
+    font-size: 1em;
+    margin: 0;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.wm_description p {
+    margin-bottom: 15px;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.wm_description p:last-child {
+    margin-bottom: 0;
+}
+
+/* 6. Gallery */
+.wm_gallery {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    min-width: 0;
+}
+
+.swiper-container {
+    width: 100%;
+    max-width: 100%;
+    height: 400px;
+    margin-bottom: 0;
+    min-width: 0;
+}
+
+.swiper-slide {
+    text-align: center;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.swiper-pagination {
+    position: relative;
+    margin-top: 15px;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: #333;
+}
+
+/* 7. Related POIs */
+.wm_related_pois {
+    width: 100%;
+    margin: 0;
+}
+
+.wm_related_pois .swiper-container.wm_related_pois_swiper {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.wm_related_pois .wm_related_pois_swiper .swiper-pagination {
+    position: relative;
+    margin-top: 12px;
+    flex-shrink: 0;
+}
+
+.wm_related_pois .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wm_related_pois .swiper-button-prev,
+.wm_related_pois .swiper-button-next {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Fixed card width so both Welcome points and Points of interest galleries look identical */
+.wm_related_poi_card {
+    width: 320px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.wm_related_poi_image {
+    width: 100%;
+    height: 220px;
+    min-height: 220px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.wm_related_poi_image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wm_related_poi_name {
+    font-weight: 600;
+    text-align: center;
+}
+
+.wm_related_pois a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 7. Download/Info Links */
+.wm_download_links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+}
+
+.wm_download_links--map {
+    margin-top: 12px;
+}
+
+.wm_download_link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    width: fit-content;
+}
+
+.wm_download_link:hover {
+    background-color: var(--wm-primary-color, #0073AA);
+}
+
+.wm_download_link .fa {
+    font-size: 1.1em;
+}
+
+.wm_info_links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+}
+
+.wm_info_item {
+    padding: 12px 15px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.wm_info_item .fa {
+    margin-right: 8px;
+    color: #666;
+}
+
+.wm_address_info,
+.wm_contact_phone,
+.wm_contact_email,
+.wm_related_urls {
+    display: flex;
+    align-items: center;
+}
+
+.wm_contact_email a,
+.wm_related_urls a {
+    color: var(--wm-primary-color, #0073AA);
+    text-decoration: none;
+}
+
+.wm_contact_email a:hover,
+.wm_related_urls a:hover {
+    text-decoration: underline;
+}
+
+/* Technical Details / Info Details - Combined styles */
+.wm_technical_details,
+.wm_info_details {
+    flex: 1;
+    width: 100%;
+    height: 540px;
+    margin: 0;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.wm_technical_details_title,
+.wm_info_details_title {
+    font-size: 1.0em;
+    font-weight: 600;
+    margin: 0;
+    padding: 20px 20px 15px 20px;
+    border-bottom: 1px solid #e2e2e2;
+    color: #1a1a1a;
+    background-color: #f8f9fa;
+}
+
+.wm_technical_details_grid,
+.wm_info_details_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* POI Contact Information: no fixed height, show all fields without scroll */
+.wm_info_details {
+    height: auto;
+    min-height: 0;
+}
+.wm_info_details_grid {
+    overflow-y: visible;
+}
+
+.wm_technical_detail_item,
+.wm_info_detail_item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e2e2e2;
+    background: #fff;
+}
+
+.wm_technical_detail_item:last-child,
+.wm_info_detail_item:last-child {
+    border-bottom: none;
+}
+
+.wm_technical_detail_label,
+.wm_info_detail_label {
+    font-size: 0.7em;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wm_info_detail_label .fa {
+    margin-right: 6px;
+    color: #666;
+    font-size: 1.1em;
+}
+
+.wm_technical_detail_value,
+.wm_info_detail_value {
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.wm_technical_detail_value a,
+.wm_info_detail_value a {
+    color: var(--wm-primary-color, #0073AA);
+    text-decoration: none;
+}
+
+.wm_technical_detail_value a:hover,
+.wm_info_detail_value a:hover {
+    text-decoration: underline;
+}
+
+/* POI info: two columns – label left, value right (title and button unchanged) */
+.wm_info_detail_item {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.wm_info_detail_item .wm_info_detail_label {
+    flex: 0 0 auto;
+    min-width: 0;
+    margin-bottom: 0;
+    width: auto;
+}
+
+.wm_info_detail_item .wm_info_detail_value {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: right;
+}
+
+/* Book refuge button (POI - SICAI): keep full width, centered – no two columns */
+.wm_info_detail_item--button {
+    flex-direction: column;
+    align-items: center;
+}
+
+.wm_btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: opacity 0.2s, background-color 0.2s;
+    width: fit-content;
+}
+
+.wm_btn:hover {
+    opacity: 0.9;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.wm_btn--prenota_rifugio {
+    min-width: 140px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .wm_content_wrapper {
+        padding: 15px 0;
+        gap: 25px;
+    }
+
+    .wm_featured_image {
+        height: 300px;
+    }
+
+    .wm_title {
+        font-size: 1.6em;
+    }
+
+    .wm_map_technical_wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Detail layout: stack everything in one column, full width, no clipping */
+    .wm_detail_with_sidebar {
+        flex-direction: column;
+        gap: 24px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .wm_detail_main_content {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .wm_detail_sidebar {
+        width: 100%;
+        max-width: none;
+        position: static;
+        min-width: 0;
+    }
+
+    .wm_detail_sidebar .wm_info_details {
+        height: auto;
+        min-height: 0;
+    }
+
+    .wm_detail_sidebar .wm_info_details_grid {
+        overflow-y: visible;
+    }
+
+    .wm_map {
+        flex: 1;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .wm_leaflet_map {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: 350px;
+    }
+
+    .wm_technical_details,
+    .wm_info_details {
+        flex: 1;
+    }
+
+    .wm_gallery {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .swiper-container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: 300px;
+    }
+
+    .wm_taxonomy_item {
+        font-size: 0.85em;
+        padding: 5px 10px;
+    }
+
+    .wm_technical_details_grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .wm_content_wrapper {
+        padding: 10px 0;
+        gap: 20px;
+    }
+
+    .wm_featured_image {
+        height: 250px;
+    }
+
+    .wm_title {
+        font-size: 1.4em;
+    }
+
+    .wm_leaflet_map {
+        height: 300px;
+    }
+
+    .wm_detail_main_content .wm_map,
+    .wm_detail_main_content .wm_description,
+    .wm_detail_main_content .wm_gallery {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .swiper-container {
+        height: 250px;
+    }
+}
+
+/* Grid Tracks Layout - Grid Style */
+.wm_tracks_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 30px 0;
+    padding: 0;
+    width: 100%;
+}
+
+.wm_grid_track_item {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    height: 100%;
+}
+
+.wm_grid_track_item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Sezione superiore con immagine in evidenza */
+.wm_grid_track_image_section {
+    width: 100%;
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Taxonomy box top left */
+.wm_grid_track_taxonomy_box {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #1a1a1a;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-transform: capitalize;
+}
+
+.wm_grid_track_taxonomy_box span {
+    display: block;
+    text-transform: capitalize;
+}
+
+
+.wm_grid_icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wm_grid_icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Content section (if needed for additional info) */
+.wm_grid_track_content {
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wm_grid_track_region {
+    font-size: 0.85em;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* Sezione inferiore con name e tasto view */
+.wm_grid_track_footer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 25px;
+    background: #fff;
+    gap: 20px;
+    min-width: 0; /* Permette al flex item di ridursi */
+}
+
+.wm_grid_track_footer_name {
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.5;
+}
+
+.wm_grid_track_footer_name span {
+    display: block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.wm_grid_track_view_button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: center; /* Allinea il pulsante al centro verticalmente */
+}
+
+.wm_grid_track_view_button:hover {
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Responsive Grid */
+@media (max-width: 992px) {
+    .wm_tracks_grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wm_tracks_grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .wm_grid_track_image_section {
+        height: 200px;
+    }
+    
+    .wm_grid_track_footer {
+        padding: 18px 20px;
+        flex-wrap: wrap;
+    }
+    
+    .wm_grid_track_footer_name {
+        font-size: 14px;
+    }
+    
+    .wm_grid_track_view_button {
+        padding: 8px 16px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 480px) {
+    .wm_tracks_grid {
+        gap: 15px;
+    }
+    
+    .wm_grid_track_image_section {
+        height: 180px;
+    }
+    
+    .wm_grid_track_footer {
+        padding: 15px 18px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .wm_grid_track_view_button {
+        width: 100%;
+        text-align: center;
+        align-self: stretch;
+    }
+}
+
+/* Filters Interface */
+/* Search bar - outside filters section */
+.wm_tracks_search_wrapper {
+    margin: 0 0 20px 0;
+}
+
+/* Desktop: smaller search bar aligned to the left */
+.wm_tracks_search {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 360px;
+}
+
+.wm_tracks_search .wm_filter_input {
+    max-width: 100%;
+}
+
+/* Mobile: search bar full width */
+@media (max-width: 768px) {
+    .wm_tracks_search {
+        max-width: 100%;
+    }
+}
+
+.wm_tracks_filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.wm_filter_item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wm_filter_label {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+}
+
+.wm_filter_range {
+    font-weight: 600;
+    color: var(--wm-primary-color, #0073AA);
+    margin-left: 5px;
+}
+
+.wm_filter_select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 0.95em;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+.wm_filter_select:hover {
+    border-color: var(--wm-primary-color, #0073AA);
+}
+
+.wm_filter_select:focus {
+    outline: none;
+    border-color: var(--wm-primary-color, #0073AA);
+    box-shadow: 0 0 0 3px rgba(var(--wm-primary-color-rgb, 0, 115, 170), 0.1);
+}
+
+.wm_filter_input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 0.95em;
+    color: #333;
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+.wm_filter_input:hover {
+    border-color: var(--wm-primary-color, #0073AA);
+}
+
+.wm_filter_input:focus {
+    outline: none;
+    border-color: var(--wm-primary-color, #0073AA);
+    box-shadow: 0 0 0 3px rgba(var(--wm-primary-color-rgb, 0, 115, 170), 0.1);
+}
+
+/* Dual Range Slider */
+.wm_slider_container {
+    position: relative;
+    height: 50px;
+    margin: 15px 0;
+    padding: 0 9px;
+}
+
+.wm_slider {
+    position: absolute;
+    width: calc(100% - 18px);
+    height: 6px;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    z-index: 2;
+    pointer-events: none;
+    margin: 0;
+    top: 22px;
+}
+
+.wm_slider::-webkit-slider-runnable-track {
+    height: 6px;
+    background: transparent;
+}
+
+.wm_slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--wm-primary-color, #0073AA);
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-top: -6px;
+}
+
+.wm_slider::-webkit-slider-thumb:hover {
+    background: var(--wm-primary-color, #0073AA);
+    transform: scale(1.1);
+}
+
+.wm_slider::-moz-range-track {
+    height: 6px;
+    background: transparent;
+    border: none;
+}
+
+.wm_slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--wm-primary-color, #0073AA);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    pointer-events: all;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.wm_slider::-moz-range-thumb:hover {
+    background: var(--wm-primary-color, #0073AA);
+    transform: scale(1.1);
+}
+
+.wm_slider_track {
+    position: absolute;
+    top: 22px;
+    left: 9px;
+    right: 9px;
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+    z-index: 1;
+    --min-percent: 0%;
+    --max-percent: 100%;
+}
+
+.wm_slider_track::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: var(--min-percent);
+    right: calc(100% - var(--max-percent));
+    bottom: 0;
+    background: var(--wm-primary-color, #0073AA);
+    border-radius: 3px;
+    z-index: 1;
+    transition: left 0.1s ease, right 0.1s ease;
+}
+
+/* Reset Filters Button */
+.wm_filter_reset_container {
+    margin: 15px 0 25px;
+}
+
+.wm_reset_filters_button,
+#wm_reset_filters {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.wm_reset_filters_button:hover,
+#wm_reset_filters:hover {
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+/* Loading and Error States */
+.wm_loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.1em;
+}
+
+.wm_error {
+    text-align: center;
+    padding: 40px;
+    color: #d63638;
+    font-size: 1.1em;
+}
+
+.wm_not_accessible_message {
+    background-color: red;
+    color: white;
+    margin: 15px 0;
+    padding: 10px;
+    font-weight: 500;
+}
+
+.wm_no_results {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.1em;
+}
+
+/* Responsive Filters */
+@media (max-width: 768px) {
+    .wm_tracks_filters {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+}
+
+/* Track Navigation */
+.wm_track_navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.wm_track_nav_button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 48%;
+}
+
+.wm_track_nav_button:hover {
+    background-color: #e8e8e8;
+    border-color: #bbb;
+    text-decoration: none;
+    color: #000;
+}
+
+.wm_track_nav_prev {
+    text-align: left;
+}
+
+.wm_track_nav_next {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.wm_track_nav_disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.wm_track_nav_arrow {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.wm_track_nav_label {
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wm_track_nav_name {
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    /* Sticky nav at bottom on mobile: reserve space so content isn't hidden */
+    .wm_content_wrapper:has(.wm_track_navigation) {
+        padding-bottom: 120px;
+    }
+
+    .wm_track_navigation {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        flex-direction: row;
+        margin: 0;
+        padding: 10px 15px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+        border-top: 1px solid #e0e0e0;
+        background: #fff;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+        z-index: 1000;
+    }
+
+    .wm_track_nav_button {
+        max-width: 50%;
+    }
+
+    .wm_track_nav_name {
+        display: none;
+    }
+}
+
+/* Grid POIs Layout - Grid Style (aligned with tracks) */
+.wm_poi_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 30px 0;
+    padding: 0;
+    width: 100%;
+}
+
+.wm_grid_poi_item {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    height: 100%;
+}
+
+.wm_grid_poi_item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Sezione superiore con immagine in evidenza */
+.wm_grid_poi_image_section {
+    width: 100%;
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Taxonomy box top left */
+.wm_grid_poi_taxonomy_box {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #1a1a1a;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-transform: capitalize;
+}
+
+.wm_grid_poi_taxonomy_box span {
+    display: block;
+    text-transform: capitalize;
+}
+
+
+/* Sezione inferiore con name e tasto view */
+.wm_grid_poi_footer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 25px;
+    background: #fff;
+    gap: 20px;
+    min-width: 0; /* Permette al flex item di ridursi */
+}
+
+.wm_grid_poi_footer_name {
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.5;
+}
+
+.wm_grid_poi_footer_name span {
+    display: block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.wm_grid_poi_view_button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: center; /* Allinea il pulsante al centro verticalmente */
+}
+
+.wm_grid_poi_view_button:hover {
+    background-color: var(--wm-primary-color, #0073AA);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Responsive Grid for POIs */
+@media (max-width: 992px) {
+    .wm_poi_grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wm_poi_grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .wm_grid_poi_image_section {
+        height: 200px;
+    }
+    
+    .wm_grid_poi_footer {
+        padding: 18px 20px;
+        flex-wrap: wrap;
+    }
+    
+    .wm_grid_poi_footer_name {
+        font-size: 14px;
+    }
+    
+    .wm_grid_poi_view_button {
+        padding: 8px 16px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 480px) {
+    .wm_poi_grid {
+        gap: 15px;
+    }
+    
+    .wm_grid_poi_image_section {
+        height: 180px;
+    }
+    
+    .wm_grid_poi_footer {
+        padding: 15px 18px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .wm_grid_poi_view_button {
+        width: 100%;
+        text-align: center;
+        align-self: stretch;
+    }
+}
+
+/* Custom POI Markers - Circle with Image */
+.wm-poi-custom-marker {
+    background: transparent;
+    border: none;
+}
+
+.wm-poi-marker-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: #fff;
+    position: relative;
+    display: block;
+}
+
+.wm-poi-marker-image {
+    display: block;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+    object-position: center center;
+    transform: translate(-50%, -50%) scale(1.3);
+}
