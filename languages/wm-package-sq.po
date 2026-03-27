@@ -1,0 +1,999 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: wm-package\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language:sq\n"
+"MIME-Version: 1.0\n"
+
+msgid "Address"
+msgstr "Adresa"
+
+msgid "Phone"
+msgstr "Telefoni"
+
+msgid "Related Links"
+msgstr "Lidhje të ngjashme"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Contact Information"
+msgstr "Informacione kontakti"
+
+msgid "Related POIs"
+msgstr "POI të ngjashme"
+
+msgid "Points of interest"
+msgstr "Pikat e interesit"
+
+msgid "Download GPX"
+msgstr "Shkarko GPX"
+
+msgid "No tracks found"
+msgstr "Nuk u gjetën rrugë"
+
+msgid "Error loading tracks"
+msgstr "Gabim gjatë ngarkimit të rrugëve"
+
+msgid "Loading..."
+msgstr "Duke u ngarkuar..."
+
+msgid "Go to track"
+msgstr "Shko te rruga"
+
+msgid "m"
+msgstr "m"
+
+msgid "Elevation gain +"
+msgstr "Ngritje lartësie +"
+
+msgid "Expert hiker with equipment"
+msgstr "Ekspert ecës me pajisje"
+
+msgid "Expert hiker"
+msgstr "Ekspert ecës"
+
+msgid "Hiker"
+msgstr "Ecës"
+
+msgid "Tourist"
+msgstr "Turist"
+
+msgid "Select difficulty"
+msgstr "Zgjidh vështirësinë"
+
+msgid "Difficulty"
+msgstr "Vështirësi"
+
+msgid "km"
+msgstr "km"
+
+msgid "Length"
+msgstr "Gjatësi"
+
+msgid "Next"
+msgstr "Tjetra"
+
+msgid "Previous"
+msgstr "E mëparshme"
+
+msgid "No"
+msgstr "Jo"
+
+msgid "min"
+msgstr "min"
+
+msgid "Yes"
+msgstr "Po"
+
+msgid "Round Trip"
+msgstr "Rrugë rrethore"
+
+msgid "Duration Backward"
+msgstr "Kohëzgjatja kthimit"
+
+msgid "Duration Forward"
+msgstr "Kohëzgjatja nisjes"
+
+msgid "Duration Backward (Bike)"
+msgstr "Kohëzgjatja kthimit (biçikletë)"
+
+msgid "Duration Forward (Bike)"
+msgstr "Kohëzgjatja nisjes (biçikletë)"
+
+msgid "Duration Backward (Hiking)"
+msgstr "Kohëzgjatja kthimit (ecje)"
+
+msgid "Duration Forward (Hiking)"
+msgstr "Kohëzgjatja nisjes (ecje)"
+
+msgid "Descent"
+msgstr "Zbritje"
+
+msgid "Ascent"
+msgstr "Ngjitje"
+
+msgid "End Elevation"
+msgstr "Lartësia e mbarimit"
+
+msgid "Start Elevation"
+msgstr "Lartësia e fillimit"
+
+msgid "Max Elevation"
+msgstr "Lartësia maksimale"
+
+msgid "Min Elevation"
+msgstr "Lartësia minimale"
+
+msgid "Distance"
+msgstr "Distancë"
+
+# Admin / Dashboard
+msgid "WM Package Settings"
+msgstr "Cilësimet WM Package"
+
+msgid "WM Package"
+msgstr "WM Package"
+
+msgid "No file uploaded or invalid file."
+msgstr "Nuk u ngarkua skedar ose skedar i pavlefshëm."
+
+msgid "File must be in PNG format. Current format not allowed."
+msgstr "Skedari duhet të jetë në format PNG. Formati aktual nuk lejohet."
+
+msgid "Extension not allowed. Use .png files only."
+msgstr "Zgjerimi nuk lejohet. Përdorni vetëm skedarë .png."
+
+msgid "The file is not a valid PNG image."
+msgstr "Skedari nuk është imazh PNG i vlefshëm."
+
+msgid "The file must be a valid PNG."
+msgstr "Skedari duhet të jetë PNG i vlefshëm."
+
+msgid "Maximum dimensions allowed: %1$d×%2$d pixels."
+msgstr "Dimensionet maksimale të lejuara: %1$d×%2$d piksel."
+
+msgid "Unauthorized"
+msgstr "I paautorizuar"
+
+msgid "Shards configuration refreshed successfully"
+msgstr "Konfigurimi i shards u rifreskua me sukses"
+
+msgid "Failed to refresh shards configuration"
+msgstr "Dështoi rifreskimi i konfigurimit të shards"
+
+msgid "Shard and APP ID must be set."
+msgstr "Shard dhe APP ID duhet të vendosen."
+
+msgid "Config API helpers not available."
+msgstr "Ndihmësit e Config API nuk janë të disponueshëm."
+
+msgid "Could not build config API URL for this shard."
+msgstr "Nuk mund të ndërtohej URL e Config API për këtë shard."
+
+msgid "Config updated from API (WORDPRESS/APP merged with local when present)."
+msgstr "Config u përditësua nga API (WORDPRESS/APP u bashkua me lokal kur është i pranishëm)."
+
+msgid "Using local config (API unavailable or invalid response)."
+msgstr "Duke përdorur config lokal (API e padisponueshme ose përgjigje e pavlefshme)."
+
+msgid "Security verification failed. Please try again."
+msgstr "Verifikimi i sigurisë dështoi. Ju lutemi provoni përsëri."
+
+msgid "The plugin assets folder is not writable."
+msgstr "Dosja e aseteve të plugin-it nuk është e shkrueshme."
+
+msgid "Unable to replace the default image."
+msgstr "Nuk mund të zëvendësohet imazhi default."
+
+msgid "Default image updated successfully."
+msgstr "Imazhi default u përditësua me sukses."
+
+msgid "WM Icon"
+msgstr "Ikona WM"
+
+msgid "Do not close this page while it is loading"
+msgstr "Mos mbyllni këtë faqe ndërsa po ngarkohet"
+
+msgid "Processing..."
+msgstr "Duke përpunuar..."
+
+msgid "Please do not close or reload this page while the operation is in progress."
+msgstr "Ju lutemi mos mbyllni ose ringarkoni këtë faqe ndërsa operacioni është në vazhdim."
+
+msgid "Backend Configuration:"
+msgstr "Konfigurimi i backend:"
+
+msgid "Shard"
+msgstr "Shard"
+
+msgid "Refresh Shards"
+msgstr "Rifresko Shards"
+
+msgid "Refresh Config API"
+msgstr "Rifresko Config API"
+
+msgid "Select the backend shard from which data will be retrieved."
+msgstr "Zgjidhni shard-in e backend nga i cili do të merren të dhënat."
+
+msgid "Configuration from:"
+msgstr "Konfigurimi nga:"
+
+msgid "Available shards:"
+msgstr "Shards të disponueshëm:"
+
+msgid "(cached for 24 hours)"
+msgstr "(në cache për 24 orë)"
+
+msgid "APP ID"
+msgstr "APP ID"
+
+msgid "This APP ID refers to the ID of the app on the backend."
+msgstr "Ky APP ID i referohet ID-së së aplikacionit në backend."
+
+msgid "APIs:"
+msgstr "API:"
+
+msgid "Tracks list API"
+msgstr "API lista e rrugëve"
+
+msgid "API endpoint used to retrieve the list of tracks for a specific app."
+msgstr "Endpoint API për marrjen e listës së rrugëve për një aplikacion."
+
+msgid "Layer API"
+msgstr "API Layer"
+
+msgid "API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays."
+msgstr "Endpoint API për informacionin e shtresave (rrugë, metadata, përmbajtje) për shfaqjet në rrjet."
+
+msgid "Single Track API"
+msgstr "API rrugë e vetme"
+
+msgid "API endpoint used to retrieve detailed information for a single track by ID."
+msgstr "Endpoint API për detajet e një rruge sipas ID."
+
+msgid "POI API"
+msgstr "API POI"
+
+msgid "API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app."
+msgstr "Endpoint API për të dhënat POI në format GeoJSON për një aplikacion."
+
+msgid "POI Type API"
+msgstr "API llojet e POI"
+
+msgid "API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest."
+msgstr "Endpoint API për taksonominë e llojeve POI (filtrim dhe kategorizim)."
+
+msgid "Elasticsearch API"
+msgstr "API Elasticsearch"
+
+msgid "Elasticsearch API used for advanced track filtering and search in grid views."
+msgstr "API Elasticsearch për filtrim dhe kërkim të avancuar në pamjet rrjet."
+
+msgid "Config API"
+msgstr "Config API"
+
+msgid "Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when \"Refresh Config API\" is used."
+msgstr "Config JSON për këtë app (shard + APP ID). Burim për opsionet WORDPRESS/APP kur përdoret \"Rifresko Config API\"."
+
+msgid "Links:"
+msgstr "Lidhje:"
+
+msgid "Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect."
+msgstr "Konfiguroni URL-të për ridrejtimin dinamik: në desktop linku hap URL e faqes, në iOS URL e App iOS (App Store), në Android URL e App Android (Play Store). Shtoni klasën CSS më poshtë në një element për të aktivizuar ridrejtimin."
+
+msgid "Webapp URL"
+msgstr "URL Webapp"
+
+msgid "URL that display the Website version of the map"
+msgstr "URL që shfaq versionin e faqes së hartës"
+
+msgid "iOS App URL"
+msgstr "URL App iOS"
+
+msgid "URL that display the Mobile version of the map for iOS"
+msgstr "URL e versionit mobil të hartës për iOS"
+
+msgid "Android App URL"
+msgstr "URL App Android"
+
+msgid "URL that display the Mobile version of the map for Android"
+msgstr "URL e versionit mobil të hartës për Android"
+
+msgid "CSS class for redirect"
+msgstr "Klasë CSS për ridrejtim"
+
+msgid "Add this class to any element to enable the redirect to the URLs above (based on device). You can use it on: a menu item (e.g. in Appearance → Menus, in \"CSS Classes\"), on a link, on a button, or on a container that wraps a link. The link opens in a new tab."
+msgstr "Shtoni këtë klasë në një element për të aktivizuar ridrejtimin te URL-të e mësipërme (sipas pajisjes). Përdoret në: element menuje (Pamja → Menutë, \"Klasat CSS\"), link, buton ose kontejner. Linku hapet në një skedë të re."
+
+msgid "Default image"
+msgstr "Imazh default"
+
+msgid "Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px."
+msgstr "Imazh i përdorur për rrugë dhe POI kur nuk ka foto. Format: PNG. Rekomandohet: katror, max 1024×1024 px."
+
+msgid "Current image"
+msgstr "Imazhi aktual"
+
+msgid "View current image"
+msgstr "Shiko imazhin aktual"
+
+msgid "Opens the image currently used for tracks and POIs in a new tab."
+msgstr "Hap imazhin e përdorur për rrugë dhe POI në një skedë të re."
+
+msgid "Example image"
+msgstr "Imazh shembull"
+
+msgid "View example image"
+msgstr "Shiko imazhin shembull"
+
+msgid "Reference image."
+msgstr "Imazh referencë."
+
+msgid "Upload new image"
+msgstr "Ngarko imazh të ri"
+
+msgid "Replace default image"
+msgstr "Zëvendëso imazhin default"
+
+msgid "PNG files only. The image will replace the current one."
+msgstr "Vetëm skedarë PNG. Imazhi zëvendëson atë aktual."
+
+msgid "Short codes:"
+msgstr "Shortcode:"
+
+msgid "Track page:"
+msgstr "Faqja e rrugës:"
+
+msgid "Shortcode to display a single track with full details, map, and related POIs."
+msgstr "Shortcode për të shfaqur një rrugë me detaje, hartë dhe POI të lidhur."
+
+msgid "Parameters:"
+msgstr "Parametra:"
+
+msgid "(Required) The ID of the track to display."
+msgstr "(Kërkohet) ID e rrugës për të shfaqur."
+
+msgid "(Optional) Comma-separated list of layer IDs for track navigation (Previous/Next buttons)."
+msgstr "(Opsional) Lista e ID-ve të shtresave të ndara me presje për navigimin (Para/Pas)."
+
+msgid "POI page:"
+msgstr "Faqja POI:"
+
+msgid "Shortcode to display a single Point of Interest (POI) with full details and map location."
+msgstr "Shortcode për të shfaqur një POI me detaje dhe vendndodhje në hartë."
+
+msgid "(Required) The ID of the POI to display."
+msgstr "(Kërkohet) ID e POI për të shfaqur."
+
+msgid "Grid Tracks page:"
+msgstr "Faqja rrjet e rrugëve:"
+
+msgid "Shortcode to display a grid of tracks with optional filters (distance, region, difficulty, elevation). Uses Elasticsearch API for advanced filtering."
+msgstr "Shortcode për një rrjet rrugësh me filtra opsional (distancë, rajon, vështirësi, lartësi). Përdor API Elasticsearch."
+
+msgid "(Optional) ID of a single layer to display tracks from."
+msgstr "(Opsional) ID e një shtrese për të shfaqur rrugët."
+
+msgid "(Optional) Comma-separated list of layer IDs. Takes precedence over layer_id if both are provided."
+msgstr "(Opsional) Lista e ID-ve të shtresave. Ka përparësi ndaj layer_id nëse jepen të dyja."
+
+msgid "(Optional) Maximum number of tracks to display. Default: -1 (unlimited)."
+msgstr "(Opsional) Numri maksimal i rrugëve për të shfaqur. Default: -1 (e pakufizuar)."
+
+msgid "(Optional) Display tracks in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Opsional) Shfaq rrugët në rend të rastësishëm. Vlerat: \"true\" ose \"false\". Default: \"false\"."
+
+msgid "(Optional) Display layer content (title, subtitle, description, featured image). Values: true/false. Default: false."
+msgstr "(Opsional) Shfaq përmbajtjen e shtresës (titull, nëntitull, përshkrim, imazh). Vlerat: true/false. Default: false."
+
+msgid "(Optional) Use Elasticsearch API for advanced filtering. Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Opsional) Përdor API Elasticsearch për filtrim. Vlerat: \"true\" ose \"false\". Default: \"true\"."
+
+msgid "(Optional) Show filter interface (distance, region, difficulty, elevation). Values: \"true\" or \"false\". Default: \"true\"."
+msgstr "(Opsional) Shfaq ndërfaqen e filtrit (distancë, rajon, vështirësi, lartësi). Vlerat: \"true\" ose \"false\". Default: \"true\"."
+
+msgid "Grid POIs page:"
+msgstr "Faqja rrjet POI:"
+
+msgid "Shortcode to display a grid of POIs filtered by POI type taxonomy."
+msgstr "Shortcode për një rrjet POI-sh të filtruar sipas llojit."
+
+msgid "(Optional) ID of a single POI type to display POIs from."
+msgstr "(Opsional) ID e një lloji POI për të shfaqur POI-të."
+
+msgid "(Optional) Comma-separated list of POI type IDs. Takes precedence over poi_type_id if both are provided."
+msgstr "(Opsional) Lista e ID-ve të llojeve POI. Ka përparësi ndaj poi_type_id nëse jepen të dyja."
+
+msgid "(Optional) Maximum number of POIs to display. Default: -1 (unlimited)."
+msgstr "(Opsional) Numri maksimal i POI-ve për të shfaqur. Default: -1 (e pakufizuar)."
+
+msgid "(Optional) Display POIs in random order. Values: \"true\" or \"false\". Default: \"false\"."
+msgstr "(Opsional) Shfaq POI-të në rend të rastësishëm. Vlerat: \"true\" ose \"false\". Default: \"false\"."
+
+msgid "Track Configuration:"
+msgstr "Konfigurimi i rrugëve:"
+
+msgid "Enable Track Navigation"
+msgstr "Aktivizo navigimin ndërmjet rrugëve"
+
+msgid "Enabled"
+msgstr "Aktivizuar"
+
+msgid "When enabled, navigation buttons will appear at the bottom of each track page to navigate between tracks."
+msgstr "Kur është aktivizuar, butonat e navigimit shfaqen në fund të çdo faqeje rruge."
+
+msgid "Default Layer IDs for Navigation"
+msgstr "ID e shtresave default për navigim"
+
+msgid "e.g., 123,456,789"
+msgstr "p.sh. 123,456,789"
+
+msgid "Comma-separated list of layer IDs to use for track navigation. If empty, navigation will only work if layer_ids are provided via shortcode parameter."
+msgstr "Lista e ID-ve të shtresave të ndara me presje për navigim. Nëse bosh, navigimi funksionon vetëm nëse layer_ids jepet në shortcode."
+
+msgid "Download Track"
+msgstr "Shkarko rrugën"
+
+msgid "When enabled, a download button will appear on the map to allow users to download the track GPX file."
+msgstr "Kur është aktivizuar, një buton shkarkimi shfaqet në hartë për skedarin GPX të rrugës."
+
+msgid "Import and Sync:"
+msgstr "Importo dhe sinkronizo:"
+
+msgid "Generate TRACK"
+msgstr "Gjenero rrugët"
+
+msgid "Generate Tracks"
+msgstr "Gjenero rrugët"
+
+msgid "Delete TRACK"
+msgstr "Fshi rrugët"
+
+msgid "Delete All Tracks"
+msgstr "Fshi të gjitha rrugët"
+
+msgid "Warning: This action will PERMANENTLY delete all Track posts. This operation cannot be undone."
+msgstr "Kujdes: Ky veprim do të fshijë PËRGJITHMONË të gjitha postimet e rrugëve. Ky operacion nuk mund të zhbëhet."
+
+msgid "Generate POI"
+msgstr "Gjenero POI"
+
+msgid "Generate POIs"
+msgstr "Gjenero POI"
+
+msgid "Delete POI"
+msgstr "Fshi POI"
+
+msgid "Delete All POIs"
+msgstr "Fshi të gjithë POI-të"
+
+msgid "Warning: This action will PERMANENTLY delete all POI posts. This operation cannot be undone."
+msgstr "Kujdes: Ky veprim do të fshijë PËRGJITHMONË të gjitha postimet POI. Ky operacion nuk mund të zhbëhet."
+
+msgid "Previous Track"
+msgstr "Rruga e mëparshme"
+
+msgid "Next Track"
+msgstr "Rruga tjetër"
+
+msgid "Region"
+msgstr "Rajoni"
+
+msgid "Select region"
+msgstr "Zgjidh rajonin"
+
+msgid "Where"
+msgstr "Ku"
+
+msgid "Select where"
+msgstr "Zgjidh ku"
+
+msgid "Search"
+msgstr "Kërko"
+
+msgid "Reset filters"
+msgstr "Rivendos filtrat"
+
+msgid "View"
+msgstr "Shiko"
+
+msgid "Translations"
+msgstr "Përkthimet"
+
+msgid "You can download the .po translation files below and import them into a translation plugin (e.g. WPML, Loco Translate, Poedit) to translate or edit the plugin strings."
+msgstr "Mund të shkarkoni skedarët .po të përkthimit më poshtë dhe t’i importoni në një shtojcë përkthimi (p.sh. WPML, Loco Translate, Poedit) për të përkthyer ose redaktuar vargjet e shtojcës."
+
+msgid "Download .po"
+msgstr "Shkarko .po"
+
+msgid "No .po translation files found in the languages folder."
+msgstr "Nuk u gjetën skedarë .po të përkthimit në dosjen languages."
+
+msgid "Security check failed."
+msgstr "Kontrolli i sigurisë dështoi."
+
+msgid "File not found."
+msgstr "Skedari nuk u gjet."
+
+msgid "German"
+msgstr "Gjermanisht"
+
+msgid "English"
+msgstr "Anglisht"
+
+msgid "Spanish"
+msgstr "Spanjisht"
+
+msgid "French"
+msgstr "Frëngjisht"
+
+msgid "Italian"
+msgstr "Italisht"
+
+msgid "Dutch"
+msgstr "Holandisht"
+
+msgid "Albanian"
+msgstr "Shqip"
+
+msgid "Featured Image Display"
+msgstr "Shfaqja e imazhit të nxjerrë në pah"
+
+msgid "Choose where to display featured images for tracks and POIs."
+msgstr "Zgjidhni ku të shfaqen imazhet e nxjerra në pah për shtigjet dhe POI-të."
+
+msgid "Featured Image Location"
+msgstr "Vendndodhja e imazhit të nxjerrë në pah"
+
+msgid "In content area (default)"
+msgstr "Në zonën e përmbajtjes (parazgjedhje)"
+
+msgid "In WordPress page-header section"
+msgstr "Në seksionin page-header të WordPress"
+
+msgid "Select where featured images should be displayed. \"In content area\" shows images in the standard content wrapper. \"In WordPress page-header section\" displays images in the theme's page-header area."
+msgstr "Zgjidhni ku duhet të shfaqen imazhet e nxjerra në pah. \"Në zonën e përmbajtjes\" tregon imazhet në mbështjellësin standard të përmbajtjes. \"Në seksionin page-header të WordPress\" shfaq imazhet në zonën page-header të temës."
+
+msgid "Synchronizing..."
+msgstr "Sinkronizim..."
+
+msgid "Deleting Tracks..."
+msgstr "Fshirje Tracks..."
+
+msgid "Deleting POIs..."
+msgstr "Fshirje POIs..."
+
+msgid "Please do not close or reload this page while synchronization is in progress."
+msgstr "Ju lutemi mos mbyllni ose ringarkoni këtë faqe ndërsa sinkronizimi është në progres."
+
+msgid "Please do not close or reload this page while deletion is in progress."
+msgstr "Ju lutemi mos mbyllni ose ringarkoni këtë faqe ndërsa fshirja është në progres."
+
+msgid "⚠️ WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të sinkronizoni/gjeneroni të gjitha Tracks. Kjo mund të zgjasë pak kohë dhe do të përditësojë ose krijojë postime Track. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "⚠️ WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të sinkronizoni/gjeneroni të gjitha POIs. Kjo mund të zgjasë pak kohë dhe do të përditësojë ose krijojë postime POI. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të fshini PERMANENTISHT të gjitha postimet Track. Kjo operacion nuk mund të zhbëhet. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "⚠️ WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "⚠️ PARALAJMËRIM: Ju jeni gati të fshini PERMANENTISHT të gjitha postimet POI. Kjo operacion nuk mund të zhbëhet. A jeni të sigurt që dëshironi të vazhdoni?"
+
+msgid "Final confirmation: Delete ALL Tracks?"
+msgstr "Konfirmim përfundimtar: Fshini TË GJITHA Tracks?"
+
+msgid "Final confirmation: Delete ALL POIs?"
+msgstr "Konfirmim përfundimtar: Fshini TË GJITHA POIs?"
+
+msgid "Tracks synchronized successfully!"
+msgstr "Tracks u sinkronizuan me sukses!"
+
+msgid "POIs synchronized successfully!"
+msgstr "POIs u sinkronizuan me sukses!"
+
+msgid "Unknown error occurred"
+msgstr "Ndodhi një gabim i panjohur"
+
+msgid "Error communicating with the server"
+msgstr "Gabim në komunikim me serverin"
+
+msgid "Request timeout. The operation may still be processing. Please check the results."
+msgstr "Koha e kërkesës skadoi. Operacioni mund të jetë ende në procesim. Ju lutemi kontrolloni rezultatet."
+
+msgid "Response format error, but operation may have completed. Please check the results."
+msgstr "Gabim në formatin e përgjigjes, por operacioni mund të jetë përfunduar. Ju lutemi kontrolloni rezultatet."
+
+msgid "Failed to refresh"
+msgstr "Dështoi përditësimi"
+
+msgid "Failed to refresh config"
+msgstr "Dështoi përditësimi i konfigurimit"
+
+msgid "shards"
+msgstr "shards"
+
+msgid "Please select a PNG file first."
+msgstr "Ju lutemi zgjidhni fillimisht një skedar PNG."
+
+msgid "Synchronization session expired. Please start over."
+msgstr "Sesioni i sinkronizimit ka skaduar. Ju lutemi filloni përsëri."
+
+msgid "Synchronization session expired."
+msgstr "Sesioni i sinkronizimit ka skaduar."
+
+msgid "Stuck process detected. Synchronization has been stopped. Please start over."
+msgstr "Procesi i bllokuar u zbulua. Sinkronizimi u ndal. Ju lutemi filloni përsëri."
+
+msgid "Stuck process detected."
+msgstr "Procesi i bllokuar u zbulua."
+
+msgid "Global timeout reached (%d minutes). Synchronization has been stopped. Please start over."
+msgstr "Koha globale e pritjes u arrit (%d minuta). Sinkronizimi u ndal. Ju lutemi filloni përsëri."
+
+msgid "Global timeout reached."
+msgstr "Koha globale e pritjes u arrit."
+
+msgid "Too many consecutive errors (%d). Synchronization has been stopped to avoid an infinite loop."
+msgstr "Shumë gabime të njëpasnjëshme (%d). Sinkronizimi u ndal për të shmangur një lak të pafund."
+
+msgid "Too many consecutive errors."
+msgstr "Shumë gabime të njëpasnjëshme."
+
+msgid "Great! Tracks synchronized successfully."
+msgstr "E shkëlqyer! Gjurmët u sinkronizuan me sukses."
+
+msgid "Synchronization completed! Processed %d tracks."
+msgstr "Sinkronizimi u përfundua! %d gjurmë të përpunuara."
+
+msgid "Batch completed: %d/%d tracks (%d%%)"
+msgstr "Grupi u përfundua: %d/%d gjurmë (%d%%)"
+
+msgid "Processed"
+msgstr "Të përpunuara"
+
+msgid "Skipped"
+msgstr "Të anashkaluara"
+
+msgid "Errors"
+msgstr "Gabime"
+
+msgid "Time"
+msgstr "Koha"
+
+msgid "tracks"
+msgstr "gjurmë"
+
+msgid "Do you want to stop the synchronization?"
+msgstr "Dëshironi të ndaloni sinkronizimin?"
+
+msgid "Synchronization stopped by user."
+msgstr "Sinkronizimi u ndal nga përdoruesi."
+
+msgid "Global timeout reached (30 minutes). Synchronization has been stopped for safety."
+msgstr "Koha globale e pritjes u arrit (30 minuta). Sinkronizimi u ndal për siguri."
+
+msgid "Stuck process detected (no progress for 5 minutes). Synchronization has been stopped."
+msgstr "Procesi i bllokuar u zbulua (pa progres për 5 minuta). Sinkronizimi u ndal."
+
+msgid "Too many consecutive errors. Synchronization has been stopped."
+msgstr "Shumë gabime të njëpasnjëshme. Sinkronizimi u ndal."
+
+msgid "Too many consecutive errors. Synchronization has been stopped to avoid an infinite loop."
+msgstr "Shumë gabime të njëpasnjëshme. Sinkronizimi u ndal për të shmangur një lak të pafund."
+
+msgid "A synchronization is already in progress. Do you want to stop it and start over?"
+msgstr "Një sinkronizim është tashmë në proces. Dëshironi ta ndalni dhe të filloni përsëri?"
+
+msgid "Stop Synchronization"
+msgstr "Ndaloni sinkronizimin"
+
+msgid "Process stopped by server"
+msgstr "Procesi u ndal nga serveri"
+
+msgid "Deletion completed! Deleted %d tracks."
+msgstr "Fshirja u përfundua! %d gjurmë të fshira."
+
+msgid "Deleted"
+msgstr "Të fshira"
+
+msgid "The batch may have been processed. Check the results."
+msgstr "Grupi mund të jetë përpunuar. Kontrolloni rezultatet."
+
+msgid "A deletion is already in progress. Do you want to stop it and start over?"
+msgstr "Një fshirje është tashmë në proces. Dëshironi ta ndalni dhe të filloni përsëri?"
+
+msgid "Deletion session expired. Please start over."
+msgstr "Sesioni i fshirjes ka skaduar. Ju lutemi filloni përsëri."
+
+msgid "Insufficient permissions"
+msgstr "Leje të pamjaftueshme"
+
+msgid "Invalid nonce"
+msgstr "Nonce e pavlefshme"
+
+msgid "Error deleting track ID: %d"
+msgstr "Gabim në fshirjen e ID-së së gjurmës: %d"
+
+msgid "Deleted %d tracks. Some errors occurred."
+msgstr "%d gjurmë të fshira. Disa gabime u ndodhën."
+
+msgid "Successfully deleted %d tracks."
+msgstr "%d gjurmë u fshinë me sukses."
+
+msgid "Required plugins are not installed or activated"
+msgstr "Plugin-et e kërkuara nuk janë instaluar ose aktivizuar"
+
+msgid "API POI list invalid or unavailable."
+msgstr "Lista e API POI është e pavlefshme ose e padisponueshme."
+
+msgid "No POIs provided or invalid format."
+msgstr "Asnjë POI nuk u dha ose formati është i pavlefshëm."
+
+msgid "No POIs in the source. The features array is empty."
+msgstr "Nuk ka POI në burim. Vargu features është bosh."
+
+msgid "Synchronization completed! Processed %d POIs."
+msgstr "Sinkronizimi u përfundua! %d POI të përpunuara."
+
+msgid "Batch completed: %d/%d POIs (%d%%)"
+msgstr "Grupi u përfundua: %d/%d POI (%d%%)"
+
+msgid "Great! POIs synchronized successfully."
+msgstr "E shkëlqyer! POI-të u sinkronizuan me sukses."
+
+msgid "Deletion completed! Deleted %d POIs."
+msgstr "Fshirja u përfundua! %d POI të fshira."
+
+msgid "Deleted %d POIs. Some errors occurred."
+msgstr "%d POI të fshira. Disa gabime u ndodhën."
+
+msgid "Successfully deleted %d POIs."
+msgstr "%d POI u fshinë me sukses."
+
+msgid "Error deleting POI ID: %d"
+msgstr "Gabim në fshirjen e ID-së së POI: %d"
+
+msgid "Preparing deletion..."
+msgstr "Duke përgatitur fshirjen..."
+
+msgid "Assuming batch was processed. Continuing with next batch..."
+msgstr "Duke supozuar se grupi u përpunua. Duke vazhduar me grupin tjetër..."
+
+msgid "Too many consecutive timeouts. Process stopped."
+msgstr "Shumë timeout të njëpasnjëshëm. Procesi u ndal."
+
+# Post type labels (POI)
+msgid "POI Archives"
+msgstr "Arkivat POI"
+
+msgid "POI Attributes"
+msgstr "Atributet POI"
+
+msgid "Parent POI:"
+msgstr "POI prind:"
+
+msgid "All POIs"
+msgstr "Të gjithë POI-të"
+
+msgid "Add New POI"
+msgstr "Shto POI të ri"
+
+msgid "Add New"
+msgstr "Shto të ri"
+
+msgid "New POI"
+msgstr "POI i ri"
+
+msgid "Edit POI"
+msgstr "Redakto POI"
+
+msgid "Update POI"
+msgstr "Përditëso POI"
+
+msgid "View POI"
+msgstr "Shiko POI"
+
+msgid "View POIs"
+msgstr "Shiko POI-të"
+
+msgid "Search POIs"
+msgstr "Kërko POI"
+
+msgid "Not Found"
+msgstr "Nuk u gjet"
+
+msgid "Not Found in Trash"
+msgstr "Nuk u gjet në kosh"
+
+msgid "Featured Image"
+msgstr "Imazhi i nxjerrë në pah"
+
+msgid "Set Featured Image"
+msgstr "Vendos imazhin e nxjerrë në pah"
+
+msgid "Remove Featured Image"
+msgstr "Hiq imazhin e nxjerrë në pah"
+
+msgid "Use as Featured Image"
+msgstr "Përdor si imazh të nxjerrë në pah"
+
+msgid "Insert into POI"
+msgstr "Fut në POI"
+
+msgid "Uploaded to this POI"
+msgstr "Ngarkuar në këtë POI"
+
+msgid "POIs List"
+msgstr "Lista e POI-ve"
+
+msgid "POIs List Navigation"
+msgstr "Navigimi i listës së POI-ve"
+
+msgid "Filter POIs List"
+msgstr "Filtro listën e POI-ve"
+
+msgid "Post type for Points of Interest"
+msgstr "Lloj postimi për Pikat e Interesit"
+
+# Post type labels (Track)
+msgid "Track Archives"
+msgstr "Arkivat e rrugëve"
+
+msgid "Track Attributes"
+msgstr "Atributet e rrugës"
+
+msgid "Parent Track:"
+msgstr "Rruga prind:"
+
+msgid "All Tracks"
+msgstr "Të gjitha rrugët"
+
+msgid "Add New Track"
+msgstr "Shto rrugë të re"
+
+msgid "New Track"
+msgstr "Rrugë e re"
+
+msgid "Edit Track"
+msgstr "Redakto rrugën"
+
+msgid "Update Track"
+msgstr "Përditëso rrugën"
+
+msgid "View Track"
+msgstr "Shiko rrugën"
+
+msgid "View Tracks"
+msgstr "Shiko rrugët"
+
+msgid "Search Tracks"
+msgstr "Kërko rrugë"
+
+msgid "Insert into Track"
+msgstr "Fut në rrugë"
+
+msgid "Uploaded to this Track"
+msgstr "Ngarkuar në këtë rrugë"
+
+msgid "Tracks List"
+msgstr "Lista e rrugëve"
+
+msgid "Tracks List Navigation"
+msgstr "Navigimi i listës së rrugëve"
+
+msgid "Filter Tracks List"
+msgstr "Filtro listën e rrugëve"
+
+msgid "Post type for Tracks"
+msgstr "Lloj postimi për rrugët"
+
+# Custom fields
+msgid "POI Details"
+msgstr "Detajet e POI"
+
+msgid "Enter the original POI ID"
+msgstr "Fut ID origjinale të POI"
+
+msgid "Track Details"
+msgstr "Detajet e rrugës"
+
+msgid "Enter the original Track ID"
+msgstr "Fut ID origjinale të rrugës"
+
+# Copy to clipboard
+msgid "Text copied to clipboard!"
+msgstr "Teksti u kopjua në clipboard!"
+
+msgid "Unable to copy text. Please copy manually."
+msgstr "Nuk mund të kopjohet teksti. Ju lutemi kopjojeni manualisht."
+
+# Admin page - JavaScript localized strings (without emoji prefix)
+msgid "WARNING: You are about to sync/generate all Tracks. This may take some time and will update or create Track posts. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të sinkronizoni/gjeneroni të gjitha Gjurmët. Kjo mund të marrë pak kohë dhe do të përditësojë ose krijojë postime të Gjurmëve. A jeni i sigurt që dëshironi të vazhdoni?"
+
+msgid "WARNING: You are about to sync/generate all POIs. This may take some time and will update or create POI posts. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të sinkronizoni/gjeneroni të gjitha POI-të. Kjo mund të marrë pak kohë dhe do të përditësojë ose krijojë postime të POI-ve. A jeni i sigurt që dëshironi të vazhdoni?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all Track posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të fshini PËRGJITHMONË të gjitha postimet e Gjurmëve. Ky veprim nuk mund të zhbëhet. A jeni i sigurt që dëshironi të vazhdoni?"
+
+msgid "WARNING: You are about to PERMANENTLY delete all POI posts. This operation cannot be undone. Are you sure you want to proceed?"
+msgstr "PARALAJMËRIM: Jeni gati të fshini PËRGJITHMONË të gjitha postimet e POI-ve. Ky veprim nuk mund të zhbëhet. A jeni i sigurt që dëshironi të vazhdoni?"
+
+# Shortcodes
+msgid "N/A"
+msgstr "N/D"
+
+msgid "Failed to load POI data."
+msgstr "Dështoi ngarkimi i të dhënave të POI."
+
+msgid "Error: Track data not available"
+msgstr "Gabim: Të dhënat e shtegut nuk janë të disponueshme"
+
+msgid "Error: GPX generation library not available. Please refresh the page."
+msgstr "Gabim: Libraria e gjenerimit GPX nuk është e disponueshme. Ju lutemi rifreskoni faqen."
+
+msgid "Error: Failed to generate GPX file"
+msgstr "Gabim: Dështoi gjenerimi i skedarit GPX"
+
+# Sync actions
+msgid "Required configuration options are missing. Please check your settings."
+msgstr "Opsionet e konfigurimit të kërkuara mungojnë. Ju lutem kontrolloni cilësimet tuaja."
+
+msgid "API track list invalid or unavailable."
+msgstr "Lista API e gjurmëve e pavlefshme ose e padisponueshme."
+
+msgid "No tracks provided or invalid format."
+msgstr "Asnjë gjurmë nuk u dha ose format i pavlefshëm."
+
+msgid "No tracks in the source. The list is empty."
+msgstr "Nuk ka gjurma në burim. Lista është bosh."
+
+msgid "Track no title"
+msgstr "Gjurmë pa titull"
+
+msgid "Configuration incomplete. Please check your settings."
+msgstr "Konfigurimi i paplotë. Ju lutem kontrolloni cilësimet tuaja."
+
+msgid "POI no title"
+msgstr "POI pa titull"
+
+# Dashboard
+msgid "Source POIs number:"
+msgstr "Numri i POI-ve burimore:"
+
+msgid "Source Tracks number:"
+msgstr "Numri i Gjurmëve burimore:"
+
+msgid "Current POIs number:"
+msgstr "Numri aktual i POI-ve:"
+
+msgid "Current Tracks number:"
+msgstr "Numri aktual i Gjurmëve:"
+
+msgid "published"
+msgstr "të publikuara"
+
+msgid "Manage Import and Sync:"
+msgstr "Menaxho Importimin dhe Sinkronizimin:"
+
+msgid "Go to WM Settings"
+msgstr "Shko te Cilësimet WM"
+
+# Controls
+msgid "The WPML plugin is not installed or activated. This plugin requires WPML to function correctly."
+msgstr "Shtojca WPML nuk është instaluar ose aktivizuar. Kjo shtojcë kërkon WPML për të funksionuar saktë."
+
+msgid "ERROR:"
+msgstr "GABIM:"
+
+msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+msgstr "GABIM: Lloji i postimit %s nuk është i përkthyeshëm. Ju lutem aktivizoni përkthimin për llojin e postimit %s në cilësimet e WPML > Përkthimi i llojit të postimit."
