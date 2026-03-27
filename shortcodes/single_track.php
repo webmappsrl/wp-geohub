@@ -282,6 +282,21 @@ function wm_single_track($atts)
 			$dem_data = $dem_data_decoded;
 		}
 
+		// Fallback for shards/tracks where technical fields are exposed directly in properties
+		// (without manual_data or dem_data blocks).
+		if (empty($dem_data) || !is_array($dem_data)) {
+			$direct_technical = [];
+			$direct_keys = ['distance', 'duration_forward', 'duration_backward', 'ascent', 'descent', 'ele_from', 'ele_to', 'ele_min', 'ele_max'];
+			foreach ($direct_keys as $k) {
+				if (array_key_exists($k, $track) && $track[$k] !== null) {
+					$direct_technical[$k] = $track[$k];
+				}
+			}
+			if (!empty($direct_technical)) {
+				$dem_data = $direct_technical;
+			}
+		}
+
 		// Region from taxonomy_where: entry with _admin_level 4 (translations in it, en, etc.)
 		$region_name = '';
 		if (!empty($track['taxonomy_where']) && is_array($track['taxonomy_where'])) {
@@ -368,6 +383,13 @@ function wm_single_track($atts)
 	$show_descent = true;
 	$show_ele_from = true;
 	$show_ele_to = true;
+	$distance_value = null;
+	$duration_forward_value = null;
+	$duration_backward_value = null;
+	$ascent_value = null;
+	$descent_value = null;
+	$ele_from_value = null;
+	$ele_to_value = null;
 	if (!empty($dem_data) && is_array($dem_data)) {
 		$config = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
 		if ($config && isset($config['WORDPRESS'])) {
@@ -393,13 +415,25 @@ function wm_single_track($atts)
 				$show_ele_to = (bool) $config['WORDPRESS']['showEleTo'];
 			}
 		}
-		if (($show_distance && isset($dem_data['distance']) && $dem_data['distance'] !== null) ||
-			($show_duration_forward && isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) ||
-			($show_duration_backward && isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) ||
-			($show_ascent && isset($dem_data['ascent']) && $dem_data['ascent'] !== null) ||
-			($show_descent && isset($dem_data['descent']) && $dem_data['descent'] !== null) ||
-			($show_ele_from && isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) ||
-			($show_ele_to && isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null)
+		$distance_value = (isset($dem_data['distance']) && $dem_data['distance'] !== null) ? $dem_data['distance'] : null;
+		$duration_forward_value = (isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) ? $dem_data['duration_forward'] : null;
+		$duration_backward_value = (isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) ? $dem_data['duration_backward'] : null;
+		$ascent_value = (isset($dem_data['ascent']) && $dem_data['ascent'] !== null) ? $dem_data['ascent'] : null;
+		$descent_value = (isset($dem_data['descent']) && $dem_data['descent'] !== null) ? $dem_data['descent'] : null;
+		$ele_from_value = (isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null)
+			? $dem_data['ele_from']
+			: ((isset($dem_data['ele_min']) && $dem_data['ele_min'] !== null) ? $dem_data['ele_min'] : null);
+		$ele_to_value = (isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null)
+			? $dem_data['ele_to']
+			: ((isset($dem_data['ele_max']) && $dem_data['ele_max'] !== null) ? $dem_data['ele_max'] : null);
+
+		if (($show_distance && $distance_value !== null) ||
+			($show_duration_forward && $duration_forward_value !== null) ||
+			($show_duration_backward && $duration_backward_value !== null) ||
+			($show_ascent && $ascent_value !== null) ||
+			($show_descent && $descent_value !== null) ||
+			($show_ele_from && $ele_from_value !== null) ||
+			($show_ele_to && $ele_to_value !== null)
 		) {
 			$has_technical = true;
 		}
@@ -839,46 +873,46 @@ function wm_single_track($atts)
 										<span class="wm_info_detail_value"><?= esc_html($city_name) ?></span>
 									</div>
 								<?php endif; ?>
-								<?php if ($show_distance && isset($dem_data['distance']) && $dem_data['distance'] !== null) : ?>
+								<?php if ($show_distance && $distance_value !== null) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-route" aria-hidden="true"></i> <?= __('Distance', 'wm-package') ?>:</span>
-										<span class="wm_info_detail_value"><?= esc_html(number_format($dem_data['distance'], 1)) ?> <?= esc_html(__('km', 'wm-package')) ?></span>
+										<span class="wm_info_detail_value"><?= esc_html(number_format($distance_value, 1)) ?> <?= esc_html(__('km', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
-								<?php if ($show_duration_forward && isset($dem_data['duration_forward']) && $dem_data['duration_forward'] !== null) : ?>
+								<?php if ($show_duration_forward && $duration_forward_value !== null) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-clock" aria-hidden="true"></i> <?= __('Duration Forward', 'wm-package') ?>:</span>
-										<span class="wm_info_detail_value"><?= esc_html($dem_data['duration_forward']) ?> <?= __('min', 'wm-package') ?></span>
+										<span class="wm_info_detail_value"><?= esc_html($duration_forward_value) ?> <?= __('min', 'wm-package') ?></span>
 									</div>
 								<?php endif; ?>
-								<?php if ($show_duration_backward && isset($dem_data['duration_backward']) && $dem_data['duration_backward'] !== null) : ?>
+								<?php if ($show_duration_backward && $duration_backward_value !== null) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-clock" aria-hidden="true"></i> <?= __('Duration Backward', 'wm-package') ?>:</span>
-										<span class="wm_info_detail_value"><?= esc_html($dem_data['duration_backward']) ?> <?= __('min', 'wm-package') ?></span>
+										<span class="wm_info_detail_value"><?= esc_html($duration_backward_value) ?> <?= __('min', 'wm-package') ?></span>
 									</div>
 								<?php endif; ?>
-								<?php if ($show_ascent && isset($dem_data['ascent']) && $dem_data['ascent'] !== null) : ?>
+								<?php if ($show_ascent && $ascent_value !== null) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-arrow-up" aria-hidden="true"></i> <?= __('Ascent', 'wm-package') ?>:</span>
-										<span class="wm_info_detail_value"><?= esc_html($dem_data['ascent']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
+										<span class="wm_info_detail_value"><?= esc_html($ascent_value) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
-								<?php if ($show_descent && isset($dem_data['descent']) && $dem_data['descent'] !== null) : ?>
+								<?php if ($show_descent && $descent_value !== null) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-arrow-down" aria-hidden="true"></i> <?= __('Descent', 'wm-package') ?>:</span>
-										<span class="wm_info_detail_value"><?= esc_html($dem_data['descent']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
+										<span class="wm_info_detail_value"><?= esc_html($descent_value) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
-								<?php if ($show_ele_from && isset($dem_data['ele_from']) && $dem_data['ele_from'] !== null) : ?>
+								<?php if ($show_ele_from && $ele_from_value !== null) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-plus" aria-hidden="true"></i> <?= __('Start Elevation', 'wm-package') ?>:</span>
-										<span class="wm_info_detail_value"><?= esc_html($dem_data['ele_from']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
+										<span class="wm_info_detail_value"><?= esc_html($ele_from_value) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
-								<?php if ($show_ele_to && isset($dem_data['ele_to']) && $dem_data['ele_to'] !== null) : ?>
+								<?php if ($show_ele_to && $ele_to_value !== null) : ?>
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-minus" aria-hidden="true"></i> <?= __('End Elevation', 'wm-package') ?>:</span>
-										<span class="wm_info_detail_value"><?= esc_html($dem_data['ele_to']) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
+										<span class="wm_info_detail_value"><?= esc_html($ele_to_value) ?> <?= esc_html(__('m', 'wm-package')) ?></span>
 									</div>
 								<?php endif; ?>
 
