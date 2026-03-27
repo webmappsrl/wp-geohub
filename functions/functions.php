@@ -426,6 +426,12 @@ function wm_package_enqueue_leaflet_map_script()
             maxZoom: 16
         }).addTo(map);
 
+        // Add dynamic metric scale (updates with zoom), shown above attribution.
+        L.control.scale({
+            position: 'bottomright',
+            imperial: false
+        }).addTo(map);
+
         // Remove default Leaflet attribution prefix
         map.attributionControl.setPrefix(false);
 
@@ -520,6 +526,43 @@ function wm_package_enqueue_leaflet_map_script()
             var polyline = L.polyline(latlngs, {
                 color: 'blue'
             }).addTo(map);
+
+            if (latlngs.length > 0) {
+                var startPoint = latlngs[0];
+                var endPoint = latlngs[latlngs.length - 1];
+                var epsilon = 1e-6;
+                var isLoopTrack = Math.abs(startPoint[0] - endPoint[0]) < epsilon && Math.abs(startPoint[1] - endPoint[1]) < epsilon;
+
+                if (isLoopTrack) {
+                    // Loop track: single marker split in half (start + end in same point).
+                    var loopIcon = L.divIcon({
+                        className: 'wm-loop-start-end-marker',
+                        html: '<span style=\"display:block;width:16px;height:16px;border:2px solid #ffffff;border-radius:50%;background:linear-gradient(90deg,#2e7d32 0 50%,#c62828 50% 100%);\"></span>',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    L.marker(startPoint, { icon: loopIcon }).addTo(map);
+                } else {
+                    // Start marker (green)
+                    L.circleMarker(startPoint, {
+                        radius: 7,
+                        color: '#ffffff',
+                        weight: 2,
+                        fillColor: '#2e7d32',
+                        fillOpacity: 1
+                    }).addTo(map);
+
+                    // End marker (red)
+                    L.circleMarker(endPoint, {
+                        radius: 7,
+                        color: '#ffffff',
+                        weight: 2,
+                        fillColor: '#c62828',
+                        fillOpacity: 1
+                    }).addTo(map);
+                }
+            }
+
             bounds = polyline.getBounds();
             hasTrackBounds = true;
         } else if (geometry.type === 'Polygon' && geometry.coordinates) {
@@ -790,11 +833,15 @@ define('WM_CONFIG_SOURCE_OPTION', 'wm_config_source');
 define('WM_CACHED_API_CONFIG_OPTION', 'wm_cached_api_config');
 
 /**
- * Build the config.json API URL for the given shard and app id.
- * Pattern: {awsApi}/{app_id}/config.json (e.g. https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2dev/2/config.json)
- * where awsApi is the shard's awsApi base (e.g. .../osm2cai2dev) and app_id is the APP ID.
+ * Build the config API URL for the given shard and app id.
  *
- * @param string $shard Shard name (e.g. osm2cai2dev, geohub)
+ * Patterns:
+ * - geohub: {awsApi}/conf/{app_id}.json
+ *   e.g. https://wmfe.s3.eu-central-1.amazonaws.com/geohub/conf/49.json
+ * - other shards: {awsApi}/{app_id}/config.json
+ *   e.g. https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2/2/config.json
+ *
+ * @param string $shard Shard name (e.g. osm2cai2, osm2cai2dev, geohub)
  * @param string $app_id App configuration ID
  * @return string|null Full URL or null if shard config not available
  */
@@ -808,6 +855,11 @@ function wm_get_config_api_url($shard, $app_id)
         return null;
     }
     $aws_api = rtrim($shards[$shard]['awsApi'], '/');
+
+    if ($shard === 'geohub') {
+        return $aws_api . '/conf/' . $app_id . '.json';
+    }
+
     return $aws_api . '/' . $app_id . '/config.json';
 }
 

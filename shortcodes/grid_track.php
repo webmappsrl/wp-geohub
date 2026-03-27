@@ -21,7 +21,8 @@ function wm_grid_track($atts)
         'show_filters' => 'false' // Show filters interface
     ), $atts));
 
-    // When content is true, layer endpoint wins: bypass Elastic (data + filters)
+    // When content is true, show layer header content (title/subtitle/description/feature image).
+    // This must NOT disable Elasticsearch for tracks/filters.
     $content = ($content === 'true' || $content === true);
     $tracks = [];
 
@@ -30,6 +31,15 @@ function wm_grid_track($atts)
     $app_id = get_option('app_configuration_id') ?: '49';
     $shard = get_option('wm_shard') ?: 'geohub';
     $shard_app = $shard . '_app';
+
+    $layer_ids_array = !empty($layer_ids) ? explode(',', $layer_ids) : (!empty($layer_id) ? [$layer_id] : []);
+    $layer_id_for_content = !empty($layer_id) ? $layer_id : ($layer_ids_array[0] ?? '');
+
+    // Ensure layer_api_base is derived from selected app config when missing
+    if (empty($layer_api_base) && function_exists('wm_get_api_urls')) {
+        $api_urls = wm_get_api_urls($shard, $app_id);
+        $layer_api_base = $api_urls['layer_api'] ?? null;
+    }
 
     // Fallback: if elastic_api is not set, try to construct it from origin
     if (empty($elastic_api_base)) {
@@ -61,8 +71,8 @@ function wm_grid_track($atts)
     $description = null;
     $featured_image_url = null;
 
-    if (!empty($layer_id) && ($content) && !empty($layer_api_base)) {
-        $layer_url = "{$layer_api_base}{$layer_id}";
+    if (!empty($layer_id_for_content) && ($content) && !empty($layer_api_base)) {
+        $layer_url = "{$layer_api_base}{$layer_id_for_content}";
         $layer_response = wp_remote_get($layer_url);
 
         if (!is_wp_error($layer_response)) {
@@ -81,8 +91,6 @@ function wm_grid_track($atts)
         }
     }
 
-
-    $layer_ids_array = !empty($layer_ids) ? explode(',', $layer_ids) : (!empty($layer_id) ? [$layer_id] : []);
 
     // Get filter options from Elasticsearch aggregations if available
     $filter_options = array(
@@ -121,8 +129,8 @@ function wm_grid_track($atts)
         }
     }
 
-    // Try to use Elasticsearch API only when content is false (when content is true, layer API is used)
-    $use_elastic = ($use_elastic === 'true' || $use_elastic === true) && !empty($elastic_api_base) && !empty($layer_ids_array) && !$content;
+    // Elasticsearch is used for tracks/filters independently from layer header content.
+    $use_elastic = ($use_elastic === 'true' || $use_elastic === true) && !empty($elastic_api_base) && !empty($layer_ids_array);
 
     if ($use_elastic) {
         // Use Elasticsearch API (like wm-home-result)
@@ -783,7 +791,9 @@ function wm_grid_track($atts)
             ),
         );
         ?>
-        <script type="application/json" id="wm_grid_config"><?= wp_json_encode($js_config); ?></script>
+        <script type="application/json" id="wm_grid_config">
+            <?= wp_json_encode($js_config); ?>
+        </script>
         <?php
         wp_enqueue_script(
             'wm-grid-track-filters',
