@@ -833,11 +833,15 @@ define('WM_CONFIG_SOURCE_OPTION', 'wm_config_source');
 define('WM_CACHED_API_CONFIG_OPTION', 'wm_cached_api_config');
 
 /**
- * Build the config.json API URL for the given shard and app id.
- * Pattern: {awsApi}/{app_id}/config.json (e.g. https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2dev/2/config.json)
- * where awsApi is the shard's awsApi base (e.g. .../osm2cai2dev) and app_id is the APP ID.
+ * Build the config API URL for the given shard and app id.
  *
- * @param string $shard Shard name (e.g. osm2cai2dev, geohub)
+ * Patterns:
+ * - geohub: {awsApi}/conf/{app_id}.json
+ *   e.g. https://wmfe.s3.eu-central-1.amazonaws.com/geohub/conf/49.json
+ * - other shards: {awsApi}/{app_id}/config.json
+ *   e.g. https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2/2/config.json
+ *
+ * @param string $shard Shard name (e.g. osm2cai2, osm2cai2dev, geohub)
  * @param string $app_id App configuration ID
  * @return string|null Full URL or null if shard config not available
  */
@@ -851,6 +855,11 @@ function wm_get_config_api_url($shard, $app_id)
         return null;
     }
     $aws_api = rtrim($shards[$shard]['awsApi'], '/');
+
+    if ($shard === 'geohub') {
+        return $aws_api . '/conf/' . $app_id . '.json';
+    }
+
     return $aws_api . '/' . $app_id . '/config.json';
 }
 

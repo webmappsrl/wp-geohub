@@ -791,7 +791,9 @@ function wm_grid_track($atts)
             ),
         );
         ?>
-        <script type="application/json" id="wm_grid_config"><?= wp_json_encode($js_config); ?></script>
+        <script type="application/json" id="wm_grid_config">
+            <?= wp_json_encode($js_config); ?>
+        </script>
         <?php
         wp_enqueue_script(
             'wm-grid-track-filters',

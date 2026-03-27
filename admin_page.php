@@ -1276,8 +1276,12 @@ function wm_admin_footer()
 				$('.api-url-elastic').text(apiUrls.elastic);
 				$('.api-input-elastic').val(apiUrls.elastic);
 
-				// Config API: {awsApi}/{app_id}/config.json
-				var configApiUrl = awsApi + '/' + appId + '/config.json';
+				// Config API:
+				// - geohub: {awsApi}/conf/{app_id}.json
+				// - others: {awsApi}/{app_id}/config.json
+				var configApiUrl = (shard === 'geohub')
+					? (awsApi + '/conf/' + appId + '.json')
+					: (awsApi + '/' + appId + '/config.json');
 				$('.api-link-config').attr('href', configApiUrl);
 				$('.api-url-config').text(configApiUrl);
 			}
