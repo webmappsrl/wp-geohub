@@ -426,6 +426,12 @@ function wm_package_enqueue_leaflet_map_script()
             maxZoom: 16
         }).addTo(map);
 
+        // Add dynamic metric scale (updates with zoom), shown above attribution.
+        L.control.scale({
+            position: 'bottomright',
+            imperial: false
+        }).addTo(map);
+
         // Remove default Leaflet attribution prefix
         map.attributionControl.setPrefix(false);
 
@@ -520,6 +526,43 @@ function wm_package_enqueue_leaflet_map_script()
             var polyline = L.polyline(latlngs, {
                 color: 'blue'
             }).addTo(map);
+
+            if (latlngs.length > 0) {
+                var startPoint = latlngs[0];
+                var endPoint = latlngs[latlngs.length - 1];
+                var epsilon = 1e-6;
+                var isLoopTrack = Math.abs(startPoint[0] - endPoint[0]) < epsilon && Math.abs(startPoint[1] - endPoint[1]) < epsilon;
+
+                if (isLoopTrack) {
+                    // Loop track: single marker split in half (start + end in same point).
+                    var loopIcon = L.divIcon({
+                        className: 'wm-loop-start-end-marker',
+                        html: '<span style=\"display:block;width:16px;height:16px;border:2px solid #ffffff;border-radius:50%;background:linear-gradient(90deg,#2e7d32 0 50%,#c62828 50% 100%);\"></span>',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    L.marker(startPoint, { icon: loopIcon }).addTo(map);
+                } else {
+                    // Start marker (green)
+                    L.circleMarker(startPoint, {
+                        radius: 7,
+                        color: '#ffffff',
+                        weight: 2,
+                        fillColor: '#2e7d32',
+                        fillOpacity: 1
+                    }).addTo(map);
+
+                    // End marker (red)
+                    L.circleMarker(endPoint, {
+                        radius: 7,
+                        color: '#ffffff',
+                        weight: 2,
+                        fillColor: '#c62828',
+                        fillOpacity: 1
+                    }).addTo(map);
+                }
+            }
+
             bounds = polyline.getBounds();
             hasTrackBounds = true;
         } else if (geometry.type === 'Polygon' && geometry.coordinates) {
