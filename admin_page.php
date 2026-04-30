@@ -62,15 +62,54 @@ add_action('admin_init', 'wm_serve_po_download');
 add_action('admin_menu', 'wm_add_admin_menu');
 function wm_add_admin_menu()
 {
+	$is_osm2cai_branding = function_exists('wm_is_osm2cai_branding_enabled') && wm_is_osm2cai_branding_enabled();
+	$brand_name = $is_osm2cai_branding ? 'osm2cai' : __('WM Package', 'wm-package');
+	$page_title = $is_osm2cai_branding ? 'Impostazioni osm2cai' : __('WM Package Settings', 'wm-package');
+	$menu_icon = $is_osm2cai_branding ? 'none' : plugins_url('assets/menu-icon.png', __FILE__);
+
 	add_menu_page(
-		__('WM Package Settings', 'wm-package'),     // Page title
-		__('WM Package', 'wm-package'),              // Menu title
+		$page_title,     // Page title
+		$brand_name,     // Menu title
 		'manage_options',         // Capability
 		'wm-settings',     // Menu slug
 		'wm_settings_page', // Function to display the page
-		plugins_url('assets/menu-icon.png', __FILE__) // Icon URL, dynamically getting the correct path
+		$menu_icon // Icon URL
 	);
 }
+
+/**
+ * White-label plugin row in plugins list when osm2cai branding is enabled.
+ */
+function wm_customize_plugin_list_row($all_plugins)
+{
+	$is_osm2cai_branding = function_exists('wm_is_osm2cai_branding_enabled') && wm_is_osm2cai_branding_enabled();
+	if (!$is_osm2cai_branding || !is_array($all_plugins)) {
+		return $all_plugins;
+	}
+
+	$plugin_basename = plugin_basename(__DIR__ . '/index.php');
+	if (isset($all_plugins[$plugin_basename])) {
+		$all_plugins[$plugin_basename]['Name'] = 'osm2cai';
+	}
+
+	return $all_plugins;
+}
+add_filter('all_plugins', 'wm_customize_plugin_list_row');
+
+/**
+ * Hide plugin row metadata (Author + Plugin URI) in plugins list.
+ */
+function wm_hide_plugin_row_meta($plugin_meta, $plugin_file)
+{
+	$is_osm2cai_branding = function_exists('wm_is_osm2cai_branding_enabled') && wm_is_osm2cai_branding_enabled();
+	$plugin_basename = plugin_basename(__DIR__ . '/index.php');
+	if ($is_osm2cai_branding && $plugin_file === $plugin_basename) {
+		return [];
+	}
+
+	return $plugin_meta;
+}
+add_filter('plugin_row_meta', 'wm_hide_plugin_row_meta', 10, 2);
 
 /**
  * Default image filename used for tracks/POIs when no image is available (can be overwritten by upload)
@@ -469,10 +508,16 @@ function wm_settings_page()
 	$config_api_url = function_exists('wm_get_config_api_url') ? wm_get_config_api_url($shard, $app_id) : '';
 
 ?>
+	<?php
+	$is_osm2cai_branding = function_exists('wm_is_osm2cai_branding_enabled') && wm_is_osm2cai_branding_enabled();
+	$settings_title = $is_osm2cai_branding ? 'Impostazioni osm2cai' : esc_html__('WM Package Settings', 'wm-package');
+	?>
 	<div class="wrap">
 		<h1 style="display: flex; align-items: center;">
-			<img src="<?php echo plugins_url('assets/menu-icon.png', __FILE__); ?>" alt="<?php echo esc_attr__('WM Icon', 'wm-package'); ?>" style="margin-right: 10px; height: 30px; width: 30px;" />
-			<?php echo esc_html__('WM Package Settings', 'wm-package'); ?>
+			<?php if (!$is_osm2cai_branding) : ?>
+				<img src="<?php echo plugins_url('assets/menu-icon.png', __FILE__); ?>" alt="<?php echo esc_attr__('WM Icon', 'wm-package'); ?>" style="margin-right: 10px; height: 30px; width: 30px;" />
+			<?php endif; ?>
+			<?php echo esc_html($settings_title); ?>
 		</h1>
 		<?php
 		$wm_default_image_msg = get_transient('wm_default_image_message');
@@ -509,6 +554,29 @@ function wm_settings_page()
 		<form method="post" action="options.php">
 			<?php settings_fields('wm-settings'); ?>
 			<?php do_settings_sections('wm-settings'); ?>
+			<?php if ($is_osm2cai_branding) :
+				$wm_preserve_cfg = function_exists('wm_get_default_config') ? wm_get_default_config() : false;
+				$wm_preserve_ios_store = !empty($wm_preserve_cfg['APP']['iosStore']) ? $wm_preserve_cfg['APP']['iosStore'] : '';
+				$wm_preserve_android_store = !empty($wm_preserve_cfg['APP']['androidStore']) ? $wm_preserve_cfg['APP']['androidStore'] : '';
+				$wm_preserve_ios = $wm_preserve_ios_store ? $wm_preserve_ios_store : (string) get_option('ios_app_url', '');
+				$wm_preserve_android = $wm_preserve_android_store ? $wm_preserve_android_store : (string) get_option('android_app_url', '');
+				$wm_preserve_website = get_option('website_url') ? (string) get_option('website_url') : (string) $default_app_url;
+				$wm_preserve_featured_loc = get_option('featured_image_location', 'content');
+				$wm_preserve_featured_loc = in_array($wm_preserve_featured_loc, ['content', 'page-header'], true) ? $wm_preserve_featured_loc : 'content';
+				?>
+				<input type="hidden" name="wm_shard" value="<?php echo esc_attr($shard); ?>" />
+				<input type="hidden" name="app_configuration_id" value="<?php echo esc_attr($app_id); ?>" />
+				<input type="hidden" name="track_shortcode" value="<?php echo esc_attr(get_option('track_shortcode') ?: "[wm_single_track track_id='$1']"); ?>" />
+				<input type="hidden" name="poi_shortcode" value="<?php echo esc_attr(get_option('poi_shortcode') ?: "[wm_single_poi poi_id='$1']"); ?>" />
+				<input type="hidden" name="taxonomy_track_shortcode" value="<?php echo esc_attr(get_option('taxonomy_track_shortcode') ?: "[wm_grid_track layer_id='id']"); ?>" />
+				<input type="hidden" name="taxonomy_poi_shortcode" value="<?php echo esc_attr(get_option('taxonomy_poi_shortcode') ?: "[wm_grid_poi poi_type_id='id']"); ?>" />
+				<input type="hidden" name="website_url" value="<?php echo esc_attr($wm_preserve_website); ?>" />
+				<input type="hidden" name="ios_app_url" value="<?php echo esc_attr($wm_preserve_ios); ?>" />
+				<input type="hidden" name="android_app_url" value="<?php echo esc_attr($wm_preserve_android); ?>" />
+				<input type="hidden" name="track_navigation_layer_ids" value="<?php echo esc_attr((string) get_option('track_navigation_layer_ids', '')); ?>" />
+				<input type="hidden" name="featured_image_location" value="<?php echo esc_attr($wm_preserve_featured_loc); ?>" />
+			<?php endif; ?>
+			<?php if (!$is_osm2cai_branding) : ?>
 			<h2><?php echo esc_html__('Backend Configuration:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
@@ -548,98 +616,102 @@ function wm_settings_page()
 					</td>
 				</tr>
 			</table>
-			<h2><?php echo esc_html__('APIs:', 'wm-package'); ?></h2>
-			<table class="form-table" style="margin-left: 30px;">
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Tracks list API', 'wm-package'); ?></th>
-					<td>
-						<a href="<?php echo esc_attr($tracks_list_api); ?>" target="_blank" class="api-link-tracks-list">
-							<p class="api-url-tracks-list"><?php echo esc_attr($tracks_list_api); ?></p>
-						</a>
-						<input type="hidden" size="50" name="tracks_list" class="api-input-tracks-list"
-							value="<?php echo esc_attr($tracks_list_api); ?>" readonly />
-						<p class="description">
-							<?php echo esc_html__('API endpoint used to retrieve the list of tracks for a specific app.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Layer API', 'wm-package'); ?></th>
-					<td>
-						<a href="<?php echo esc_attr($layer_api); ?>" target="_blank" class="api-link-layer">
-							<p class="api-url-layer"><?php echo esc_attr($layer_api); ?></p>
-						</a>
-						<input type="hidden" size="50" name="layer_api" class="api-input-layer"
-							value="<?php echo esc_attr($layer_api); ?>" readonly />
-						<p class="description">
-							<?php echo esc_html__('API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Single Track API', 'wm-package'); ?></th>
-					<td>
-						<a href="<?php echo esc_attr($single_track_api); ?>" target="_blank" class="api-link-track">
-							<p class="api-url-track"><?php echo esc_attr($single_track_api); ?></p>
-						</a>
-						<input type="hidden" size="50" name="track_url" class="api-input-track"
-							value="<?php echo esc_attr($single_track_api); ?>" readonly />
-						<p class="description">
-							<?php echo esc_html__('API endpoint used to retrieve detailed information for a single track by ID.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('POI API', 'wm-package'); ?></th>
-					<td>
-						<a href="<?php echo esc_attr($poi_api); ?>" target="_blank" class="api-link-poi">
-							<p class="api-url-poi"><?php echo esc_attr($poi_api); ?></p>
-						</a>
-						<input type="hidden" size="50" name="poi_url" class="api-input-poi"
-							value="<?php echo esc_attr($poi_api); ?>" readonly />
-						<p class="description">
-							<?php echo esc_html__('API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('POI Type API', 'wm-package'); ?></th>
-					<td>
-						<a href="<?php echo esc_attr($poi_type_api); ?>" target="_blank" class="api-link-poi-type">
-							<p class="api-url-poi-type"><?php echo esc_attr($poi_type_api); ?></p>
-						</a>
-						<input type="hidden" size="50" name="poi_type_api" class="api-input-poi-type"
-							value="<?php echo esc_attr($poi_type_api); ?>" readonly />
-						<p class="description">
-							<?php echo esc_html__('API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Elasticsearch API', 'wm-package'); ?></th>
-					<td>
-						<a href="<?php echo esc_attr($elastic_api); ?>" target="_blank" class="api-link-elastic">
-							<p class="api-url-elastic"><?php echo esc_attr($elastic_api); ?></p>
-						</a>
-						<input type="hidden" size="50" name="elastic_api" class="api-input-elastic"
-							value="<?php echo esc_attr($elastic_api); ?>" readonly />
-						<p class="description">
-							<?php echo esc_html__('Elasticsearch API used for advanced track filtering and search in grid views.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><?php echo esc_html__('Config API', 'wm-package'); ?></th>
-					<td>
-						<a href="<?php echo !empty($config_api_url) ? esc_url($config_api_url) : '#'; ?>" target="_blank" class="api-link-config">
-							<p class="api-url-config"><?php echo !empty($config_api_url) ? esc_html($config_api_url) : '—'; ?></p>
-						</a>
-						<p class="description">
-							<?php echo esc_html__('Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when "Refresh Config API" is used.', 'wm-package'); ?>
-						</p>
-					</td>
-				</tr>
-			</table>
+			<?php endif; ?>
+			<?php if (!$is_osm2cai_branding) : ?>
+				<h2><?php echo esc_html__('APIs:', 'wm-package'); ?></h2>
+				<table class="form-table" style="margin-left: 30px;">
+					<tr valign="top">
+						<th scope="row"><?php echo esc_html__('Tracks list API', 'wm-package'); ?></th>
+						<td>
+							<a href="<?php echo esc_attr($tracks_list_api); ?>" target="_blank" class="api-link-tracks-list">
+								<p class="api-url-tracks-list"><?php echo esc_attr($tracks_list_api); ?></p>
+							</a>
+							<input type="hidden" size="50" name="tracks_list" class="api-input-tracks-list"
+								value="<?php echo esc_attr($tracks_list_api); ?>" readonly />
+							<p class="description">
+								<?php echo esc_html__('API endpoint used to retrieve the list of tracks for a specific app.', 'wm-package'); ?>
+							</p>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php echo esc_html__('Layer API', 'wm-package'); ?></th>
+						<td>
+							<a href="<?php echo esc_attr($layer_api); ?>" target="_blank" class="api-link-layer">
+								<p class="api-url-layer"><?php echo esc_attr($layer_api); ?></p>
+							</a>
+							<input type="hidden" size="50" name="layer_api" class="api-input-layer"
+								value="<?php echo esc_attr($layer_api); ?>" readonly />
+							<p class="description">
+								<?php echo esc_html__('API endpoint used to retrieve layer information including tracks, metadata, and content for grid displays.', 'wm-package'); ?>
+							</p>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php echo esc_html__('Single Track API', 'wm-package'); ?></th>
+						<td>
+							<a href="<?php echo esc_attr($single_track_api); ?>" target="_blank" class="api-link-track">
+								<p class="api-url-track"><?php echo esc_attr($single_track_api); ?></p>
+							</a>
+							<input type="hidden" size="50" name="track_url" class="api-input-track"
+								value="<?php echo esc_attr($single_track_api); ?>" readonly />
+							<p class="description">
+								<?php echo esc_html__('API endpoint used to retrieve detailed information for a single track by ID.', 'wm-package'); ?>
+							</p>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php echo esc_html__('POI API', 'wm-package'); ?></th>
+						<td>
+							<a href="<?php echo esc_attr($poi_api); ?>" target="_blank" class="api-link-poi">
+								<p class="api-url-poi"><?php echo esc_attr($poi_api); ?></p>
+							</a>
+							<input type="hidden" size="50" name="poi_url" class="api-input-poi"
+								value="<?php echo esc_attr($poi_api); ?>" readonly />
+							<p class="description">
+								<?php echo esc_html__('API endpoint used to retrieve Points of Interest (POI) data in GeoJSON format for a specific app.', 'wm-package'); ?>
+							</p>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php echo esc_html__('POI Type API', 'wm-package'); ?></th>
+						<td>
+							<a href="<?php echo esc_attr($poi_type_api); ?>" target="_blank" class="api-link-poi-type">
+								<p class="api-url-poi-type"><?php echo esc_attr($poi_type_api); ?></p>
+							</a>
+							<input type="hidden" size="50" name="poi_type_api" class="api-input-poi-type"
+								value="<?php echo esc_attr($poi_type_api); ?>" readonly />
+							<p class="description">
+								<?php echo esc_html__('API endpoint used to retrieve POI type taxonomies for filtering and categorizing Points of Interest.', 'wm-package'); ?>
+							</p>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php echo esc_html__('Elasticsearch API', 'wm-package'); ?></th>
+						<td>
+							<a href="<?php echo esc_attr($elastic_api); ?>" target="_blank" class="api-link-elastic">
+								<p class="api-url-elastic"><?php echo esc_attr($elastic_api); ?></p>
+							</a>
+							<input type="hidden" size="50" name="elastic_api" class="api-input-elastic"
+								value="<?php echo esc_attr($elastic_api); ?>" readonly />
+							<p class="description">
+								<?php echo esc_html__('Elasticsearch API used for advanced track filtering and search in grid views.', 'wm-package'); ?>
+							</p>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php echo esc_html__('Config API', 'wm-package'); ?></th>
+						<td>
+							<a href="<?php echo !empty($config_api_url) ? esc_url($config_api_url) : '#'; ?>" target="_blank" class="api-link-config">
+								<p class="api-url-config"><?php echo !empty($config_api_url) ? esc_html($config_api_url) : '—'; ?></p>
+							</a>
+							<p class="description">
+								<?php echo esc_html__('Config JSON used for this app (shard + APP ID). Source for WORDPRESS/APP options when "Refresh Config API" is used.', 'wm-package'); ?>
+							</p>
+						</td>
+					</tr>
+				</table>
+			<?php endif; ?>
+			<?php if (!$is_osm2cai_branding) : ?>
 			<h2><?php echo esc_html__('Links:', 'wm-package'); ?></h2>
 			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
 				<?php echo esc_html__('Configure the URLs used for the dynamic redirect: on desktop the link opens the Website URL, on iOS the iOS App URL (App Store), on Android the Android App URL (Play Store). Add the CSS class below to any element (menu item, link, button, or container) to enable this redirect.', 'wm-package'); ?>
@@ -690,6 +762,8 @@ function wm_settings_page()
 					</td>
 				</tr>
 			</table>
+			<?php endif; ?>
+			<?php if (!$is_osm2cai_branding) : ?>
 			<h2><?php echo esc_html__('Featured Image Display', 'wm-package'); ?></h2>
 			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
 				<?php echo esc_html__('Choose where to display featured images for tracks and POIs.', 'wm-package'); ?>
@@ -713,6 +787,8 @@ function wm_settings_page()
 					</td>
 				</tr>
 			</table>
+			<?php endif; ?>
+			<?php if (!$is_osm2cai_branding) : ?>
 			<h2><?php echo esc_html__('Default image', 'wm-package'); ?></h2>
 			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
 				<?php echo esc_html__('Image used for tracks and POIs when no photo is available. Allowed format: PNG. Recommended: square, max 1024×1024 px.', 'wm-package'); ?>
@@ -924,6 +1000,7 @@ function wm_settings_page()
 						</tr>
 					<?php endif; ?>
 				</table>
+			<?php endif; ?>
 			<?php endif; ?>
 
 			<h2><?php echo esc_html__('Automatic Synchronization', 'wm-package'); ?></h2>
@@ -1403,6 +1480,9 @@ function wm_admin_footer()
 
 			// Function to update API URLs based on shard and app_id
 			function updateApiUrls() {
+				if (!$('.api-input-tracks-list').length) {
+					return;
+				}
 				var shard = $('#wm_shard').val();
 				var appId = $('input[name="app_configuration_id"]').val() || '49';
 
@@ -2382,7 +2462,12 @@ add_action('admin_footer-toplevel_page_wm-settings', 'wm_admin_footer');
 function wm_save_options()
 {
 	$shard = isset($_POST['wm_shard']) ? sanitize_text_field($_POST['wm_shard']) : 'geohub';
-	$app_id = isset($_POST['app_configuration_id']) ? sanitize_text_field($_POST['app_configuration_id']) : '49';
+	if (isset($_POST['app_configuration_id']) && $_POST['app_configuration_id'] !== '') {
+		$app_id = sanitize_text_field($_POST['app_configuration_id']);
+	} else {
+		$existing = get_option('app_configuration_id');
+		$app_id = (is_numeric($existing) && $existing !== '') ? (string) $existing : '49';
+	}
 
 	// Save the shard
 	update_option('wm_shard', $shard);

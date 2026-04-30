@@ -2,9 +2,12 @@
 
 function wm_admin_dashboard_widget()
 {
+    $is_osm2cai_branding = function_exists('wm_is_osm2cai_branding_enabled') && wm_is_osm2cai_branding_enabled();
+    $widget_title = $is_osm2cai_branding ? 'osm2cai' : __('WM Package', 'wm-package');
+
     wp_add_dashboard_widget(
         'wm_dashboard_widget',
-        __('WM Package', 'wm-package'),
+        $widget_title,
         'wm_dashboard_widget_content'
     );
 }
@@ -57,7 +60,11 @@ function wm_dashboard_widget_content()
         <p><?php echo esc_html(__('Current Tracks number:', 'wm-package')); ?> <strong><?php echo $current_tracks ?></strong> (<?php echo esc_html(__('published', 'wm-package')); ?>)</p>
         </br>
         <p><?php echo esc_html(__('Manage Import and Sync:', 'wm-package')); ?></p>
-        <a href="<?php echo esc_url($adminPageURL) ?>" class="button button-primary"><?php echo esc_html(__('Go to WM Settings', 'wm-package')); ?></a>
+        <?php
+        $is_osm2cai_branding = function_exists('wm_is_osm2cai_branding_enabled') && wm_is_osm2cai_branding_enabled();
+        $settings_label = $is_osm2cai_branding ? __('Go to osm2cai settings', 'wm-package') : __('Go to WM Settings', 'wm-package');
+        ?>
+        <a href="<?php echo esc_url($adminPageURL) ?>" class="button button-primary"><?php echo esc_html($settings_label); ?></a>
     </div>
 
 <?php

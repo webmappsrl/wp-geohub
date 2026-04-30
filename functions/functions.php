@@ -237,6 +237,19 @@ function wm_is_osm2cai_shard_type($shard)
 }
 
 /**
+ * Check if osm2cai white-label mode is enabled from config.
+ *
+ * @return bool
+ */
+function wm_is_osm2cai_branding_enabled()
+{
+    $config = wm_get_default_config();
+    return is_array($config)
+        && isset($config['WORDPRESS']['osm2cai'])
+        && $config['WORDPRESS']['osm2cai'] === true;
+}
+
+/**
  * If the label is a full URL (http/https), returns a short label: host without "www." and only the name part (e.g. "sitoweb" from "https://www.sitoweb.it").
  * Used in POI and Track information sidebar for Website links.
  *
@@ -1097,11 +1110,14 @@ function wm_get_default_config()
 
     $cached = get_option(WM_CACHED_API_CONFIG_OPTION);
     if (is_array($cached)) {
+        // Merge cached sections over local config without dropping local-only keys.
         if (isset($cached['WORDPRESS']) && is_array($cached['WORDPRESS'])) {
-            $config['WORDPRESS'] = $cached['WORDPRESS'];
+            $local_wordpress = isset($config['WORDPRESS']) && is_array($config['WORDPRESS']) ? $config['WORDPRESS'] : [];
+            $config['WORDPRESS'] = array_replace($local_wordpress, $cached['WORDPRESS']);
         }
         if (isset($cached['APP']) && is_array($cached['APP'])) {
-            $config['APP'] = $cached['APP'];
+            $local_app = isset($config['APP']) && is_array($config['APP']) ? $config['APP'] : [];
+            $config['APP'] = array_replace($local_app, $cached['APP']);
         }
     }
 
