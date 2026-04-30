@@ -97,7 +97,7 @@
                 apiUrl += '&';
             }
             apiUrl += 'app=' + shardApp + '_' + appId + '&layer=' + encodeURIComponent(layerId);
-            apiUrl += '&taxonomyWheres=' + encodeURIComponent(regionName);
+            apiUrl += '&taxonomyWheres=' + encodeURIComponent(resolveCanonicalWhereValue(regionName));
 
             fetch(apiUrl)
                 .then(function(response) { return response.json(); })
@@ -177,6 +177,85 @@
                 .replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-+|-+$/g, '');
+        }
+
+        // Normalize values for tolerant comparisons (apostrophes/accents/spaces).
+        function normalizeComparable(text) {
+            return (text || '')
+                .toString()
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/['’`]/g, '')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        function resolveCanonicalWhereValue(value) {
+            if (!value) return value;
+            var normalizedTarget = normalizeComparable(value);
+            var candidates = [];
+            var seenCandidates = {};
+
+            if (originalWhereOptions && originalWhereOptions.length) {
+                originalWhereOptions.forEach(function(option) {
+                    if (option && option.value) {
+                        var optionKey = option.value;
+                        if (!seenCandidates[optionKey]) {
+                            seenCandidates[optionKey] = true;
+                            candidates.push(optionKey);
+                        }
+                    }
+                });
+            }
+
+            if (whereFilter && whereFilter.options && whereFilter.options.length) {
+                for (var i = 0; i < whereFilter.options.length; i++) {
+                    var optionValue = whereFilter.options[i].value;
+                    if (optionValue) {
+                        if (!seenCandidates[optionValue]) {
+                            seenCandidates[optionValue] = true;
+                            candidates.push(optionValue);
+                        }
+                    }
+                }
+            }
+
+            for (var ci = 0; ci < candidates.length; ci++) {
+                if (normalizeComparable(candidates[ci]) === normalizedTarget) {
+                    return candidates[ci];
+                }
+            }
+
+            // Fuzzy fallback: match values that contain all target tokens
+            // (e.g. "Valle d'Aosta" -> "Regione Autonoma Valle d'Aosta").
+            var targetTokens = normalizedTarget.split('-').filter(function(token) {
+                return token.length > 1;
+            });
+            var bestMatch = null;
+            var bestScore = Number.MAX_SAFE_INTEGER;
+
+            for (var fi = 0; fi < candidates.length; fi++) {
+                var candidate = candidates[fi];
+                var normalizedCandidate = normalizeComparable(candidate);
+                var candidateHasAllTokens = targetTokens.every(function(token) {
+                    return normalizedCandidate.indexOf(token) !== -1;
+                });
+
+                if (candidateHasAllTokens) {
+                    var score = Math.abs(normalizedCandidate.length - normalizedTarget.length);
+                    if (score < bestScore) {
+                        bestScore = score;
+                        bestMatch = candidate;
+                    }
+                }
+            }
+
+            if (bestMatch) {
+                return bestMatch;
+            }
+
+            return value;
         }
 
         function findRegionFromSlug(slug) {
@@ -391,7 +470,7 @@
 
                 var taxonomyWheresValue = null;
                 if (regionValue) {
-                    taxonomyWheresValue = regionValue;
+                    taxonomyWheresValue = resolveCanonicalWhereValue(regionValue);
                 } else if (whereValue) {
                     taxonomyWheresValue = whereValue;
                 }

@@ -46,14 +46,90 @@ function wm_strip_osm2cai_track_description_blocks($html)
 	if (!is_string($html) || $html === '') {
 		return $html;
 	}
-	// Remove <p>...</p> containing "Percorribilità"
-	$html = preg_replace('/<p[^>]*>.*?Percorribilità.*?<\/p>/isu', '', $html);
-	// Remove <p>...</p> containing "Ultimo aggiornamento"
-	$html = preg_replace('/<p[^>]*>.*?Ultimo aggiornamento.*?<\/p>/isu', '', $html);
-	// Remove "Stato di accatastamento:" and content up to next <br> (inclusive)
-	$html = preg_replace('/Stato di accatastamento:.*?<br\s*\/?>\s*/isu', '', $html);
-	// Remove link "Modifica questo percorso"
-	$html = preg_replace('/<a\s[^>]*>Modifica questo percorso<\/a>/iu', '', $html);
+
+	// Prefer robust HTML parsing when possible (regex on HTML can be overly greedy).
+	// If DOM is unavailable or parsing fails, fall back to narrower regexes.
+	if (class_exists('DOMDocument')) {
+		$dom = new DOMDocument();
+		$prev = libxml_use_internal_errors(true);
+
+		// Wrap in a container to reliably extract inner HTML.
+		$wrapped = '<!doctype html><html><head><meta charset="utf-8"></head><body><div id="wm-desc-root">' . $html . '</div></body></html>';
+		$loaded = $dom->loadHTML($wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+		libxml_clear_errors();
+		libxml_use_internal_errors($prev);
+
+		if ($loaded) {
+			$root = $dom->getElementById('wm-desc-root');
+			if ($root) {
+				$to_remove = [];
+
+				// Remove "Modifica questo percorso" links (anchor text match).
+				foreach ($root->getElementsByTagName('a') as $a) {
+					$label = trim(preg_replace('/\s+/u', ' ', $a->textContent ?? ''));
+					if (mb_strtolower($label, 'UTF-8') === mb_strtolower('Modifica questo percorso', 'UTF-8')) {
+						$to_remove[] = $a;
+					}
+				}
+
+				// Remove technical <p> blocks: only when the label is at the start (or very near start)
+				// to avoid deleting narrative paragraphs that merely mention these words.
+				foreach ($root->getElementsByTagName('p') as $p) {
+					$text = trim(preg_replace('/\s+/u', ' ', $p->textContent ?? ''));
+					if ($text === '') {
+						continue;
+					}
+					$lower = mb_strtolower($text, 'UTF-8');
+					if (preg_match('/^\s*percorribilit[àa]\b/u', $lower) || preg_match('/^\s*ultimo aggiornamento\b/u', $lower)) {
+						$to_remove[] = $p;
+						continue;
+					}
+					// Also remove when the label appears very early (e.g. "<strong>Percorribilità:</strong> ...")
+					$pos_perc = mb_strpos($lower, 'percorribilit', 0, 'UTF-8');
+					$pos_upd = mb_strpos($lower, 'ultimo aggiornamento', 0, 'UTF-8');
+					if (($pos_perc !== false && $pos_perc <= 20) || ($pos_upd !== false && $pos_upd <= 20)) {
+						$to_remove[] = $p;
+						continue;
+					}
+				}
+
+				// Apply removals (dedupe by node identity).
+				$seen = [];
+				foreach ($to_remove as $node) {
+					if (!$node || !$node->parentNode) {
+						continue;
+					}
+					$hash = spl_object_hash($node);
+					if (isset($seen[$hash])) {
+						continue;
+					}
+					$seen[$hash] = true;
+					$node->parentNode->removeChild($node);
+				}
+
+				// Serialize inner HTML of root back to string.
+				$out = '';
+				foreach ($root->childNodes as $child) {
+					$out .= $dom->saveHTML($child);
+				}
+
+				$html = $out;
+			}
+		}
+	}
+
+	// Remove "Stato di accatastamento:" line without removing surrounding narrative.
+	// Keep the delimiter (<br> or </p>) when matched.
+	$html = preg_replace('/Stato di accatastamento:.*?(<br\s*\/?>|<\/p>)/isu', '$1', $html);
+
+	// Fallback / additional cleanup: remove standalone technical paragraphs if still present.
+	// Match only paragraphs that BEGIN with the technical label (optionally wrapped in <strong>).
+	$html = preg_replace('/<p[^>]*>\s*(?:<strong[^>]*>\s*)?Percorribilit[àa]\s*:.*?<\/p>/isu', '', $html);
+	$html = preg_replace('/<p[^>]*>\s*(?:<strong[^>]*>\s*)?Ultimo aggiornamento\s*:.*?<\/p>/isu', '', $html);
+	// Remove link "Modifica questo percorso" (in case DOM parsing wasn't available).
+	$html = preg_replace('/<a\s[^>]*>\s*Modifica questo percorso\s*<\/a>/iu', '', $html);
+
 	// Clean up repeated <br> and trim
 	$html = preg_replace('/(<br\s*\/?>\s*){2,}/i', '<br><br>', $html);
 	return trim($html);
