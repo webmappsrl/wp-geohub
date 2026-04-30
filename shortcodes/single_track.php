@@ -965,28 +965,41 @@ function wm_single_track($atts)
 			if (typeof Swiper !== 'undefined') {
 				var swiperContainers = document.querySelectorAll('.wm_swiper');
 				swiperContainers.forEach(function(container) {
+					var slidesCount = container.querySelectorAll('.swiper-slide').length;
+					var hasMultipleSlides = slidesCount > 1;
 					var config = {
 						slidesPerView: 1,
 						spaceBetween: 10,
-						freeMode: true,
-						loop: true
+						freeMode: hasMultipleSlides,
+						loop: hasMultipleSlides,
+						allowTouchMove: hasMultipleSlides,
+						simulateTouch: hasMultipleSlides
 					};
 
 					var paginationEl = container.querySelector('.swiper-pagination');
 					if (paginationEl) {
-						config.pagination = {
-							el: paginationEl,
-							clickable: true
-						};
+						if (hasMultipleSlides) {
+							config.pagination = {
+								el: paginationEl,
+								clickable: true
+							};
+						} else {
+							paginationEl.style.display = 'none';
+						}
 					}
 
 					var nextEl = container.querySelector('.swiper-button-next');
 					var prevEl = container.querySelector('.swiper-button-prev');
 					if (nextEl && prevEl) {
-						config.navigation = {
-							nextEl: nextEl,
-							prevEl: prevEl
-						};
+						if (hasMultipleSlides) {
+							config.navigation = {
+								nextEl: nextEl,
+								prevEl: prevEl
+							};
+						} else {
+							nextEl.style.display = 'none';
+							prevEl.style.display = 'none';
+						}
 					}
 
 					new Swiper(container, config);

@@ -997,3 +997,78 @@ msgstr "ERREUR :"
 
 msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
 msgstr "ERREUR : Le type de contenu %s n'est pas traduisible. Veuillez activer la traduction pour le type de contenu %s dans les paramètres WPML > Traduction des types de contenu."
+
+# Auto Sync - frequencies
+msgid "Every 5 minutes"
+msgstr "Toutes les 5 minutes"
+
+msgid "Every 15 minutes"
+msgstr "Toutes les 15 minutes"
+
+msgid "Every 30 minutes"
+msgstr "Toutes les 30 minutes"
+
+msgid "Every hour"
+msgstr "Toutes les heures"
+
+msgid "Every 6 hours"
+msgstr "Toutes les 6 heures"
+
+msgid "Twice a day"
+msgstr "Deux fois par jour"
+
+msgid "Once a day"
+msgstr "Une fois par jour"
+
+# Auto Sync - status messages
+msgid "Not scheduled"
+msgstr "Non planifié"
+
+msgid "processed"
+msgstr "traités"
+
+msgid "skipped"
+msgstr "ignorés"
+
+msgid "errors"
+msgstr "erreurs"
+
+msgid "error"
+msgstr "erreur"
+
+msgid "elapsed"
+msgstr "écoulé"
+
+msgid "no remote changes detected, sync skipped"
+msgstr "aucune modification distante détectée, synchronisation ignorée"
+
+msgid "last actual sync %1$s — %2$s"
+msgstr "dernière synchronisation effective %1$s — %2$s"
+
+# Auto Sync - admin UI
+msgid "Automatic Synchronization"
+msgstr "Synchronisation automatique"
+
+msgid "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+msgstr "Planifie une exécution récurrente qui crée de nouveaux articles et met à jour ceux dont la source a changé. Les éléments déjà à jour sont automatiquement ignorés."
+
+msgid "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+msgstr "Astuce : le cron WordPress est déclenché par le trafic du site. Pour un site à faible trafic, configurez un cron externe gratuit (par ex. cron-job.org) afin d'interroger wp-cron.php toutes les 10–15 minutes."
+
+msgid "Tracks auto-sync"
+msgstr "Synchronisation automatique des tracks"
+
+msgid "POIs auto-sync"
+msgstr "Synchronisation automatique des POI"
+
+msgid "Next run:"
+msgstr "Prochaine exécution :"
+
+msgid "Last run:"
+msgstr "Dernière exécution :"
+
+msgid "Progress:"
+msgstr "Progression :"
+
+msgid "a run is currently in progress (batch processing)"
+msgstr "une exécution est actuellement en cours (traitement par lots)"

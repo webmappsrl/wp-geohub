@@ -997,3 +997,78 @@ msgstr "ERROR:"
 
 msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
 msgstr "ERROR: El tipo de contenido %s no es traducible. Habilite la traducción para el tipo de contenido %s en Configuración de WPML > Traducción de tipos de contenido."
+
+# Auto Sync - frequencies
+msgid "Every 5 minutes"
+msgstr "Cada 5 minutos"
+
+msgid "Every 15 minutes"
+msgstr "Cada 15 minutos"
+
+msgid "Every 30 minutes"
+msgstr "Cada 30 minutos"
+
+msgid "Every hour"
+msgstr "Cada hora"
+
+msgid "Every 6 hours"
+msgstr "Cada 6 horas"
+
+msgid "Twice a day"
+msgstr "Dos veces al día"
+
+msgid "Once a day"
+msgstr "Una vez al día"
+
+# Auto Sync - status messages
+msgid "Not scheduled"
+msgstr "No programado"
+
+msgid "processed"
+msgstr "procesados"
+
+msgid "skipped"
+msgstr "omitidos"
+
+msgid "errors"
+msgstr "errores"
+
+msgid "error"
+msgstr "error"
+
+msgid "elapsed"
+msgstr "transcurrido"
+
+msgid "no remote changes detected, sync skipped"
+msgstr "no se detectaron cambios remotos, sincronización omitida"
+
+msgid "last actual sync %1$s — %2$s"
+msgstr "última sincronización real %1$s — %2$s"
+
+# Auto Sync - admin UI
+msgid "Automatic Synchronization"
+msgstr "Sincronización automática"
+
+msgid "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+msgstr "Programa una ejecución periódica que crea nuevas entradas y actualiza las existentes cuya fuente ha cambiado. Los elementos ya actualizados se omiten automáticamente."
+
+msgid "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+msgstr "Consejo: el cron de WordPress se activa con el tráfico del sitio. Para un sitio con poco tráfico, configura un cron externo gratuito (p. ej. cron-job.org) que solicite wp-cron.php cada 10–15 minutos."
+
+msgid "Tracks auto-sync"
+msgstr "Sincronización automática de Tracks"
+
+msgid "POIs auto-sync"
+msgstr "Sincronización automática de POIs"
+
+msgid "Next run:"
+msgstr "Próxima ejecución:"
+
+msgid "Last run:"
+msgstr "Última ejecución:"
+
+msgid "Progress:"
+msgstr "Progreso:"
+
+msgid "a run is currently in progress (batch processing)"
+msgstr "hay una ejecución en curso (procesamiento por lotes)"

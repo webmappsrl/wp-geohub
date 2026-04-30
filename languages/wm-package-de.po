@@ -997,3 +997,78 @@ msgstr "FEHLER:"
 
 msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
 msgstr "FEHLER: Der Beitragstyp %s ist nicht übersetzbar. Bitte aktivieren Sie die Übersetzung für den Beitragstyp %s in den WPML-Einstellungen > Beitragstyp-Übersetzung."
+
+# Auto Sync - frequencies
+msgid "Every 5 minutes"
+msgstr "Alle 5 Minuten"
+
+msgid "Every 15 minutes"
+msgstr "Alle 15 Minuten"
+
+msgid "Every 30 minutes"
+msgstr "Alle 30 Minuten"
+
+msgid "Every hour"
+msgstr "Stündlich"
+
+msgid "Every 6 hours"
+msgstr "Alle 6 Stunden"
+
+msgid "Twice a day"
+msgstr "Zweimal täglich"
+
+msgid "Once a day"
+msgstr "Einmal täglich"
+
+# Auto Sync - status messages
+msgid "Not scheduled"
+msgstr "Nicht geplant"
+
+msgid "processed"
+msgstr "verarbeitet"
+
+msgid "skipped"
+msgstr "übersprungen"
+
+msgid "errors"
+msgstr "Fehler"
+
+msgid "error"
+msgstr "Fehler"
+
+msgid "elapsed"
+msgstr "vergangen"
+
+msgid "no remote changes detected, sync skipped"
+msgstr "keine entfernten Änderungen erkannt, Synchronisation übersprungen"
+
+msgid "last actual sync %1$s — %2$s"
+msgstr "letzte tatsächliche Synchronisation %1$s — %2$s"
+
+# Auto Sync - admin UI
+msgid "Automatic Synchronization"
+msgstr "Automatische Synchronisation"
+
+msgid "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+msgstr "Plant einen wiederkehrenden Lauf, der neue Beiträge erstellt und bestehende aktualisiert, deren Quelle sich geändert hat. Bereits aktuelle Elemente werden automatisch übersprungen."
+
+msgid "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+msgstr "Hinweis: Der WordPress-Cron wird durch Website-Traffic ausgelöst. Richten Sie für eine Website mit geringem Traffic einen kostenlosen externen Cron (z. B. cron-job.org) ein, der wp-cron.php alle 10–15 Minuten aufruft."
+
+msgid "Tracks auto-sync"
+msgstr "Automatische Tracks-Synchronisation"
+
+msgid "POIs auto-sync"
+msgstr "Automatische POI-Synchronisation"
+
+msgid "Next run:"
+msgstr "Nächster Lauf:"
+
+msgid "Last run:"
+msgstr "Letzter Lauf:"
+
+msgid "Progress:"
+msgstr "Fortschritt:"
+
+msgid "a run is currently in progress (batch processing)"
+msgstr "Ein Lauf wird derzeit ausgeführt (Batch-Verarbeitung)"

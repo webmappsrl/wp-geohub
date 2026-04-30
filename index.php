@@ -30,4 +30,5 @@ include_once('actions/sync_track_action.php');
 include_once('actions/sync_poi_action.php');
 include_once('actions/delete_tracks_action.php');
 include_once('actions/delete_pois_action.php');
+include_once('actions/auto_sync.php');
 include_once('admin_page.php');
