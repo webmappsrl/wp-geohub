@@ -997,3 +997,78 @@ msgstr "GABIM:"
 
 msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
 msgstr "GABIM: Lloji i postimit %s nuk është i përkthyeshëm. Ju lutem aktivizoni përkthimin për llojin e postimit %s në cilësimet e WPML > Përkthimi i llojit të postimit."
+
+# Auto Sync - frequencies
+msgid "Every 5 minutes"
+msgstr "Çdo 5 minuta"
+
+msgid "Every 15 minutes"
+msgstr "Çdo 15 minuta"
+
+msgid "Every 30 minutes"
+msgstr "Çdo 30 minuta"
+
+msgid "Every hour"
+msgstr "Çdo orë"
+
+msgid "Every 6 hours"
+msgstr "Çdo 6 orë"
+
+msgid "Twice a day"
+msgstr "Dy herë në ditë"
+
+msgid "Once a day"
+msgstr "Një herë në ditë"
+
+# Auto Sync - status messages
+msgid "Not scheduled"
+msgstr "I/E paplanifikuar"
+
+msgid "processed"
+msgstr "të përpunuara"
+
+msgid "skipped"
+msgstr "të anashkaluara"
+
+msgid "errors"
+msgstr "gabime"
+
+msgid "error"
+msgstr "gabim"
+
+msgid "elapsed"
+msgstr "kohë e kaluar"
+
+msgid "no remote changes detected, sync skipped"
+msgstr "s'u zbuluan ndryshime në distancë, sinkronizimi u anashkalua"
+
+msgid "last actual sync %1$s — %2$s"
+msgstr "sinkronizimi i fundit i vërtetë %1$s — %2$s"
+
+# Auto Sync - admin UI
+msgid "Automatic Synchronization"
+msgstr "Sinkronizim automatik"
+
+msgid "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+msgstr "Planifikon një ekzekutim të përsëritur që krijon postime të reja dhe përditëson ato ekzistuese, burimi i të cilave ka ndryshuar. Elementet që janë tashmë të përditësuara anashkalohen automatikisht."
+
+msgid "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+msgstr "Këshillë: cron-i i WordPress aktivizohet nga trafiku i faqes. Për një faqe me trafik të ulët, vendosni një cron të jashtëm falas (p.sh. cron-job.org) që të thërrasë wp-cron.php çdo 10–15 minuta."
+
+msgid "Tracks auto-sync"
+msgstr "Sinkronizim automatik i Tracks-ave"
+
+msgid "POIs auto-sync"
+msgstr "Sinkronizim automatik i POI-ve"
+
+msgid "Next run:"
+msgstr "Ekzekutimi tjetër:"
+
+msgid "Last run:"
+msgstr "Ekzekutimi i fundit:"
+
+msgid "Progress:"
+msgstr "Progresi:"
+
+msgid "a run is currently in progress (batch processing)"
+msgstr "një ekzekutim është aktualisht në vazhdim (përpunim me grupe)"

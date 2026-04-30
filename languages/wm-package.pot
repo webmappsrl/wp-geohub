@@ -950,3 +950,78 @@ msgstr ""
 
 msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
 msgstr ""
+
+# Auto Sync - frequencies
+msgid "Every 5 minutes"
+msgstr ""
+
+msgid "Every 15 minutes"
+msgstr ""
+
+msgid "Every 30 minutes"
+msgstr ""
+
+msgid "Every hour"
+msgstr ""
+
+msgid "Every 6 hours"
+msgstr ""
+
+msgid "Twice a day"
+msgstr ""
+
+msgid "Once a day"
+msgstr ""
+
+# Auto Sync - status messages
+msgid "Not scheduled"
+msgstr ""
+
+msgid "processed"
+msgstr ""
+
+msgid "skipped"
+msgstr ""
+
+msgid "errors"
+msgstr ""
+
+msgid "error"
+msgstr ""
+
+msgid "elapsed"
+msgstr ""
+
+msgid "no remote changes detected, sync skipped"
+msgstr ""
+
+msgid "last actual sync %1$s — %2$s"
+msgstr ""
+
+# Auto Sync - admin UI
+msgid "Automatic Synchronization"
+msgstr ""
+
+msgid "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+msgstr ""
+
+msgid "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+msgstr ""
+
+msgid "Tracks auto-sync"
+msgstr ""
+
+msgid "POIs auto-sync"
+msgstr ""
+
+msgid "Next run:"
+msgstr ""
+
+msgid "Last run:"
+msgstr ""
+
+msgid "Progress:"
+msgstr ""
+
+msgid "a run is currently in progress (batch processing)"
+msgstr ""

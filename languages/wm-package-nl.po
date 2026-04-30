@@ -1002,3 +1002,78 @@ msgstr "FOUT:"
 
 msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
 msgstr "FOUT: Het berichttype %s is niet vertaalbaar. Schakel de vertaling in voor het berichttype %s in WPML-instellingen > Berichttype-vertaling."
+
+# Auto Sync - frequencies
+msgid "Every 5 minutes"
+msgstr "Elke 5 minuten"
+
+msgid "Every 15 minutes"
+msgstr "Elke 15 minuten"
+
+msgid "Every 30 minutes"
+msgstr "Elke 30 minuten"
+
+msgid "Every hour"
+msgstr "Elk uur"
+
+msgid "Every 6 hours"
+msgstr "Elke 6 uur"
+
+msgid "Twice a day"
+msgstr "Tweemaal per dag"
+
+msgid "Once a day"
+msgstr "Eenmaal per dag"
+
+# Auto Sync - status messages
+msgid "Not scheduled"
+msgstr "Niet gepland"
+
+msgid "processed"
+msgstr "verwerkt"
+
+msgid "skipped"
+msgstr "overgeslagen"
+
+msgid "errors"
+msgstr "fouten"
+
+msgid "error"
+msgstr "fout"
+
+msgid "elapsed"
+msgstr "verstreken"
+
+msgid "no remote changes detected, sync skipped"
+msgstr "geen externe wijzigingen gedetecteerd, synchronisatie overgeslagen"
+
+msgid "last actual sync %1$s — %2$s"
+msgstr "laatste daadwerkelijke synchronisatie %1$s — %2$s"
+
+# Auto Sync - admin UI
+msgid "Automatic Synchronization"
+msgstr "Automatische synchronisatie"
+
+msgid "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+msgstr "Plant een terugkerende run die nieuwe berichten aanmaakt en bestaande bijwerkt waarvan de bron is gewijzigd. Items die al up-to-date zijn, worden automatisch overgeslagen."
+
+msgid "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+msgstr "Tip: WordPress-cron wordt geactiveerd door siteverkeer. Stel voor een site met weinig verkeer een gratis externe cron in (bijv. cron-job.org) die wp-cron.php elke 10–15 minuten aanroept."
+
+msgid "Tracks auto-sync"
+msgstr "Automatische Tracks-synchronisatie"
+
+msgid "POIs auto-sync"
+msgstr "Automatische POI-synchronisatie"
+
+msgid "Next run:"
+msgstr "Volgende run:"
+
+msgid "Last run:"
+msgstr "Laatste run:"
+
+msgid "Progress:"
+msgstr "Voortgang:"
+
+msgid "a run is currently in progress (batch processing)"
+msgstr "er wordt momenteel een run uitgevoerd (batchverwerking)"

@@ -877,6 +877,103 @@ function wm_settings_page()
 				</table>
 			<?php endif; ?>
 
+			<h2><?php echo esc_html__('Automatic Synchronization', 'wm-package'); ?></h2>
+			<p class="description" style="margin-left: 30px; margin-bottom: 12px;">
+				<?php echo esc_html__('Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically.', 'wm-package'); ?>
+				<br>
+				<?php echo esc_html__('Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes.', 'wm-package'); ?>
+			</p>
+			<?php
+			$wm_auto_freqs = function_exists('wm_auto_sync_allowed_frequencies') ? wm_auto_sync_allowed_frequencies() : [
+				'hourly'             => __('Every hour', 'wm-package'),
+				'wm_every_six_hours' => __('Every 6 hours', 'wm-package'),
+				'twicedaily'         => __('Twice a day', 'wm-package'),
+				'daily'              => __('Once a day', 'wm-package'),
+			];
+			$wm_auto_tracks_enabled   = (int) get_option('wm_auto_sync_tracks_enabled', 0) === 1;
+			$wm_auto_tracks_frequency = get_option('wm_auto_sync_tracks_frequency', 'daily');
+			$wm_auto_pois_enabled     = (int) get_option('wm_auto_sync_pois_enabled', 0) === 1;
+			$wm_auto_pois_frequency   = get_option('wm_auto_sync_pois_frequency', 'daily');
+			$wm_auto_tracks_status    = function_exists('wm_auto_sync_status_info') ? wm_auto_sync_status_info('tracks') : ['next' => '—', 'last' => '—', 'in_progress' => false];
+			$wm_auto_pois_status      = function_exists('wm_auto_sync_status_info') ? wm_auto_sync_status_info('pois')   : ['next' => '—', 'last' => '—', 'in_progress' => false];
+			?>
+			<table class="form-table" style="margin-left: 30px;">
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('Tracks auto-sync', 'wm-package'); ?></th>
+					<td>
+						<label>
+							<input type="hidden" name="wm_auto_sync_tracks_enabled" value="0" />
+							<input type="checkbox" name="wm_auto_sync_tracks_enabled" value="1" <?php checked($wm_auto_tracks_enabled); ?> />
+							<?php echo esc_html__('Enabled', 'wm-package'); ?>
+						</label>
+						<select name="wm_auto_sync_tracks_frequency" style="margin-left: 10px;">
+							<?php foreach ($wm_auto_freqs as $freq_key => $freq_label) : ?>
+								<option value="<?php echo esc_attr($freq_key); ?>" <?php selected($wm_auto_tracks_frequency, $freq_key); ?>><?php echo esc_html($freq_label); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<p class="description">
+							<strong><?php echo esc_html__('Next run:', 'wm-package'); ?></strong> <?php echo esc_html($wm_auto_tracks_status['next']); ?>
+							<?php if ($wm_auto_tracks_status['in_progress']) : ?>
+								&nbsp;—&nbsp;<em><?php echo esc_html__('a run is currently in progress (batch processing)', 'wm-package'); ?></em>
+							<?php endif; ?>
+							<?php if (!empty($wm_auto_tracks_status['progress'])) :
+								$p = $wm_auto_tracks_status['progress'];
+								$elapsed_min = $p['started_at'] > 0 ? max(0, (int) floor((time() - $p['started_at']) / 60)) : 0;
+							?>
+								<br>
+								<strong><?php echo esc_html__('Progress:', 'wm-package'); ?></strong>
+								<?php echo (int) $p['offset']; ?> / <?php echo (int) $p['total']; ?> (<?php echo (int) $p['percent']; ?>%)
+								— <?php echo esc_html__('processed', 'wm-package'); ?>: <?php echo (int) $p['processed']; ?>,
+								<?php echo esc_html__('skipped', 'wm-package'); ?>: <?php echo (int) $p['skipped']; ?>,
+								<?php echo esc_html__('errors', 'wm-package'); ?>: <?php echo (int) $p['errors']; ?>
+								<?php if ($elapsed_min > 0) : ?>
+									— <?php echo esc_html__('elapsed', 'wm-package'); ?>: <?php echo (int) $elapsed_min; ?> <?php echo esc_html__('min', 'wm-package'); ?>
+								<?php endif; ?>
+							<?php endif; ?>
+							<br>
+							<strong><?php echo esc_html__('Last run:', 'wm-package'); ?></strong> <?php echo esc_html($wm_auto_tracks_status['last']); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php echo esc_html__('POIs auto-sync', 'wm-package'); ?></th>
+					<td>
+						<label>
+							<input type="hidden" name="wm_auto_sync_pois_enabled" value="0" />
+							<input type="checkbox" name="wm_auto_sync_pois_enabled" value="1" <?php checked($wm_auto_pois_enabled); ?> />
+							<?php echo esc_html__('Enabled', 'wm-package'); ?>
+						</label>
+						<select name="wm_auto_sync_pois_frequency" style="margin-left: 10px;">
+							<?php foreach ($wm_auto_freqs as $freq_key => $freq_label) : ?>
+								<option value="<?php echo esc_attr($freq_key); ?>" <?php selected($wm_auto_pois_frequency, $freq_key); ?>><?php echo esc_html($freq_label); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<p class="description">
+							<strong><?php echo esc_html__('Next run:', 'wm-package'); ?></strong> <?php echo esc_html($wm_auto_pois_status['next']); ?>
+							<?php if ($wm_auto_pois_status['in_progress']) : ?>
+								&nbsp;—&nbsp;<em><?php echo esc_html__('a run is currently in progress (batch processing)', 'wm-package'); ?></em>
+							<?php endif; ?>
+							<?php if (!empty($wm_auto_pois_status['progress'])) :
+								$p = $wm_auto_pois_status['progress'];
+								$elapsed_min = $p['started_at'] > 0 ? max(0, (int) floor((time() - $p['started_at']) / 60)) : 0;
+							?>
+								<br>
+								<strong><?php echo esc_html__('Progress:', 'wm-package'); ?></strong>
+								<?php echo (int) $p['offset']; ?> / <?php echo (int) $p['total']; ?> (<?php echo (int) $p['percent']; ?>%)
+								— <?php echo esc_html__('processed', 'wm-package'); ?>: <?php echo (int) $p['processed']; ?>,
+								<?php echo esc_html__('skipped', 'wm-package'); ?>: <?php echo (int) $p['skipped']; ?>,
+								<?php echo esc_html__('errors', 'wm-package'); ?>: <?php echo (int) $p['errors']; ?>
+								<?php if ($elapsed_min > 0) : ?>
+									— <?php echo esc_html__('elapsed', 'wm-package'); ?>: <?php echo (int) $elapsed_min; ?> <?php echo esc_html__('min', 'wm-package'); ?>
+								<?php endif; ?>
+							<?php endif; ?>
+							<br>
+							<strong><?php echo esc_html__('Last run:', 'wm-package'); ?></strong> <?php echo esc_html($wm_auto_pois_status['last']); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+
 			<h2><?php echo esc_html__('Import and Sync:', 'wm-package'); ?></h2>
 			<table class="form-table" style="margin-left: 30px;">
 				<tr valign="top">
@@ -956,6 +1053,46 @@ function wm_settings_init()
 		register_setting('wm-settings', 'track_navigation_layer_ids', 'sanitize_text_field');
 	}
 	// track_download_enabled is now controlled by wm_default_config.json, not WordPress options
+
+	// Auto-sync settings (separate toggle/frequency for tracks and POIs)
+	register_setting('wm-settings', 'wm_auto_sync_tracks_enabled', [
+		'type'              => 'integer',
+		'sanitize_callback' => 'wm_sanitize_auto_sync_enabled',
+		'default'           => 0,
+	]);
+	register_setting('wm-settings', 'wm_auto_sync_tracks_frequency', [
+		'type'              => 'string',
+		'sanitize_callback' => 'wm_sanitize_auto_sync_frequency',
+		'default'           => 'daily',
+	]);
+	register_setting('wm-settings', 'wm_auto_sync_pois_enabled', [
+		'type'              => 'integer',
+		'sanitize_callback' => 'wm_sanitize_auto_sync_enabled',
+		'default'           => 0,
+	]);
+	register_setting('wm-settings', 'wm_auto_sync_pois_frequency', [
+		'type'              => 'string',
+		'sanitize_callback' => 'wm_sanitize_auto_sync_frequency',
+		'default'           => 'daily',
+	]);
+}
+
+/**
+ * Sanitize auto-sync enabled flag (0 or 1).
+ */
+function wm_sanitize_auto_sync_enabled($value)
+{
+	return ((int) $value === 1) ? 1 : 0;
+}
+
+/**
+ * Sanitize auto-sync frequency: only allow whitelisted values, fall back to 'daily'.
+ */
+function wm_sanitize_auto_sync_frequency($value)
+{
+	$allowed = function_exists('wm_auto_sync_allowed_frequencies') ? array_keys(wm_auto_sync_allowed_frequencies()) : ['hourly', 'wm_every_six_hours', 'twicedaily', 'daily'];
+	$value   = is_string($value) ? sanitize_text_field($value) : '';
+	return in_array($value, $allowed, true) ? $value : 'daily';
 }
 
 function wm_admin_footer()

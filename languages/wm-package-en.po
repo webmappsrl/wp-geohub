@@ -1003,3 +1003,78 @@ msgstr "ERROR:"
 
 msgid "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
 msgstr "ERROR: The %s post type is not translatable. Please enable the translation for the %s post type in WPML settings > Post type translation."
+
+# Auto Sync - frequencies
+msgid "Every 5 minutes"
+msgstr "Every 5 minutes"
+
+msgid "Every 15 minutes"
+msgstr "Every 15 minutes"
+
+msgid "Every 30 minutes"
+msgstr "Every 30 minutes"
+
+msgid "Every hour"
+msgstr "Every hour"
+
+msgid "Every 6 hours"
+msgstr "Every 6 hours"
+
+msgid "Twice a day"
+msgstr "Twice a day"
+
+msgid "Once a day"
+msgstr "Once a day"
+
+# Auto Sync - status messages
+msgid "Not scheduled"
+msgstr "Not scheduled"
+
+msgid "processed"
+msgstr "processed"
+
+msgid "skipped"
+msgstr "skipped"
+
+msgid "errors"
+msgstr "errors"
+
+msgid "error"
+msgstr "error"
+
+msgid "elapsed"
+msgstr "elapsed"
+
+msgid "no remote changes detected, sync skipped"
+msgstr "no remote changes detected, sync skipped"
+
+msgid "last actual sync %1$s — %2$s"
+msgstr "last actual sync %1$s — %2$s"
+
+# Auto Sync - admin UI
+msgid "Automatic Synchronization"
+msgstr "Automatic Synchronization"
+
+msgid "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+msgstr "Schedules a recurring run that creates new posts and updates existing ones whose source changed. Items already up to date are skipped automatically."
+
+msgid "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+msgstr "Tip: WordPress cron is triggered by site traffic. For a low-traffic site, set up a free external cron (e.g. cron-job.org) to ping wp-cron.php every 10–15 minutes."
+
+msgid "Tracks auto-sync"
+msgstr "Tracks auto-sync"
+
+msgid "POIs auto-sync"
+msgstr "POIs auto-sync"
+
+msgid "Next run:"
+msgstr "Next run:"
+
+msgid "Last run:"
+msgstr "Last run:"
+
+msgid "Progress:"
+msgstr "Progress:"
+
+msgid "a run is currently in progress (batch processing)"
+msgstr "a run is currently in progress (batch processing)"
