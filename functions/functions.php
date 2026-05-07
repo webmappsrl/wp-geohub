@@ -568,6 +568,20 @@ function wm_package_enqueue_leaflet_map_script()
     // Get default image URL
     $default_image_url = plugins_url('wm-package/assets/default_image.png');
 
+    // Pick the basemap tiles URL and attribution based on the current shard:
+    // - osm2cai-type shards (osm2cai*, local): r3-it/CloudIT tiles + CAI attribution
+    // - all other shards: historical webmapp tiles + plain OpenStreetMap attribution
+    $current_shard = get_option('wm_shard', 'geohub');
+    $is_osm2cai_shard = function_exists('wm_is_osm2cai_shard_type')
+        ? wm_is_osm2cai_shard_type($current_shard)
+        : (strpos((string) $current_shard, 'osm2cai') === 0 || $current_shard === 'local');
+    $tile_url = $is_osm2cai_shard
+        ? 'https://r3-it.storage.cloud.it/tiles/{z}/{x}/{y}.png'
+        : 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png';
+    $tile_attribution = $is_osm2cai_shard
+        ? '&copy; CAI &copy; OpenStreetMap'
+        : '&copy; Webmapp &copy; OpenStreetMap';
+
     // Add inline script for Leaflet map initialization
     $script = "
     function wmInitLeafletMap(mapElementId, geometryJson, relatedPoisJson, defaultImageUrl) {
@@ -580,8 +594,8 @@ function wm_package_enqueue_leaflet_map_script()
         var map = L.map(mapElement).setView([0, 0], 13);
         var defaultImgUrl = defaultImageUrl || '" . esc_js($default_image_url) . "';
 
-        L.tileLayer('https://api.webmapp.it/tiles/{z}/{x}/{y}.png', {
-            attribution: '&copy; Webmapp &copy; OpenStreetMap',
+        L.tileLayer('" . esc_js($tile_url) . "', {
+            attribution: '" . esc_js($tile_attribution) . "',
             maxZoom: 16
         }).addTo(map);
 
@@ -998,7 +1012,12 @@ define('WM_CACHED_API_CONFIG_OPTION', 'wm_cached_api_config');
  * - geohub: {awsApi}/conf/{app_id}.json
  *   e.g. https://wmfe.s3.eu-central-1.amazonaws.com/geohub/conf/49.json
  * - other shards: {awsApi}/{app_id}/config.json
- *   e.g. https://wmfe.s3.eu-central-1.amazonaws.com/osm2cai2/2/config.json
+ *   e.g. https://r3-it.storage.cloud.it/wmfe/osm2cai2/2/config.json (osm2cai-type)
+ *
+ * Note: for osm2cai-type shards `awsApi` is rewritten to the r3-it/CloudIT
+ * storage by `wm_apply_osm2cai_aws_api_override()` inside
+ * `wm_get_shards_config()`, so this builder uses the correct host without
+ * additional logic.
  *
  * @param string $shard Shard name (e.g. osm2cai2, osm2cai2dev, geohub)
  * @param string $app_id App configuration ID

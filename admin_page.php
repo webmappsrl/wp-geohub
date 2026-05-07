@@ -173,6 +173,51 @@ function wm_get_fallback_shards_config()
 }
 
 /**
+ * For osm2cai-type shards, the assets are no longer served from the AWS S3
+ * bucket but from the r3-it/CloudIT storage. This helper rewrites the
+ * `awsApi` host of every osm2cai-type shard accordingly, leaving the rest of
+ * the path untouched. Other shards (e.g. `geohub`) are returned unchanged.
+ *
+ * Mapping applied (osm2cai-type shards only):
+ *   https://wmfe.s3.eu-central-1.amazonaws.com/<path>
+ *   -> https://r3-it.storage.cloud.it/wmfe/<path>
+ *
+ * Applied at the boundary of `wm_get_shards_config()` so that every consumer
+ * (PHP and the JS receiving the JSON-encoded shards) sees the correct URL,
+ * even when the underlying source is the upstream `environment.ts`, the
+ * 24h transient cache or the local fallback.
+ *
+ * @param array $shards Shards configuration keyed by shard name
+ * @return array Filtered shards configuration
+ */
+function wm_apply_osm2cai_aws_api_override($shards)
+{
+	if (!is_array($shards) || empty($shards)) {
+		return $shards;
+	}
+
+	$old_prefix = 'https://wmfe.s3.eu-central-1.amazonaws.com/';
+	$new_prefix = 'https://r3-it.storage.cloud.it/wmfe/';
+
+	foreach ($shards as $name => $data) {
+		if (!is_array($data) || empty($data['awsApi']) || !is_string($data['awsApi'])) {
+			continue;
+		}
+		$is_osm2cai = function_exists('wm_is_osm2cai_shard')
+			? wm_is_osm2cai_shard($name)
+			: (strpos($name, 'osm2cai') === 0 || $name === 'local');
+		if (!$is_osm2cai) {
+			continue;
+		}
+		if (strpos($data['awsApi'], $old_prefix) === 0) {
+			$shards[$name]['awsApi'] = $new_prefix . substr($data['awsApi'], strlen($old_prefix));
+		}
+	}
+
+	return $shards;
+}
+
+/**
  * Get all available shards configuration
  * Fetched dynamically from: https://github.com/webmappsrl/wm-types/blob/main/src/environment.ts
  * Results are cached for 24 hours
@@ -186,7 +231,7 @@ function wm_get_shards_config($force_refresh = false)
 	if (!$force_refresh) {
 		$cached = get_transient(WM_SHARDS_CACHE_KEY);
 		if ($cached !== false && is_array($cached) && !empty($cached)) {
-			return $cached;
+			return wm_apply_osm2cai_aws_api_override($cached);
 		}
 	}
 
@@ -200,14 +245,16 @@ function wm_get_shards_config($force_refresh = false)
 		error_log('WM Package: Failed to fetch shards config - ' . $response->get_error_message());
 		// Return cached data if available, otherwise fallback
 		$cached = get_transient(WM_SHARDS_CACHE_KEY);
-		return ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+		$result = ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+		return wm_apply_osm2cai_aws_api_override($result);
 	}
 
 	$status_code = wp_remote_retrieve_response_code($response);
 	if ($status_code !== 200) {
 		error_log('WM Package: Failed to fetch shards config - HTTP ' . $status_code);
 		$cached = get_transient(WM_SHARDS_CACHE_KEY);
-		return ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+		$result = ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+		return wm_apply_osm2cai_aws_api_override($result);
 	}
 
 	$body = wp_remote_retrieve_body($response);
@@ -216,13 +263,15 @@ function wm_get_shards_config($force_refresh = false)
 	if (empty($shards)) {
 		error_log('WM Package: Failed to parse shards from TypeScript content');
 		$cached = get_transient(WM_SHARDS_CACHE_KEY);
-		return ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+		$result = ($cached !== false && is_array($cached)) ? $cached : wm_get_fallback_shards_config();
+		return wm_apply_osm2cai_aws_api_override($result);
 	}
 
-	// Cache the result
+	// Cache the raw upstream result so the override is always reapplied on read
+	// (tolerant to changes in the override mapping without needing a cache flush).
 	set_transient(WM_SHARDS_CACHE_KEY, $shards, WM_SHARDS_CACHE_EXPIRATION);
 
-	return $shards;
+	return wm_apply_osm2cai_aws_api_override($shards);
 }
 
 /**

@@ -442,12 +442,21 @@
     font-size: 0.7em;
     font-weight: 600;
     color: #1a1a1a;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
 }
 
 .wm_technical_detail_value a,
 .wm_info_detail_value a {
     color: var(--wm-primary-color, #0073AA);
     text-decoration: none;
+    display: inline;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .wm_technical_detail_value a:hover,
