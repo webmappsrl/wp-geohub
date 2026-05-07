@@ -209,6 +209,9 @@ function sync_pois_action()
             $languages = apply_filters('wpml_active_languages', NULL, 'orderby=id&order=desc');
             $default_lang_title = (isset($data['properties']['name'][$default_lang]) && $data['properties']['name'][$default_lang]) ? $data['properties']['name'][$default_lang] : __('POI no title', 'wm-package') . ' ' . $source_id;
 
+            // Track the legitimate IDs (original + translations) to clean up orphans at the end.
+            $valid_post_ids = [(int) $post_id];
+
             foreach ($languages as $lang_code => $lang_details) {
                 if ($lang_code == $original_language_info->language_code) continue;
 
@@ -216,7 +219,6 @@ function sync_pois_action()
                 $post_title = (isset($data['properties']['name'][$lang_code]) && $data['properties']['name'][$lang_code]) ? $data['properties']['name'][$lang_code] : $default_lang_title;
                 $post_slug = sanitize_title($post_title);
 
-                // Create translation post object (you should modify this part according to how you manage translations)
                 $translated_post_data = [
                     'post_title'    => $post_title,
                     'post_content'  => $poi_shortcode_final,
@@ -225,10 +227,18 @@ function sync_pois_action()
                     'post_type'     => 'poi',
                     'post_name'     => $post_slug . '-' . $lang_code,
                 ];
-                $translated_post_id = wp_insert_post($translated_post_data);
 
-                if (!is_wp_error($translated_post_id)) {
-                    // Associate the translation with the original post
+                // Reuse the existing translation (UPDATE) instead of always creating a new one,
+                // so renaming a POI in the backend updates the slug without producing duplicates.
+                $existing_tr_id = wm_find_translation_post_id($post_id, $wpml_element_type, $lang_code);
+                if ($existing_tr_id > 0) {
+                    $translated_post_data['ID'] = $existing_tr_id;
+                    $translated_post_id = wp_update_post($translated_post_data);
+                } else {
+                    $translated_post_id = wp_insert_post($translated_post_data);
+                }
+
+                if (!is_wp_error($translated_post_id) && $translated_post_id) {
                     $set_language_args = [
                         'element_id'            => $translated_post_id,
                         'element_type'          => $wpml_element_type,
@@ -238,9 +248,15 @@ function sync_pois_action()
                     ];
                     do_action('wpml_set_element_language_details', $set_language_args);
 
-                    // Update post meta field for the translation
                     update_post_meta($translated_post_id, 'wm_poi_id', $source_id);
+                    $valid_post_ids[] = (int) $translated_post_id;
                 }
+            }
+
+            // Move to trash any POI posts sharing the same wm_poi_id that do not
+            // belong to the current translation set (orphans from previous syncs).
+            if (function_exists('wm_trash_orphan_synced_posts')) {
+                wm_trash_orphan_synced_posts('poi', 'wm_poi_id', $source_id, $valid_post_ids);
             }
         }
 

@@ -69,6 +69,165 @@ function wm_custom_slugify($title)
 }
 
 /**
+ * Permalink of a post in the requested language (WPML). Without WPML it falls back to get_permalink().
+ * Used for related POI/track links so the slug stays aligned after a sync.
+ *
+ * @param int    $post_id
+ * @param string $language Language code (e.g. it, de).
+ * @return string
+ */
+function wm_get_localized_permalink($post_id, $language)
+{
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) {
+        return '';
+    }
+
+    $post_type = get_post_type($post_id);
+    if (!$post_type) {
+        return (string) get_permalink($post_id);
+    }
+
+    if (!is_string($language) || $language === '') {
+        if (defined('ICL_LANGUAGE_CODE')) {
+            $language = ICL_LANGUAGE_CODE;
+        } else {
+            return (string) get_permalink($post_id);
+        }
+    }
+
+    if (!has_filter('wpml_object_id')) {
+        return (string) get_permalink($post_id);
+    }
+
+    $element_type  = apply_filters('wpml_element_type', 'post_' . $post_type);
+    $translated_id = apply_filters('wpml_object_id', $post_id, $element_type, true, $language);
+
+    if (is_numeric($translated_id) && (int) $translated_id > 0) {
+        return (string) get_permalink((int) $translated_id);
+    }
+
+    return (string) get_permalink($post_id);
+}
+
+/**
+ * Given a list of post IDs that share the same source, pick the one that
+ * actually belongs to $language by asking WPML. If none matches the language,
+ * try wpml_object_id on the first one; as a last resort, return the first ID.
+ *
+ * Solves the case where a previous sync left orphan duplicate posts with the
+ * same wm_*_id but a stale slug.
+ *
+ * @param int[]  $post_ids
+ * @param string $element_type E.g. 'post_poi', 'post_track'.
+ * @param string $language     Language code (it, de, ...).
+ * @return int                 Chosen post ID, or 0.
+ */
+function wm_pick_post_id_in_language(array $post_ids, $element_type, $language)
+{
+    $post_ids = array_values(array_unique(array_filter(array_map('intval', $post_ids))));
+    if (empty($post_ids)) {
+        return 0;
+    }
+    if (!is_string($language) || $language === '') {
+        return (int) $post_ids[0];
+    }
+
+    if (has_filter('wpml_element_language_details')) {
+        foreach ($post_ids as $pid) {
+            $details = apply_filters('wpml_element_language_details', null, [
+                'element_id'   => $pid,
+                'element_type' => $element_type,
+            ]);
+            if ($details && isset($details->language_code) && $details->language_code === $language) {
+                return (int) $pid;
+            }
+        }
+    }
+
+    if (has_filter('wpml_object_id')) {
+        $translated = apply_filters('wpml_object_id', $post_ids[0], $element_type, true, $language);
+        if (is_numeric($translated) && (int) $translated > 0) {
+            return (int) $translated;
+        }
+    }
+
+    return (int) $post_ids[0];
+}
+
+/**
+ * Returns the ID of the existing translation of $original_post_id for
+ * $language_code, or 0 if none exists. Uses WPML when available.
+ *
+ * @param int    $original_post_id
+ * @param string $element_type
+ * @param string $language_code
+ * @return int
+ */
+function wm_find_translation_post_id($original_post_id, $element_type, $language_code)
+{
+    $original_post_id = (int) $original_post_id;
+    if ($original_post_id <= 0 || !is_string($language_code) || $language_code === '') {
+        return 0;
+    }
+    if (!has_filter('wpml_object_id')) {
+        return 0;
+    }
+    $translated = apply_filters('wpml_object_id', $original_post_id, $element_type, false, $language_code);
+    if (is_numeric($translated) && (int) $translated > 0 && (int) $translated !== $original_post_id) {
+        return (int) $translated;
+    }
+    return 0;
+}
+
+/**
+ * Finds duplicate (poi/track) posts that share the same source ID but do NOT
+ * belong to the current translation set, and moves them to the trash. Prevents
+ * slug collisions after the backend renames a POI/track and protects permalink
+ * resolution on the frontend.
+ *
+ * @param string $post_type    'poi' or 'track'.
+ * @param string $meta_key     E.g. 'wm_poi_id' or 'wm_track_id'.
+ * @param string $source_id    Meta value (upstream source id).
+ * @param int[]  $valid_ids    IDs of the legitimate posts (original + WPML translations).
+ * @return int                 Number of orphans moved to trash.
+ */
+function wm_trash_orphan_synced_posts($post_type, $meta_key, $source_id, array $valid_ids)
+{
+    if (empty($post_type) || empty($meta_key) || $source_id === '' || $source_id === null) {
+        return 0;
+    }
+
+    $valid_ids = array_values(array_unique(array_filter(array_map('intval', $valid_ids))));
+
+    $all_posts = get_posts([
+        'post_type'        => $post_type,
+        'post_status'      => ['publish', 'draft', 'pending', 'private', 'future'],
+        'posts_per_page'   => -1,
+        'fields'           => 'ids',
+        'suppress_filters' => true,
+        'meta_query'       => [
+            [
+                'key'   => $meta_key,
+                'value' => (string) $source_id,
+            ],
+        ],
+    ]);
+
+    $trashed = 0;
+    foreach ($all_posts as $pid) {
+        $pid = (int) $pid;
+        if ($pid <= 0 || in_array($pid, $valid_ids, true)) {
+            continue;
+        }
+        if (wp_trash_post($pid)) {
+            $trashed++;
+        }
+    }
+    return $trashed;
+}
+
+/**
  * Check if a shard is osm2cai-type
  * This affects URL structure for iframes
  */

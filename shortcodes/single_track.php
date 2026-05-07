@@ -105,39 +105,59 @@ function wm_single_track($atts)
 		$related_poi_urls = [];
 		if (!empty($related_poi_ids)) {
 			$poi_posts = get_posts([
-				'post_type' => 'poi',
-				'post_status' => 'publish',
-				'posts_per_page' => -1,
-				'meta_query' => [
+				'post_type'        => 'poi',
+				'post_status'      => 'publish',
+				'posts_per_page'   => -1,
+				'suppress_filters' => true,
+				'meta_query'       => [
 					[
-						'key' => 'wm_poi_id',
-						'value' => $related_poi_ids,
+						'key'     => 'wm_poi_id',
+						'value'   => $related_poi_ids,
 						'compare' => 'IN',
 					],
 				],
 			]);
+
+			// Group posts by source id to discard orphan duplicates (same wm_poi_id
+			// but stale slug) and ALWAYS pick the post in the current language.
+			$poi_ids_by_source = [];
 			foreach ($poi_posts as $poi_post) {
 				$source_id = get_post_meta($poi_post->ID, 'wm_poi_id', true);
-				if (!empty($source_id)) {
-					$related_poi_urls[(string)$source_id] = get_permalink($poi_post->ID);
+				if ($source_id === '' || $source_id === null) {
+					continue;
+				}
+				$poi_ids_by_source[(string) $source_id][] = (int) $poi_post->ID;
+			}
+			foreach ($poi_ids_by_source as $sid => $ids) {
+				$picked = wm_pick_post_id_in_language($ids, 'post_poi', $language);
+				if ($picked > 0) {
+					$related_poi_urls[(string) $sid] = get_permalink($picked);
 				}
 			}
 		}
 
-		// Fallback: mappa nome normalizzato → URL (tutti i POI pubblicati) per match quando l'id non combacia
+		// Fallback: normalized name -> URL of the post in the current language.
 		$related_poi_urls_by_name = [];
 		$all_poi_posts = get_posts([
-			'post_type' => 'poi',
-			'post_status' => 'publish',
-			'posts_per_page' => -1,
+			'post_type'        => 'poi',
+			'post_status'      => 'publish',
+			'posts_per_page'   => -1,
+			'suppress_filters' => true,
 		]);
 		foreach ($all_poi_posts as $poi_post) {
 			$title = $poi_post->post_title;
-			if ($title !== '') {
-				$key = wm_normalize_poi_name_for_match($title);
-				if ($key !== '') {
-					$related_poi_urls_by_name[$key] = get_permalink($poi_post->ID);
-				}
+			if ($title === '') {
+				continue;
+			}
+			$key = wm_normalize_poi_name_for_match($title);
+			if ($key === '') {
+				continue;
+			}
+			$picked = wm_pick_post_id_in_language([(int) $poi_post->ID], 'post_poi', $language);
+			if ($picked > 0) {
+				// Last write wins: orphans sharing the same title get overwritten by
+				// the entry pointing to the post in the current language.
+				$related_poi_urls_by_name[$key] = get_permalink($picked);
 			}
 		}
 

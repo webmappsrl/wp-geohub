@@ -169,21 +169,40 @@ function wm_single_poi($atts)
 			$track_urls_by_id = [];
 			$track_urls_by_name = [];
 			$track_posts = get_posts([
-				'post_type'   => 'track',
-				'post_status' => 'publish',
-				'posts_per_page' => -1,
+				'post_type'        => 'track',
+				'post_status'      => 'publish',
+				'posts_per_page'   => -1,
+				'suppress_filters' => true,
 			]);
+
+			// Group by wm_track_id and ALWAYS pick the post in the current
+			// language (discard duplicates with stale slug).
+			$track_ids_by_source = [];
 			foreach ($track_posts as $track_post) {
 				$tid = get_post_meta($track_post->ID, 'wm_track_id', true);
 				if ($tid !== '' && $tid !== null) {
-					$track_urls_by_id[(string) $tid] = get_permalink($track_post->ID);
+					$track_ids_by_source[(string) $tid][] = (int) $track_post->ID;
 				}
+			}
+			foreach ($track_ids_by_source as $tid => $ids) {
+				$picked = wm_pick_post_id_in_language($ids, 'post_track', $language);
+				if ($picked > 0) {
+					$track_urls_by_id[(string) $tid] = get_permalink($picked);
+				}
+			}
+
+			foreach ($track_posts as $track_post) {
 				$track_title = $track_post->post_title;
-				if ($track_title !== '') {
-					$key = wm_normalize_name_for_match($track_title);
-					if ($key !== '') {
-						$track_urls_by_name[$key] = get_permalink($track_post->ID);
-					}
+				if ($track_title === '') {
+					continue;
+				}
+				$key = wm_normalize_name_for_match($track_title);
+				if ($key === '') {
+					continue;
+				}
+				$picked = wm_pick_post_id_in_language([(int) $track_post->ID], 'post_track', $language);
+				if ($picked > 0) {
+					$track_urls_by_name[$key] = get_permalink($picked);
 				}
 			}
 			foreach ($tappe as $tappa_name) {
