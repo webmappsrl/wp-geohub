@@ -470,6 +470,16 @@
                 return;
             }
 
+            function resolveLocalizedField(val) {
+                if (val == null || val === '') {
+                    return '';
+                }
+                if (typeof val === 'object' && !Array.isArray(val)) {
+                    return val[language] || val.it || val.en || '';
+                }
+                return String(val);
+            }
+
             var html = '';
             hits.forEach(function(hit) {
                 var nameValue = hit.name || (hit.properties && hit.properties.name) || '';
@@ -512,10 +522,26 @@
                     html += '</div>';
                 }
                 html += '</div>';
+                var fromRaw = hit.from || (hit.properties && hit.properties.from);
+                var toRaw = hit.to || (hit.properties && hit.properties.to);
+                var fromStr = resolveLocalizedField(fromRaw).trim();
+                var toStr = resolveLocalizedField(toRaw).trim();
+                var fromToText = '';
+                if (fromStr && toStr) {
+                    fromToText = fromStr + ' → ' + toStr;
+                } else if (fromStr) {
+                    fromToText = fromStr;
+                } else if (toStr) {
+                    fromToText = toStr;
+                }
+
                 html += '<div class="wm_grid_track_footer">';
                 html += '<div class="wm_grid_track_footer_name">';
                 if (name) {
                     html += '<span>' + escapeHtml(name) + '</span>';
+                }
+                if (fromToText) {
+                    html += '<div class="wm_grid_track_footer_fromto">' + escapeHtml(fromToText) + '</div>';
                 }
                 html += '</div>';
                 html += '<a href="' + escapeHtml(trackUrl) + '" class="wm_grid_track_view_button">' + escapeHtml(cfg.i18n.view) + '</a>';

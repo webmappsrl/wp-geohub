@@ -491,6 +491,12 @@ msgstr "Next Track"
 msgid "Region"
 msgstr "Region"
 
+msgid "From"
+msgstr "From"
+
+msgid "To"
+msgstr "To"
+
 msgid "Select region"
 msgstr "Select region"
 

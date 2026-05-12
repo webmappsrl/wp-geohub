@@ -485,6 +485,12 @@ msgstr "Nächste Strecke"
 msgid "Region"
 msgstr "Region"
 
+msgid "From"
+msgstr "Von"
+
+msgid "To"
+msgstr "Nach"
+
 msgid "Select region"
 msgstr "Region auswählen"
 

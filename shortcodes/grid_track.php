@@ -379,6 +379,19 @@ function wm_grid_track($atts)
                         $track['taxonomy_wheres'] = $hit['taxonomyWheres'] ?? [];
                         $track['taxonomy_icons'] = $hit['taxonomyIcons'] ?? [];
 
+                        $from_val = $hit['from'] ?? $hit['properties']['from'] ?? null;
+                        $to_val = $hit['to'] ?? $hit['properties']['to'] ?? null;
+                        if (is_array($from_val)) {
+                            $track['from'] = $from_val[$language] ?? $from_val['it'] ?? $from_val['en'] ?? (string) reset($from_val);
+                        } else {
+                            $track['from'] = $from_val !== null && $from_val !== '' ? (string) $from_val : '';
+                        }
+                        if (is_array($to_val)) {
+                            $track['to'] = $to_val[$language] ?? $to_val['it'] ?? $to_val['en'] ?? (string) reset($to_val);
+                        } else {
+                            $track['to'] = $to_val !== null && $to_val !== '' ? (string) $to_val : '';
+                        }
+
                         // Feature image
                         if (!empty($hit['feature_image'])) {
                             $track['featureImage'] = $hit['feature_image'];
@@ -752,6 +765,20 @@ function wm_grid_track($atts)
                             <div class="wm_grid_track_footer_name">
                                 <?php if ($name) : ?>
                                     <span><?= esc_html($name); ?></span>
+                                <?php endif; ?>
+                                <?php
+                                $from_disp = isset($track['from']) ? trim((string) $track['from']) : '';
+                                $to_disp = isset($track['to']) ? trim((string) $track['to']) : '';
+                                if ($from_disp !== '' || $to_disp !== '') :
+                                    if ($from_disp !== '' && $to_disp !== '') {
+                                        $from_to_text = $from_disp . ' → ' . $to_disp;
+                                    } elseif ($from_disp !== '') {
+                                        $from_to_text = $from_disp;
+                                    } else {
+                                        $from_to_text = $to_disp;
+                                    }
+                                ?>
+                                    <div class="wm_grid_track_footer_fromto"><?= esc_html($from_to_text); ?></div>
                                 <?php endif; ?>
                             </div>
                             <a href="<?= esc_url($track_page_url); ?>" class="wm_grid_track_view_button">

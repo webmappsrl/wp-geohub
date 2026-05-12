@@ -760,6 +760,16 @@
     overflow-wrap: break-word;
 }
 
+.wm_grid_track_footer_fromto {
+    font-size: 0.85em;
+    color: #666;
+    font-weight: 400;
+    margin-top: 6px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 .wm_grid_track_view_button {
     display: inline-block;
     padding: 10px 20px;

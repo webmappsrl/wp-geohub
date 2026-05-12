@@ -485,6 +485,12 @@ msgstr "Rruga tjetër"
 msgid "Region"
 msgstr "Rajoni"
 
+msgid "From"
+msgstr "Nga"
+
+msgid "To"
+msgstr "Deri"
+
 msgid "Select region"
 msgstr "Zgjidh rajonin"
 

@@ -485,6 +485,12 @@ msgstr ""
 msgid "Region"
 msgstr ""
 
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
 msgid "Select region"
 msgstr ""
 

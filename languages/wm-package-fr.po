@@ -485,6 +485,12 @@ msgstr "Itinéraire suivant"
 msgid "Region"
 msgstr "Région"
 
+msgid "From"
+msgstr "De"
+
+msgid "To"
+msgstr "À"
+
 msgid "Select region"
 msgstr "Sélectionner une région"
 

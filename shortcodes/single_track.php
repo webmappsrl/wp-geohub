@@ -243,6 +243,8 @@ function wm_single_track($atts)
 	$city_name = '';
 	$related_urls = [];
 	$default_image = plugins_url('wm-package/assets/default_image.png');
+	$track_from_display = '';
+	$track_to_display = '';
 
 	if ($track) {
 		$description = $track['description'][$language] ?? null;
@@ -381,6 +383,30 @@ function wm_single_track($atts)
 		if (empty($related_urls) && !empty($sicai['website'])) {
 			$related_urls = [__('Click here', 'wm-package') => $sicai['website']];
 		}
+
+		// Route endpoints (from / to): plain string or multilingual object like name
+		$wm_resolve_track_localized_string = function ($raw) use ($language, $supported_languages) {
+			if ($raw === null || $raw === '') {
+				return '';
+			}
+			if (is_array($raw)) {
+				$lang_order = array_values(array_unique(array_merge([$language], $supported_languages)));
+				foreach ($lang_order as $lang) {
+					if (!empty($raw[$lang]) && is_string($raw[$lang])) {
+						return trim($raw[$lang]);
+					}
+				}
+				foreach ($raw as $v) {
+					if (is_string($v) && trim($v) !== '') {
+						return trim($v);
+					}
+				}
+				return '';
+			}
+			return trim((string) $raw);
+		};
+		$track_from_display = $wm_resolve_track_localized_string($track['from'] ?? null);
+		$track_to_display = $wm_resolve_track_localized_string($track['to'] ?? null);
 	}
 	// For osm2cai shards: strip Percorribilità, Ultimo aggiornamento, Stato di accatastamento and "Modifica questo percorso" from description
 	if (!empty($description) && function_exists('wm_is_osm2cai_shard_type') && wm_is_osm2cai_shard_type(get_option('wm_shard', 'geohub'))) {
@@ -465,6 +491,9 @@ function wm_single_track($atts)
 		$has_technical = true;
 	}
 	if (!empty($related_urls)) {
+		$has_technical = true;
+	}
+	if (!empty($track_from_display) || !empty($track_to_display)) {
 		$has_technical = true;
 	}
 	$has_sidebar_layout = $has_map || $has_technical;
@@ -891,6 +920,18 @@ function wm_single_track($atts)
 									<div class="wm_info_detail_item">
 										<span class="wm_info_detail_label"><i class="fa fa-building" aria-hidden="true"></i> <?= __('City', 'wm-package') ?>:</span>
 										<span class="wm_info_detail_value"><?= esc_html($city_name) ?></span>
+									</div>
+								<?php endif; ?>
+								<?php if (!empty($track_from_display)) : ?>
+									<div class="wm_info_detail_item">
+										<span class="wm_info_detail_label"><i class="fa fa-flag" aria-hidden="true"></i> <?= __('From', 'wm-package') ?>:</span>
+										<span class="wm_info_detail_value"><?= esc_html($track_from_display) ?></span>
+									</div>
+								<?php endif; ?>
+								<?php if (!empty($track_to_display)) : ?>
+									<div class="wm_info_detail_item">
+										<span class="wm_info_detail_label"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <?= __('To', 'wm-package') ?>:</span>
+										<span class="wm_info_detail_value"><?= esc_html($track_to_display) ?></span>
 									</div>
 								<?php endif; ?>
 								<?php if ($show_distance && $distance_value !== null) : ?>

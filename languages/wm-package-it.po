@@ -500,6 +500,12 @@ msgstr "Traccia successiva"
 msgid "Region"
 msgstr "Regione"
 
+msgid "From"
+msgstr "Da"
+
+msgid "To"
+msgstr "A"
+
 msgid "Select region"
 msgstr "Seleziona regione"
 
